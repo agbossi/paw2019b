@@ -5,36 +5,65 @@ import ar.edu.itba.paw.model.Doctor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class DoctorDaoImpl implements DoctorDao {
     private JdbcTemplate jdbcTemplate;
+    private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Doctor> ROW_MAPPER = new RowMapper<Doctor>() {
         @Override
         public Doctor mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new Doctor(resultSet.getString("nombre"), resultSet.getString("especialidad"),resultSet.getString("locacion"),resultSet.getLong("matricula"));
+            return new Doctor(resultSet.getString("name"), resultSet.getString("specialty"),resultSet.getString("location"),resultSet.getString("license"));
         }
     };
 
     @Autowired
     public DoctorDaoImpl(final DataSource ds){
+
         jdbcTemplate = new JdbcTemplate(ds);
+
+        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                         .withTableName("doctors");
+
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS doctors (" +
+                "name VARCHAR(60)," +
+                "specialty VARCHAR(50)," +
+                "location VARCHAR(50)," +
+                "license VARCHAR(20) PRIMARY KEY" +
+                ")");
     }
 
     @Override
     public List<Doctor> getDoctorByLocation(String location) {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctor where locacion = ?",ROW_MAPPER,location);
+        final List<Doctor> list = jdbcTemplate.query("select * from doctors where location = ?",ROW_MAPPER,location);
         if(list.isEmpty()){
             return null;
         }
         return list;
+    }
+
+    @Override
+    public Doctor createDoctor(final String name, final String specialty, final String location, final String license) {
+        final Map<String, Object> args = new HashMap<>();
+        args.put("name", name);
+        args.put("specialty", specialty);
+        args.put("location", location);
+        args.put("license", license);
+        int result;
+
+        result = jdbcInsert.execute(args);
+
+        return new Doctor(name, specialty, location, license);
     }
 }

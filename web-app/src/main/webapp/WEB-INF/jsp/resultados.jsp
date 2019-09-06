@@ -13,9 +13,14 @@
     <title>resultados</title>
 </head>
 <body>
+    <h2>Results for <c:out value="${dni}"/> in <c:out value="${ubicacion}"/> </h2>
     <ul>
         <c:forEach var="doctor" items="${doctors}">
-            <li><c:out value="${doctor}"/></li>
+            <li>
+                <h4><c:out value="${doctor.name}"/></h4>
+                <h4><c:out value="${doctor.specialty}"/></h4>
+                <h4><c:out value="${doctor.license}"/></h4>
+            </li>
         </c:forEach>
     </ul>
 </body>

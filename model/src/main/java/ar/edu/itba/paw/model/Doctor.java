@@ -2,48 +2,49 @@ package ar.edu.itba.paw.model;
 
 
 public class Doctor {
-    private String nombre;
-    private String especialidad;
-    private String locacion;
-    private long matricula;
+    private String name;
+    private String specialty;
+    private String location;
+    private String license;
 
     public Doctor(){
     }
-    public Doctor(String nombre, String especialidad, String locacion, long matricula){
-        this.nombre = nombre;
-        this.especialidad = especialidad;
-        this.locacion = locacion;
-        this.matricula = matricula;
-    }
-    public String getNombre() {
-        return nombre;
+    public Doctor(String name, String specialty, String location, String license){
+        this.name = name;
+        this.specialty = specialty;
+        this.location = location;
+        this.license = license;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public String getName() {
+        return name;
     }
 
-    public String getEspecialidad() {
-        return especialidad;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setEspecialidad(String especialidad) {
-        this.especialidad = especialidad;
+    public String getSpecialty() {
+        return specialty;
     }
 
-    public String getLocacion() {
-        return locacion;
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
     }
 
-    public void setLocacion(String locacion) {
-        this.locacion = locacion;
+    public String getLocation() {
+        return location;
     }
 
-    public long getMatricula() {
-        return matricula;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public void setMatricula(long matricula) {
-        this.matricula = matricula;
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
     }
 }

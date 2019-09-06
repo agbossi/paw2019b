@@ -18,7 +18,15 @@ public class DoctorServiceImpl implements DoctorService {
     public String[] getDoctors() {
         return new String[]{"alvaro", "jose", "lucas"};
     }
+
+    @Override
     public List<Doctor> getDoctorByLocation(String location){
 
+        return doctorDao.getDoctorByLocation(location);
+    }
+
+    @Override
+    public Doctor createDoctor(String name, String specialty, String location, String license) {
+        return doctorDao.createDoctor(name, specialty, location, license);
     }
 }
