@@ -10,7 +10,7 @@
 <html>
 <head>
     <%@ page isELIgnored="false" %>
-    <title>resultados</title>
+    <title>results</title>
 </head>
 <body>
     <h2>Results for <c:out value="${dni}"/> in <c:out value="${ubicacion}"/> </h2>

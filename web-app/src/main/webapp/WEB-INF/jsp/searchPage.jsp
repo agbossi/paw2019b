@@ -8,18 +8,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>PAW duele</title>
+    <title>Doctor Search</title>
 </head>
 <body>
-    <form action="/resultados" method="post">
-        <h3>seleccione ubicacion</h3>
-        <select name="selectUbicacion">
+    <form action="/results" method="post">
+        <h3>Select location</h3>
+        <select name="selectLocation">
             <option>CABA</option>
             <option>Buenos Aires</option>
         </select>
-        <h3>ingrese DNI</h3>
+        <h3>Enter DNI</h3>
         <input type="text" name="inputDni">
-        <input type="submit" value="buscar">
+        <input type="submit" value="search">
     </form>
 </body>
 </html>

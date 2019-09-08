@@ -13,13 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class HelloWorldController{
+public class SearchController {
 
     @Autowired
     DoctorService doctorService;
 
     @RequestMapping("/")
-    public ModelAndView helloWorld(){
+    public ModelAndView index(){
         final ModelAndView mav = new ModelAndView("index");
         return mav;
     }
@@ -49,15 +49,15 @@ public class HelloWorldController{
 
         return mav;
     }
-    @RequestMapping(value = "/resultados",method = RequestMethod.POST)
+    @RequestMapping(value = "/results",method = RequestMethod.POST)
     public ModelAndView results(@RequestParam Map<String,String> reqPar){
 
-        String ubicacion = reqPar.get("selectUbicacion");
+        String location = reqPar.get("selectLocation");
 
-        List<Doctor> doctors = doctorService.getDoctorByLocation(ubicacion);
+        List<Doctor> doctors = doctorService.getDoctorByLocation(location);
         String dni = reqPar.get("inputDni");
-        final ModelAndView mav = new ModelAndView("resultados");
-        mav.addObject("ubicacion",ubicacion);
+        final ModelAndView mav = new ModelAndView("results");
+        mav.addObject("location",location);
         mav.addObject("dni",dni);
         mav.addObject("doctors", doctors);
         return mav;
