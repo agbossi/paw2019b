@@ -2,8 +2,10 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.model.Doctor;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,6 +56,14 @@ public class SearchController {
         mav.addObject("location",location);
         mav.addObject("dni",dni);
         mav.addObject("doctors", doctors);
+        return mav;
+    }
+
+    @RequestMapping("/results/{doctorId}")
+    public ModelAndView doctorsPage(@PathVariable(value = "doctorId") String license){
+        ModelAndView mav = new ModelAndView("DoctorPage");
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+        mav.addObject(doctor);
         return mav;
     }
 }

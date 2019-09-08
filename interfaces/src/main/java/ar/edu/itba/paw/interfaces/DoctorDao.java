@@ -12,5 +12,7 @@ public interface DoctorDao {
 
     List<Doctor> getDoctorBySpecialty(String specialty);
 
+    Doctor getDoctorByLicense(String license);
+
     Doctor createDoctor(String name, String specialty, String location, String license);
 }
