@@ -27,9 +27,9 @@
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-
                     <a class="nav-link" href="/addDoctor">Add Doctor</a>
                 </li>
+
             </ul>
 
             <form class="form-inline mt-2 mt-md-0" action="/results" method="post" style="margin-bottom: 0px">
@@ -38,6 +38,7 @@
                         <option value="CABA">CABA</option>
                         <option value="Buenos Aires">Buenos Aires</option>
                     </select>
+                    
                 </div>
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
             </form>

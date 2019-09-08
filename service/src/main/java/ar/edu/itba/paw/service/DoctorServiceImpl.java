@@ -35,6 +35,11 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    public Doctor getDoctorByLicense(String license) {
+        return doctorDao.getDoctorByLicense(license);
+    }
+
+    @Override
     public Doctor createDoctor(String name, String specialty, String location, String license) {
         return doctorDao.createDoctor(name, specialty, location, license);
     }

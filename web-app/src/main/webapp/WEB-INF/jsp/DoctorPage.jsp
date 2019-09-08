@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
-  User: abossi
-  Date: 4/9/19
-  Time: 18:43
+  User: gigizuber
+  Date: 2019-09-08
+  Time: 12:41
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -15,7 +15,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <title>DoctorSearch - Results for <c:out value="${location}"/></title>
+    <title>DoctorSearch - <c:out value="${doctor.name}"/></title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/navbar-fixed/">
 
@@ -51,15 +51,14 @@
         </div>
     </nav>
 </header>
-    <h2>Results in <c:out value="${location}"/> </h2>
-    <ul class="list-group">
-        <c:forEach var="doctor" items="${doctors}">
-            <li class="list-group-item">
-                <a href="/results/${doctor.license}"><c:out value="${doctor.name}"/></a>
-                <h6><c:out value="${doctor.specialty}"/></h6>
-                <h6>License: <c:out value="${doctor.license}"/></h6>
-            </li>
-        </c:forEach>
-    </ul>
+<h2><c:out value="${doctor.name}"/> </h2>
+<ul class="list-group">
+        <li class="list-group-item">
+            <h4><c:out value="${doctor.name}"/></h4>
+            <h6><c:out value="${doctor.specialty}"/></h6>
+            <h6>License: <c:out value="${doctor.license}"/></h6>
+        </li>
+</ul>
 </body>
 </html>
+
