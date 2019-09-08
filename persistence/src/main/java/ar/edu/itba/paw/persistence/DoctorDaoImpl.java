@@ -3,8 +3,11 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.model.Doctor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -46,6 +49,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getDoctorByLocation(String location) {
+
         final List<Doctor> list = jdbcTemplate.query("select * from doctors where location = ?",ROW_MAPPER,location);
         if(list.isEmpty()){
             return null;

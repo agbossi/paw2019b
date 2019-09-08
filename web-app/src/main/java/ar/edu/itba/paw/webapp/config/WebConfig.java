@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springframework.web.servlet.ViewResolver;
@@ -19,6 +20,14 @@ import javax.sql.DataSource;
 @Configuration
 public class WebConfig{
 
+    private String dbName = "paw";
+
+    private String dbUser = "root";
+
+    private String dbPassword = "root";
+
+    private String jdbcPath = "jdbc:postgresql://localhost/";
+
     @Bean
     public ViewResolver viewResolver(){
         final InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -33,9 +42,9 @@ public class WebConfig{
     public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl("jdbc:postgresql://localhost/paw");
-        ds.setUsername("root");
-        ds.setPassword("root");
+        ds.setUrl( jdbcPath + dbName );
+        ds.setUsername( dbUser );
+        ds.setPassword( dbPassword );
 
         return ds;
     }
