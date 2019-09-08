@@ -54,6 +54,24 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
+    public List<Doctor> getDoctorByName(String name) {
+        final List<Doctor> list = jdbcTemplate.query("select * from doctors where name = ?",ROW_MAPPER,name);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list;
+    }
+
+    @Override
+    public List<Doctor> getDoctorBySpecialty(String specialty) {
+        final List<Doctor> list = jdbcTemplate.query("select * from doctors where specialty = ?",ROW_MAPPER,specialty);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list;
+    }
+
+    @Override
     public Doctor createDoctor(final String name, final String specialty, final String location, final String license) {
         final Map<String, Object> args = new HashMap<>();
         args.put("name", name);
