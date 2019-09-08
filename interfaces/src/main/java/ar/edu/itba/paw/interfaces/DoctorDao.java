@@ -8,5 +8,9 @@ public interface DoctorDao {
 
     List<Doctor> getDoctorByLocation(String location);
 
+    List<Doctor> getDoctorByName(String name);
+
+    List<Doctor> getDoctorBySpecialty(String specialty);
+
     Doctor createDoctor(String name, String specialty, String location, String license);
 }

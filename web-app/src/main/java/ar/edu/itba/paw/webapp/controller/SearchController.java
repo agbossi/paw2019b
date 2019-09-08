@@ -24,12 +24,6 @@ public class SearchController {
         return mav;
     }
 
-    @RequestMapping("/searchPage")
-    public ModelAndView searchPage(){
-        final ModelAndView mav = new ModelAndView("searchPage");
-        return mav;
-    }
-
     @RequestMapping("/addDoctor")
     public ModelAndView addDoctor(){
         final ModelAndView mav = new ModelAndView("addDoctor");
