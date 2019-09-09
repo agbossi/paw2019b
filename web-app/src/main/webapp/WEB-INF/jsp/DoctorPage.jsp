@@ -54,7 +54,6 @@
 <h2><c:out value="${doctor.name}"/> </h2>
 <ul class="list-group">
         <li class="list-group-item">
-            <h4><c:out value="${doctor.name}"/></h4>
             <h6><c:out value="${doctor.specialty}"/></h6>
             <h6>License: <c:out value="${doctor.license}"/></h6>
         </li>

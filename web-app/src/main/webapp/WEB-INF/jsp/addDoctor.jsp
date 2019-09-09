@@ -67,7 +67,7 @@
                 <label >Doctor's Location</label>
                 <select name="location">
                     <option value="CABA">CABA</option>
-                    <option value="CABA">Buenos Aires</option>
+                    <option value="Buenos Aires">Buenos Aires</option>
                 </select>
             </div>
             <div class="form-group">
