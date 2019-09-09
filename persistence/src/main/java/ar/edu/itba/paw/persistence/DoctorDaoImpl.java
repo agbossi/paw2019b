@@ -45,6 +45,15 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
+    public List<Doctor> getDoctors() {
+        final List<Doctor> list = jdbcTemplate.query("select * from doctors",ROW_MAPPER);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list;
+    }
+
+    @Override
     public List<Doctor> getDoctorByLocation(String location) {
         final List<Doctor> list = jdbcTemplate.query("select * from doctors where location = ?",ROW_MAPPER,location);
         if(list.isEmpty()){
@@ -69,6 +78,11 @@ public class DoctorDaoImpl implements DoctorDao {
             return null;
         }
         return list;
+    }
+
+    @Override
+    public List<Doctor> getDoctorByClinic(String clinic) {
+        return null;
     }
 
     @Override

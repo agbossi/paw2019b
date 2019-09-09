@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.Doctor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.print.Doc;
 import java.util.List;
 
 @Component
@@ -15,9 +16,7 @@ public class DoctorServiceImpl implements DoctorService {
     DoctorDao doctorDao;
 
     @Override
-    public String[] getDoctors() {
-        return new String[]{"alvaro", "jose", "lucas"};
-    }
+    public List<Doctor> getDoctors() { return doctorDao.getDoctors(); }
 
     @Override
     public List<Doctor> getDoctorByLocation(String location){
@@ -32,6 +31,27 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<Doctor> getDoctorBySpecialty(String specialty) {
         return doctorDao.getDoctorBySpecialty(specialty);
+    }
+
+    @Override
+    public List<Doctor> getDoctorByClinic(String clinic){ return doctorDao.getDoctorByClinic(clinic);}
+
+    @Override
+    public List<Doctor> getDoctorBy(String location, String specialty, String clinic) {
+        if(location.equals("Select location") && specialty.equals("Select specialty") && !clinic.equals("Select clinic")){
+            return doctorDao.getDoctorByClinic(clinic);
+        }
+        if(location.equals("Select location") && !specialty.equals("Select specialty") && clinic.equals("Select clinic")){
+            return doctorDao.getDoctorBySpecialty(specialty);
+        }
+        if(!location.equals("Select location") && specialty.equals("Select specialty") && clinic.equals("Select clinic")){
+            return doctorDao.getDoctorByLocation(location);
+        }
+        //casos con dos me falta la parte de clinic y que me aprueben la bd
+        else{
+            return doctorDao.getDoctors();
+        }
+
     }
 
     @Override
