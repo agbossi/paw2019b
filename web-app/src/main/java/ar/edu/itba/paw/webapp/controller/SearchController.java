@@ -68,8 +68,9 @@ public class SearchController {
         String specialty = (String) reqPar.get("specialty");
         String location = (String) reqPar.get("location");
         String license = (String) reqPar.get("license");
+        String phoneNumber = (String) reqPar.get("phoneNumber");
 
-        doctorService.createDoctor(name, specialty, location, license);
+        doctorService.createDoctor(name, specialty, location, license, phoneNumber);
 
         final ModelAndView mav = new ModelAndView("addedDoctor");
 

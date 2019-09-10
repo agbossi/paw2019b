@@ -31,32 +31,38 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">Add Doctor <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="#">DoctorSearch<span class="sr-only">(current)</span></a>
                         </li>
                     </ul>
                 </div>
             </nav>
         </header>
-        <h2>Add a Doctor</h2>
+        <h2>Doctor Information</h2>
         <div class="container">
             <form action="/added" method="post">
                 <div class="form-group">
-                    <label >Doctor's Name</label>
+                    <label >Name and Last Name</label>
                     <input type="text" class="form-control" name="name">
                 </div>
                 <div class="form-group">
-                    <label >Doctor's Specialty</label>
+                    <label>Specialty</label>
                     <input type="text" class="form-control" name="specialty">
                 </div>
                 <div class="form-group">
-                    <label >Doctor's Location</label>
-                    <select name="location">
-                        <option value="CABA">CABA</option>
-                        <option value="Buenos Aires">Buenos Aires</option>
-                    </select>
+                    <label>Location</label>
+                    <div>
+                        <select name="location">
+                            <option value="CABA">CABA</option>
+                            <option value="Buenos Aires">Buenos Aires</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="text" class="form-control" name="phoneNumber">
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label >Doctor's License</label>
+                    <label>License</label>
                     <input type="text" class="form-control" name="license">
                 </div>
                 <input type="submit" value="Add">

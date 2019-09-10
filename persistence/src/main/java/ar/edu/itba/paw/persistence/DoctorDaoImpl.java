@@ -3,14 +3,10 @@ package ar.edu.itba.paw.persistence;
 import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.model.Doctor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -29,7 +25,11 @@ public class DoctorDaoImpl implements DoctorDao {
     private final static RowMapper<Doctor> ROW_MAPPER = new RowMapper<Doctor>() {
         @Override
         public Doctor mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new Doctor(resultSet.getString("name"), resultSet.getString("specialty"),resultSet.getString("location"),resultSet.getString("license"));
+            return new Doctor(resultSet.getString("name"),
+                    resultSet.getString("specialty"),
+                    resultSet.getString("location"),
+                    resultSet.getString("license"),
+                    resultSet.getString("phoneNumber"));
         }
     };
 
@@ -129,16 +129,17 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
-    public Doctor createDoctor(final String name, final String specialty, final String location, final String license) {
+    public Doctor createDoctor(final String name, final String specialty, final String location, final String license, final String phoneNumber) {
         final Map<String, Object> args = new HashMap<>();
         args.put("name", name);
         args.put("specialty", specialty);
         args.put("location", location);
         args.put("license", license);
+        args.put("phoneNumber", phoneNumber);
         int result;
 
         result = jdbcInsert.execute(args);
 
-        return new Doctor(name, specialty, location, license);
+        return new Doctor(name, specialty, location, license, phoneNumber);
     }
 }
