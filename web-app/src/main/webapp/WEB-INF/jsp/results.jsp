@@ -32,9 +32,6 @@
         <a class="navbar-brand" href="/">DoctorSearch</a>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
                 <li class="nav-item ">
                     <a class="nav-link" href="/addDoctor">Add Doctor</a>
                 </li>
