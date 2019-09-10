@@ -43,7 +43,7 @@ public class SearchController {
 
     @RequestMapping("/results/{doctorId}")
     public ModelAndView doctorsPage(@PathVariable(value = "doctorId") String license){
-        ModelAndView mav = new ModelAndView("DoctorPage");
+        ModelAndView mav = new ModelAndView("doctorPage");
         Doctor doctor = doctorService.getDoctorByLicense(license);
         mav.addObject(doctor);
         return mav;
@@ -59,6 +59,18 @@ public class SearchController {
     @RequestMapping("/addDoctor")
     public ModelAndView addDoctor(){
         final ModelAndView mav = new ModelAndView("addDoctor");
+        return mav;
+    }
+
+    @RequestMapping("/addClinic")
+    public ModelAndView addClinic(){
+        final ModelAndView mav = new ModelAndView("addClinic");
+        return mav;
+    }
+
+    @RequestMapping("/addLocation")
+    public ModelAndView addLocation(){
+        final ModelAndView mav = new ModelAndView("addLocation");
         return mav;
     }
 
