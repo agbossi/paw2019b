@@ -27,25 +27,6 @@ public class SearchController {
         return mav;
     }
 
-    @RequestMapping("/addDoctor")
-    public ModelAndView addDoctor(){
-        final ModelAndView mav = new ModelAndView("addDoctor");
-        return mav;
-    }
-
-    @RequestMapping("/added")
-    public ModelAndView addedDoctor(@RequestParam Map<String, String> reqPar){
-        String name = (String) reqPar.get("name");
-        String specialty = (String) reqPar.get("specialty");
-        String location = (String) reqPar.get("location");
-        String license = (String) reqPar.get("license");
-
-        doctorService.createDoctor(name, specialty, location, license);
-
-        final ModelAndView mav = new ModelAndView("addedDoctor");
-
-        return mav;
-    }
     @RequestMapping(value = "/results",method = RequestMethod.POST)
     public ModelAndView results(@RequestParam Map<String,String> reqPar){
 
@@ -65,6 +46,33 @@ public class SearchController {
         ModelAndView mav = new ModelAndView("DoctorPage");
         Doctor doctor = doctorService.getDoctorByLicense(license);
         mav.addObject(doctor);
+        return mav;
+    }
+
+    // quick fix for administration page
+    @RequestMapping("/admin")
+    public ModelAndView admin(){
+        final ModelAndView mav = new ModelAndView("admin");
+        return mav;
+    }
+
+    @RequestMapping("/addDoctor")
+    public ModelAndView addDoctor(){
+        final ModelAndView mav = new ModelAndView("addDoctor");
+        return mav;
+    }
+
+    @RequestMapping("/added")
+    public ModelAndView addedDoctor(@RequestParam Map<String, String> reqPar){
+        String name = (String) reqPar.get("name");
+        String specialty = (String) reqPar.get("specialty");
+        String location = (String) reqPar.get("location");
+        String license = (String) reqPar.get("license");
+
+        doctorService.createDoctor(name, specialty, location, license);
+
+        final ModelAndView mav = new ModelAndView("addedDoctor");
+
         return mav;
     }
 }
