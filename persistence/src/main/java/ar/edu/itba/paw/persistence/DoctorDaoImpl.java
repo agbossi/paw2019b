@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.Doctor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -87,6 +89,34 @@ public class DoctorDaoImpl implements DoctorDao {
     @Override
     public List<Doctor> getDoctorByClinic(String clinic) {
         return null;
+    }
+
+    @Override
+    public List<Doctor> getFilteredDoctors(final String location, final String specialty, final String clinic) {
+
+        DoctorQueryBuilder builder = new DoctorQueryBuilder();
+        builder.buildQuery(location, specialty, clinic);
+
+        final List<Doctor> list = jdbcTemplate.query(builder.getQuery(), new PreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement preparedStatement) throws SQLException {
+                int i=1;
+                
+                if(location!=null){
+                    preparedStatement.setString(i,location);
+                    i++;
+                }
+                if(specialty!=null){
+                    preparedStatement.setString(i,specialty);
+                    i++;
+                }
+                if(clinic!=null){
+                    preparedStatement.setString(i,clinic);
+                }
+
+            }
+        }, ROW_MAPPER);
+        return ( list.isEmpty() ? null : list );
     }
 
     @Override

@@ -12,6 +12,10 @@ import java.util.List;
 @Component
 public class DoctorServiceImpl implements DoctorService {
 
+    private static final String NO_LOCATION = "noLocation";
+    private static final String NO_SPECIALTY = "noSpecialty";
+    private static final String NO_CLINIC = "noClinic";
+
     @Autowired
     DoctorDao doctorDao;
 
@@ -38,19 +42,24 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<Doctor> getDoctorBy(String location, String specialty, String clinic) {
-        if(location.equals("Select location") && specialty.equals("Select specialty") && !clinic.equals("Select clinic")){
-            return doctorDao.getDoctorByClinic(clinic);
-        }
-        if(location.equals("Select location") && !specialty.equals("Select specialty") && clinic.equals("Select clinic")){
-            return doctorDao.getDoctorBySpecialty(specialty);
-        }
-        if(!location.equals("Select location") && specialty.equals("Select specialty") && clinic.equals("Select clinic")){
-            return doctorDao.getDoctorByLocation(location);
-        }
-        //casos con dos me falta la parte de clinic y que me aprueben la bd
-        else{
-            return doctorDao.getDoctors();
-        }
+
+        String locationFilter, specialtyFilter, clinicFilter;
+
+        // we should change this, too much repetitive code
+        if(location.equals(NO_LOCATION))
+            locationFilter=null;
+        else
+            locationFilter=location;
+        if(specialty.equals(NO_SPECIALTY))
+            specialtyFilter=null;
+        else
+            specialtyFilter=specialty;
+        if(clinic.equals(NO_CLINIC))
+            clinicFilter=null;
+        else
+            clinicFilter=clinic;
+
+        return doctorDao.getFilteredDoctors(locationFilter, specialtyFilter, clinicFilter);
 
     }
 

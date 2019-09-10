@@ -16,6 +16,8 @@ public interface DoctorDao {
 
     List<Doctor> getDoctorByClinic(String clinic);
 
+    List<Doctor> getFilteredDoctors(String location, String specialty, String clinic);
+
     Doctor getDoctorByLicense(String license);
 
     Doctor createDoctor(String name, String specialty, String location, String license);

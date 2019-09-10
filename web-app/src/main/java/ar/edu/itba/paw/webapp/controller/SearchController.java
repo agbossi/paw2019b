@@ -49,15 +49,13 @@ public class SearchController {
     @RequestMapping(value = "/results",method = RequestMethod.POST)
     public ModelAndView results(@RequestParam Map<String,String> reqPar){
 
-        String location = reqPar.get("selectLocation");
-        String specialty = reqPar.get("selectSpecialty");
-        String clinic = reqPar.get("selectClinic");
+        String location = reqPar.get("location");
+        String specialty = reqPar.get("specialty");
+        String clinic = reqPar.get("clinic");
 
         List<Doctor> doctors = doctorService.getDoctorBy(location,specialty,clinic);
-        String dni = reqPar.get("inputDni");
         final ModelAndView mav = new ModelAndView("results");
         mav.addObject("location",location);
-        mav.addObject("dni",dni);
         mav.addObject("doctors", doctors);
         return mav;
     }

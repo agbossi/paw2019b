@@ -34,21 +34,21 @@
 
             <form class="form-inline mt-2 mt-md-0" action="/results" method="post" style="margin-bottom: 0px">
                 <div class="searchSelect" style="margin-right: 10px">
-                    <select class="browser-default custom-select" name="selectLocation">
+                    <select class="browser-default custom-select" name="location">
                         <option value="noLocation">Select location</option>
                         <option value="CABA">CABA</option>
                         <option value="Buenos Aires">Buenos Aires</option>
                     </select>
-                    <select class="browser-default custom-select" name="selectClinic">
-                        <option value="noClinic">Select clinic</option>
-                        <option value="CEMIC">CEMIC</option>
-                        <option value="Hospital Italiano">Hospital italiano</option>
-                    </select>
-                    <select class="browser-default custom-select" name="selectSpecialty">
+                    <select class="browser-default custom-select" name="specialty">
                         <option value="noSpecialty">Select specialty</option>
                         <option value="Surgeon">Surgeon</option>
                         <option value="Clinical">Clinical</option>
                         <option value="Pediatrician">Pediatrician</option>
+                    </select>
+                    <select class="browser-default custom-select" name="clinic">
+                        <option value="noClinic">Select clinic</option>
+                        <option value="CEMIC">CEMIC</option>
+                        <option value="Hospital Italiano">Hospital italiano</option>
                     </select>
                 </div>
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>

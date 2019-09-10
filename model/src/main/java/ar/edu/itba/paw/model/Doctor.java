@@ -6,6 +6,7 @@ public class Doctor {
     private String specialty;
     private String location;
     private String license;
+    private Clinic clinic;
 
     public Doctor(){
     }
