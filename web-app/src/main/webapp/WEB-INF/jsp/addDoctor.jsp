@@ -31,7 +31,7 @@
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">DoctorSearch<span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="/admin">DoctorSearch<span class="sr-only">(current)</span></a>
                         </li>
                     </ul>
                 </div>
@@ -39,7 +39,7 @@
         </header>
         <h2>Doctor Information</h2>
         <div class="container">
-            <form action="/added" method="post">
+            <form action="/addedDoctor" method="post">
                 <div class="form-group">
                     <label >Name and Last Name</label>
                     <input type="text" class="form-control" name="name">

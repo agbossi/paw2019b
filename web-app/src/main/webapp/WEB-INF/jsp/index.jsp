@@ -19,7 +19,7 @@
         <header>
             <!-- Fixed navbar -->
             <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-                <a class="navbar-brand" href="#">DoctorSearch</a>
+                <a class="navbar-brand" href="/">DoctorSearch</a>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <form class="form-inline mt-2 mt-md-0" action="/results" method="post" style="margin-bottom: 0px">
                         <div class="searchSelect" style="margin-right: 10px">

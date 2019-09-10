@@ -28,27 +28,17 @@
         <header>
             <!-- Fixed navbar -->
             <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-                <a class="navbar-brand" href="/">DoctorSearch</a>
+                <a class="navbar-brand" href="/admin">DoctorSearch</a>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
                             <a class="nav-link" href="/addDoctor">Add Doctor <span class="sr-only">(current)</span></a>
                         </li>
                     </ul>
-                    <form class="form-inline mt-2 mt-md-0" action="/results" method="post" style="margin-bottom: 0px">
-                        <div class="searchSelect" style="margin-right: 10px">
-                            <select class="browser-default custom-select" name="selectLocation" >
-                                <option value="CABA">CABA</option>
-                                <option value="Buenos Aires">Buenos Aires</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form>
                 </div>
             </nav>
         </header>
         <h2>Doctor added!</h2>
-        <a class="nav-link" href="/">Home</a>
         <a class="nav-link" href="/addDoctor">Add another doctor</a>
     </body>
 </html>
