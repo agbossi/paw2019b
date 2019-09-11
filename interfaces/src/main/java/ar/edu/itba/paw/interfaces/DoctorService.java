@@ -16,8 +16,6 @@ public interface DoctorService {
 
     List<Doctor> getDoctorBySpecialty(String specialty);
 
-    List<Doctor> getDoctorByClinic(String clinic);
-
     List<Doctor> getDoctorBy(String location,String specialty,String clinic);
 
     Doctor getDoctorByLicense(String license);

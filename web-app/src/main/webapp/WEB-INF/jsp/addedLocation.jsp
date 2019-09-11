@@ -31,8 +31,14 @@
         <a class="navbar-brand" href="/admin">DoctorSearch</a>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/addLocation">Add Location <span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link" href="/addDoctor">Add Doctor</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/addClinic">Add Clinic</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/addLocation">Add Location</a>
                 </li>
             </ul>
         </div>

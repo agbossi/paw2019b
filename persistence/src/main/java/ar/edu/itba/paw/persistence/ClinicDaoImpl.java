@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@Repository
 public class ClinicDaoImpl implements ClinicDao {
     private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
@@ -33,14 +37,27 @@ public class ClinicDaoImpl implements ClinicDao {
 
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS clinics (" +
                 "name VARCHAR(20) PRIMARY KEY," +
-                "consultPrice INTEGER" +
+                "consultPrice INTEGER," +
                 "city VARCHAR(60)" +
                 ")");
     }
 
     @Override
-    public Clinic getClinicByName(String clinic_name) {
-        return jdbcTemplate.queryForObject("select * from clinics where name = ?", Clinic.class, clinic_name);
+    public Clinic createClinic(String name, String location, int consultPrice) {
+        final Map<String, Object> args = new HashMap<>();
+        args.put("name", name);
+        args.put("location", location);
+        args.put("consultPrice", consultPrice);
+        int result;
+
+        result = jdbcInsert.execute(args);
+
+        return new Clinic(name, location, consultPrice);
+    }
+
+    @Override
+    public Clinic getClinicByName(String clinicName) {
+        return jdbcTemplate.queryForObject("select * from clinics where name = ?", Clinic.class, clinicName);
     }
 
     @Override

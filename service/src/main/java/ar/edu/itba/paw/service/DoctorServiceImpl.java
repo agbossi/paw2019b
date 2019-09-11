@@ -17,7 +17,7 @@ public class DoctorServiceImpl implements DoctorService {
     private static final String NO_CLINIC = "noClinic";
 
     @Autowired
-    DoctorDao doctorDao;
+    private DoctorDao doctorDao;
 
     @Override
     public Doctor createDoctor(String name, String specialty, String location, String license, String phoneNumber) {
@@ -41,9 +41,6 @@ public class DoctorServiceImpl implements DoctorService {
     public List<Doctor> getDoctorBySpecialty(String specialty) {
         return doctorDao.getDoctorBySpecialty(specialty);
     }
-
-    @Override
-    public List<Doctor> getDoctorByClinic(String clinic){ return doctorDao.getDoctorByClinic(clinic);}
 
     @Override
     public List<Doctor> getDoctorBy(String location, String specialty, String clinic) {

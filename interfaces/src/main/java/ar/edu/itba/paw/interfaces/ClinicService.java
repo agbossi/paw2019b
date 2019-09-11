@@ -4,10 +4,8 @@ import ar.edu.itba.paw.model.Clinic;
 
 import java.util.List;
 
-public interface ClinicDao {
+public interface ClinicService {
     Clinic createClinic(String name, String location, int consultPrice);
 
-    public Clinic getClinicByName(String clinicName);
-
-    public List<Clinic> getClinics();
+    List<Clinic> getClinics();
 }

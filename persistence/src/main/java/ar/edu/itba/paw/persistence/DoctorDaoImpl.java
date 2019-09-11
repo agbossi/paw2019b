@@ -50,6 +50,21 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
+    public Doctor createDoctor(final String name, final String specialty, final String location, final String license, final String phoneNumber) {
+        final Map<String, Object> args = new HashMap<>();
+        args.put("name", name);
+        args.put("specialty", specialty);
+        args.put("location", location);
+        args.put("license", license);
+        args.put("phoneNumber", phoneNumber);
+        int result;
+
+        result = jdbcInsert.execute(args);
+
+        return new Doctor(name, specialty, location, license, phoneNumber);
+    }
+
+    @Override
     public List<Doctor> getDoctors() {
         final List<Doctor> list = jdbcTemplate.query("select * from doctors",ROW_MAPPER);
         if(list.isEmpty()){
@@ -87,8 +102,12 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
-    public List<Doctor> getDoctorByClinic(String clinic) {
-        return null;
+    public Doctor getDoctorByLicense(String license) {
+        final List<Doctor> list = jdbcTemplate.query("select * from doctors where license = ?",ROW_MAPPER,license);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list.get(0);
     }
 
     @Override
@@ -101,7 +120,7 @@ public class DoctorDaoImpl implements DoctorDao {
             @Override
             public void setValues(PreparedStatement preparedStatement) throws SQLException {
                 int i=1;
-                
+
                 if(location!=null){
                     preparedStatement.setString(i,location);
                     i++;
@@ -117,29 +136,5 @@ public class DoctorDaoImpl implements DoctorDao {
             }
         }, ROW_MAPPER);
         return ( list.isEmpty() ? null : list );
-    }
-
-    @Override
-    public Doctor getDoctorByLicense(String license) {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where license = ?",ROW_MAPPER,license);
-        if(list.isEmpty()){
-            return null;
-        }
-        return list.get(0);
-    }
-
-    @Override
-    public Doctor createDoctor(final String name, final String specialty, final String location, final String license, final String phoneNumber) {
-        final Map<String, Object> args = new HashMap<>();
-        args.put("name", name);
-        args.put("specialty", specialty);
-        args.put("location", location);
-        args.put("license", license);
-        args.put("phoneNumber", phoneNumber);
-        int result;
-
-        result = jdbcInsert.execute(args);
-
-        return new Doctor(name, specialty, location, license, phoneNumber);
     }
 }
