@@ -32,7 +32,7 @@
             <c:forEach var="doctor" items="${doctors}">
                 <li class="list-group-item">
                     <a href="/results/${doctor.license}"><c:out value="${doctor.name}"/></a>
-                    <h6><c:out value="${doctor.specialty}"/></h6>
+                    <h6><c:out value="${doctor.specialty.specialtyName}"/></h6>
                 </li>
             </c:forEach>
         </ul>
