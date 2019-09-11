@@ -42,7 +42,11 @@
                 </div>
                 <div>
                     <form:label path="specialty">Specialty: </form:label>
-                    <form:input type="text" path="specialty"/>
+                    <form:select path="specialty">
+                        <c:forEach var="specialty" items="${specialties}">
+                            <form:option value="${specialty.specialtyName}"/>
+                        </c:forEach>
+                    </form:select>
                     <form:errors path="specialty" element="p"/>
                 </div>
                 <div>

@@ -31,6 +31,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/addLocation">Add Location</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/addSpecialty">Add Specialty</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
