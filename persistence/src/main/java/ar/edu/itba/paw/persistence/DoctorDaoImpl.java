@@ -2,6 +2,8 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.model.Doctor;
+import ar.edu.itba.paw.model.Location;
+import ar.edu.itba.paw.model.Specialty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
@@ -26,8 +28,8 @@ public class DoctorDaoImpl implements DoctorDao {
         @Override
         public Doctor mapRow(ResultSet resultSet, int i) throws SQLException {
             return new Doctor(resultSet.getString("name"),
-                    resultSet.getString("specialty"),
-                    resultSet.getString("location"),
+                   new Specialty(resultSet.getString("specialty")),
+                   new Location(resultSet.getString("location")),
                     resultSet.getString("license"),
                     resultSet.getString("phoneNumber"));
         }
@@ -43,19 +45,19 @@ public class DoctorDaoImpl implements DoctorDao {
 
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS doctors (" +
                 "license VARCHAR(20) PRIMARY KEY," +
-                "specialty VARCHAR(50)," +
-                "location VARCHAR(50)," +
+                "specialty VARCHAR(50) REFERENCES specialties(name)," +
+                "location VARCHAR(50) REFERENCES locations(name)," +
                 "name VARCHAR(60)," +
                 "phoneNumber VARCHAR(20)" +
                 ")");
     }
 
     @Override
-    public Doctor createDoctor(final String name, final String specialty, final String location, final String license, final String phoneNumber) {
+    public Doctor createDoctor(final String name, final Specialty specialty, final Location location, final String license, final String phoneNumber) {
         final Map<String, Object> args = new HashMap<>();
         args.put("name", name);
-        args.put("specialty", specialty);
-        args.put("location", location);
+        args.put("specialty", specialty.getSpecialtyName());
+        args.put("location", location.getLocationName());
         args.put("license", license);
         args.put("phoneNumber", phoneNumber);
         int result;
@@ -75,9 +77,9 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
-    public List<Doctor> getDoctorByLocation(String location) {
+    public List<Doctor> getDoctorByLocation(Location location) {
 
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where location = ?",ROW_MAPPER,location);
+        final List<Doctor> list = jdbcTemplate.query("select * from doctors where location = ?",ROW_MAPPER,location.getLocationName());
         if(list.isEmpty()){
             return null;
         }
@@ -94,8 +96,8 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
-    public List<Doctor> getDoctorBySpecialty(String specialty) {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where specialty = ?",ROW_MAPPER,specialty);
+    public List<Doctor> getDoctorBySpecialty(Specialty specialty) {
+        final List<Doctor> list = jdbcTemplate.query("select * from doctors where specialty = ?",ROW_MAPPER,specialty.getSpecialtyName());
         if(list.isEmpty()){
             return null;
         }
@@ -112,10 +114,10 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
-    public List<Doctor> getFilteredDoctors(final String location, final String specialty, final String clinic) {
+    public List<Doctor> getFilteredDoctors(final Location location, final Specialty specialty, final String clinic) {
 
         DoctorQueryBuilder builder = new DoctorQueryBuilder();
-        builder.buildQuery(location, specialty, clinic);
+        builder.buildQuery(location.getLocationName(), specialty.getSpecialtyName(), clinic);
 
         final List<Doctor> list = jdbcTemplate.query(builder.getQuery(), new PreparedStatementSetter() {
             @Override
@@ -123,17 +125,13 @@ public class DoctorDaoImpl implements DoctorDao {
                 int i=1;
 
                 if(location!=null){
-                    preparedStatement.setString(i,location);
+                    preparedStatement.setString(i,location.getLocationName());
                     i++;
                 }
                 if(specialty!=null){
-                    preparedStatement.setString(i,specialty);
+                    preparedStatement.setString(i,specialty.getSpecialtyName());
                     i++;
                 }
-                if(clinic!=null){
-                    preparedStatement.setString(i,clinic);
-                }
-
             }
         }, ROW_MAPPER);
         return ( list.isEmpty() ? null : list );
