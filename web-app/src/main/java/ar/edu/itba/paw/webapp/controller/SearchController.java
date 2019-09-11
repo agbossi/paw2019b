@@ -2,8 +2,10 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.LocationService;
+import ar.edu.itba.paw.interfaces.SpecialtyService;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Location;
+import ar.edu.itba.paw.model.Specialty;
 import ar.edu.itba.paw.webapp.form.SearchForm;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +23,22 @@ import java.util.Map;
 public class SearchController {
 
     @Autowired
-    DoctorService doctorService;
+    private DoctorService doctorService;
 
     @Autowired
-    LocationService locationService;
+    private LocationService locationService;
+
+    @Autowired
+    private SpecialtyService specialtyService;
 
     @RequestMapping(value = "/search", method = { RequestMethod.GET })
     public ModelAndView search(@ModelAttribute("searchForm") final SearchForm form){
         ModelAndView mav = new ModelAndView("search");
 
         List<Location> locations = locationService.getLocations();
+        List<Specialty> specialties = specialtyService.getSpecialties();
         mav.addObject("locations", locations);
+        mav.addObject("specialties", specialties);
 
         return mav;
     }

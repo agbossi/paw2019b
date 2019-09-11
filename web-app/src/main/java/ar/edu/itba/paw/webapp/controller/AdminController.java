@@ -3,11 +3,14 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.ClinicService;
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.LocationService;
+import ar.edu.itba.paw.interfaces.SpecialtyService;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
+import ar.edu.itba.paw.model.Specialty;
 import ar.edu.itba.paw.webapp.form.ClinicForm;
 import ar.edu.itba.paw.webapp.form.DoctorForm;
 import ar.edu.itba.paw.webapp.form.LocationForm;
+import ar.edu.itba.paw.webapp.form.SpecialtyForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -31,6 +34,9 @@ public class AdminController {
     @Autowired
     private LocationService locationService;
 
+    @Autowired
+    private SpecialtyService specialtyService;
+
     @RequestMapping("/admin")
     public ModelAndView admin(){
         final ModelAndView mav = new ModelAndView("admin");
@@ -42,7 +48,9 @@ public class AdminController {
         final ModelAndView mav = new ModelAndView("addDoctor");
 
         List<Location> locations = locationService.getLocations();
+        List<Specialty> specialties = specialtyService.getSpecialties();
         mav.addObject("locations", locations);
+        mav.addObject("specialties", specialties);
 
         return mav;
     }
@@ -76,6 +84,12 @@ public class AdminController {
         return mav;
     }
 
+    @RequestMapping(value = "/addSpecialty", method = {RequestMethod.GET})
+    public ModelAndView addSpecialty(@ModelAttribute("specialtyForm") final SpecialtyForm form){
+        final ModelAndView mav = new ModelAndView("addSpecialty");
+        return mav;
+    }
+
     @RequestMapping(value = "/addedClinic", method = { RequestMethod.POST })
     public ModelAndView addedClinic(@Valid @ModelAttribute("clinicForm") final ClinicForm form, final BindingResult errors){
 
@@ -101,6 +115,18 @@ public class AdminController {
         // same goes for doctors and clinics and everything you can add
         final ModelAndView mav = new ModelAndView("addedLocation");
 
+        return mav;
+    }
+
+    @RequestMapping("/addedSpecialty")
+    public ModelAndView addedSpecialty(@Valid @ModelAttribute("specialtyForm") final SpecialtyForm form, final BindingResult errors){
+
+        if(errors.hasErrors())
+            return addSpecialty(form);
+
+        final Specialty specialty = specialtyService.createSpecialty(form.getName());
+
+        final ModelAndView mav = new ModelAndView("addedSpecialty");
         return mav;
     }
 }
