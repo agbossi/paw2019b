@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <html>
     <head>
+        <%@ page isELIgnored="false" %>
+
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -16,6 +18,7 @@
 
     </head>
     <body class="d-flex flex-column h-100">
+
         <header>
             <!-- Fixed navbar -->
             <nav class="navbar navbar-expand-md navbar-dark bg-dark">
@@ -25,8 +28,17 @@
                 </div>
             </nav>
         </header>
-    <div class="container">
-    </div>
+
+        <div class="container">
+            <ul class="list-group">
+                <c:forEach var="doctor" items="${doctors}">
+                    <li class="list-group-item">
+                        <a href="/results/${doctor.license}"><c:out value="${doctor.name}"/></a>
+                        <h6>${doctor.specialty}</h6>
+                    </li>
+                </c:forEach>
+            </ul>
+        </div>
 
     </body>
 </html>
