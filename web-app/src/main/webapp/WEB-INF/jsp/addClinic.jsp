@@ -1,12 +1,6 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: gigizuber
-  Date: 2019-09-05
-  Time: 22:48
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <%@ page isELIgnored="false" %>
@@ -39,21 +33,31 @@
 </header>
 <h2>Clinic Information</h2>
 <div class="container">
-    <form action="/addedClinic" method="post">
-        <div class="form-group">
-            <label >Name</label>
-            <input type="text" class="form-control" name="name">
+    <c:url value="/addedClinic" var="postPath"/>
+    <form:form modelAttribute="clinicForm" action="${postPath}" method="post">
+        <div>
+            <form:label path="name">Name: </form:label>
+            <form:input type="text" path="name"/>
+            <form:errors path="name" element="p"/>
         </div>
-        <div class="form-group">
-            <label>Address</label>
-            <input type="text" class="form-control" name="address">
+        <div>
+            <form:label path="location">Location: </form:label>
+            <form:select path="location">
+                <c:forEach var="location" items="${locations}">
+                    <form:option value="${location.locationName}"/>
+                </c:forEach>
+            </form:select>
+            <form:errors path="location" element="p"/>
         </div>
-        <div class="form-group">
-            <label>Consult Price</label>
-            <input type="text" class="form-control" name="consultPrice">
+        <div>
+            <form:label path="consultPrice">Consult Price: </form:label>
+            <form:input type="number" path="consultPrice"/>
+            <form:errors path="consultPrice" element="p"/>
         </div>
-        <input type="submit" value="Add">
-    </form>
+        <div>
+            <input type="submit" value="Add">
+        </div>
+    </form:form>
 </div>
 </body>
 </html>

@@ -3,13 +3,21 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.ClinicService;
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.LocationService;
+import ar.edu.itba.paw.model.Clinic;
+import ar.edu.itba.paw.model.Location;
+import ar.edu.itba.paw.webapp.form.ClinicForm;
+import ar.edu.itba.paw.webapp.form.DoctorForm;
+import ar.edu.itba.paw.webapp.form.LocationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Map;
+import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class AdminController {
@@ -29,58 +37,68 @@ public class AdminController {
         return mav;
     }
 
-    @RequestMapping("/addDoctor")
-    public ModelAndView addDoctor(){
+    @RequestMapping(value = "/addDoctor", method = { RequestMethod.GET })
+    public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form){
         final ModelAndView mav = new ModelAndView("addDoctor");
+
+        List<Location> locations = locationService.getLocations();
+        mav.addObject("locations", locations);
+
         return mav;
     }
 
-    @RequestMapping("/addClinic")
-    public ModelAndView addClinic(){
+    @RequestMapping(value = "/addClinic", method = { RequestMethod.GET })
+    public ModelAndView addClinic(@ModelAttribute("clinicForm") final ClinicForm form){
         final ModelAndView mav = new ModelAndView("addClinic");
+
+        List<Location> locations = locationService.getLocations();
+        mav.addObject("locations", locations);
+
         return mav;
     }
 
-    @RequestMapping("/addLocation")
-    public ModelAndView addLocation(){
+    @RequestMapping(value = "/addLocation", method = { RequestMethod.GET })
+    public ModelAndView addLocation(@ModelAttribute("locationForm") final LocationForm form){
         final ModelAndView mav = new ModelAndView("addLocation");
         return mav;
     }
 
-    @RequestMapping("/addedDoctor")
-    public ModelAndView addedDoctor(@RequestParam Map<String, String> reqPar){
-        String name = (String) reqPar.get("name");
-        String specialty = (String) reqPar.get("specialty");
-        String location = (String) reqPar.get("location");
-        String license = (String) reqPar.get("license");
-        String phoneNumber = (String) reqPar.get("phoneNumber");
+    @RequestMapping(value = "/addedDoctor", method = { RequestMethod.POST })
+    public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors){
 
-        doctorService.createDoctor(name, specialty, location, license, phoneNumber);
+        if(errors.hasErrors())
+            return addDoctor(form);
+
+        doctorService.createDoctor(form.getName(), form.getSpecialty(), form.getLocation(), form.getLicense(), form.getPhoneNumber());
 
         final ModelAndView mav = new ModelAndView("addedDoctor");
 
         return mav;
     }
 
-    @RequestMapping("/addedClinic")
-    public ModelAndView addedClinic(@RequestParam Map<String, String> reqPar){
-        String name = (String) reqPar.get("name");
-        String location = (String) reqPar.get("location");
-        int consultPrice = Integer.valueOf((String) reqPar.get("consultPrice"));
+    @RequestMapping(value = "/addedClinic", method = { RequestMethod.POST })
+    public ModelAndView addedClinic(@Valid @ModelAttribute("clinicForm") final ClinicForm form, final BindingResult errors){
 
-        clinicService.createClinic(name, location, consultPrice);
+        if(errors.hasErrors())
+            return addClinic(form);
+
+        final Clinic clinic = clinicService.createClinic(form.getName(), form.getLocation(), form.getConsultPrice());
 
         final ModelAndView mav = new ModelAndView("addedClinic");
 
         return mav;
     }
 
-    @RequestMapping("/addedLocation")
-    public ModelAndView addedLocation(@RequestParam Map<String, String> reqPar){
-        String name = (String) reqPar.get("name");
+    @RequestMapping(value = "/addedLocation", method = { RequestMethod.POST })
+    public ModelAndView addedLocation(@Valid @ModelAttribute("locationForm") final LocationForm form, final BindingResult errors){
 
-        locationService.createLocation(name);
+        if(errors.hasErrors())
+            return addLocation(form);
 
+        final Location location = locationService.createLocation(form.getName());
+
+        // this could show something more specific, for example, the recently added location.
+        // same goes for doctors and clinics and everything you can add
         final ModelAndView mav = new ModelAndView("addedLocation");
 
         return mav;

@@ -23,7 +23,7 @@ public class ClinicDaoImpl implements ClinicDao {
         private final static RowMapper<Clinic> ROW_MAPPER = new RowMapper<Clinic>() {
         @Override
         public Clinic mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new Clinic(resultSet.getString("name"), resultSet.getString("city"), resultSet.getInt("consultPrice"));
+            return new Clinic(resultSet.getString("name"), resultSet.getString("location"), resultSet.getInt("consultPrice"));
         }
     };
 
@@ -37,8 +37,8 @@ public class ClinicDaoImpl implements ClinicDao {
 
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS clinics (" +
                 "name VARCHAR(20) PRIMARY KEY," +
-                "consultPrice INTEGER," +
-                "city VARCHAR(60)" +
+                "location VARCHAR(60)," +
+                "consultPrice INTEGER"+
                 ")");
     }
 

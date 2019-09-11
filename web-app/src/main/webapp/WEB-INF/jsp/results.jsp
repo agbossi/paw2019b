@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: abossi
-  Date: 4/9/19
-  Time: 18:43
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <html>
@@ -29,6 +22,9 @@
         <!-- Fixed navbar -->
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <a class="navbar-brand" href="/">DoctorSearch</a>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><a href="/search">SEARCH</a></button>
+            </div>
         </nav>
     </header>
         <h2>Results in <c:out value="${location}"/> </h2>
@@ -37,7 +33,6 @@
                 <li class="list-group-item">
                     <a href="/results/${doctor.license}"><c:out value="${doctor.name}"/></a>
                     <h6><c:out value="${doctor.specialty}"/></h6>
-                    <h6>License: <c:out value="${doctor.license}"/></h6>
                 </li>
             </c:forEach>
         </ul>

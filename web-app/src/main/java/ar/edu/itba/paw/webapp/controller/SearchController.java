@@ -1,15 +1,19 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.DoctorService;
+import ar.edu.itba.paw.interfaces.LocationService;
 import ar.edu.itba.paw.model.Doctor;
+import ar.edu.itba.paw.model.Location;
+import ar.edu.itba.paw.webapp.form.SearchForm;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
@@ -19,17 +23,32 @@ public class SearchController {
     @Autowired
     DoctorService doctorService;
 
-    @RequestMapping(value = "/results",method = RequestMethod.POST)
-    public ModelAndView results(@RequestParam Map<String,String> reqPar){
+    @Autowired
+    LocationService locationService;
 
-        String location = reqPar.get("location");
-        String specialty = reqPar.get("specialty");
-        String clinic = reqPar.get("clinic");
+    @RequestMapping(value = "/search", method = { RequestMethod.GET })
+    public ModelAndView search(@ModelAttribute("searchForm") final SearchForm form){
+        ModelAndView mav = new ModelAndView("search");
 
-        List<Doctor> doctors = doctorService.getDoctorBy(location,specialty,clinic);
+        List<Location> locations = locationService.getLocations();
+        mav.addObject("locations", locations);
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/results", method = { RequestMethod.POST })
+    public ModelAndView results(@Valid @ModelAttribute("searchForm") final SearchForm form, final BindingResult errors){
+
+        if(errors.hasErrors())
+            return search(form);
+
+        // TODO: once we implement a proper query builder fix this and search form attributes !!
+        List<Doctor> doctors = doctorService.getDoctorBy(form.getLocation(), form.getSpecialty(),"noClinic");
+
         final ModelAndView mav = new ModelAndView("results");
-        mav.addObject("location",location);
+        mav.addObject("location",form.getLocation());
         mav.addObject("doctors", doctors);
+
         return mav;
     }
 

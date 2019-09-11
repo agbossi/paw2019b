@@ -4,13 +4,13 @@ public class Clinic {
     private String name;
 
     // TODO: this should be transformed into an address
-    private String city;
+    private String location;
 
     private int consultPrice;
 
-    public Clinic(String name, String city, int consultPrice){
+    public Clinic(String name, String location, int consultPrice){
         this.name = name;
-        this.city = city;
+        this.location = location;
         this.consultPrice = consultPrice;
     }
 
@@ -18,8 +18,8 @@ public class Clinic {
         return name;
     }
 
-    public String city() {
-        return city;
+    public String getLocation() {
+        return location;
     }
 
     public int getConsultPrice() {

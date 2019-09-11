@@ -1,12 +1,6 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: gigizuber
-  Date: 2019-09-05
-  Time: 22:48
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html>
     <head>
         <%@ page isELIgnored="false" %>
@@ -39,34 +33,41 @@
         </header>
         <h2>Doctor Information</h2>
         <div class="container">
-            <form action="/addedDoctor" method="post">
-                <div class="form-group">
-                    <label >Name and Last Name</label>
-                    <input type="text" class="form-control" name="name">
+            <c:url value="/addedDoctor" var="postPath"/>
+            <form:form modelAttribute="doctorForm" action="${postPath}" method="post">
+                <div>
+                    <form:label path="name">Name: </form:label>
+                    <form:input type="text" path="name"/>
+                    <form:errors path="name" element="p"/>
                 </div>
-                <div class="form-group">
-                    <label>Specialty</label>
-                    <input type="text" class="form-control" name="specialty">
+                <div>
+                    <form:label path="specialty">Specialty: </form:label>
+                    <form:input type="text" path="specialty"/>
+                    <form:errors path="specialty" element="p"/>
                 </div>
-                <div class="form-group">
-                    <label>Location</label>
-                    <div>
-                        <select name="location">
-                            <option value="CABA">CABA</option>
-                            <option value="Buenos Aires">Buenos Aires</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Phone Number</label>
-                        <input type="text" class="form-control" name="phoneNumber">
-                    </div>
+                <div>
+                    <form:label path="location">Location: </form:label>
+                    <form:select path="location">
+                        <c:forEach var="location" items="${locations}">
+                            <form:option value="${location.locationName}"/>
+                        </c:forEach>
+                    </form:select>
+                    <form:errors path="location" element="p"/>
                 </div>
-                <div class="form-group">
-                    <label>License</label>
-                    <input type="text" class="form-control" name="license">
+                <div>
+                    <form:label path="license">License: </form:label>
+                    <form:input type="text" path="license"/>
+                    <form:errors path="license" element="p"/>
                 </div>
-                <input type="submit" value="Add">
-            </form>
+                <div>
+                    <form:label path="phoneNumber">Phone Number: </form:label>
+                    <form:input type="text" path="phoneNumber"/>
+                    <form:errors path="phoneNumber" element="p"/>
+                </div>
+                <div>
+                    <input type="submit" value="Add">
+                </div>
+            </form:form>
         </div>
     </body>
 </html>

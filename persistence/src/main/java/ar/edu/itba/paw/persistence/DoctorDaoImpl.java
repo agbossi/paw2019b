@@ -42,10 +42,11 @@ public class DoctorDaoImpl implements DoctorDao {
                          .withTableName("doctors");
 
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS doctors (" +
-                "name VARCHAR(60)," +
+                "license VARCHAR(20) PRIMARY KEY," +
                 "specialty VARCHAR(50)," +
                 "location VARCHAR(50)," +
-                "license VARCHAR(20) PRIMARY KEY" +
+                "name VARCHAR(60)," +
+                "phoneNumber VARCHAR(20)" +
                 ")");
     }
 

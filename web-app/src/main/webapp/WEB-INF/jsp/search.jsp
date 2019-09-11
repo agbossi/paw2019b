@@ -1,14 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html>
-    <head><head>
+    <head>
         <%@ page isELIgnored="false" %>
 
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
-        <title>DoctorSearch - <c:out value="${doctor.name}"/></title>
+        <title>DoctorSearch</title>
 
         <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/navbar-fixed/">
 
@@ -17,8 +18,10 @@
         <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
     </head>
+
     <body class="d-flex flex-column h-100">
         <header>
+
             <!-- Fixed navbar -->
             <nav class="navbar navbar-expand-md navbar-dark bg-dark">
                 <a class="navbar-brand" href="/">DoctorSearch</a>
@@ -26,17 +29,29 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><a href="/search">SEARCH</a></button>
                 </div>
             </nav>
+
         </header>
-        <h2><c:out value="${doctor.name}"/> </h2>
-        <ul class="list-group">
-                <li class="list-group-item">
-                    <h6><c:out value="${doctor.specialty}"/></h6>
-                    <h6>License: <c:out value="${doctor.license}"/></h6>
-                    <h6>Location: <c:out value="${doctor.location}"/></h6>
-                    <h6>Specialty: <c:out value="${doctor.specialty}"/></h6>
-                    <h6>Phone Number: <c:out value="${doctor.phoneNumber}"/></h6>
-                </li>
-        </ul>
+        <div class="container">
+            <c:url value="/results" var="postPath"/>
+            <form:form modelAttribute="searchForm" action="${postPath}" method="post">
+                <div>
+                    <form:label path="location">Location: </form:label>
+                    <form:select path="location">
+                        <c:forEach var="location" items="${locations}">
+                            <form:option value="${location.locationName}"/>
+                        </c:forEach>
+                    </form:select>
+                    <form:errors path="location" element="p"/>
+                </div>
+                <div>
+                    <form:label path="specialty">Specialty: </form:label>
+                    <form:input type="text" path="specialty"/>
+                    <form:errors path="specialty" element="p"/>
+                </div>
+                <div>
+                    <input type="submit" value="Search">
+                </div>
+            </form:form>
+        </div>
     </body>
 </html>
-
