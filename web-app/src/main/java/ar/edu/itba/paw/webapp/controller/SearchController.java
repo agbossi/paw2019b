@@ -50,7 +50,7 @@ public class SearchController {
             return search(form);
 
         // TODO: once we implement a proper query builder fix this and search form attributes !!
-        List<Doctor> doctors = doctorService.getDoctorBy(form.getLocation(), form.getSpecialty(),"noClinic");
+        List<Doctor> doctors = doctorService.getDoctorBy(new Location(form.getLocation()), new Specialty(form.getSpecialty()),"noClinic");
 
         final ModelAndView mav = new ModelAndView("results");
         mav.addObject("location",form.getLocation());

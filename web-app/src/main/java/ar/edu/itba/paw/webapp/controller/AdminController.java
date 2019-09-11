@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.security.acl.LastOwnerException;
 import java.util.List;
 
 @Controller
@@ -77,7 +78,7 @@ public class AdminController {
         if(errors.hasErrors())
             return addDoctor(form);
 
-        doctorService.createDoctor(form.getName(), form.getSpecialty(), form.getLocation(), form.getLicense(), form.getPhoneNumber());
+        doctorService.createDoctor(form.getName(), new Specialty(form.getSpecialty()), new Location(form.getLocation()), form.getLicense(), form.getPhoneNumber());
 
         final ModelAndView mav = new ModelAndView("addedDoctor");
 
@@ -96,7 +97,7 @@ public class AdminController {
         if(errors.hasErrors())
             return addClinic(form);
 
-        final Clinic clinic = clinicService.createClinic(form.getName(), form.getLocation(), form.getConsultPrice());
+        final Clinic clinic = clinicService.createClinic(form.getName(), new Location(form.getLocation()), form.getConsultPrice());
 
         final ModelAndView mav = new ModelAndView("addedClinic");
 

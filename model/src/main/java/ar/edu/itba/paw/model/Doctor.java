@@ -5,15 +5,15 @@ public class Doctor {
 
     private String name;
 
-    private String specialty;
+    private Specialty specialty;
 
-    private String location;
+    private Location location;
 
     private String license;
 
     private String phoneNumber;
 
-    public Doctor(String name, String specialty, String location, String license, String phoneNumber){
+    public Doctor(String name, Specialty specialty, Location location, String license, String phoneNumber){
         this.name = name;
         this.specialty = specialty;
         this.location = location;
@@ -25,11 +25,11 @@ public class Doctor {
         return name;
     }
 
-    public String getSpecialty() {
+    public Specialty getSpecialty() {
         return specialty;
     }
 
-    public String getLocation() {
+    public Location getLocation() {
         return location;
     }
 

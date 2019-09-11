@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.ClinicDao;
 import ar.edu.itba.paw.model.Clinic;
+import ar.edu.itba.paw.model.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,7 +24,7 @@ public class ClinicDaoImpl implements ClinicDao {
         private final static RowMapper<Clinic> ROW_MAPPER = new RowMapper<Clinic>() {
         @Override
         public Clinic mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new Clinic(resultSet.getString("name"), resultSet.getString("location"), resultSet.getInt("consultPrice"));
+            return new Clinic(resultSet.getString("name"), new Location(resultSet.getString("location")), resultSet.getInt("consultPrice"));
         }
     };
 
@@ -37,16 +38,16 @@ public class ClinicDaoImpl implements ClinicDao {
 
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS clinics (" +
                 "name VARCHAR(20) PRIMARY KEY," +
-                "location VARCHAR(60)," +
+                "location VARCHAR(60) REFERENCES locations(name)," +
                 "consultPrice INTEGER"+
                 ")");
     }
 
     @Override
-    public Clinic createClinic(String name, String location, int consultPrice) {
+    public Clinic createClinic(String name, Location location, int consultPrice) {
         final Map<String, Object> args = new HashMap<>();
         args.put("name", name);
-        args.put("location", location);
+        args.put("location", location.getLocationName());
         args.put("consultPrice", consultPrice);
         int result;
 

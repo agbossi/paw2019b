@@ -4,6 +4,8 @@ import ar.edu.itba.paw.interfaces.DoctorDao;
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Doctor;
+import ar.edu.itba.paw.model.Location;
+import ar.edu.itba.paw.model.Specialty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +22,7 @@ public class DoctorServiceImpl implements DoctorService {
     private DoctorDao doctorDao;
 
     @Override
-    public Doctor createDoctor(String name, String specialty, String location, String license, String phoneNumber) {
+    public Doctor createDoctor(String name, Specialty specialty, Location location, String license, String phoneNumber) {
         return doctorDao.createDoctor(name, specialty, location, license, phoneNumber);
     }
 
@@ -28,7 +30,7 @@ public class DoctorServiceImpl implements DoctorService {
     public List<Doctor> getDoctors() { return doctorDao.getDoctors(); }
 
     @Override
-    public List<Doctor> getDoctorByLocation(String location){
+    public List<Doctor> getDoctorByLocation(Location location){
         return doctorDao.getDoctorByLocation(location);
     }
 
@@ -38,30 +40,15 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<Doctor> getDoctorBySpecialty(String specialty) {
+    public List<Doctor> getDoctorBySpecialty(Specialty specialty) {
         return doctorDao.getDoctorBySpecialty(specialty);
     }
 
     @Override
-    public List<Doctor> getDoctorBy(String location, String specialty, String clinic) {
+    public List<Doctor> getDoctorBy(Location location, Specialty specialty, String clinic) {
 
-        String locationFilter, specialtyFilter, clinicFilter;
 
-        // we should change this, too much repetitive code
-        if(location.equals(NO_LOCATION))
-            locationFilter=null;
-        else
-            locationFilter=location;
-        if(specialty.equals(NO_SPECIALTY))
-            specialtyFilter=null;
-        else
-            specialtyFilter=specialty;
-        if(clinic.equals(NO_CLINIC))
-            clinicFilter=null;
-        else
-            clinicFilter=clinic;
-
-        return doctorDao.getFilteredDoctors(locationFilter, specialtyFilter, clinicFilter);
+        return doctorDao.getFilteredDoctors(location, specialty, "noClinic");
 
     }
 
