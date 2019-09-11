@@ -24,7 +24,7 @@
             <nav class="navbar navbar-expand-md navbar-dark bg-dark">
                 <a class="navbar-brand" href="/">DoctorSearch</a>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><a href="/search">SEARCH</a></button>
+                    <a href="/search"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">SEARCH</button></a>
                 </div>
             </nav>
         </header>
