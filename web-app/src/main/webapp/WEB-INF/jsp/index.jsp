@@ -29,15 +29,26 @@
             </nav>
         </header>
 
-        <div class="container">
-            <ul class="list-group">
+        <div class="container marketing">
+            <div class="row">
                 <c:forEach var="doctor" items="${doctors}">
-                    <li class="list-group-item">
-                        <a href="/results/${doctor.license}"><c:out value="${doctor.name}"/></a>
-                        <h6>${doctor.specialty.specialtyName}</h6>
-                    </li>
+                    <div class="col-lg-4">
+                        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
+                            <title>
+                                ::before
+                                "Placeholder"
+                                ::after
+                            </title>
+                            <rect width="100%" height="100%" fill="#777"></rect>
+                            <text x="50%" y="50%" fill="#777" dy=".3em">140x140</text>
+                        </svg>
+                        <h3>${doctor.name}</h3>
+                        <p>${doctor.specialty.specialtyName}</p>
+                        <p>${doctor.location.locationName}</p>
+                        <p><a class="btn btn-secondary" href="/results/${doctor.license}" role="button">View Details</a></p>
+                    </div>
                 </c:forEach>
-            </ul>
+            </div>
         </div>
 
     </body>

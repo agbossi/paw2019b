@@ -18,23 +18,36 @@
 
     </head>
     <body class="d-flex flex-column h-100">
-    <header>
-        <!-- Fixed navbar -->
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <a class="navbar-brand" href="/">DoctorSearch</a>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <a href="/search"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">SEARCH</button></a>
+        <header>
+            <!-- Fixed navbar -->
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+                <a class="navbar-brand" href="/">DoctorSearch</a>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <a href="/search"><button class="btn btn-outline-success my-2 my-sm-0" type="submit">SEARCH</button></a>
+                </div>
+            </nav>
+        </header>
+            <h2>Results in <c:out value="${location}"/> </h2>
+        <div class="container marketing">
+            <div class="row">
+                <c:forEach var="doctor" items="${doctors}">
+                    <div class="col-lg-4">
+                        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
+                            <title>
+                                ::before
+                                "Placeholder"
+                                ::after
+                            </title>
+                            <rect width="100%" height="100%" fill="#777"></rect>
+                            <text x="50%" y="50%" fill="#777" dy=".3em">140x140</text>
+                        </svg>
+                        <h3>${doctor.name}</h3>
+                        <p>${doctor.specialty.specialtyName}</p>
+                        <p>${doctor.location.locationName}</p>
+                        <p><a class="btn btn-secondary" href="/results/${doctor.license}" role="button">View Details</a></p>
+                    </div>
+                </c:forEach>
             </div>
-        </nav>
-    </header>
-        <h2>Results in <c:out value="${location}"/> </h2>
-        <ul class="list-group">
-            <c:forEach var="doctor" items="${doctors}">
-                <li class="list-group-item">
-                    <a href="/results/${doctor.license}"><c:out value="${doctor.name}"/></a>
-                    <h6><c:out value="${doctor.specialty.specialtyName}"/></h6>
-                </li>
-            </c:forEach>
-        </ul>
+        </div>
     </body>
 </html>
