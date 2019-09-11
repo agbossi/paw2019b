@@ -23,7 +23,7 @@ import java.util.List;
 @EnableWebMvc
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.service", "ar.edu.itba.paw.persistence"})
 @Configuration
-public class WebConfig implements WebMvcConfigurer{
+public class WebConfig extends WebMvcConfigurerAdapter {
 
     private String dbName = "paw";
 
@@ -58,86 +58,4 @@ public class WebConfig implements WebMvcConfigurer{
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
-
-    @Override
-    public void addFormatters(FormatterRegistry formatterRegistry) {
-
-    }
-
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> list) {
-
-    }
-
-    @Override
-    public void extendMessageConverters(List<HttpMessageConverter<?>> list) {
-
-    }
-
-    @Override
-    public Validator getValidator() {
-        return null;
-    }
-
-    @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer contentNegotiationConfigurer) {
-
-    }
-
-    @Override
-    public void configureAsyncSupport(AsyncSupportConfigurer asyncSupportConfigurer) {
-
-    }
-
-    @Override
-    public void configurePathMatch(PathMatchConfigurer pathMatchConfigurer) {
-
-    }
-
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> list) {
-
-    }
-
-    @Override
-    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> list) {
-
-    }
-
-    @Override
-    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> list) {
-
-    }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry interceptorRegistry) {
-
-    }
-
-    @Override
-    public MessageCodesResolver getMessageCodesResolver() {
-        return null;
-    }
-
-    @Override
-    public void addViewControllers(ViewControllerRegistry viewControllerRegistry) {
-
-    }
-
-    @Override
-    public void configureViewResolvers(ViewResolverRegistry viewResolverRegistry) {
-
-    }
-
-    @Override
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer defaultServletHandlerConfigurer) {
-
-    }
-
-    @Override
-    public void addCorsMappings(CorsRegistry corsRegistry) {
-
-    }
-
-
 }
