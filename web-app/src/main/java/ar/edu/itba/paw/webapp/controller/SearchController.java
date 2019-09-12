@@ -49,10 +49,15 @@ public class SearchController {
         if(errors.hasErrors())
             return search(form);
 
+        final ModelAndView mav = new ModelAndView("results");
+
+        List<Location> locations = locationService.getLocations();
+        List<Specialty> specialties = specialtyService.getSpecialties();
         // TODO: once we implement a proper query builder fix this and search form attributes !!
         List<Doctor> doctors = doctorService.getDoctorBy(new Location(form.getLocation()), new Specialty(form.getSpecialty()),"noClinic");
 
-        final ModelAndView mav = new ModelAndView("results");
+        mav.addObject("locations", locations);
+        mav.addObject("specialties", specialties);
         mav.addObject("location",form.getLocation());
         mav.addObject("doctors", doctors);
 
@@ -62,8 +67,15 @@ public class SearchController {
     @RequestMapping("/results/{doctorId}")
     public ModelAndView doctorsPage(@PathVariable(value = "doctorId") String license){
         ModelAndView mav = new ModelAndView("doctorPage");
+
+        List<Location> locations = locationService.getLocations();
+        List<Specialty> specialties = specialtyService.getSpecialties();
         Doctor doctor = doctorService.getDoctorByLicense(license);
+
+        mav.addObject("locations", locations);
+        mav.addObject("specialties", specialties);
         mav.addObject(doctor);
+
         return mav;
     }
 
