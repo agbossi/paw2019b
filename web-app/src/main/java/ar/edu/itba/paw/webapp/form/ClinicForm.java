@@ -8,8 +8,6 @@ public class ClinicForm {
     @Size(min = 2, max = 20)
     private String name;
 
-    // this should have as restriction to be a Location
-    @Size(min = 2, max = 30)
     private String location;
 
     @Min(0)
