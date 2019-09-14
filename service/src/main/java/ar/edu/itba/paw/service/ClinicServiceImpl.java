@@ -24,4 +24,9 @@ public class ClinicServiceImpl implements ClinicService {
     public List<Clinic> getClinics() {
         return clinicDao.getClinics();
     }
+
+    @Override
+    public Clinic getClinicByName(String name) {
+        return clinicDao.getClinicByName(name);
+    }
 }

@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.ClinicService;
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.interfaces.LocationService;
 import ar.edu.itba.paw.interfaces.SpecialtyService;
+import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Specialty;
@@ -31,14 +33,24 @@ public class SearchController {
     @Autowired
     private SpecialtyService specialtyService;
 
+    @Autowired
+    private ClinicService clinicService;
+
+    private ModelAndView addSearchInfoToView(ModelAndView mav){
+        List<Location> locations = locationService.getLocations();
+        List<Specialty> specialties = specialtyService.getSpecialties();
+        List<Clinic> clinics = clinicService.getClinics();
+        mav.addObject("locations", locations);
+        mav.addObject("specialties", specialties);
+        mav.addObject("clinics", clinics);
+
+        return mav;
+    }
+
     @RequestMapping(value = "/search", method = { RequestMethod.GET })
     public ModelAndView search(@ModelAttribute("searchForm") final SearchForm form){
         ModelAndView mav = new ModelAndView("search");
-
-        List<Location> locations = locationService.getLocations();
-        List<Specialty> specialties = specialtyService.getSpecialties();
-        mav.addObject("locations", locations);
-        mav.addObject("specialties", specialties);
+        addSearchInfoToView(mav);
 
         return mav;
     }
@@ -50,14 +62,11 @@ public class SearchController {
             return search(form);
 
         final ModelAndView mav = new ModelAndView("results");
+        addSearchInfoToView(mav);
 
-        List<Location> locations = locationService.getLocations();
-        List<Specialty> specialties = specialtyService.getSpecialties();
         // TODO: once we implement a proper query builder fix this and search form attributes !!
         List<Doctor> doctors = doctorService.getDoctorBy(new Location(form.getLocation()), new Specialty(form.getSpecialty()),"noClinic");
 
-        mav.addObject("locations", locations);
-        mav.addObject("specialties", specialties);
         mav.addObject("location",form.getLocation());
         mav.addObject("doctors", doctors);
 
@@ -68,12 +77,10 @@ public class SearchController {
     public ModelAndView doctorsPage(@PathVariable(value = "doctorId") String license){
         ModelAndView mav = new ModelAndView("doctorPage");
 
-        List<Location> locations = locationService.getLocations();
-        List<Specialty> specialties = specialtyService.getSpecialties();
         Doctor doctor = doctorService.getDoctorByLicense(license);
 
-        mav.addObject("locations", locations);
-        mav.addObject("specialties", specialties);
+        addSearchInfoToView(mav);
+
         mav.addObject(doctor);
 
         return mav;

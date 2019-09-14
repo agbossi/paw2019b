@@ -13,12 +13,15 @@ public class Doctor {
 
     private String phoneNumber;
 
-    public Doctor(String name, Specialty specialty, Location location, String license, String phoneNumber){
+    private Clinic clinic;
+
+    public Doctor(String name, Specialty specialty, Location location, String license, String phoneNumber, Clinic clinic){
         this.name = name;
         this.specialty = specialty;
         this.location = location;
         this.license = license;
         this.phoneNumber = phoneNumber;
+        this.clinic = clinic;
     }
 
     public String getName() {
@@ -41,4 +44,7 @@ public class Doctor {
         return phoneNumber;
     }
 
+    public Clinic getClinic() {
+        return clinic;
+    }
 }

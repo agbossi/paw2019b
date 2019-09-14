@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.security.acl.LastOwnerException;
 import java.util.List;
 
 @Controller
@@ -38,6 +37,17 @@ public class AdminController {
     @Autowired
     private SpecialtyService specialtyService;
 
+    private ModelAndView addSearchInfoToView(ModelAndView mav){
+        List<Location> locations = locationService.getLocations();
+        List<Specialty> specialties = specialtyService.getSpecialties();
+        List<Clinic> clinics = clinicService.getClinics();
+        mav.addObject("locations", locations);
+        mav.addObject("specialties", specialties);
+        mav.addObject("clinics", clinics);
+
+        return mav;
+    }
+
     @RequestMapping("/admin")
     public ModelAndView admin(){
         final ModelAndView mav = new ModelAndView("admin");
@@ -48,10 +58,7 @@ public class AdminController {
     public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form){
         final ModelAndView mav = new ModelAndView("addDoctor");
 
-        List<Location> locations = locationService.getLocations();
-        List<Specialty> specialties = specialtyService.getSpecialties();
-        mav.addObject("locations", locations);
-        mav.addObject("specialties", specialties);
+        addSearchInfoToView(mav);
 
         return mav;
     }
@@ -78,7 +85,9 @@ public class AdminController {
         if(errors.hasErrors())
             return addDoctor(form);
 
-        doctorService.createDoctor(form.getName(), new Specialty(form.getSpecialty()), new Location(form.getLocation()), form.getLicense(), form.getPhoneNumber());
+        Clinic doctorClinic = clinicService.getClinicByName(form.getClinic());
+
+        doctorService.createDoctor(form.getName(), new Specialty(form.getSpecialty()), new Location(form.getLocation()), form.getLicense(), form.getPhoneNumber(), doctorClinic);
 
         final ModelAndView mav = new ModelAndView("addedDoctor");
 

@@ -9,4 +9,6 @@ public interface ClinicService {
     Clinic createClinic(String name, Location location, int consultPrice);
 
     List<Clinic> getClinics();
+
+    Clinic getClinicByName(String name);
 }

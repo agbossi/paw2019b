@@ -68,6 +68,15 @@
                     <form:errors path="phoneNumber" element="p"/>
                 </div>
                 <div>
+                    <form:label path="clinic">Clinic: </form:label>
+                    <form:select path="clinic">
+                        <c:forEach var="clinic" items="${clinics}">
+                            <form:option value="${clinic.name}"/>
+                        </c:forEach>
+                    </form:select>
+                    <form:errors path="clinic" element="p"/>
+                </div>
+                <div>
                     <input type="submit" value="Add">
                 </div>
             </form:form>

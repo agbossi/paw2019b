@@ -50,7 +50,11 @@
                         <form:label path="clinic">Clinic</form:label>
                     </div>
                     <div>
-                        <form:input type="text" path="clinic"/>
+                        <form:select path="clinic">
+                            <c:forEach var="clinic" items="${clinics}">
+                                <form:option value="${clinic.name}"/>
+                            </c:forEach>
+                        </form:select>
                         <form:errors path="clinic" element="p"/>
                         <br/>
                     </div>

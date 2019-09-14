@@ -21,6 +21,8 @@ public class DoctorForm {
     @Pattern( regexp = "(5411|11)[0-9]{8}")
     private String phoneNumber;
 
+    private String clinic;
+
     public String getName() {
         return name;
     }
@@ -59,5 +61,13 @@ public class DoctorForm {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getClinic() {
+        return clinic;
+    }
+
+    public void setClinic(String clinic) {
+        this.clinic = clinic;
     }
 }
