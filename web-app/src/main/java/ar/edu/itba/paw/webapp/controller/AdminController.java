@@ -11,6 +11,7 @@ import ar.edu.itba.paw.webapp.form.ClinicForm;
 import ar.edu.itba.paw.webapp.form.DoctorForm;
 import ar.edu.itba.paw.webapp.form.LocationForm;
 import ar.edu.itba.paw.webapp.form.SpecialtyForm;
+import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 public class AdminController {
@@ -37,18 +37,11 @@ public class AdminController {
     @Autowired
     private SpecialtyService specialtyService;
 
-    private ModelAndView addSearchInfoToView(ModelAndView mav){
-        List<Location> locations = locationService.getLocations();
-        List<Specialty> specialties = specialtyService.getSpecialties();
-        List<Clinic> clinics = clinicService.getClinics();
-        mav.addObject("locations", locations);
-        mav.addObject("specialties", specialties);
-        mav.addObject("clinics", clinics);
+    @Autowired
+    private ModelAndViewModifier viewModifier;
 
-        return mav;
-    }
 
-    @RequestMapping("/admin")
+    @RequestMapping(value = "/admin", method = { RequestMethod.GET })
     public ModelAndView admin(){
         final ModelAndView mav = new ModelAndView("admin");
         return mav;
@@ -58,7 +51,7 @@ public class AdminController {
     public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form){
         final ModelAndView mav = new ModelAndView("addDoctor");
 
-        addSearchInfoToView(mav);
+        viewModifier.addSearchInfo(mav);
 
         return mav;
     }
@@ -67,8 +60,7 @@ public class AdminController {
     public ModelAndView addClinic(@ModelAttribute("clinicForm") final ClinicForm form){
         final ModelAndView mav = new ModelAndView("addClinic");
 
-        List<Location> locations = locationService.getLocations();
-        mav.addObject("locations", locations);
+        viewModifier.addLocations(mav);
 
         return mav;
     }
@@ -76,6 +68,12 @@ public class AdminController {
     @RequestMapping(value = "/addLocation", method = { RequestMethod.GET })
     public ModelAndView addLocation(@ModelAttribute("locationForm") final LocationForm form){
         final ModelAndView mav = new ModelAndView("addLocation");
+        return mav;
+    }
+
+    @RequestMapping(value = "/addSpecialty", method = {RequestMethod.GET})
+    public ModelAndView addSpecialty(@ModelAttribute("specialtyForm") final SpecialtyForm form){
+        final ModelAndView mav = new ModelAndView("addSpecialty");
         return mav;
     }
 
@@ -87,16 +85,15 @@ public class AdminController {
 
         Clinic doctorClinic = clinicService.getClinicByName(form.getClinic());
 
-        doctorService.createDoctor(form.getName(), new Specialty(form.getSpecialty()), new Location(form.getLocation()), form.getLicense(), form.getPhoneNumber(), doctorClinic);
+        doctorService.createDoctor(form.getName(),
+                new Specialty(form.getSpecialty()),
+                new Location(form.getLocation()),
+                form.getLicense(),
+                form.getPhoneNumber(),
+                doctorClinic);
 
         final ModelAndView mav = new ModelAndView("addedDoctor");
 
-        return mav;
-    }
-
-    @RequestMapping(value = "/addSpecialty", method = {RequestMethod.GET})
-    public ModelAndView addSpecialty(@ModelAttribute("specialtyForm") final SpecialtyForm form){
-        final ModelAndView mav = new ModelAndView("addSpecialty");
         return mav;
     }
 
@@ -128,7 +125,7 @@ public class AdminController {
         return mav;
     }
 
-    @RequestMapping("/addedSpecialty")
+    @RequestMapping(value = "/addedSpecialty", method = { RequestMethod.POST })
     public ModelAndView addedSpecialty(@Valid @ModelAttribute("specialtyForm") final SpecialtyForm form, final BindingResult errors){
 
         if(errors.hasErrors())

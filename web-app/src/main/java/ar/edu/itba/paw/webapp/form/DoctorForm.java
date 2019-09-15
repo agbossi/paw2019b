@@ -1,24 +1,16 @@
 package ar.edu.itba.paw.webapp.form;
 
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
 public class DoctorForm {
 
-    @Size(min = 1, max = 60)
     private String name;
 
-    @Size(min = 1, max = 50)
+
     private String specialty;
 
-    @Size(min = 2, max = 50)
     private String location;
 
-    @Size(min = 3, max = 20)
-    @Pattern(regexp = "[A-Z]+[0-9]+")
     private String license;
 
-    @Pattern( regexp = "(5411|11)[0-9]{8}")
     private String phoneNumber;
 
     private String clinic;

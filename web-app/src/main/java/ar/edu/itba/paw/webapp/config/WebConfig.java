@@ -4,17 +4,8 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.format.FormatterRegistry;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springframework.validation.MessageCodesResolver;
-import org.springframework.validation.Validator;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -22,10 +13,12 @@ import org.springframework.web.servlet.view.JstlView;
 
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @EnableWebMvc
-@ComponentScan({ "ar.edu.itba.paw.webapp.controller", "ar.edu.itba.paw.service", "ar.edu.itba.paw.persistence"})
+@ComponentScan({ "ar.edu.itba.paw.webapp.controller",
+                 "ar.edu.itba.paw.webapp.helpers",
+                 "ar.edu.itba.paw.service",
+                 "ar.edu.itba.paw.persistence"})
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 

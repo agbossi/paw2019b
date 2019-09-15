@@ -1,16 +1,11 @@
 package ar.edu.itba.paw.webapp.form;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
-
 public class ClinicForm {
 
-    @Size(min = 2, max = 20)
     private String name;
 
     private String location;
 
-    @Min(0)
     private int consultPrice;
 
     public String getName() {
