@@ -58,7 +58,11 @@ public class ClinicDaoImpl implements ClinicDao {
 
     @Override
     public Clinic getClinicByName(String clinicName) {
-        return jdbcTemplate.queryForObject("select * from clinics where name = ?", Clinic.class, clinicName);
+        final List<Clinic> list = jdbcTemplate.query("select * from clinics where name = ?",ROW_MAPPER,clinicName);
+        if(list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 
     @Override
