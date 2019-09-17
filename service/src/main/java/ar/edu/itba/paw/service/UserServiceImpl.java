@@ -13,7 +13,12 @@ public class UserServiceImpl implements UserService {
     UserDaoImpl userDao;
 
     @Override
-    public User createUser(String id, String name, String password, String email, String healthInsurance) {
-        return userDao.createUser(id,name,password,email,healthInsurance);
+    public User createUser(String id, String firstName,String lastName, String password, String email, String healthInsurance) {
+        return userDao.createUser(id,firstName,lastName,password,email,healthInsurance);
+    }
+
+    @Override
+    public User findUserByEmail(String email) {
+        return userDao.findUserByEmail(email);
     }
 }

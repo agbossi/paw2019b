@@ -30,10 +30,14 @@ public class UserController {
         if(errors.hasErrors()){
             return signUp(form);
         }
-        userService.createUser(form.getId(),form.getName(),form.getPassword(),form.getEmail(),form.getHealthInsurance());
-        //TODO how to send back to the previous page
+        userService.createUser(form.getId(),form.getFirstName(),form.getLastName(),form.getPassword(),form.getEmail(),form.getHealthInsurance());
+        //TODO how to send back to the previous page with its parameters
         //possible solution: request curr url in <a href = ${}/signUp> and use @pathvariable in controller
-        final ModelAndView mav = new ModelAndView("index");
+        final ModelAndView mav = new ModelAndView("login");
         return mav;
+    }
+    @RequestMapping(value = "/login")
+    public ModelAndView login(){
+        return new ModelAndView("login");
     }
 }

@@ -30,9 +30,14 @@
     <c:url value="/signUp" var="postPath"/>
     <form:form modelAttribute="signUpForm" action="${postPath}" method="post">
         <div>
-            <form:label path="name">Name: </form:label>
-            <form:input type="text" path="name"/>
-            <form:errors path="name" element="p"/>
+            <form:label path="firstName">First name: </form:label>
+            <form:input type="text" path="firstName"/>
+            <form:errors path="firstName" element="p"/>
+        </div>
+        <div>
+            <form:label path="lastName">Last name: </form:label>
+            <form:input type="text" path="lastName"/>
+            <form:errors path="lastName" element="p"/>
         </div>
          <div>
             <form:label path="password">Password: </form:label>
