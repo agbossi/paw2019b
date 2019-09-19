@@ -26,7 +26,7 @@
                 <a class="p-2 text-dark" href="/">Profile</a>
             </nav>
             <a class="btn btn-outline-primary" href="/signUp">Sign up</a>
-            <a class="btn btn-outline-primary" href="/">log in</a>
+            <a class="btn btn-outline-primary" href="/login">log in</a>
         </div>
     </body>
 </html>
