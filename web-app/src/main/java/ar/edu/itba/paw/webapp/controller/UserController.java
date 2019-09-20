@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -18,6 +19,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     //TODO change form error messages
     @RequestMapping(value = "/signUp", method = {RequestMethod.GET})
@@ -43,13 +47,13 @@ public class UserController {
         if(errors.hasErrors()){
             return signUp(form);
         }
-        userService.createUser(form.getId(),form.getFirstName(),form.getLastName(),form.getPassword(),form.getEmail(),form.getHealthInsurance());
+        userService.createUser(form.getId(),form.getFirstName(),form.getLastName(),passwordEncoder.encode(form.getPassword()),form.getEmail(),form.getHealthInsurance());
         //TODO how to send back to the previous page with its parameters
         //possible solution: request curr url in <a href = ${}/signUp> and use @pathvariable in controller
         final ModelAndView mav = new ModelAndView("redirect:/");
         return mav;
     }
-    @RequestMapping(value = "/login")
+    @RequestMapping(value = "/login",method = {RequestMethod.GET})
     public ModelAndView login(){
         return new ModelAndView("login");
     }

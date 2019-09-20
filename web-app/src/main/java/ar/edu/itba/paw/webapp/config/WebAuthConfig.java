@@ -29,9 +29,11 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
     @Override protected void configure(final HttpSecurity http) throws Exception{
-        http.sessionManagement().invalidSessionUrl("/login")
+        http.sessionManagement().invalidSessionUrl("/")
                 .and().authorizeRequests()
                 .antMatchers("/login").anonymous()
+                .antMatchers("/").anonymous()
+                .antMatchers("/signUp").anonymous()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/**").authenticated()
                 .and().formLogin()
