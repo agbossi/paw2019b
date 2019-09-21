@@ -19,11 +19,13 @@ public class SignUpForm {
     private String id;
 
     @Size(min = 8, max = 15)
-    @Pattern(regexp = "[[a-z]+[A-Z]+[0-9]{4,}]")
+    //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
+    @Pattern(regexp = "[a-zA-Z0-9]+")
     private String password;
 
     @Size(min = 8, max = 15)
-    @Pattern(regexp = "[[a-z]+[A-Z]+[0-9]{4,}]")
+    //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
+    @Pattern(regexp = "[a-zA-Z0-9]+")
     private String repeatPassword;
 
     @Size(min = 4, max = 20)
@@ -32,7 +34,7 @@ public class SignUpForm {
 
     @Size(min = 6, max = 20)
     //stackOverflow
-    @Pattern(regexp = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
     private String email;
 
     public String getFirstName() {

@@ -29,5 +29,8 @@
     <div>
         <input type="submit" value="Login!"/>
     </div>
+    </div>
+    <a href="/signUp">sign up!</a>
+    </div>
 </body>
 </html>
