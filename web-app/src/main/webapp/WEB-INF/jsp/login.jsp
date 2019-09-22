@@ -19,7 +19,7 @@
             <input id="password" name="password" type="password">
         </div>
     <div>
-        <label><input name="rememberme" type="checkbox"/> <spring:message code="remember_me"/></label>
+        <label><input name="rememberme" type="checkbox"/><spring:message code="rememberme"/></label>
     </div>
     <div>
         <input type="submit" value="Login"/>
