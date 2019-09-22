@@ -49,15 +49,6 @@
                     <form:errors path="specialty" element="p"/>
                 </div>
                 <div>
-                    <form:label path="location">Location: </form:label>
-                    <form:select path="location">
-                        <c:forEach var="location" items="${locations}">
-                            <form:option value="${location.locationName}"/>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors path="location" element="p"/>
-                </div>
-                <div>
                     <form:label path="license">License: </form:label>
                     <form:input type="text" path="license"/>
                     <form:errors path="license" element="p"/>
@@ -66,15 +57,6 @@
                     <form:label path="phoneNumber">Phone Number: </form:label>
                     <form:input type="text" path="phoneNumber"/>
                     <form:errors path="phoneNumber" element="p"/>
-                </div>
-                <div>
-                    <form:label path="clinic">Clinic: </form:label>
-                    <form:select path="clinic">
-                        <c:forEach var="clinic" items="${clinics}">
-                            <form:option value="${clinic.name}"/>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors path="clinic" element="p"/>
                 </div>
                 <div>
                     <input type="submit" value="Add">

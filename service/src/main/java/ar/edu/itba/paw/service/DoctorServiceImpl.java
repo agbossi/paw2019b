@@ -22,17 +22,13 @@ public class DoctorServiceImpl implements DoctorService {
     private DoctorDao doctorDao;
 
     @Override
-    public Doctor createDoctor(String name, Specialty specialty, Location location, String license, String phoneNumber, Clinic clinic) {
-        return doctorDao.createDoctor(name, specialty, location, license, phoneNumber, clinic);
+    public Doctor createDoctor(String name, Specialty specialty, String license, String phoneNumber) {
+        return doctorDao.createDoctor(name, specialty, license, phoneNumber);
     }
 
     @Override
     public List<Doctor> getDoctors() { return doctorDao.getDoctors(); }
 
-    @Override
-    public List<Doctor> getDoctorByLocation(Location location){
-        return doctorDao.getDoctorByLocation(location);
-    }
 
     @Override
     public List<Doctor> getDoctorByName(String name) {
@@ -54,8 +50,4 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorDao.getDoctorByLicense(license);
     }
 
-    @Override
-    public List<Doctor> getDoctorByClinic(Clinic clinic){
-        return doctorDao.getDoctorByClinic(clinic);
-    }
 }

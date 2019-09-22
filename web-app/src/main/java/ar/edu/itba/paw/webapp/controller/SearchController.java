@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.ClinicService;
+import ar.edu.itba.paw.interfaces.DoctorClinicService;
 import ar.edu.itba.paw.interfaces.DoctorService;
 import ar.edu.itba.paw.model.Doctor;
+import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Specialty;
 import ar.edu.itba.paw.webapp.form.SearchForm;
@@ -17,6 +20,12 @@ import java.util.List;
 
 @Controller
 public class SearchController {
+
+    @Autowired
+    private DoctorClinicService doctorClinicService;
+
+    @Autowired
+    ClinicService clinicService;
 
     @Autowired
     private DoctorService doctorService;
@@ -43,24 +52,24 @@ public class SearchController {
         viewModifier.addSearchInfo(mav);
 
         // TODO: once we implement a proper query builder fix this and search form attributes !!
-        List<Doctor> filteredDoctors = doctorService.getDoctorBy(new Location(form.getLocation()),
-                new Specialty(form.getSpecialty()),
-                "noClinic");
+        List<DoctorClinic> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
+                new Specialty(form.getSpecialty()), form.getClinic());
 
         viewModifier.addFilteredDoctors(mav, filteredDoctors);
 
         return mav;
     }
 
-    @RequestMapping(value = "/results/{doctorId}", method = {RequestMethod.GET})
-    public ModelAndView doctorsPage(@PathVariable(value = "doctorId") String license) {
+    @RequestMapping(value = "/results/{clinicId}/{doctorId}", method = {RequestMethod.GET})
+    public ModelAndView doctorsPage(@PathVariable(value = "clinicId") String clinic, @PathVariable(value = "doctorId") String license) {
         ModelAndView mav = new ModelAndView("doctorPage");
 
-        Doctor doctor = doctorService.getDoctorByLicense(license);
+
+        DoctorClinic doctor = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctorService.getDoctorByLicense(license), clinicService.getClinicByName(clinic));
 
         viewModifier.addSearchInfo(mav);
 
-        mav.addObject(doctor);
+        mav.addObject("doctor", doctor);
 
         return mav;
     }

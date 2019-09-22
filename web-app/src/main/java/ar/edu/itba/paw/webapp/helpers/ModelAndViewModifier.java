@@ -1,13 +1,7 @@
 package ar.edu.itba.paw.webapp.helpers;
 
-import ar.edu.itba.paw.interfaces.ClinicService;
-import ar.edu.itba.paw.interfaces.DoctorService;
-import ar.edu.itba.paw.interfaces.LocationService;
-import ar.edu.itba.paw.interfaces.SpecialtyService;
-import ar.edu.itba.paw.model.Clinic;
-import ar.edu.itba.paw.model.Doctor;
-import ar.edu.itba.paw.model.Location;
-import ar.edu.itba.paw.model.Specialty;
+import ar.edu.itba.paw.interfaces.*;
+import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
@@ -28,6 +22,9 @@ public class ModelAndViewModifier {
 
     @Autowired
     private DoctorService doctorService;
+
+    @Autowired
+    DoctorClinicService doctorClinicService;
 
     public ModelAndView addSearchInfo(ModelAndView mav){
         List<Location> locations = locationService.getLocations();
@@ -62,14 +59,14 @@ public class ModelAndViewModifier {
     }
 
     public ModelAndView addDoctors(ModelAndView mav){
-        List<Doctor> doctors = doctorService.getDoctors();
-        mav.addObject("doctors", doctors);
+        List<DoctorClinic> doctors = doctorClinicService.getDoctorClinics();
+        mav.addObject("doctorClinics", doctors);
 
         return mav;
     }
 
-    public ModelAndView addFilteredDoctors(ModelAndView mav, List<Doctor> filteredDoctors){
-        mav.addObject("doctors", filteredDoctors);
+    public ModelAndView addFilteredDoctors(ModelAndView mav, List<DoctorClinic> filteredDoctors){
+        mav.addObject("doctorClinics", filteredDoctors);
 
         return mav;
     }

@@ -6,12 +6,10 @@ public class Clinic {
     // TODO: this should be transformed into an address
     private Location location;
 
-    private int consultPrice;
 
-    public Clinic(String name, Location location, int consultPrice){
+    public Clinic(String name, Location location){
         this.name = name;
-        this.location = location;
-        this.consultPrice = consultPrice;
+        this.location = location;;
     }
 
     public String getName() {
@@ -22,7 +20,4 @@ public class Clinic {
         return location;
     }
 
-    public int getConsultPrice() {
-        return consultPrice;
-    }
 }

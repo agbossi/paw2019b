@@ -1,16 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.ClinicService;
-import ar.edu.itba.paw.interfaces.DoctorService;
-import ar.edu.itba.paw.interfaces.LocationService;
-import ar.edu.itba.paw.interfaces.SpecialtyService;
-import ar.edu.itba.paw.model.Clinic;
-import ar.edu.itba.paw.model.Location;
-import ar.edu.itba.paw.model.Specialty;
-import ar.edu.itba.paw.webapp.form.ClinicForm;
-import ar.edu.itba.paw.webapp.form.DoctorForm;
-import ar.edu.itba.paw.webapp.form.LocationForm;
-import ar.edu.itba.paw.webapp.form.SpecialtyForm;
+import ar.edu.itba.paw.interfaces.*;
+import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class AdminController {
@@ -36,6 +29,9 @@ public class AdminController {
 
     @Autowired
     private SpecialtyService specialtyService;
+
+    @Autowired
+    private DoctorClinicService doctorClinicService;
 
     @Autowired
     private ModelAndViewModifier viewModifier;
@@ -55,6 +51,18 @@ public class AdminController {
 
         return mav;
     }
+
+    @RequestMapping(value = "/addDoctorClinic", method = { RequestMethod.GET })
+    public ModelAndView addDoctorClinic(@ModelAttribute("doctorClinicForm") final DoctorClinicForm form){
+        final ModelAndView mav = new ModelAndView("addDoctorClinic");
+        List<Doctor> doctors = doctorService.getDoctors();
+        List<Clinic> clinics = clinicService.getClinics();
+        mav.addObject("doctors", doctors);
+        mav.addObject("clinics", clinics);
+
+        return mav;
+    }
+
 
     @RequestMapping(value = "/addClinic", method = { RequestMethod.GET })
     public ModelAndView addClinic(@ModelAttribute("clinicForm") final ClinicForm form){
@@ -83,19 +91,32 @@ public class AdminController {
         if(errors.hasErrors())
             return addDoctor(form);
 
-        Clinic doctorClinic = clinicService.getClinicByName(form.getClinic());
 
         doctorService.createDoctor(form.getName(),
                 new Specialty(form.getSpecialty()),
-                new Location(form.getLocation()),
                 form.getLicense(),
-                form.getPhoneNumber(),
-                doctorClinic);
+                form.getPhoneNumber());
 
         final ModelAndView mav = new ModelAndView("addedDoctor");
 
         return mav;
     }
+
+    @RequestMapping(value = "/addedDoctorClinic", method = { RequestMethod.POST })
+    public ModelAndView addedDoctorClinic(@Valid @ModelAttribute("doctorClinicForm") final DoctorClinicForm form, final BindingResult errors){
+
+        if(errors.hasErrors())
+            return addDoctorClinic(form);
+
+        doctorClinicService.createDoctorClinic(doctorService.getDoctorByLicense(form.getDoctor()),
+                clinicService.getClinicByName(form.getClinic()),
+                form.getConsultPrice());
+
+        final ModelAndView mav = new ModelAndView("addedDoctorClinic");
+
+        return mav;
+    }
+
 
     @RequestMapping(value = "/addedClinic", method = { RequestMethod.POST })
     public ModelAndView addedClinic(@Valid @ModelAttribute("clinicForm") final ClinicForm form, final BindingResult errors){
@@ -103,7 +124,7 @@ public class AdminController {
         if(errors.hasErrors())
             return addClinic(form);
 
-        final Clinic clinic = clinicService.createClinic(form.getName(), new Location(form.getLocation()), form.getConsultPrice());
+        final Clinic clinic = clinicService.createClinic(form.getName(), new Location(form.getLocation()));
 
         final ModelAndView mav = new ModelAndView("addedClinic");
 

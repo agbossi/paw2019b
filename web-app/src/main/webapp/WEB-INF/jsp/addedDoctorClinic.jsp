@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <%@ page isELIgnored="false" %>
@@ -9,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <title>DoctorSearch - Add Clinic</title>
+    <title>DoctorSearch - Add Doctor</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/navbar-fixed/">
 
@@ -22,37 +21,23 @@
 <header>
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <a class="navbar-brand" href="/admin">DoctorSearch</a>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/admin">DoctorSearch<span class="sr-only">(current)</span></a>
+                <li class="nav-item">
+                    <a class="nav-link" href="/addDoctor">Add Doctor</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/addClinic">Add Clinic</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/addLocation">Add Location</a>
                 </li>
             </ul>
         </div>
     </nav>
 </header>
-<h2>Clinic Information</h2>
-<div class="container">
-    <c:url value="/addedClinic" var="postPath"/>
-    <form:form modelAttribute="clinicForm" action="${postPath}" method="post">
-        <div>
-            <form:label path="name">Name: </form:label>
-            <form:input type="text" path="name"/>
-            <form:errors path="name" element="p"/>
-        </div>
-        <div>
-            <form:label path="location">Location: </form:label>
-            <form:select path="location">
-                <c:forEach var="location" items="${locations}">
-                    <form:option value="${location.locationName}"/>
-                </c:forEach>
-            </form:select>
-            <form:errors path="location" element="p"/>
-        </div>
-        <div>
-            <input type="submit" value="Add">
-        </div>
-    </form:form>
-</div>
+<h2>Doctor added to clinic!</h2>
+<a class="nav-link" href="/addDoctorClinic">Add another doctor to a clinic</a>
 </body>
 </html>

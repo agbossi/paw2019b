@@ -6,15 +6,25 @@
         <jsp:include page="base/navbar.jsp" />
     </head>
     <body>
-        <h2><c:out value="${doctor.name}"/></h2>
+        <h2><c:out value="${doctor.doctor.name}"/></h2>
         <ul class="list-group">
             <li class="list-group-item">
-                <h6>License: <c:out value="${doctor.license}"/></h6>
-                <h6>Location: <c:out value="${doctor.location.locationName}"/></h6>
-                <h6>Specialty: <c:out value="${doctor.specialty.specialtyName}"/></h6>
-                <h6>Phone Number: <c:out value="${doctor.phoneNumber}"/></h6>
+                <h6>License: <c:out value="${doctor.doctor.license}"/></h6>
+                <h6>Clinic: <c:out value="${doctor.clinic.name}"/> (<c:out value="${doctor.clinic.location.locationName}"/>)</h6>
+                <h6>Specialty: <c:out value="${doctor.doctor.specialty.specialtyName}"/></h6>
+                <h6>Phone Number: <c:out value="${doctor.doctor.phoneNumber}"/></h6>
+<%--                <h6>Schedule :--%>
+<%--                    <c:if test="${!empty doctor.schedule}">--%>
+<%--                    <c:forEach var="schedule" items="${doctor.schedule}">--%>
+<%--                        <h6> <c:out value="${schedule}"/> -  <c:out value="${schedule.hour}"/></h6>--%>
+<%--                        </div>--%>
+<%--                    </c:forEach>--%>
+<%--                </c:if></h6>--%>
             </li>
         </ul>
+
+
+        <!--
         <table style="width:100%">
             <tr>
                 <th></th>
@@ -89,6 +99,7 @@
                 <td></td>
             </tr>
          </table>
+         -->
     </body>
 </html>
 

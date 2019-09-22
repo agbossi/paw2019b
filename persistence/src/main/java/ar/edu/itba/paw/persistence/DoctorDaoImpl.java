@@ -30,13 +30,9 @@ public class DoctorDaoImpl implements DoctorDao {
         public Doctor mapRow(ResultSet resultSet, int i) throws SQLException {
             return new Doctor(resultSet.getString("doctorName"),
                    new Specialty(resultSet.getString("specialty")),
-                   new Location(resultSet.getString("location")),
                     resultSet.getString("license"),
-                    resultSet.getString("phoneNumber"),
-                   new Clinic(resultSet.getString("clinicName"),
-                              new Location(resultSet.getString("location")),
-                              resultSet.getInt(("consultPrice"))
-                   )
+                    resultSet.getString("phoneNumber")
+
             );
         }
     };
@@ -52,9 +48,6 @@ public class DoctorDaoImpl implements DoctorDao {
         jdbcTemplate.execute( "CREATE TABLE IF NOT EXISTS doctors ("+
                 "license VARCHAR(20) PRIMARY KEY,"+
                 "specialty VARCHAR(50) REFERENCES specialties(name),"+
-                "location VARCHAR(50) REFERENCES locations(name),"+
-                "clinicName VARCHAR(20) REFERENCES clinics(name),"+
-                "consultPrice INTEGER,"+
                 "doctorName VARCHAR(60),"+
                 "phoneNumber VARCHAR(20)"+
                 ");"
@@ -62,20 +55,17 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
-    public Doctor createDoctor(final String name, final Specialty specialty, final Location location, final String license, final String phoneNumber, final Clinic clinic) {
+    public Doctor createDoctor(final String name, final Specialty specialty, final String license, final String phoneNumber) {
         final Map<String, Object> args = new HashMap<>();
         args.put("doctorName", name);
         args.put("specialty", specialty.getSpecialtyName());
-        args.put("location", location.getLocationName());
         args.put("license", license);
         args.put("phoneNumber", phoneNumber);
-        args.put("clinicName", clinic.getName());
-        args.put("clinicConsultPrice", clinic.getConsultPrice());
         int result;
 
         result = jdbcInsert.execute(args);
 
-        return new Doctor(name, specialty, location, license, phoneNumber, clinic);
+        return new Doctor(name, specialty, license, phoneNumber);
     }
 
     @Override
@@ -87,15 +77,6 @@ public class DoctorDaoImpl implements DoctorDao {
         return list;
     }
 
-    @Override
-    public List<Doctor> getDoctorByLocation(Location location) {
-
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where location = ?",ROW_MAPPER,location.getLocationName());
-        if(list.isEmpty()){
-            return null;
-        }
-        return list;
-    }
 
     @Override
     public List<Doctor> getDoctorByName(String name) {
@@ -124,36 +105,10 @@ public class DoctorDaoImpl implements DoctorDao {
         return list.get(0);
     }
 
-    @Override
-    public List<Doctor> getDoctorByClinic(Clinic clinic) {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where clinicName = ?",ROW_MAPPER,clinic.getName());
-        if(list.isEmpty()){
-            return null;
-        }
-        return list;
-    }
 
     @Override
     public List<Doctor> getFilteredDoctors(final Location location, final Specialty specialty, final String clinic) {
 
-        DoctorQueryBuilder builder = new DoctorQueryBuilder();
-        builder.buildQuery(location.getLocationName(), specialty.getSpecialtyName(), clinic);
-
-        final List<Doctor> list = jdbcTemplate.query(builder.getQuery(), new PreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement preparedStatement) throws SQLException {
-                int i=1;
-
-                if(location!=null){
-                    preparedStatement.setString(i,location.getLocationName());
-                    i++;
-                }
-                if(specialty!=null){
-                    preparedStatement.setString(i,specialty.getSpecialtyName());
-                    i++;
-                }
-            }
-        }, ROW_MAPPER);
-        return ( list.isEmpty() ? null : list );
+        return null;
     }
 }
