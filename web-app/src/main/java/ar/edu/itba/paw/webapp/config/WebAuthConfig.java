@@ -35,32 +35,33 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Override protected void configure(final HttpSecurity http) throws Exception{
         http.sessionManagement().invalidSessionUrl("/")
-                .and().authorizeRequests()
-                .antMatchers("/login").anonymous()
-                .antMatchers("/").anonymous()
-                .antMatchers("/signUp").anonymous()
-                .antMatchers("/admin/**").permitAll()
-                .antMatchers("/**").permitAll()
+                    .and().authorizeRequests()
+                    .antMatchers("/login").anonymous()
+                    .antMatchers("/signUp").anonymous()
+                    .antMatchers("/admin/**").permitAll()//hasRole("ADMIN")
+                    .antMatchers("/**").permitAll()
                 .and().formLogin()
-                .usernameParameter("j_username")
-                .passwordParameter("j_password")
-                .defaultSuccessUrl("/", false)
-                .loginPage("/login")
-                .successHandler(myAuthenticationSuccessHandler())
+                    .usernameParameter("email")
+                    .passwordParameter("password")
+                    .defaultSuccessUrl("/", false)
+                    .loginPage("/login")
+                    .successHandler(myAuthenticationSuccessHandler())
                 .and().rememberMe()
-                .rememberMeParameter("j_rememberme")
-                .userDetailsService(userDetailsService).key("${key}")
-                .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
+                    .rememberMeParameter("rememberme")
+                    .userDetailsService(userDetailsService).key("${key}")
+                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
                 .and().logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-                .and().exceptionHandling()
-                .accessDeniedPage("/403")
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/login")
+                    .and().exceptionHandling()
+                    .accessDeniedPage("/403")
                 .and().csrf().disable();
     }
+
     @Override public void configure(final WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico", "/403");
     }
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -70,6 +71,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
         return new PawUrlAuthenticationSuccessHandler("/");
     }
+
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {

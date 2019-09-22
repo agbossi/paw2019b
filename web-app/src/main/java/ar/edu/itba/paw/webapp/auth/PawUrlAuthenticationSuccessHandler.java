@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
+
     public PawUrlAuthenticationSuccessHandler(String defaultTargetUrl) {
         setDefaultTargetUrl(defaultTargetUrl);
     }
@@ -22,14 +23,15 @@ public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         if (session != null) {
             String redirectUrl = (String) session.getAttribute("url_prior_login");
             if (redirectUrl != null) {
+
                 // we do not forget to clean this attribute from session
                 session.removeAttribute("url_prior_login");
                 String role = determineTargetUrl(authentication);
-                if(role.equals("admin") && redirectUrl.equals("/")){
+                if(role.equals("ROLE_ADMIN") && redirectUrl.equals("/")){
                     getRedirectStrategy().sendRedirect(request, response, "/admin");
                 }else {
                     // then we redirect
-                    getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+                    getRedirectStrategy().sendRedirect(request, response, getDefaultTargetUrl());
                 }
             } else {
                 super.onAuthenticationSuccess(request, response, authentication);
@@ -54,9 +56,9 @@ public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         }
 
         if (isUser) {
-            return "user";
+            return "ROLE_USER";
         } else if (isAdmin) {
-            return "admin";
+            return "ROLE_ADMIN";
         } else {
             throw new IllegalStateException();
         }

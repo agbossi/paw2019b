@@ -37,7 +37,6 @@
                 <a class="btn btn-outline-primary" href="/signUp">Sign up</a>
                 <a class="btn btn-outline-primary" href="/login">log in</a>
             </sec:authorize>
-
         </div>
     </body>
 </html>
