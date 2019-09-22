@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <html>
     <head>
@@ -21,11 +22,21 @@
     <body>
         <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
             <h5 class="my-0 mr-md-auto font-weight-normal"><a href="/">Doctor Search</a></h5>
+
             <nav class="my-2 my-md-0 mr-md-3">
-                <a class="p-2 text-dark" href="/">Appointments</a>
-                <a class="p-2 text-dark" href="/">Profile</a>
+                <sec:authorize access="hasRole('ROLE_USER')">
+                    <a class="p-2 text-dark" href="/">Appointments</a>
+                    <a class="p-2 text-dark" href="/">Profile</a>
+                </sec:authorize>
             </nav>
-            <a class="btn btn-outline-primary" href="/">Sign up</a>
+
+            <sec:authorize access="hasRole('ROLE_USER')">
+                <a class="btn btn-outline-primary" href="/logout">log out</a>
+            </sec:authorize>
+            <sec:authorize access="isAnonymous()">
+                <a class="btn btn-outline-primary" href="/signUp">Sign up</a>
+                <a class="btn btn-outline-primary" href="/login">log in</a>
+            </sec:authorize>
         </div>
     </body>
 </html>
