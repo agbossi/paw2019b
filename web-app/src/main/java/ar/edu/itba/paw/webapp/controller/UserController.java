@@ -81,8 +81,8 @@ public class UserController {
         //TODO how to send back to the previous page with its parameters
         //need to get parameter stored in request
 
-        //
-        //TODO change reditect parameter once obtained
+        //not sure if it gets here, should not but does
+        //TODO change redirect parameter once obtained
         final ModelAndView mav = new ModelAndView("redirect:/");
         return mav;
     }

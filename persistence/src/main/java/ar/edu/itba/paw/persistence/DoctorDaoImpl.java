@@ -35,7 +35,7 @@ public class DoctorDaoImpl implements DoctorDao {
                     resultSet.getString("phoneNumber"),
                    new Clinic(resultSet.getString("clinicName"),
                               new Location(resultSet.getString("location")),
-                              resultSet.getInt(("clinicConsultPrice"))
+                              resultSet.getInt(("consultPrice"))
                    )
             );
         }
