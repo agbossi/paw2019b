@@ -32,6 +32,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
+
     @Override protected void configure(final HttpSecurity http) throws Exception{
         http.sessionManagement().invalidSessionUrl("/")
                 .and().authorizeRequests()
@@ -39,7 +40,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").anonymous()
                 .antMatchers("/signUp").anonymous()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/**").authenticated()
+                .antMatchers("/**").permitAll()
                 .and().formLogin()
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")

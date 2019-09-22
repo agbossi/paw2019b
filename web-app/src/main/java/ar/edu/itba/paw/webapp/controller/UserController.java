@@ -41,18 +41,18 @@ public class UserController {
     private AuthenticationSuccessHandler urlAuthenticationSuccessHandler;
 
     //TODO change form error messages
-    @RequestMapping(value = "/signUp", method = {RequestMethod.GET})
+    @RequestMapping(value = "/signUp", method = { RequestMethod.GET })
     public ModelAndView signUp(@ModelAttribute("signUpForm") final SignUpForm form,HttpServletRequest request,HttpServletResponse response){
         //TODO how to send back to the previous page with its parameters
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
         //
 
-        ModelAndView mav = new ModelAndView("signUp");
+        final ModelAndView mav = new ModelAndView("signUp");
 
         return mav;
     }
-    @RequestMapping(value = "/signUp",method = {RequestMethod.POST})
+    @RequestMapping(value = "/signUp",method = { RequestMethod.POST })
     public ModelAndView signUpValidation(@Valid @ModelAttribute("signUpForm") final SignUpForm form, final BindingResult errors, HttpServletRequest request,HttpServletResponse response) throws IOException, ServletException {
         //TODO message does not display
         if(!form.getPassword().equals(form.getRepeatPassword())){
@@ -69,9 +69,15 @@ public class UserController {
         if(errors.hasErrors()){
             return signUp(form,request,response);
         }
-        userService.createUser(form.getId(),form.getFirstName(),form.getLastName(),passwordEncoder.encode(form.getPassword()),form.getEmail(),form.getHealthInsurance());
+
+        String encodedPassword = passwordEncoder.encode(form.getPassword());
+
+        userService.createUser(form.getId(),form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail(),form.getHealthInsurance());
         //to be kept logged in after sign up
-        authWithAuthManager(request,form.getEmail(),passwordEncoder.encode(form.getPassword()));
+
+        //TODO this should send an email or something of confirmation and then login ???
+        //authWithAuthManager(request, form.getEmail(), encodedPassword);
+
         //TODO how to send back to the previous page with its parameters
         //need to get parameter stored in request
 
@@ -80,12 +86,14 @@ public class UserController {
         final ModelAndView mav = new ModelAndView("redirect:/");
         return mav;
     }
-    @RequestMapping(value = "/login",method = {RequestMethod.GET})
+
+    @RequestMapping(value = "/login",method = { RequestMethod.GET })
     public ModelAndView login(HttpServletRequest request){
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
         return new ModelAndView("login");
     }
+
     private void authWithAuthManager(HttpServletRequest request, String email, String password) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password);
         authToken.setDetails(new WebAuthenticationDetails(request));

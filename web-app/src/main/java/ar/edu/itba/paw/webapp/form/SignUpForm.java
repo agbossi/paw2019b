@@ -5,12 +5,12 @@ import javax.validation.constraints.Size;
 
 public class SignUpForm {
 
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 20)
     @Pattern(regexp = "[a-zA-Z]+")
     private String firstName;
 
 
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 20)
     @Pattern(regexp = "[a-zA-Z]+")
     private String lastName;
 
@@ -18,12 +18,12 @@ public class SignUpForm {
     @Pattern(regexp = "[0-9]+")
     private String id;
 
-    @Size(min = 8, max = 15)
+    @Size(min = 8, max = 20)
     //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String password;
 
-    @Size(min = 8, max = 15)
+    @Size(min = 8, max = 20)
     //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String repeatPassword;
@@ -32,7 +32,7 @@ public class SignUpForm {
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String healthInsurance;
 
-    @Size(min = 6, max = 20)
+    @Size(min = 6, max = 25)
     //stackOverflow
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
     private String email;

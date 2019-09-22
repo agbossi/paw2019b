@@ -40,7 +40,7 @@ public class UserDaoImpl implements UserDao {
                 "id VARCHAR(9) PRIMARY KEY,"+
                 "firstName VARCHAR(20),"+
                 "lastName varchar(20),"+
-                "password VARCHAR(20),"+
+                "password VARCHAR(60),"+
                 "email VARCHAR(25),"+
                 "healthInsurance VARCHAR(20)"+
                 ");"
