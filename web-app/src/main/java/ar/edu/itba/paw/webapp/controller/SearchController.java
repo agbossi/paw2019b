@@ -51,9 +51,10 @@ public class SearchController {
         final ModelAndView mav = new ModelAndView("results");
         viewModifier.addSearchInfo(mav);
 
+        long clinicid = clinicService.getClinicByName(form.getClinic()).getId();
         // TODO: once we implement a proper query builder fix this and search form attributes !!
         List<DoctorClinic> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
-                new Specialty(form.getSpecialty()), form.getClinic());
+                new Specialty(form.getSpecialty()), clinicid);
 
         viewModifier.addFilteredDoctors(mav, filteredDoctors);
 

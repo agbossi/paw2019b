@@ -11,4 +11,6 @@ public interface ClinicService {
     List<Clinic> getClinics();
 
     Clinic getClinicByName(String name);
+
+    Clinic getClinicById(int id);
 }

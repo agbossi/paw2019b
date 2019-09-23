@@ -47,7 +47,7 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
 
     @Override
     public List<DoctorClinic> getDoctorsFromClinic(Clinic clinic) {
-        List<DoctorClinic> list = doctorClinicDao.getDoctorsInClinic(clinic.getName());
+        List<DoctorClinic> list = doctorClinicDao.getDoctorsInClinic(clinic.getId());
 //        for (DoctorClinic doctorClinic: list) {
 //            List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
 //            doctorClinic.setSchedule(schedules);
@@ -59,7 +59,7 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
 
     @Override
     public DoctorClinic getDoctorClinicFromDoctorAndClinic(Doctor doctor, Clinic clinic) {
-        DoctorClinic doctorClinic = doctorClinicDao.getDoctorInClinic(doctor.getLicense(), clinic.getName());
+        DoctorClinic doctorClinic = doctorClinicDao.getDoctorInClinic(doctor.getLicense(), clinic.getId());
 
 //        List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
 //        doctorClinic.setSchedule(schedules);
@@ -69,7 +69,7 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     }
 
     @Override
-    public List<DoctorClinic> getDoctorBy(Location location, Specialty specialty, String clinic) {
+    public List<DoctorClinic> getDoctorBy(Location location, Specialty specialty, long clinic) {
         return doctorClinicDao.getFilteredDoctors(location, specialty, clinic);
     }
 }

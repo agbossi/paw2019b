@@ -24,7 +24,7 @@ public class ClinicDaoImpl implements ClinicDao {
         private final static RowMapper<Clinic> ROW_MAPPER = new RowMapper<Clinic>() {
         @Override
         public Clinic mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new Clinic(resultSet.getString("name"), new Location(resultSet.getString("location")));
+            return new Clinic(resultSet.getInt("clinicid"),resultSet.getString("name"), new Location(resultSet.getString("location")));
         }
     };
 
@@ -34,10 +34,12 @@ public class ClinicDaoImpl implements ClinicDao {
         jdbcTemplate = new JdbcTemplate(ds);
 
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("clinics");
+                .withTableName("clinics")
+                .usingGeneratedKeyColumns("clinicid");
 
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS clinics (" +
-                "name VARCHAR(20) PRIMARY KEY," +
+                "clinicId SERIAL PRIMARY KEY," +
+                "name VARCHAR(20) ," +
                 "location VARCHAR(60) REFERENCES locations(name)" +
                 ")");
     }
@@ -47,11 +49,8 @@ public class ClinicDaoImpl implements ClinicDao {
         final Map<String, Object> args = new HashMap<>();
         args.put("name", name);
         args.put("location", location.getLocationName());
-        int result;
-
-        result = jdbcInsert.execute(args);
-
-        return new Clinic(name, location);
+        final Number id = jdbcInsert.executeAndReturnKey(args);
+        return new Clinic(id.intValue(), name, location);
     }
 
     @Override
@@ -66,5 +65,14 @@ public class ClinicDaoImpl implements ClinicDao {
     @Override
     public List<Clinic> getClinics(){
         return jdbcTemplate.query( "select * from clinics", ROW_MAPPER);
+    }
+
+    @Override
+    public Clinic getClinicById(int id) {
+        final List<Clinic> list = jdbcTemplate.query("select * from clinics where clinicId = ?",ROW_MAPPER,id);
+        if(list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 }

@@ -40,9 +40,9 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 "day VARCHAR(30)," +
                 "hour VARCHAR(30)," +
                 "doctor VARCHAR(30)," +
-                "clinic VARCHAR (30)," +
+                "clinic INTEGER ," +
                 "PRIMARY KEY (day,hour,doctor,clinic)," +
-                "FOREIGN KEY (doctor, clinic) REFERENCES doctorClinics(doctorLicense, clinicName))");
+                "FOREIGN KEY (doctor, clinic) REFERENCES doctorClinics(doctorLicense, clinicId))");
 
     }
 
@@ -52,7 +52,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
         args.put("day", day);
         args.put("hour", hour);
         args.put("doctor", doctorClinic.getDoctor().getName());
-        args.put("clinic", doctorClinic.getClinic().getName());
+        args.put("clinic", doctorClinic.getClinic().getId());
         int result;
 
         result = jdbcInsert.execute(args);

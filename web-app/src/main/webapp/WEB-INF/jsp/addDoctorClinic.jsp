@@ -38,7 +38,7 @@
             <form:label path="doctor">Specialty: </form:label>
             <form:select path="doctor">
                 <c:forEach var="doctor" items="${doctors}">
-                    <form:option value="${doctor.license}"/>
+                    <form:option value="${doctor.license}"> <c:out value="${doctor.name}"/> </form:option>
                 </c:forEach>
             </form:select>
             <form:errors path="doctor" element="p"/>
@@ -47,7 +47,7 @@
             <form:label path="clinic">Clinic: </form:label>
             <form:select path="clinic">
                 <c:forEach var="clinic" items="${clinics}">
-                    <form:option value="${clinic.name}"/>
+                    <form:option value="${clinic.id}"> <c:out value="${clinic.name}"/> </form:option>
                 </c:forEach>
             </form:select>
             <form:errors path="clinic" element="p"/>

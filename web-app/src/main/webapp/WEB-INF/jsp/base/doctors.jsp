@@ -26,7 +26,7 @@
                     <h3>${doctorClinic.doctor.name}</h3>
                     <p>${doctorClinic.doctor.specialty.specialtyName}</p>
                     <p>${doctorClinic.clinic.name}</p>
-                    <p><a class="btn btn-secondary" href="/results/${doctorClinic.clinic.name}/${doctorClinic.doctor.license}" role="button">View Details</a></p>
+                    <p><a class="btn btn-secondary" href="/results/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}" role="button">View Details</a></p>
                 </div>
             </c:forEach>
         </c:if>

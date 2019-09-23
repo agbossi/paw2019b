@@ -11,4 +11,6 @@ public interface ClinicDao {
     public Clinic getClinicByName(String clinicName);
 
     public List<Clinic> getClinics();
+
+    Clinic getClinicById(int id);
 }
