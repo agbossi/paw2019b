@@ -29,496 +29,460 @@
                 <th>Friday</th>
             </tr>
             <tr>
-                <c:forEach var="schedule" items="${doctor.schedule}">
                     <td>8:00</td>
-                    <c:choose>
-                        <c:when test="${schedule.hour == '8:00'}">
-                            <td>
-                                <c:if test="${schedule.day == 'MONDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'TUESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'WEDNESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'THURSDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'FRIDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                        </c:when>
-                        <c:otherwise>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
+                    <td>
+                        <c:forEach var="schedule" items="${doctor.schedule}">
+                            <c:if test="${schedule.day == 'MONDAY' && schedule.hour =='8:00'}">
+                                <h6>Available</h6>
+                            </c:if>
+                        </c:forEach>
+                    </td>
+                    <td>
+                        <c:forEach var="schedule" items="${doctor.schedule}">
+                            <c:if test="${schedule.day == 'TUESDAY' && schedule.hour =='8:00'}">
+                                <h6>Available</h6>
+                            </c:if>
+                        </c:forEach>
+                    </td>
+                    <td>
+                        <c:forEach var="schedule" items="${doctor.schedule}">
+                            <c:if test="${schedule.day == 'WEDNESDAY' && schedule.hour =='8:00'}">
+                                <h6>Available</h6>
+                            </c:if>
+                        </c:forEach>
+                    </td>
+                    <td>
+                        <c:forEach var="schedule" items="${doctor.schedule}">
+                            <c:if test="${schedule.day == 'THURSDAY' && schedule.hour =='8:00'}">
+                                <h6>Available</h6>
+                            </c:if>
+                        </c:forEach>
+                    </td>
+                    <td>
+                        <c:forEach var="schedule" items="${doctor.schedule}">
+                            <c:if test="${schedule.day == 'FRIDAY' && schedule.hour =='8:00'}">
+                                <h6>Available</h6>
+                            </c:if>
+                        </c:forEach>
+                    </td>
             </tr>
             <tr>
-                <c:forEach var="schedule" items="${doctor.schedule}">
-                    <td>9:00</td>
-                    <c:choose>
-                        <c:when test="${schedule.hour == '9:00'}">
-                            <td>
-                                <c:if test="${schedule.day == 'MONDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'TUESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'WEDNESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'THURSDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'FRIDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                        </c:when>
-                        <c:otherwise>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
+                <td>9:00</td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'MONDAY' && schedule.hour =='9:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'TUESDAY' && schedule.hour =='9:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'WEDNESDAY' && schedule.hour =='9:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'THURSDAY' && schedule.hour =='9:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'FRIDAY' && schedule.hour =='9:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
             </tr>
             <tr>
-                <c:forEach var="schedule" items="${doctor.schedule}">
-                    <td>10:00</td>
-                    <c:choose>
-                        <c:when test="${schedule.hour == '10:00'}">
-                            <td>
-                                <c:if test="${schedule.day == 'MONDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'TUESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'WEDNESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'THURSDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'FRIDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                        </c:when>
-                        <c:otherwise>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
+                <td>10:00</td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'MONDAY' && schedule.hour =='10:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'TUESDAY' && schedule.hour =='10:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'WEDNESDAY' && schedule.hour =='10:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'THURSDAY' && schedule.hour =='10:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'FRIDAY' && schedule.hour =='10:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
             </tr>
             <tr>
-                <c:forEach var="schedule" items="${doctor.schedule}">
-                    <td>11:00</td>
-                    <c:choose>
-                        <c:when test="${schedule.hour == '11:00'}">
-                            <td>
-                                <c:if test="${schedule.day == 'MONDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'TUESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'WEDNESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'THURSDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'FRIDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                        </c:when>
-                        <c:otherwise>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
+                <td>11:00</td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'MONDAY' && schedule.hour =='11:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'TUESDAY' && schedule.hour =='11:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'WEDNESDAY' && schedule.hour =='11:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'THURSDAY' && schedule.hour =='11:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'FRIDAY' && schedule.hour =='11:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
             </tr>
             <tr>
-                <c:forEach var="schedule" items="${doctor.schedule}">
-                    <td>12:00</td>
-                    <c:choose>
-                        <c:when test="${schedule.hour == '12:00'}">
-                            <td>
-                                <c:if test="${schedule.day == 'MONDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'TUESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'WEDNESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'THURSDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'FRIDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                        </c:when>
-                        <c:otherwise>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
+                <td>12:00</td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'MONDAY' && schedule.hour =='12:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'TUESDAY' && schedule.hour =='12:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'WEDNESDAY' && schedule.hour =='12:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'THURSDAY' && schedule.hour =='12:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'FRIDAY' && schedule.hour =='12:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
             </tr>
             <tr>
-                <c:forEach var="schedule" items="${doctor.schedule}">
-                    <td>13:00</td>
-                    <c:choose>
-                        <c:when test="${schedule.hour == '13:00'}">
-                            <td>
-                                <c:if test="${schedule.day == 'MONDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'TUESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'WEDNESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'THURSDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'FRIDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                        </c:when>
-                        <c:otherwise>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
+                <td>13:00</td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'MONDAY' && schedule.hour =='13:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'TUESDAY' && schedule.hour =='13:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'WEDNESDAY' && schedule.hour =='13:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'THURSDAY' && schedule.hour =='13:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'FRIDAY' && schedule.hour =='13:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
             </tr>
             <tr>
-                <c:forEach var="schedule" items="${doctor.schedule}">
-                    <td>14:00</td>
-                    <c:choose>
-                        <c:when test="${schedule.hour == '14:00'}">
-                            <td>
-                                <c:if test="${schedule.day == 'MONDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'TUESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'WEDNESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'THURSDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'FRIDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                        </c:when>
-                        <c:otherwise>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
+                <td>14:00</td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'MONDAY' && schedule.hour =='14:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'TUESDAY' && schedule.hour =='14:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'WEDNESDAY' && schedule.hour =='14:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'THURSDAY' && schedule.hour =='14:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'FRIDAY' && schedule.hour =='14:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
             </tr>
             <tr>
-                <c:forEach var="schedule" items="${doctor.schedule}">
-                    <td>15:00</td>
-                    <c:choose>
-                        <c:when test="${schedule.hour == '15:00'}">
-                            <td>
-                                <c:if test="${schedule.day == 'MONDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'TUESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'WEDNESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'THURSDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'FRIDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                        </c:when>
-                        <c:otherwise>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
+                <td>15:00</td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'MONDAY' && schedule.hour =='15:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'TUESDAY' && schedule.hour =='15:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'WEDNESDAY' && schedule.hour =='15:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'THURSDAY' && schedule.hour =='15:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'FRIDAY' && schedule.hour =='15:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
             </tr>
             <tr>
-                <c:forEach var="schedule" items="${doctor.schedule}">
-                    <td>16:00</td>
-                    <c:choose>
-                        <c:when test="${schedule.hour == '16:00'}">
-                            <td>
-                                <c:if test="${schedule.day == 'MONDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'TUESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'WEDNESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'THURSDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'FRIDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                        </c:when>
-                        <c:otherwise>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
+                <td>16:00</td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'MONDAY' && schedule.hour =='16:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'TUESDAY' && schedule.hour =='16:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'WEDNESDAY' && schedule.hour =='16:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'THURSDAY' && schedule.hour =='16:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'FRIDAY' && schedule.hour =='16:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
             </tr>
             <tr>
-                <c:forEach var="schedule" items="${doctor.schedule}">
-                    <td>17:00</td>
-                    <c:choose>
-                        <c:when test="${schedule.hour == '17:00'}">
-                            <td>
-                                <c:if test="${schedule.day == 'MONDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'TUESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'WEDNESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'THURSDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'FRIDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                        </c:when>
-                        <c:otherwise>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
+                <td>17:00</td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'MONDAY' && schedule.hour =='17:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'TUESDAY' && schedule.hour =='17:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'WEDNESDAY' && schedule.hour =='17:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'THURSDAY' && schedule.hour =='17:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'FRIDAY' && schedule.hour =='17:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
             </tr>
             <tr>
-                <c:forEach var="schedule" items="${doctor.schedule}">
-                    <td>18:00</td>
-                    <c:choose>
-                        <c:when test="${schedule.hour == '18:00'}">
-                            <td>
-                                <c:if test="${schedule.day == 'MONDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'TUESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'WEDNESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'THURSDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'FRIDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                        </c:when>
-                        <c:otherwise>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
+                <td>18:00</td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'MONDAY' && schedule.hour =='18:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'TUESDAY' && schedule.hour =='18:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'WEDNESDAY' && schedule.hour =='18:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'THURSDAY' && schedule.hour =='18:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'FRIDAY' && schedule.hour =='18:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
             </tr>
             <tr>
-                <c:forEach var="schedule" items="${doctor.schedule}">
-                    <td>19:00</td>
-                    <c:choose>
-                        <c:when test="${schedule.hour == '19:00'}">
-                            <td>
-                                <c:if test="${schedule.day == 'MONDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'TUESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'WEDNESDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day =='THURSDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                            <td>
-                                <c:if test="${schedule.day == 'FRIDAY'}">
-                                    <h6>Available</h6>
-                                </c:if>
-                            </td>
-                        </c:when>
-                        <c:otherwise>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
+                <td>19:00</td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'MONDAY' && schedule.hour =='19:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'TUESDAY' && schedule.hour =='19:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'WEDNESDAY' && schedule.hour =='19:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'THURSDAY' && schedule.hour =='19:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
+                <td>
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <c:if test="${schedule.day == 'FRIDAY' && schedule.hour =='19:00'}">
+                            <h6>Available</h6>
+                        </c:if>
+                    </c:forEach>
+                </td>
             </tr>
         </table>
 
