@@ -25,17 +25,17 @@
 
             <nav class="my-2 my-md-0 mr-md-3">
                 <sec:authorize access="hasRole('ROLE_USER')">
-                    <a class="p-2 text-dark" href="/">Appointments</a>
-                    <a class="p-2 text-dark" href="/">Profile</a>
+                    <a class="p-2 text-dark" href="/appointments">Appointments</a>
+                    <a class="p-2 text-dark" href="/profile">Profile</a>
                 </sec:authorize>
             </nav>
 
             <sec:authorize access="hasRole('ROLE_USER')">
-                <a class="btn btn-outline-primary" href="/logout">log out</a>
+                <a class="btn btn-outline-primary" href="/logout">Log out</a>
             </sec:authorize>
             <sec:authorize access="isAnonymous()">
                 <a class="btn btn-outline-primary" href="/signUp">Sign up</a>
-                <a class="btn btn-outline-primary" href="/login">log in</a>
+                <a class="btn btn-outline-primary" href="/login">Log in</a>
             </sec:authorize>
         </div>
     </body>

@@ -24,8 +24,11 @@ public class UserDaoImpl implements UserDao {
     private final static RowMapper<User> ROW_MAPPER = new RowMapper<User>() {
 
         @Override public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new User(rs.getString("id"),rs.getString("firstName"),rs.getString("lastName"),rs.getString("password"),
-                    rs.getString("email"),rs.getString("healthInsurance"));
+            return new User(rs.getString("id"),
+                            rs.getString("firstName"),
+                            rs.getString("lastName"),
+                            rs.getString("password"),
+                            rs.getString("email"));
         }
     };
 
@@ -41,25 +44,23 @@ public class UserDaoImpl implements UserDao {
                 "firstName VARCHAR(20),"+
                 "lastName varchar(20),"+
                 "password VARCHAR(60),"+
-                "email VARCHAR(25),"+
-                "healthInsurance VARCHAR(20)"+
+                "email VARCHAR(25)"+
                 ");"
         );
     }
 
     @Override
-    public User createUser(String id, String firstName,String lastName, String password, String email, String healthInsurance) {
+    public User createUser(String id, String firstName,String lastName, String password, String email) {
         final Map<String, Object> args = new HashMap<>();
         args.put("id",id);
         args.put("firstName",firstName);
         args.put("lastName",lastName);
         args.put("password",password);
         args.put("email",email);
-        args.put("healthInsurance",healthInsurance);
 
         int result;
         result = jdbcInsert.execute(args);
-        return new User(id,firstName,lastName,password,email,healthInsurance);
+        return new User(id,firstName,lastName,password,email);
     }
 
     @Override

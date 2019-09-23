@@ -13,8 +13,8 @@ public class UserServiceImpl implements UserService {
     UserDaoImpl userDao;
 
     @Override
-    public User createUser(String id, String firstName,String lastName, String password, String email, String healthInsurance) {
-        return userDao.createUser(id,firstName,lastName,password,email,healthInsurance);
+    public User createUser(String id, String firstName,String lastName, String password, String email) {
+        return userDao.createUser(id,firstName,lastName,password,email);
     }
 
     @Override
@@ -26,4 +26,5 @@ public class UserServiceImpl implements UserService {
     public boolean userExists(String email) {
         return (userDao.findUserByEmail(email) != null);
     }
+
 }

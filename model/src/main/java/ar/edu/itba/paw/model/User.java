@@ -5,20 +5,17 @@ public class User {
 
     private String lastName;
 
-    private String id;
-
     private String password;
-
-    private String healthInsurance;
 
     private String email;
 
-    public User(String id,String firstName,String lastName,String password,String email, String healthInsurance) {
+    private String id;
+
+    public User(String id,String firstName,String lastName,String password,String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.id = id;
         this.password = password;
-        this.healthInsurance = healthInsurance;
         this.email = email;
     }
 
@@ -36,10 +33,6 @@ public class User {
 
     public String getPassword() {
         return password;
-    }
-
-    public String getHealthInsurance() {
-        return healthInsurance;
     }
 
     public String getEmail() {

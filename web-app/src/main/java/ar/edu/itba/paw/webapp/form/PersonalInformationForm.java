@@ -1,9 +1,8 @@
 package ar.edu.itba.paw.webapp.form;
-
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class SignUpForm {
+public class PersonalInformationForm {
 
     @Size(min = 1, max = 20)
     @Pattern(regexp = "[a-zA-Z]+")
@@ -12,10 +11,6 @@ public class SignUpForm {
     @Size(min = 1, max = 20)
     @Pattern(regexp = "[a-zA-Z]+")
     private String lastName;
-
-    @Size(min = 8,max = 9)
-    @Pattern(regexp = "[0-9]+")
-    private String id;
 
     @Size(min = 8, max = 20)
     //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
@@ -27,16 +22,12 @@ public class SignUpForm {
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String repeatPassword;
 
-    @Size(min = 6, max = 25)
-    //stackOverflow
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
-    private String email;
-
     private String prepaid;
 
     @Size(min=10, max=20)
     @Pattern(regexp = "[\" \"0-9]+")
     private String prepaidNumber;
+
 
     public String getFirstName() {
         return firstName;
@@ -54,14 +45,6 @@ public class SignUpForm {
         this.lastName = lastName;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -76,14 +59,6 @@ public class SignUpForm {
 
     public void setRepeatPassword(String repeatPassword) {
         this.repeatPassword = repeatPassword;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPrepaid() {
