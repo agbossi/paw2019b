@@ -42,7 +42,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 "doctor VARCHAR(30)," +
                 "clinic INTEGER ," +
                 "PRIMARY KEY (day,hour,doctor,clinic)," +
-                "FOREIGN KEY (doctor, clinic) REFERENCES doctorClinics(doctorLicense, clinicId))");
+                "FOREIGN KEY (doctor, clinic) REFERENCES doctorClinics(doctorLicense, clinicid))");
 
     }
 
@@ -51,7 +51,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
         final Map<String, Object> args = new HashMap<>();
         args.put("day", day);
         args.put("hour", hour);
-        args.put("doctor", doctorClinic.getDoctor().getName());
+        args.put("doctor", doctorClinic.getDoctor().getLicense());
         args.put("clinic", doctorClinic.getClinic().getId());
         int result;
 
@@ -61,11 +61,6 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
     @Override
     public List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic) {
-//        final List<Schedule> list = jdbcTemplate.query("select * from schedule where doctor = ? and clinic = ?",ROW_MAPPER, doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getName());
-//        if(list.isEmpty()) {
-//            return null;
-//        }
-//        return list;
-        return null;
+        return jdbcTemplate.query( "select * from schedule where doctor = ? and clinic =?", ROW_MAPPER, doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId());
     }
 }

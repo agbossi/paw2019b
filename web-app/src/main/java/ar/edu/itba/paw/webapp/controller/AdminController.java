@@ -36,6 +36,9 @@ public class AdminController {
     @Autowired
     private ModelAndViewModifier viewModifier;
 
+    @Autowired
+    private ScheduleService scheduleService;
+
 
     @RequestMapping(value = "/admin", method = { RequestMethod.GET })
     public ModelAndView admin(){
@@ -63,6 +66,14 @@ public class AdminController {
         return mav;
     }
 
+    @RequestMapping(value ="/addSchedule", method = { RequestMethod.GET })
+    public ModelAndView addSchedule(@ModelAttribute("scheduleForm") final ScheduleForm form){
+        final ModelAndView mav = new ModelAndView("addSchedule");
+        List<DoctorClinic> doctorClinics = doctorClinicService.getDoctorClinics();
+        mav.addObject("doctorClinics", doctorClinics);
+
+        return mav;
+    }
 
     @RequestMapping(value = "/addClinic", method = { RequestMethod.GET })
     public ModelAndView addClinic(@ModelAttribute("clinicForm") final ClinicForm form){
@@ -109,7 +120,7 @@ public class AdminController {
             return addDoctorClinic(form);
 
         doctorClinicService.createDoctorClinic(doctorService.getDoctorByLicense(form.getDoctor()),
-                clinicService.getClinicByName(form.getClinic()),
+                clinicService.getClinicById(form.getClinic()),
                 form.getConsultPrice());
 
         final ModelAndView mav = new ModelAndView("addedDoctorClinic");
@@ -117,6 +128,21 @@ public class AdminController {
         return mav;
     }
 
+    @RequestMapping(value = "/addedSchedule", method = {RequestMethod.POST})
+    public ModelAndView addedSchedule(@Valid @ModelAttribute("scheduleForm") final ScheduleForm form, final BindingResult errors){
+
+        if(errors.hasErrors())
+            return addSchedule(form);
+        Doctor doc = doctorService.getDoctorByLicense(form.getDoctor());
+        Clinic clinic = clinicService.getClinicById(form.getClinic());
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, clinic);
+
+        scheduleService.createSchedule(form.getHour(), form.getDay(), doctorClinic);
+
+        final ModelAndView mav = new ModelAndView("addedSchedule");
+
+        return mav;
+    }
 
     @RequestMapping(value = "/addedClinic", method = { RequestMethod.POST })
     public ModelAndView addedClinic(@Valid @ModelAttribute("clinicForm") final ClinicForm form, final BindingResult errors){

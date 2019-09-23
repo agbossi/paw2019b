@@ -11,7 +11,7 @@ public class Clinic {
     public Clinic(int id, String name, Location location){
         this.id = id;
         this.name = name;
-        this.location = location;;
+        this.location = location;
     }
 
     public String getName() {
@@ -22,7 +22,7 @@ public class Clinic {
         return location;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 

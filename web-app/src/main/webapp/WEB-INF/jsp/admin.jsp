@@ -35,7 +35,7 @@
                             <a class="nav-link" href="/addSpecialty">Add Specialty</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/addDoctorClinic">Add Doctor to Clinic</a>
+                            <a class="nav-link" href="/addSchedule">Add Schedule</a>
                         </li>
                     </ul>
                 </div>

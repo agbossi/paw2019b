@@ -1,12 +1,14 @@
 package ar.edu.itba.paw.webapp.form;
 
-public class DoctorClinicForm {
+public class ScheduleForm {
 
     private String doctor;
 
     private int clinic;
 
-    private int consultPrice;
+    private String day;
+
+    private String hour;
 
     public String getDoctor() {
         return doctor;
@@ -24,11 +26,19 @@ public class DoctorClinicForm {
         this.clinic = clinic;
     }
 
-    public int getConsultPrice() {
-        return consultPrice;
+    public String getDay() {
+        return day;
     }
 
-    public void setConsultPrice(int consultPrice) {
-        this.consultPrice = consultPrice;
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getHour() {
+        return hour;
+    }
+
+    public void setHour(String hour) {
+        this.hour = hour;
     }
 }

@@ -28,31 +28,33 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     @Override
     public List<DoctorClinic> getDoctorClinics() {
         List<DoctorClinic> list = doctorClinicDao.getDoctorClinics();
-//        for (DoctorClinic doctorClinic: list) {
-//            List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
-//            doctorClinic.setSchedule(schedules);
-//
-//        }
+        if(list!=null){
+            for (DoctorClinic doctorClinic: list) {
+                List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
+                doctorClinic.setSchedule(schedules);
+            }
+        }
 
         return list;
     }
 
     @Override
     public void setSchedule(DoctorClinic doctorClinic, String day, String hour) {
-//        Schedule schedule = scheduleDao.createSchedule(hour, day, doctorClinic);
-//        List<Schedule> list = doctorClinic.getSchedule();
-//        list.add(schedule);
-//        doctorClinic.setSchedule(list);
+        Schedule schedule = scheduleDao.createSchedule(hour, day, doctorClinic);
+        List<Schedule> list = doctorClinic.getSchedule();
+        list.add(schedule);
+        doctorClinic.setSchedule(list);
     }
 
     @Override
     public List<DoctorClinic> getDoctorsFromClinic(Clinic clinic) {
         List<DoctorClinic> list = doctorClinicDao.getDoctorsInClinic(clinic.getId());
-//        for (DoctorClinic doctorClinic: list) {
-//            List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
-//            doctorClinic.setSchedule(schedules);
-//
-//        }
+        if(list != null){
+            for (DoctorClinic doctorClinic: list) {
+                List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
+                doctorClinic.setSchedule(schedules);
+            }
+        }
 
         return list;
     }
@@ -60,16 +62,23 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     @Override
     public DoctorClinic getDoctorClinicFromDoctorAndClinic(Doctor doctor, Clinic clinic) {
         DoctorClinic doctorClinic = doctorClinicDao.getDoctorInClinic(doctor.getLicense(), clinic.getId());
-
-//        List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
-//        doctorClinic.setSchedule(schedules);
-
+        if(doctorClinic != null) {
+            List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
+            doctorClinic.setSchedule(schedules);
+        }
 
         return doctorClinic;
     }
 
     @Override
-    public List<DoctorClinic> getDoctorBy(Location location, Specialty specialty, long clinic) {
-        return doctorClinicDao.getFilteredDoctors(location, specialty, clinic);
+    public List<DoctorClinic> getDoctorBy(Location location, Specialty specialty, int clinic) {
+        List<DoctorClinic> list = doctorClinicDao.getFilteredDoctors(location, specialty, clinic);
+        if(list != null){
+            for (DoctorClinic doctorClinic: list) {
+                List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
+                doctorClinic.setSchedule(schedules);
+            }
+        }
+        return list;
     }
 }

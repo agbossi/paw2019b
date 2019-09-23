@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <title>DoctorSearch - Add Doctor to Clinic</title>
+    <title>DoctorSearch - Add  Schedule to Doctor</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/navbar-fixed/">
 
@@ -32,13 +32,13 @@
 </header>
 <h2>Doctor Information</h2>
 <div class="container">
-    <c:url value="/addedDoctorClinic" var="postPath"/>
-    <form:form modelAttribute="doctorClinicForm" action="${postPath}" method="post">
+    <c:url value="/addedSchedule" var="postPath"/>
+    <form:form modelAttribute="scheduleForm" action="${postPath}" method="post">
         <div>
             <form:label path="doctor">Doctor: </form:label>
             <form:select path="doctor">
-                <c:forEach var="doctor" items="${doctors}">
-                    <form:option value="${doctor.license}"> <c:out value="${doctor.name}"/> </form:option>
+                <c:forEach var="doctorClinic" items="${doctorClinics}">
+                    <form:option value="${doctorClinic.doctor.license}"> <c:out value="${doctorClinic.doctor.name}"/> </form:option>
                 </c:forEach>
             </form:select>
             <form:errors path="doctor" element="p"/>
@@ -46,16 +46,42 @@
         <div>
             <form:label path="clinic">Clinic: </form:label>
             <form:select path="clinic">
-                <c:forEach var="clinic" items="${clinics}">
-                    <form:option value="${clinic.id}"> <c:out value="${clinic.name}"/> </form:option>
+                <c:forEach var="doctorClinic" items="${doctorClinics}">
+                    <form:option value="${doctorClinic.clinic.id}"> <c:out value="${doctorClinic.clinic.name}"/> </form:option>
                 </c:forEach>
             </form:select>
             <form:errors path="clinic" element="p"/>
         </div>
         <div>
-            <form:label path="consultPrice">Consult Price: </form:label>
-            <form:input type="number" path="consultPrice"/>
-            <form:errors path="consultPrice" element="p"/>
+            <form:label path="day">Day: </form:label>
+            <form:select path="day">
+                <form:option value="MONDAY"/>
+                <form:option value="TUESDAY"/>
+                <form:option value="WEDNESDAY"/>
+                <form:option value="THURSDAY"/>
+                <form:option value="FRIDAY"/>
+            </form:select>
+
+            <form:errors path="day" element="p"/>
+        </div>
+        <div>
+            <form:label path="hour">Day: </form:label>
+            <form:select path="hour">
+                <form:option value="8:00"/>
+                <form:option value="9:00"/>
+                <form:option value="10:00"/>
+                <form:option value="11:00"/>
+                <form:option value="12:00"/>
+                <form:option value="13:00"/>
+                <form:option value="14:00"/>
+                <form:option value="15:00"/>
+                <form:option value="16:00"/>
+                <form:option value="17:00"/>
+                <form:option value="18:00"/>
+                <form:option value="19:00"/>
+            </form:select>
+
+            <form:errors path="day" element="p"/>
         </div>
         <div>
             <input type="submit" value="Add">

@@ -9,9 +9,9 @@ public interface DoctorClinicDao {
 
         List<DoctorClinic> getDoctorClinics();
 
-        List<DoctorClinic> getDoctorsInClinic(long clinic);
+        List<DoctorClinic> getDoctorsInClinic(int clinic);
 
-        DoctorClinic getDoctorInClinic(String doctor, long clinic);
+        DoctorClinic getDoctorInClinic(String doctor, int clinic);
 
         List<DoctorClinic> getClinicsWithDoctor(String doctor);
 

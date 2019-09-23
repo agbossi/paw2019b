@@ -31,7 +31,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                     new Specialty(resultSet.getString("specialty")),
                     resultSet.getString("doctorLicense"),
                     resultSet.getString("phoneNumber")),
-                    new Clinic(resultSet.getInt("clinicId"),resultSet.getString("clinicName"),
+                    new Clinic(resultSet.getInt("clinicId"),resultSet.getString("name"),
                             new Location(resultSet.getString("location"))),
                     resultSet.getInt("consultPrice"));
         }
@@ -69,7 +69,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public List<DoctorClinic> getDoctorClinics() {
-        final List<DoctorClinic> list = jdbcTemplate.query("select * from (doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicId = clinics.clinicId ",ROW_MAPPER);
+        final List<DoctorClinic> list = jdbcTemplate.query("select * from (doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicId = clinics.clinicid ",ROW_MAPPER);
         if(list.isEmpty()) {
             return null;
         }
@@ -77,8 +77,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     }
 
     @Override
-    public List<DoctorClinic> getDoctorsInClinic(long clinic) {
-        final List<DoctorClinic> list = jdbcTemplate.query("select * from (doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicId = clinics.clinicId where clinics.clinicId = ?",ROW_MAPPER, clinic);
+    public List<DoctorClinic> getDoctorsInClinic(int clinic) {
+        final List<DoctorClinic> list = jdbcTemplate.query("select * from (doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicId = clinics.clinicid where clinics.clinicId = ?",ROW_MAPPER, clinic);
         if(list.isEmpty()) {
             return null;
         }
@@ -86,8 +86,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     }
 
     @Override
-    public DoctorClinic getDoctorInClinic(String doctor, long clinic) {
-        final List<DoctorClinic> list = jdbcTemplate.query("select * from (doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicId = clinics.clinicId where clinics.clinicId = ? and doctors.license = ?",ROW_MAPPER, clinic, doctor);
+    public DoctorClinic getDoctorInClinic(String doctor, int clinic) {
+        final List<DoctorClinic> list = jdbcTemplate.query("select * from (doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicId = clinics.clinicid where clinics.clinicid = ? and doctors.license = ?",ROW_MAPPER, clinic, doctor);
         if(list.isEmpty()) {
             return null;
         }
@@ -97,7 +97,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public List<DoctorClinic> getClinicsWithDoctor(String doctor) {
-        final List<DoctorClinic> list = jdbcTemplate.query("select * from (doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicId = clinics.clinicId where doctors.license = ?",ROW_MAPPER, doctor);
+        final List<DoctorClinic> list = jdbcTemplate.query("select * from (doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicId = clinics.clinicid where doctors.license = ?",ROW_MAPPER, doctor);
         if(list.isEmpty()) {
             return null;
         }
@@ -130,7 +130,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 //                }
 //            }, ROW_MAPPER);
 
-        final List<DoctorClinic> list = jdbcTemplate.query("select * from (doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicId = clinics.clinicId where clinicname = ? and location = ? and specialty = ?",ROW_MAPPER, clinic, location.getLocationName(), specialty.getSpecialtyName());
+        final List<DoctorClinic> list = jdbcTemplate.query("select * from (doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicid = clinics.clinicid where clinicname = ? and location = ? and specialty = ?",ROW_MAPPER, clinic, location.getLocationName(), specialty.getSpecialtyName());
 
 
         return ( list.isEmpty() ? null : list );

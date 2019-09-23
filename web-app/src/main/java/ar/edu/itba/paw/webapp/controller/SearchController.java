@@ -51,10 +51,10 @@ public class SearchController {
         final ModelAndView mav = new ModelAndView("results");
         viewModifier.addSearchInfo(mav);
 
-        long clinicid = clinicService.getClinicByName(form.getClinic()).getId();
+
         // TODO: once we implement a proper query builder fix this and search form attributes !!
         List<DoctorClinic> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
-                new Specialty(form.getSpecialty()), clinicid);
+                new Specialty(form.getSpecialty()), form.getClinic());
 
         viewModifier.addFilteredDoctors(mav, filteredDoctors);
 
@@ -62,11 +62,11 @@ public class SearchController {
     }
 
     @RequestMapping(value = "/results/{clinicId}/{doctorId}", method = {RequestMethod.GET})
-    public ModelAndView doctorsPage(@PathVariable(value = "clinicId") String clinic, @PathVariable(value = "doctorId") String license) {
+    public ModelAndView doctorsPage(@PathVariable(value = "clinicId") int clinic, @PathVariable(value = "doctorId") String license) {
         ModelAndView mav = new ModelAndView("doctorPage");
 
 
-        DoctorClinic doctor = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctorService.getDoctorByLicense(license), clinicService.getClinicByName(clinic));
+        DoctorClinic doctor = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctorService.getDoctorByLicense(license), clinicService.getClinicById(clinic));
 
         viewModifier.addSearchInfo(mav);
 
