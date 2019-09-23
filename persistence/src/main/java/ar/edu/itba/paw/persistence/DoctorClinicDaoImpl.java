@@ -105,7 +105,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     }
 
     @Override
-    public List<DoctorClinic> getFilteredDoctors(final Location location, final Specialty specialty, final long clinic) {
+    public List<DoctorClinic> getFilteredDoctors(final Location location, final Specialty specialty, final int clinic) {
 
 //            DoctorQueryBuilder builder = new DoctorQueryBuilder();
 //            builder.buildQuery(location.getLocationName(), specialty.getSpecialtyName(), clinic);
@@ -130,7 +130,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 //                }
 //            }, ROW_MAPPER);
 
-        final List<DoctorClinic> list = jdbcTemplate.query("select * from (doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicid = clinics.clinicid where clinicname = ? and location = ? and specialty = ?",ROW_MAPPER, clinic, location.getLocationName(), specialty.getSpecialtyName());
+        final List<DoctorClinic> list = jdbcTemplate.query("select * from (doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicid = clinics.clinicid where clinics.clinicid = ? and location = ? and specialty = ?",ROW_MAPPER, clinic, location.getLocationName(), specialty.getSpecialtyName());
 
 
         return ( list.isEmpty() ? null : list );

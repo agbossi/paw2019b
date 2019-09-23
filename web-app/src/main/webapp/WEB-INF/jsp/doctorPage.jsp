@@ -13,13 +13,13 @@
                 <h6>Clinic: <c:out value="${doctor.clinic.name}"/> (<c:out value="${doctor.clinic.location.locationName}"/>)</h6>
                 <h6>Specialty: <c:out value="${doctor.doctor.specialty.specialtyName}"/></h6>
                 <h6>Phone Number: <c:out value="${doctor.doctor.phoneNumber}"/></h6>
-<%--                <h6>Schedule :--%>
-<%--                    <c:if test="${!empty doctor.schedule}">--%>
-<%--                    <c:forEach var="schedule" items="${doctor.schedule}">--%>
-<%--                        <h6> <c:out value="${schedule}"/> -  <c:out value="${schedule.hour}"/></h6>--%>
-<%--                        </div>--%>
-<%--                    </c:forEach>--%>
-<%--                </c:if></h6>--%>
+                <h6>Schedule :
+                    <c:if test="${!empty doctor.schedule}">
+                    <c:forEach var="schedule" items="${doctor.schedule}">
+                        <h6> <c:out value="${schedule.day}"/> - <c:out value="${schedule.hour}"/></h6>
+                        </div>
+                    </c:forEach>
+                </c:if></h6>
             </li>
         </ul>
 

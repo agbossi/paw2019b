@@ -58,10 +58,9 @@ public class AdminController {
     @RequestMapping(value = "/addDoctorClinic", method = { RequestMethod.GET })
     public ModelAndView addDoctorClinic(@ModelAttribute("doctorClinicForm") final DoctorClinicForm form){
         final ModelAndView mav = new ModelAndView("addDoctorClinic");
-        List<Doctor> doctors = doctorService.getDoctors();
-        List<Clinic> clinics = clinicService.getClinics();
-        mav.addObject("doctors", doctors);
-        mav.addObject("clinics", clinics);
+
+        viewModifier.addClinics(mav);
+        viewModifier.addDoctors(mav);
 
         return mav;
     }
@@ -69,8 +68,8 @@ public class AdminController {
     @RequestMapping(value ="/addSchedule", method = { RequestMethod.GET })
     public ModelAndView addSchedule(@ModelAttribute("scheduleForm") final ScheduleForm form){
         final ModelAndView mav = new ModelAndView("addSchedule");
-        List<DoctorClinic> doctorClinics = doctorClinicService.getDoctorClinics();
-        mav.addObject("doctorClinics", doctorClinics);
+
+        viewModifier.addDoctorClinics(mav);
 
         return mav;
     }
