@@ -41,7 +41,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                 "hour VARCHAR(30)," +
                 "doctor VARCHAR(30)," +
                 "clinic INTEGER ," +
-                "PRIMARY KEY (day,hour,doctor,clinic)," +
+                "PRIMARY KEY (day,hour,doctor)," +
                 "FOREIGN KEY (doctor, clinic) REFERENCES doctorClinics(doctorLicense, clinicid))");
 
     }

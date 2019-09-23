@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -66,12 +67,25 @@ public class AdminController {
     }
 
     @RequestMapping(value ="/addSchedule", method = { RequestMethod.GET })
-    public ModelAndView addSchedule(@ModelAttribute("scheduleForm") final ScheduleForm form){
+    public ModelAndView addSchedule(){
         final ModelAndView mav = new ModelAndView("addSchedule");
 
         viewModifier.addDoctorClinics(mav);
 
         return mav;
+    }
+
+    @RequestMapping(value = "addSchedule/{clinicid}/{license}", method = {RequestMethod.GET})
+    public ModelAndView addDoctorShedule( @PathVariable(value = "clinicid") int clinic, @PathVariable(value = "license") String license, @ModelAttribute("scheduleForm") final ScheduleForm form){
+
+        final ModelAndView mav = new ModelAndView("doctorSchedule");
+        Doctor doc = doctorService.getDoctorByLicense(license);
+        Clinic cli = clinicService.getClinicById(clinic);
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
+
+        mav.addObject("doctorClinic", doctorClinic);
+        return mav;
+
     }
 
     @RequestMapping(value = "/addClinic", method = { RequestMethod.GET })
@@ -127,14 +141,14 @@ public class AdminController {
         return mav;
     }
 
-    @RequestMapping(value = "/addedSchedule", method = {RequestMethod.POST})
-    public ModelAndView addedSchedule(@Valid @ModelAttribute("scheduleForm") final ScheduleForm form, final BindingResult errors){
+    @RequestMapping(value = "/addedSchedule/{clinicid}/{license}", method = {RequestMethod.POST})
+    public ModelAndView addedSchedule(@PathVariable(value = "clinicid") int clinic, @PathVariable(value = "license") String license,@Valid @ModelAttribute("scheduleForm") final ScheduleForm form, final BindingResult errors){
 
         if(errors.hasErrors())
-            return addSchedule(form);
-        Doctor doc = doctorService.getDoctorByLicense(form.getDoctor());
-        Clinic clinic = clinicService.getClinicById(form.getClinic());
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, clinic);
+            return addDoctorShedule(clinic, license, form);
+        Doctor doc = doctorService.getDoctorByLicense(license);
+        Clinic cli = clinicService.getClinicById(clinic);
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
 
         scheduleService.createSchedule(form.getHour(), form.getDay(), doctorClinic);
 

@@ -10,60 +10,31 @@
     </head>
     <body class="d-flex flex-column h-100">
         <h2>Doctor Information</h2>
-        <div class="container">
-            <c:url value="/addedSchedule" var="postPath"/>
-            <form:form modelAttribute="scheduleForm" action="${postPath}" method="post">
-                <div>
-                    <form:label path="doctor">Doctor: </form:label>
-                    <form:select path="doctor">
-                        <c:forEach var="doctorClinic" items="${doctorClinics}">
-                            <form:option value="${doctorClinic.doctor.license}"> <c:out value="${doctorClinic.doctor.name}"/> </form:option>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors path="doctor" element="p"/>
-                </div>
-                <div>
-                    <form:label path="clinic">Clinic: </form:label>
-                    <form:select path="clinic">
-                        <c:forEach var="doctorClinic" items="${doctorClinics}">
-                            <form:option value="${doctorClinic.clinic.id}"> <c:out value="${doctorClinic.clinic.name}"/> </form:option>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors path="clinic" element="p"/>
-                </div>
-                <div>
-                    <form:label path="day">Day: </form:label>
-                    <form:select path="day">
-                        <form:option value="MONDAY"/>
-                        <form:option value="TUESDAY"/>
-                        <form:option value="WEDNESDAY"/>
-                        <form:option value="THURSDAY"/>
-                        <form:option value="FRIDAY"/>
-                    </form:select>
-                    <form:errors path="day" element="p"/>
-                </div>
-                <div>
-                    <form:label path="hour">Day: </form:label>
-                    <form:select path="hour">
-                        <form:option value="8:00"/>
-                        <form:option value="9:00"/>
-                        <form:option value="10:00"/>
-                        <form:option value="11:00"/>
-                        <form:option value="12:00"/>
-                        <form:option value="13:00"/>
-                        <form:option value="14:00"/>
-                        <form:option value="15:00"/>
-                        <form:option value="16:00"/>
-                        <form:option value="17:00"/>
-                        <form:option value="18:00"/>
-                        <form:option value="19:00"/>
-                    </form:select>
-                    <form:errors path="day" element="p"/>
-                </div>
-                <div>
-                    <input type="submit" value="Add">
-                </div>
-            </form:form>
+        <body class="d-flex flex-column h-100">
+        <div class="container marketing" id="doctors">
+            <div class="row">
+                <c:if test="${!empty doctorClinics}">
+                    <c:forEach var="doctorClinic" items="${doctorClinics}">
+                        <div class="col-lg-4 single-doctor">
+                            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 140x140">
+                                <title>
+                                    ::before
+                                    "Placeholder"
+                                    ::after
+                                </title>
+                                <rect width="100%" height="100%" fill="#777"></rect>
+                                <text x="50%" y="50%" fill="#777" dy=".3em">140x140</text>
+                            </svg>
+                            <h3>${doctorClinic.doctor.name}</h3>
+                            <p>${doctorClinic.doctor.specialty.specialtyName}</p>
+                            <p>${doctorClinic.clinic.name}</p>
+                            <p><a class="btn btn-secondary" href="/addSchedule/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}" role="button">Add Schedule</a></p>
+                        </div>
+                    </c:forEach>
+                </c:if>
+            </div>
+        </div>
+        </body>
         </div>
     </body>
 </html>
