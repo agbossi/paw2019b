@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.interfaces;
 
 import ar.edu.itba.paw.model.*;
-import javafx.scene.transform.Scale;
 
 import java.util.List;
 
