@@ -49,7 +49,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                 "doctorLicense VARCHAR(20) REFERENCES doctors(license),"+
                 "clinicId VARCHAR(20) REFERENCES clinics(id),"+
                 "consultPrice INTEGER," +
-                "PRIMARY KEY (doctorLicense, clinicName)"+
+                "PRIMARY KEY (doctorLicense, clinicid)"+
                 ");"
         );
     }
@@ -58,7 +58,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     public DoctorClinic createDoctorClinic(Doctor doctor, Clinic clinic, int consultPrice) {
         final Map<String, Object> args = new HashMap<>();
         args.put("doctorLicense", doctor.getLicense());
-        args.put("clinicId", clinic.getId());
+        args.put("clinicid", clinic.getId());
         args.put("consultPrice", consultPrice);
         int result;
 
