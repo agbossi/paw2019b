@@ -31,7 +31,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                     new Specialty(resultSet.getString("specialty")),
                     resultSet.getString("doctorLicense"),
                     resultSet.getString("phoneNumber")),
-                    new Clinic(resultSet.getInt("clinicId"),resultSet.getString("name"),
+                    new Clinic(resultSet.getInt("clinicid"),resultSet.getString("name"),
                             new Location(resultSet.getString("location"))),
                     resultSet.getInt("consultPrice"));
         }
@@ -47,7 +47,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
         jdbcTemplate.execute( "CREATE TABLE IF NOT EXISTS doctorclinics("+
                 "doctorLicense VARCHAR(20) REFERENCES doctors(license),"+
-                "clinicId VARCHAR(20) REFERENCES clinics(id),"+
+                "clinicid VARCHAR(20) REFERENCES clinics(id),"+
                 "consultPrice INTEGER," +
                 "PRIMARY KEY (doctorLicense, clinicid)"+
                 ");"

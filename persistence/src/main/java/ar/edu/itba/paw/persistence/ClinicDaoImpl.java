@@ -38,7 +38,7 @@ public class ClinicDaoImpl implements ClinicDao {
                 .usingGeneratedKeyColumns("clinicid");
 
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS clinics (" +
-                "clinicId SERIAL PRIMARY KEY," +
+                "id SERIAL PRIMARY KEY," +
                 "name VARCHAR(20) ," +
                 "location VARCHAR(60) REFERENCES locations(name)" +
                 ")");
