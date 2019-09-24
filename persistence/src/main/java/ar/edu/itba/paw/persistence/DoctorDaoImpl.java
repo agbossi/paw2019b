@@ -44,14 +44,6 @@ public class DoctorDaoImpl implements DoctorDao {
 
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                          .withTableName("doctors");
-
-        jdbcTemplate.execute( "CREATE TABLE IF NOT EXISTS doctors ("+
-                "license VARCHAR(20) PRIMARY KEY,"+
-                "specialty VARCHAR(50) REFERENCES specialties(name),"+
-                "doctorName VARCHAR(60),"+
-                "phoneNumber VARCHAR(20)"+
-                ");"
-        );
     }
 
     @Override

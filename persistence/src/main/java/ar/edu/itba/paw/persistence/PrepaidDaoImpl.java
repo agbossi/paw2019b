@@ -33,10 +33,6 @@ public class PrepaidDaoImpl implements PrepaidDao {
 
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("prepaids");
-
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS prepaids (" +
-                "name VARCHAR(30) PRIMARY KEY" +
-                ")");
     }
 
     @Override

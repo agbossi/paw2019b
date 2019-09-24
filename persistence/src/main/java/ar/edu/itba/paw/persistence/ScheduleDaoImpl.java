@@ -36,14 +36,6 @@ public class ScheduleDaoImpl implements ScheduleDao {
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("schedule");
 
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS schedule (" +
-                "day VARCHAR(30)," +
-                "hour VARCHAR(30)," +
-                "doctor VARCHAR(30)," +
-                "clinic INTEGER ," +
-                "PRIMARY KEY (day,hour,doctor)," +
-                "FOREIGN KEY (doctor, clinic) REFERENCES doctorClinics(doctorLicense, clinicid))");
-
     }
 
     @Override
