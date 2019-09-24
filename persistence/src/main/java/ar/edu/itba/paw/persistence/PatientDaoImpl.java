@@ -24,7 +24,7 @@ public class PatientDaoImpl implements PatientDao {
     private final static RowMapper<Patient> ROW_MAPPER = new RowMapper<Patient>() {
 
         @Override public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Patient(rs.getString("id"),
+            return new Patient(rs.getString("email"),
                     rs.getString("prepaid"),
                     rs.getString("prepaidNumber"));
         }
@@ -38,7 +38,7 @@ public class PatientDaoImpl implements PatientDao {
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("patients");
 
         jdbcTemplate.execute( "CREATE TABLE IF NOT EXISTS patients ("+
-                "id VARCHAR(9) PRIMARY KEY REFERENCES users(id),"+
+                "email VARCHAR(25) PRIMARY KEY REFERENCES users(email),"+
                 "prepaid VARCHAR(20),"+
                 "prepaidNumber varchar(20)"+
                 ");"
@@ -47,20 +47,20 @@ public class PatientDaoImpl implements PatientDao {
 
 
     @Override
-    public Patient create(String id, String prepaid, String prepaidNumber) {
+    public Patient create(String email, String prepaid, String prepaidNumber) {
         final Map<String, Object> args = new HashMap<>();
-        args.put("id",id);
+        args.put("email",email);
         args.put("prepaid",prepaid);
         args.put("prepaidNumber",prepaidNumber);
 
         int result;
         result = jdbcInsert.execute(args);
-        return new Patient(id,prepaid,prepaidNumber);
+        return new Patient(email,prepaid,prepaidNumber);
     }
 
     @Override
-    public Patient getPatientById(String id) {
-        List<Patient> patient = jdbcTemplate.query("select * from patients where id = ?", ROW_MAPPER, id);
+    public Patient getPatientById(String email) {
+        List<Patient> patient = jdbcTemplate.query("select * from patients where email = ?", ROW_MAPPER, email);
         if(patient.isEmpty()) {
             return null;
         }

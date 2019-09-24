@@ -1,26 +1,52 @@
 package ar.edu.itba.paw.webapp.form;
 
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 public class DoctorForm {
 
-    private String name;
+    @Pattern(regexp = "[a-zA-Z]+")
+    private String firstName;
 
+    @Pattern(regexp = "[a-zA-Z]+")
+    private String lastName;
 
+    @Pattern(regexp = "[a-zA-Z]+")
     private String specialty;
 
-    private String location;
-
+    @Pattern(regexp = "[0-9]+")
     private String license;
 
+    @Pattern(regexp = "[0-9]+")
     private String phoneNumber;
 
-    private String clinic;
+    @Size(min = 8, max = 20)
+    //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
+    @Pattern(regexp = "[a-zA-Z0-9]+")
+    private String password;
 
-    public String getName() {
-        return name;
+    @Size(min = 8, max = 20)
+    //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
+    @Pattern(regexp = "[a-zA-Z0-9]+")
+    private String repeatPassword;
+
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
+    private String email;
+
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String name) {
+        this.firstName = name;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String name) {
+        this.lastName = name;
     }
 
     public String getSpecialty() {
@@ -29,14 +55,6 @@ public class DoctorForm {
 
     public void setSpecialty(String specialty) {
         this.specialty = specialty;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 
     public String getLicense() {
@@ -55,11 +73,27 @@ public class DoctorForm {
         this.phoneNumber = phoneNumber;
     }
 
-    public String getClinic() {
-        return clinic;
+    public String getPassword() {
+        return password;
     }
 
-    public void setClinic(String clinic) {
-        this.clinic = clinic;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRepeatPassword() {
+        return repeatPassword;
+    }
+
+    public void setRepeatPassword(String repeatPassword) {
+        this.repeatPassword = repeatPassword;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

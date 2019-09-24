@@ -13,10 +13,6 @@ public class SignUpForm {
     @Pattern(regexp = "[a-zA-Z]+")
     private String lastName;
 
-    @Size(min = 8,max = 9)
-    @Pattern(regexp = "[0-9]+")
-    private String id;
-
     @Size(min = 8, max = 20)
     //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
     @Pattern(regexp = "[a-zA-Z0-9]+")
@@ -50,14 +46,6 @@ public class SignUpForm {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getPassword() {

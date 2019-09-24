@@ -1,9 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.ClinicService;
-import ar.edu.itba.paw.interfaces.DoctorService;
-import ar.edu.itba.paw.interfaces.LocationService;
-import ar.edu.itba.paw.interfaces.SpecialtyService;
+import ar.edu.itba.paw.interfaces.*;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Specialty;
@@ -13,8 +10,10 @@ import ar.edu.itba.paw.webapp.form.LocationForm;
 import ar.edu.itba.paw.webapp.form.SpecialtyForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,6 +39,11 @@ public class AdminController {
     @Autowired
     private ModelAndViewModifier viewModifier;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    UserService userService;
 
     @RequestMapping(value = "/admin", method = { RequestMethod.GET })
     public ModelAndView admin(){
@@ -80,17 +84,31 @@ public class AdminController {
     @RequestMapping(value = "/addedDoctor", method = { RequestMethod.POST })
     public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors){
 
+        //TODO this is like user controller /signup
+        if (form.getPassword().equals(form.getRepeatPassword())) {
+        } else {
+            FieldError passwordNotMatchingError = new FieldError("form","repeat password","fields password and repeat password do not match");
+            errors.addError(passwordNotMatchingError);
+        }
+
+        if (userService.userExists(form.getEmail())) {
+            //TODO change message for language variable
+            FieldError ssoError = new FieldError("form", "email","That email is already registered" );
+            errors.addError(ssoError);
+        }
+
+
         if(errors.hasErrors())
             return addDoctor(form);
 
-        Clinic doctorClinic = clinicService.getClinicByName(form.getClinic());
-
-        doctorService.createDoctor(form.getName(),
-                new Specialty(form.getSpecialty()),
-                new Location(form.getLocation()),
+        doctorService.createDoctor(new Specialty(form.getSpecialty()),
                 form.getLicense(),
-                form.getPhoneNumber(),
-                doctorClinic);
+                form.getPhoneNumber(),form.getEmail()
+                );
+
+        String encodedPassword = passwordEncoder.encode(form.getPassword());
+
+        userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
 
         final ModelAndView mav = new ModelAndView("addedDoctor");
 

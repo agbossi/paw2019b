@@ -35,9 +35,14 @@
             <c:url value="/addedDoctor" var="postPath"/>
             <form:form modelAttribute="doctorForm" action="${postPath}" method="post">
                 <div>
-                    <form:label path="name">Name: </form:label>
-                    <form:input type="text" path="name"/>
-                    <form:errors path="name" element="p"/>
+                    <form:label path="firstName">First name: </form:label>
+                    <form:input type="text" path="firstName"/>
+                    <form:errors path="firstName" element="p"/>
+                </div>
+                <div>
+                    <form:label path="lastName">Last name: </form:label>
+                    <form:input type="text" path="lastName"/>
+                    <form:errors path="lastName" element="p"/>
                 </div>
                 <div>
                     <form:label path="specialty">Specialty: </form:label>
@@ -47,15 +52,6 @@
                         </c:forEach>
                     </form:select>
                     <form:errors path="specialty" element="p"/>
-                </div>
-                <div>
-                    <form:label path="location">Location: </form:label>
-                    <form:select path="location">
-                        <c:forEach var="location" items="${locations}">
-                            <form:option value="${location.locationName}"/>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors path="location" element="p"/>
                 </div>
                 <div>
                     <form:label path="license">License: </form:label>
@@ -68,13 +64,19 @@
                     <form:errors path="phoneNumber" element="p"/>
                 </div>
                 <div>
-                    <form:label path="clinic">Clinic: </form:label>
-                    <form:select path="clinic">
-                        <c:forEach var="clinic" items="${clinics}">
-                            <form:option value="${clinic.name}"/>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors path="clinic" element="p"/>
+                    <form:label path="email">Email: </form:label>
+                    <form:input type="text" path="email"/>
+                    <form:errors path="email" element="p"/>
+                </div>
+                <div>
+                    <form:label path="password">Password: </form:label>
+                    <form:input type="password" path="password" />
+                    <form:errors path="password" element="p"/></div>
+                </div>
+                <div>
+                    <form:label path="repeatPassword">Repeat password: </form:label>
+                    <form:input type="password" path="repeatPassword"/>
+                    <form:errors path="repeatPassword" element="p"/>
                 </div>
                 <div>
                     <input type="submit" value="Add">

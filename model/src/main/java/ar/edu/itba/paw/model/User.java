@@ -9,12 +9,9 @@ public class User {
 
     private String email;
 
-    private String id;
-
-    public User(String id,String firstName,String lastName,String password,String email) {
+    public User(String firstName,String lastName,String password,String email) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.id = id;
         this.password = password;
         this.email = email;
     }
@@ -25,10 +22,6 @@ public class User {
 
     public String getLastName() {
         return lastName;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getPassword() {

@@ -8,19 +8,21 @@ import ar.edu.itba.paw.model.Specialty;
 import java.util.List;
 
 public interface DoctorDao {
-    Doctor createDoctor(String name, Specialty specialty, Location location, String license, String phoneNumber, Clinic clinic);
+    public Doctor createDoctor(Specialty specialty,String license, String phoneNumber,String email);
 
-    List<Doctor> getDoctors();
+    public List<Doctor> getDoctors();
 
-    List<Doctor> getDoctorByLocation(Location location);
+    //List<Doctor> getDoctorByLocation(Location location);
 
-    List<Doctor> getDoctorByName(String name);
+    public List<Doctor> getDoctorByName(String fistName,String lastName);
 
-    List<Doctor> getDoctorBySpecialty(Specialty specialty);
+    public List<Doctor> getDoctorBySpecialty(Specialty specialty);
 
-    List<Doctor> getFilteredDoctors(Location location, Specialty specialty, String clinic);
+    //List<Doctor> getFilteredDoctors(Location location, Specialty specialty, String clinic);
 
-    Doctor getDoctorByLicense(String license);
+    public Doctor getDoctorByLicense(String license);
 
-    List<Doctor> getDoctorByClinic(Clinic clinic);
+    //List<Doctor> getDoctorByClinic(Clinic clinic);
+
+    public boolean isDoctor(String email);
 }

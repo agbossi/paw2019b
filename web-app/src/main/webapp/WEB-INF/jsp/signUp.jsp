@@ -40,11 +40,6 @@
                     <form:errors path="email" element="p"/>
                 </div>
                 <div>
-                    <form:label path="id">Id: </form:label>
-                    <form:input type="text" path="id"/>
-                    <form:errors path="id" element="p"/>
-                </div>
-                <div>
                     <form:label path="prepaid">Prepaid:</form:label>
                     <form:select type="select" path="prepaid">
                         <form:option value="">None</form:option>

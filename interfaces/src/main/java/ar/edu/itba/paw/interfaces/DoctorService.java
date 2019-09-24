@@ -8,19 +8,19 @@ import ar.edu.itba.paw.model.Specialty;
 import java.util.List;
 
 public interface DoctorService {
-    Doctor createDoctor(String name, Specialty specialty, Location location, String license, String phoneNumber, Clinic clinic);
+    Doctor createDoctor(Specialty specialty,String license, String phoneNumber, String email);
 
     List<Doctor> getDoctors();
 
-    List<Doctor> getDoctorByLocation(Location location);
+    //List<Doctor> getDoctorByLocation(Location location);
 
-    List<Doctor> getDoctorByName(String name);
+    List<Doctor> getDoctorByName(String firstName,String lastName);
 
     List<Doctor> getDoctorBySpecialty(Specialty specialty);
 
-    List<Doctor> getDoctorBy(Location location, Specialty specialty, String clinic);
+    //List<Doctor> getDoctorBy(Location location, Specialty specialty, String clinic);
 
     Doctor getDoctorByLicense(String license);
 
-    List<Doctor> getDoctorByClinic(Clinic clinic);
+    //List<Doctor> getDoctorByClinic(Clinic clinic);
 }

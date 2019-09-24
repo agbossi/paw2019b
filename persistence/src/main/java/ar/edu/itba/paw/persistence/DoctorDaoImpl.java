@@ -28,15 +28,12 @@ public class DoctorDaoImpl implements DoctorDao {
     private final static RowMapper<Doctor> ROW_MAPPER = new RowMapper<Doctor>() {
         @Override
         public Doctor mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new Doctor(resultSet.getString("doctorName"),
+            return new Doctor(resultSet.getString("firstName"),
+                    resultSet.getString("lastName"),
                    new Specialty(resultSet.getString("specialty")),
-                   new Location(resultSet.getString("location")),
                     resultSet.getString("license"),
                     resultSet.getString("phoneNumber"),
-                   new Clinic(resultSet.getString("clinicName"),
-                              new Location(resultSet.getString("location")),
-                              resultSet.getInt(("consultPrice"))
-                   )
+                    resultSet.getString("email")
             );
         }
     };
@@ -52,42 +49,37 @@ public class DoctorDaoImpl implements DoctorDao {
         jdbcTemplate.execute( "CREATE TABLE IF NOT EXISTS doctors ("+
                 "license VARCHAR(20) PRIMARY KEY,"+
                 "specialty VARCHAR(50) REFERENCES specialties(name),"+
-                "location VARCHAR(50) REFERENCES locations(name),"+
-                "clinicName VARCHAR(20) REFERENCES clinics(name),"+
-                "consultPrice INTEGER,"+
-                "doctorName VARCHAR(60),"+
+                "email VARCHAR(25) references users(email),"+
                 "phoneNumber VARCHAR(20)"+
                 ");"
         );
     }
 
     @Override
-    public Doctor createDoctor(final String name, final Specialty specialty, final Location location, final String license, final String phoneNumber, final Clinic clinic) {
+    public Doctor createDoctor(final Specialty specialty,final String license, final String phoneNumber, final String email) {
         final Map<String, Object> args = new HashMap<>();
-        args.put("doctorName", name);
         args.put("specialty", specialty.getSpecialtyName());
-        args.put("location", location.getLocationName());
         args.put("license", license);
         args.put("phoneNumber", phoneNumber);
-        args.put("clinicName", clinic.getName());
-        args.put("clinicConsultPrice", clinic.getConsultPrice());
+        args.put("email",email);
         int result;
 
         result = jdbcInsert.execute(args);
 
-        return new Doctor(name, specialty, location, license, phoneNumber, clinic);
+        return this.getDoctorByLicense(license);
     }
 
     @Override
     public List<Doctor> getDoctors() {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors",ROW_MAPPER);
+        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,email,firstName,lastName " +
+                "from doctors join users on doctors.email = users.email",ROW_MAPPER);
         if(list.isEmpty()){
             return null;
         }
         return list;
     }
 
-    @Override
+   /* @Override
     public List<Doctor> getDoctorByLocation(Location location) {
 
         final List<Doctor> list = jdbcTemplate.query("select * from doctors where location = ?",ROW_MAPPER,location.getLocationName());
@@ -95,11 +87,12 @@ public class DoctorDaoImpl implements DoctorDao {
             return null;
         }
         return list;
-    }
+    } */
 
     @Override
-    public List<Doctor> getDoctorByName(String name) {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where doctorName = ?",ROW_MAPPER,name);
+    public List<Doctor> getDoctorByName(String firstName,String lastName) {
+        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,email,firstName,lastName " +
+                "from doctors join users on doctors.email = users.email where firstName = ? and lastName = ?",ROW_MAPPER,firstName,lastName);
         if(list.isEmpty()){
             return null;
         }
@@ -108,7 +101,8 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getDoctorBySpecialty(Specialty specialty) {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where specialty = ?",ROW_MAPPER,specialty.getSpecialtyName());
+        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,email,firstName,lastName " +
+                               "from doctors join users on doctors.email = users.email where specialty = ?",ROW_MAPPER,specialty.getSpecialtyName());
         if(list.isEmpty()){
             return null;
         }
@@ -117,7 +111,8 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public Doctor getDoctorByLicense(String license) {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where license = ?",ROW_MAPPER,license);
+        final List<Doctor> list = jdbcTemplate.query("specialty,license,phoneNumber,email,firstName,lastName"  +
+                                               "from doctors join users on doctors.email = users.email where license = ?",ROW_MAPPER,license);
         if(list.isEmpty()){
             return null;
         }
@@ -125,15 +120,21 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
+    public boolean isDoctor(String email) {
+        final List<Doctor> list = jdbcTemplate.query("select * from doctors where email = ?",ROW_MAPPER,email);
+        return list.isEmpty();
+    }
+
+   /* @Override
     public List<Doctor> getDoctorByClinic(Clinic clinic) {
         final List<Doctor> list = jdbcTemplate.query("select * from doctors where clinicName = ?",ROW_MAPPER,clinic.getName());
         if(list.isEmpty()){
             return null;
         }
         return list;
-    }
+    } */
 
-    @Override
+   /* @Override
     public List<Doctor> getFilteredDoctors(final Location location, final Specialty specialty, final String clinic) {
 
         DoctorQueryBuilder builder = new DoctorQueryBuilder();
@@ -155,5 +156,5 @@ public class DoctorDaoImpl implements DoctorDao {
             }
         }, ROW_MAPPER);
         return ( list.isEmpty() ? null : list );
-    }
+    } */
 }

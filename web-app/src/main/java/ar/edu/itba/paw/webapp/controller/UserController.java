@@ -92,8 +92,8 @@ public class UserController {
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
 
-        userService.createUser(form.getId(),form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
-        patientService.create(form.getId(), form.getPrepaid(), form.getPrepaidNumber());
+        userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
+        patientService.create(form.getEmail(),form.getPrepaid(), form.getPrepaidNumber());
 
         //TODO this should send an email or something of confirmation and then login ???
         //authWithAuthManager(request, form.getEmail(), encodedPassword);

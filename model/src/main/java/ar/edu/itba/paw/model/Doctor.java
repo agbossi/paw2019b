@@ -3,37 +3,29 @@ package ar.edu.itba.paw.model;
 
 public class Doctor {
 
-    private String name;
+    private String firstName;
+
+    private String lastName;
 
     private Specialty specialty;
-
-    private Location location;
 
     private String license;
 
     private String phoneNumber;
 
-    private Clinic clinic;
+    private String email;
 
-    public Doctor(String name, Specialty specialty, Location location, String license, String phoneNumber, Clinic clinic){
-        this.name = name;
+    public Doctor(String firstName,String lastName ,Specialty specialty,String license, String phoneNumber, String email){
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.specialty = specialty;
-        this.location = location;
         this.license = license;
         this.phoneNumber = phoneNumber;
-        this.clinic = clinic;
-    }
-
-    public String getName() {
-        return name;
+        this.email = email;
     }
 
     public Specialty getSpecialty() {
         return specialty;
-    }
-
-    public Location getLocation() {
-        return location;
     }
 
     public String getLicense() {
@@ -44,7 +36,13 @@ public class Doctor {
         return phoneNumber;
     }
 
-    public Clinic getClinic() {
-        return clinic;
+    public String getEmail() {return email;}
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 }

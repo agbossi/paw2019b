@@ -39,7 +39,7 @@ public class PatientController {
     public ModelAndView profile() {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Patient patient = patientService.getPatientById(user.getId());
+        Patient patient = patientService.getPatientById(user.getEmail());
 
         final ModelAndView mav = new ModelAndView("/profile");
         mav.addObject("user", user);
@@ -52,7 +52,7 @@ public class PatientController {
     public ModelAndView editProfile(@ModelAttribute("form") final PersonalInformationForm form) {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Patient patient = patientService.getPatientById(user.getId());
+        Patient patient = patientService.getPatientById(user.getEmail());
 
         setFormInformation(form, user, patient);
 

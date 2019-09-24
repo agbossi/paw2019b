@@ -43,10 +43,11 @@ public class SearchController {
         viewModifier.addSearchInfo(mav);
 
         // TODO: once we implement a proper query builder fix this and search form attributes !!
-        List<Doctor> filteredDoctors = doctorService.getDoctorBy(new Location(form.getLocation()),
+        // TODO replace once we merge doctorClinic
+       /* List<Doctor> filteredDoctors = doctorService.getDoctorBy(new Location(form.getLocation()),
                 new Specialty(form.getSpecialty()),
-                "noClinic");
-
+                "noClinic"); */
+        List<Doctor> filteredDoctors = doctorService.getDoctors();
         viewModifier.addFilteredDoctors(mav, filteredDoctors);
 
         return mav;
