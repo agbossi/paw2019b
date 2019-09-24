@@ -7,17 +7,16 @@ CREATE TABLE IF NOT EXISTS specialties (
 );
 
 CREATE TABLE IF NOT EXISTS users (
-    id VARCHAR(9) PRIMARY KEY,
     firstName VARCHAR(20),
     lastName varchar(20),
     password VARCHAR(60),
-    email VARCHAR(25)
+    email VARCHAR(25) primary key
 );
 
 CREATE TABLE IF NOT EXISTS doctors (
     license VARCHAR(20) PRIMARY KEY,
-    specialty VARCHAR(30) REFERENCES specialties(name),
-    doctorName VARCHAR(60),
+    specialty VARCHAR(50) REFERENCES specialties(name),
+    email VARCHAR(25) references users(email),
     phoneNumber VARCHAR(20)
 );
 
@@ -48,8 +47,8 @@ CREATE TABLE IF NOT EXISTS schedule (
 );
 
 CREATE TABLE IF NOT EXISTS patients (
-    id VARCHAR(9) PRIMARY KEY REFERENCES users(id),
+    email VARCHAR(25) PRIMARY KEY REFERENCES users(email),
     prepaid VARCHAR(20),
-    prepaidNumber VARCHAR(20)
+    prepaidNumber varchar(20)
 );
   

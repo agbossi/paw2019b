@@ -1,13 +1,8 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.*;
-import ar.edu.itba.paw.model.Clinic;
-import ar.edu.itba.paw.model.Location;
-import ar.edu.itba.paw.model.Specialty;
-import ar.edu.itba.paw.webapp.form.ClinicForm;
-import ar.edu.itba.paw.webapp.form.DoctorForm;
-import ar.edu.itba.paw.webapp.form.LocationForm;
-import ar.edu.itba.paw.webapp.form.SpecialtyForm;
+import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -121,33 +116,34 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/addedDoctor", method = { RequestMethod.POST })
-    public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors){
+    public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors) {
 
         //TODO this is like user controller /signup
-        if (form.getPassword().equals(form.getRepeatPassword())) {
-        } else {
-            FieldError passwordNotMatchingError = new FieldError("form","repeat password","fields password and repeat password do not match");
+        if (!form.getPassword().equals(form.getRepeatPassword())) {
+            FieldError passwordNotMatchingError = new FieldError("form", "repeatPassword", "fields password and repeat password do not match");
             errors.addError(passwordNotMatchingError);
         }
 
         if (userService.userExists(form.getEmail())) {
             //TODO change message for language variable
-            FieldError ssoError = new FieldError("form", "email","That email is already registered" );
+            FieldError ssoError = new FieldError("form", "email", "That email is already registered");
             errors.addError(ssoError);
         }
 
 
-        if(errors.hasErrors())
+        if (errors.hasErrors())
             return addDoctor(form);
+
+        String encodedPassword = passwordEncoder.encode(form.getPassword());
+
+        userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
 
         doctorService.createDoctor(new Specialty(form.getSpecialty()),
                 form.getLicense(),
                 form.getPhoneNumber(),form.getEmail()
                 );
 
-        String encodedPassword = passwordEncoder.encode(form.getPassword());
 
-        userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
 
         final ModelAndView mav = new ModelAndView("addedDoctor");
 

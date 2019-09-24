@@ -45,14 +45,6 @@ public class DoctorDaoImpl implements DoctorDao {
 
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                          .withTableName("doctors");
-
-        jdbcTemplate.execute( "CREATE TABLE IF NOT EXISTS doctors ("+
-                "license VARCHAR(20) PRIMARY KEY,"+
-                "specialty VARCHAR(50) REFERENCES specialties(name),"+
-                "email VARCHAR(25) references users(email),"+
-                "phoneNumber VARCHAR(20)"+
-                ");"
-        );
     }
 
     @Override
@@ -71,7 +63,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getDoctors() {
-        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,email,firstName,lastName " +
+        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName " +
                 "from doctors join users on doctors.email = users.email",ROW_MAPPER);
         if(list.isEmpty()){
             return null;
@@ -82,7 +74,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getDoctorByName(String firstName,String lastName) {
-        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,email,firstName,lastName " +
+        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName " +
                 "from doctors join users on doctors.email = users.email where firstName = ? and lastName = ?",ROW_MAPPER,firstName,lastName);
         if(list.isEmpty()){
             return null;
@@ -92,7 +84,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getDoctorBySpecialty(Specialty specialty) {
-        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,email,firstName,lastName " +
+        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName " +
                                "from doctors join users on doctors.email = users.email where specialty = ?",ROW_MAPPER,specialty.getSpecialtyName());
         if(list.isEmpty()){
             return null;
@@ -102,16 +94,22 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public Doctor getDoctorByLicense(String license) {
-        final List<Doctor> list = jdbcTemplate.query("specialty,license,phoneNumber,email,firstName,lastName"  +
-                                               "from doctors join users on doctors.email = users.email where license = ?",ROW_MAPPER,license);
+        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName"  +
+                                               " from doctors join users on doctors.email = users.email where license = ?",ROW_MAPPER,license);
         if(list.isEmpty()){
             return null;
         }
         return list.get(0);
     }
 
+    @Override
+    public boolean isDoctor(String email) {
+        final List<Doctor> list = jdbcTemplate.query("select * from doctors where email = ?",ROW_MAPPER,email);
+        return list.isEmpty();
+    }
 
-   /* @Override
+
+    @Override
     public List<Doctor> getFilteredDoctors(final Location location, final Specialty specialty, final String clinic) {
 
         return null;

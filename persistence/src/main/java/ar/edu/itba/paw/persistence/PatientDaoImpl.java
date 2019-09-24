@@ -36,13 +36,6 @@ public class PatientDaoImpl implements PatientDao {
         jdbcTemplate = new JdbcTemplate(ds);
 
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("patients");
-
-        jdbcTemplate.execute( "CREATE TABLE IF NOT EXISTS patients ("+
-                "email VARCHAR(25) PRIMARY KEY REFERENCES users(email),"+
-                "prepaid VARCHAR(20),"+
-                "prepaidNumber varchar(20)"+
-                ");"
-        );
     }
 
 

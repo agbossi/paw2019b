@@ -37,14 +37,6 @@ public class UserDaoImpl implements UserDao {
         jdbcTemplate = new JdbcTemplate(ds);
 
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate).withTableName("users");
-
-        jdbcTemplate.execute( "CREATE TABLE IF NOT EXISTS users ("+
-                "firstName VARCHAR(20),"+
-                "lastName varchar(20),"+
-                "password VARCHAR(60),"+
-                "email VARCHAR(25)"+
-                ");"
-        );
     }
 
     @Override

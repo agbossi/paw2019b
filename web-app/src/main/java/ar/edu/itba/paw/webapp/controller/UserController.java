@@ -76,7 +76,7 @@ public class UserController {
                                          throws IOException, ServletException {
         //TODO message does not display
         if(!form.getPassword().equals(form.getRepeatPassword())){
-            FieldError passwordNotMatchingError = new FieldError("form","repeat password","fields password and repeat password do not match");
+            FieldError passwordNotMatchingError = new FieldError("form","repeatPassword","fields password and repeat password do not match");
             errors.addError(passwordNotMatchingError);
         }
 
