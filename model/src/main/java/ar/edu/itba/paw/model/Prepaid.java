@@ -6,4 +6,8 @@ public class Prepaid {
     public Prepaid(String name) {
         this.name = name;
     }
+
+    public String getName() {
+        return name;
+    }
 }

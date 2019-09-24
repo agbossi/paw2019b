@@ -25,7 +25,7 @@
         <p><b><spring:message code="user.id"/></b></p>
         <p>${user.id}</p>
     </div>
-    <c:if test="${patient.prepaid==""}">
+    <c:if test="${not empty patient.prepaid}">
         <div>
             <p><b><spring:message code="patient.prepaid"/></b></p>
             <p>${patient.prepaid}</p>

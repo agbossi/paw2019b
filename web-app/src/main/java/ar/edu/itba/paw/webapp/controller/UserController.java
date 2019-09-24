@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.webapp.auth.PawUrlAuthenticationSuccessHandler;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
+import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -44,6 +45,9 @@ public class UserController {
     @Autowired
     private AuthenticationSuccessHandler urlAuthenticationSuccessHandler;
 
+    @Autowired
+    private ModelAndViewModifier modelAndViewModifier;
+
     private void authWithAuthManager(HttpServletRequest request, String email, String password) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password);
         authToken.setDetails(new WebAuthenticationDetails(request));
@@ -54,12 +58,13 @@ public class UserController {
     //TODO change form error messages
     @RequestMapping(value = "/signUp", method = { RequestMethod.GET })
     public ModelAndView signUp(@ModelAttribute("signUpForm") final SignUpForm form,HttpServletRequest request,HttpServletResponse response) {
+
         //TODO how to send back to the previous page with its parameters
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
-        //
 
         final ModelAndView mav = new ModelAndView("signUp");
+        modelAndViewModifier.addPrepaids(mav);
 
         return mav;
     }

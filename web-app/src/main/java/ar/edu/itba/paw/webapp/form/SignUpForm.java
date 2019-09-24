@@ -34,8 +34,6 @@ public class SignUpForm {
 
     private String prepaid;
 
-    @Size(min=10, max=20)
-    @Pattern(regexp = "[\" \"0-9]+")
     private String prepaidNumber;
 
     public String getFirstName() {

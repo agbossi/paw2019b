@@ -46,7 +46,12 @@
                 </div>
                 <div>
                     <form:label path="prepaid">Prepaid:</form:label>
-                    <form:input type="text" path="prepaid" placeholder="Choose a prepaid"/>
+                    <form:select type="select" path="prepaid">
+                        <form:option value="">None</form:option>
+                        <c:forEach var="prepaid" items="${prepaids}">
+                            <form:option value="${prepaid.name}"/>
+                        </c:forEach>
+                    </form:select>
                     <form:errors path="prepaid" element="p"/>
                 </div>
                 <div>
