@@ -29,10 +29,6 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<Doctor> getDoctors() { return doctorDao.getDoctors(); }
 
-    /*@Override
-    public List<Doctor> getDoctorByLocation(Location location){
-        return doctorDao.getDoctorByLocation(location);
-    } */
 
     @Override
     public List<Doctor> getDoctorByName(String firstName,String lastName) {
@@ -54,8 +50,4 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorDao.getDoctorByLicense(license);
     }
 
-    /*@Override
-    public List<Doctor> getDoctorByClinic(Clinic clinic){
-        return doctorDao.getDoctorByClinic(clinic);
-    } */
 }

@@ -34,10 +34,6 @@ public class LocationDaoImpl implements LocationDao {
 
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("locations");
-
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS locations (" +
-                "name VARCHAR(30) PRIMARY KEY" +
-                ")");
     }
 
     @Override

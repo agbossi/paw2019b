@@ -33,10 +33,6 @@ public class SpecialtyDaoImpl implements SpecialtyDao{
 
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("specialties");
-
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS specialties (" +
-                "name VARCHAR(30) PRIMARY KEY" +
-                ")");
     }
 
     @Override

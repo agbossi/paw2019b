@@ -15,11 +15,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class AdminController {
@@ -37,10 +39,15 @@ public class AdminController {
     private SpecialtyService specialtyService;
 
     @Autowired
+    private DoctorClinicService doctorClinicService;
+
+    @Autowired
     private ModelAndViewModifier viewModifier;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ScheduleService scheduleService;
 
     @Autowired
     UserService userService;
@@ -58,6 +65,38 @@ public class AdminController {
         viewModifier.addSearchInfo(mav);
 
         return mav;
+    }
+
+    @RequestMapping(value = "/addDoctorClinic", method = { RequestMethod.GET })
+    public ModelAndView addDoctorClinic(@ModelAttribute("doctorClinicForm") final DoctorClinicForm form){
+        final ModelAndView mav = new ModelAndView("addDoctorClinic");
+
+        viewModifier.addClinics(mav);
+        viewModifier.addDoctors(mav);
+
+        return mav;
+    }
+
+    @RequestMapping(value ="/addSchedule", method = { RequestMethod.GET })
+    public ModelAndView addSchedule(){
+        final ModelAndView mav = new ModelAndView("addSchedule");
+
+        viewModifier.addDoctorClinics(mav);
+
+        return mav;
+    }
+
+    @RequestMapping(value = "addSchedule/{clinicid}/{license}", method = {RequestMethod.GET})
+    public ModelAndView addDoctorShedule( @PathVariable(value = "clinicid") int clinic, @PathVariable(value = "license") String license, @ModelAttribute("scheduleForm") final ScheduleForm form){
+
+        final ModelAndView mav = new ModelAndView("doctorSchedule");
+        Doctor doc = doctorService.getDoctorByLicense(license);
+        Clinic cli = clinicService.getClinicById(clinic);
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
+
+        mav.addObject("doctorClinic", doctorClinic);
+        return mav;
+
     }
 
     @RequestMapping(value = "/addClinic", method = { RequestMethod.GET })
@@ -115,13 +154,44 @@ public class AdminController {
         return mav;
     }
 
+    @RequestMapping(value = "/addedDoctorClinic", method = { RequestMethod.POST })
+    public ModelAndView addedDoctorClinic(@Valid @ModelAttribute("doctorClinicForm") final DoctorClinicForm form, final BindingResult errors){
+
+        if(errors.hasErrors())
+            return addDoctorClinic(form);
+
+        doctorClinicService.createDoctorClinic(doctorService.getDoctorByLicense(form.getDoctor()),
+                clinicService.getClinicById(form.getClinic()),
+                form.getConsultPrice());
+
+        final ModelAndView mav = new ModelAndView("addedDoctorClinic");
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/addedSchedule/{clinicid}/{license}", method = {RequestMethod.POST})
+    public ModelAndView addedSchedule(@PathVariable(value = "clinicid") int clinic, @PathVariable(value = "license") String license,@Valid @ModelAttribute("scheduleForm") final ScheduleForm form, final BindingResult errors){
+
+        if(errors.hasErrors())
+            return addDoctorShedule(clinic, license, form);
+        Doctor doc = doctorService.getDoctorByLicense(license);
+        Clinic cli = clinicService.getClinicById(clinic);
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
+
+        scheduleService.createSchedule(form.getHour(), form.getDay(), doctorClinic);
+
+        final ModelAndView mav = new ModelAndView("addedSchedule");
+
+        return mav;
+    }
+
     @RequestMapping(value = "/addedClinic", method = { RequestMethod.POST })
     public ModelAndView addedClinic(@Valid @ModelAttribute("clinicForm") final ClinicForm form, final BindingResult errors){
 
         if(errors.hasErrors())
             return addClinic(form);
 
-        final Clinic clinic = clinicService.createClinic(form.getName(), new Location(form.getLocation()), form.getConsultPrice());
+        final Clinic clinic = clinicService.createClinic(form.getName(), new Location(form.getLocation()));
 
         final ModelAndView mav = new ModelAndView("addedClinic");
 

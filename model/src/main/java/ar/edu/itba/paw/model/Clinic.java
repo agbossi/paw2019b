@@ -3,15 +3,15 @@ package ar.edu.itba.paw.model;
 public class Clinic {
     private String name;
 
+    private int id;
     // TODO: this should be transformed into an address
     private Location location;
 
-    private int consultPrice;
 
-    public Clinic(String name, Location location, int consultPrice){
+    public Clinic(int id, String name, Location location){
+        this.id = id;
         this.name = name;
         this.location = location;
-        this.consultPrice = consultPrice;
     }
 
     public String getName() {
@@ -22,7 +22,11 @@ public class Clinic {
         return location;
     }
 
-    public int getConsultPrice() {
-        return consultPrice;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -6,8 +6,6 @@ public class ClinicForm {
 
     private String location;
 
-    private int consultPrice;
-
     public String getName() {
         return name;
     }
@@ -24,11 +22,4 @@ public class ClinicForm {
         this.location = location;
     }
 
-    public int getConsultPrice() {
-        return consultPrice;
-    }
-
-    public void setConsultPrice(int consultPrice) {
-        this.consultPrice = consultPrice;
-    }
 }

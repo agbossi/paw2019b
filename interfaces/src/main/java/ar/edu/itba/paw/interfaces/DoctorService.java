@@ -12,8 +12,6 @@ public interface DoctorService {
 
     List<Doctor> getDoctors();
 
-    //List<Doctor> getDoctorByLocation(Location location);
-
     List<Doctor> getDoctorByName(String firstName,String lastName);
 
     List<Doctor> getDoctorBySpecialty(Specialty specialty);
@@ -22,5 +20,4 @@ public interface DoctorService {
 
     Doctor getDoctorByLicense(String license);
 
-    //List<Doctor> getDoctorByClinic(Clinic clinic);
 }

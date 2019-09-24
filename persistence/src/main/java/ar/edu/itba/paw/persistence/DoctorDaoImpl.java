@@ -79,15 +79,6 @@ public class DoctorDaoImpl implements DoctorDao {
         return list;
     }
 
-   /* @Override
-    public List<Doctor> getDoctorByLocation(Location location) {
-
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where location = ?",ROW_MAPPER,location.getLocationName());
-        if(list.isEmpty()){
-            return null;
-        }
-        return list;
-    } */
 
     @Override
     public List<Doctor> getDoctorByName(String firstName,String lastName) {
@@ -119,42 +110,10 @@ public class DoctorDaoImpl implements DoctorDao {
         return list.get(0);
     }
 
-    @Override
-    public boolean isDoctor(String email) {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where email = ?",ROW_MAPPER,email);
-        return list.isEmpty();
-    }
-
-   /* @Override
-    public List<Doctor> getDoctorByClinic(Clinic clinic) {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where clinicName = ?",ROW_MAPPER,clinic.getName());
-        if(list.isEmpty()){
-            return null;
-        }
-        return list;
-    } */
 
    /* @Override
     public List<Doctor> getFilteredDoctors(final Location location, final Specialty specialty, final String clinic) {
 
-        DoctorQueryBuilder builder = new DoctorQueryBuilder();
-        builder.buildQuery(location.getLocationName(), specialty.getSpecialtyName(), clinic);
-
-        final List<Doctor> list = jdbcTemplate.query(builder.getQuery(), new PreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement preparedStatement) throws SQLException {
-                int i=1;
-
-                if(location!=null){
-                    preparedStatement.setString(i,location.getLocationName());
-                    i++;
-                }
-                if(specialty!=null){
-                    preparedStatement.setString(i,specialty.getSpecialtyName());
-                    i++;
-                }
-            }
-        }, ROW_MAPPER);
-        return ( list.isEmpty() ? null : list );
-    } */
+        return null;
+    }
 }
