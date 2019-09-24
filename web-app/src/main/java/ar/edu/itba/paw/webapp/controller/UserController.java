@@ -1,8 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.webapp.auth.PawUrlAuthenticationSuccessHandler;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
+import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +34,9 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private PatientService patientService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -40,20 +45,35 @@ public class UserController {
     @Autowired
     private AuthenticationSuccessHandler urlAuthenticationSuccessHandler;
 
+    @Autowired
+    private ModelAndViewModifier modelAndViewModifier;
+
+    private void authWithAuthManager(HttpServletRequest request, String email, String password) {
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password);
+        authToken.setDetails(new WebAuthenticationDetails(request));
+        Authentication authentication = authenticationManager.authenticate(authToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
     //TODO change form error messages
     @RequestMapping(value = "/signUp", method = { RequestMethod.GET })
-    public ModelAndView signUp(@ModelAttribute("signUpForm") final SignUpForm form,HttpServletRequest request,HttpServletResponse response){
+    public ModelAndView signUp(@ModelAttribute("signUpForm") final SignUpForm form,HttpServletRequest request,HttpServletResponse response) {
+
         //TODO how to send back to the previous page with its parameters
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
-        //
 
         final ModelAndView mav = new ModelAndView("signUp");
+        modelAndViewModifier.addPrepaids(mav);
 
         return mav;
     }
+
     @RequestMapping(value = "/signUp",method = { RequestMethod.POST })
-    public ModelAndView signUpValidation(@Valid @ModelAttribute("signUpForm") final SignUpForm form, final BindingResult errors, HttpServletRequest request,HttpServletResponse response) throws IOException, ServletException {
+    public ModelAndView signUpValidation(@Valid @ModelAttribute("signUpForm") final SignUpForm form,
+                                         final BindingResult errors, HttpServletRequest request,
+                                         HttpServletResponse response)
+                                         throws IOException, ServletException {
         //TODO message does not display
         if(!form.getPassword().equals(form.getRepeatPassword())){
             FieldError passwordNotMatchingError = new FieldError("form","repeat password","fields password and repeat password do not match");
@@ -72,8 +92,8 @@ public class UserController {
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
 
-        userService.createUser(form.getId(),form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail(),form.getHealthInsurance());
-        //to be kept logged in after sign up
+        userService.createUser(form.getId(),form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
+        patientService.create(form.getId(), form.getPrepaid(), form.getPrepaidNumber());
 
         //TODO this should send an email or something of confirmation and then login ???
         //authWithAuthManager(request, form.getEmail(), encodedPassword);
@@ -87,17 +107,11 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(value = "/login",method = { RequestMethod.GET })
-    public ModelAndView login(HttpServletRequest request){
+    @RequestMapping(value = "/login", method = { RequestMethod.GET })
+    public ModelAndView login(HttpServletRequest request) {
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
         return new ModelAndView("login");
     }
 
-    private void authWithAuthManager(HttpServletRequest request, String email, String password) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password);
-        authToken.setDetails(new WebAuthenticationDetails(request));
-        Authentication authentication = authenticationManager.authenticate(authToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
 }

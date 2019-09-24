@@ -12,7 +12,6 @@ CREATE TABLE IF NOT EXISTS users (
     lastName varchar(20),
     password VARCHAR(60),
     email VARCHAR(25),
-    healtInsurance VARCHAR(20)
 );
 
 CREATE TABLE IF NOT EXISTS doctors (

@@ -24,6 +24,9 @@ public class ModelAndViewModifier {
     private DoctorService doctorService;
 
     @Autowired
+    private PrepaidService prepaidService;
+
+    @Autowired
     DoctorClinicService doctorClinicService;
 
     public ModelAndView addSearchInfo(ModelAndView mav){
@@ -65,7 +68,6 @@ public class ModelAndViewModifier {
         return mav;
     }
 
-
     public ModelAndView addDoctors(ModelAndView mav){
         List<Doctor> doctors = doctorService.getDoctors();
         mav.addObject("doctors", doctors);
@@ -75,6 +77,12 @@ public class ModelAndViewModifier {
 
     public ModelAndView addFilteredDoctors(ModelAndView mav, List<DoctorClinic> filteredDoctors){
         mav.addObject("doctorClinics", filteredDoctors);
+
+        return mav;
+    }
+    public ModelAndView addPrepaids(ModelAndView mav){
+        List<Prepaid> prepaids = prepaidService.getPrepaids();
+        mav.addObject("prepaids", prepaids);
 
         return mav;
     }
