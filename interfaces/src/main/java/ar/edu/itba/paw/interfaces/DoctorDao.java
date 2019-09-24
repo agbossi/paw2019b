@@ -8,11 +8,9 @@ import ar.edu.itba.paw.model.Specialty;
 import java.util.List;
 
 public interface DoctorDao {
-    Doctor createDoctor(String name, Specialty specialty, Location location, String license, String phoneNumber, Clinic clinic);
+    Doctor createDoctor(String name, Specialty specialty, String license, String phoneNumber);
 
     List<Doctor> getDoctors();
-
-    List<Doctor> getDoctorByLocation(Location location);
 
     List<Doctor> getDoctorByName(String name);
 
@@ -21,6 +19,4 @@ public interface DoctorDao {
     List<Doctor> getFilteredDoctors(Location location, Specialty specialty, String clinic);
 
     Doctor getDoctorByLicense(String license);
-
-    List<Doctor> getDoctorByClinic(Clinic clinic);
 }

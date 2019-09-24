@@ -7,21 +7,16 @@ public class Doctor {
 
     private Specialty specialty;
 
-    private Location location;
-
     private String license;
 
     private String phoneNumber;
 
-    private Clinic clinic;
 
-    public Doctor(String name, Specialty specialty, Location location, String license, String phoneNumber, Clinic clinic){
+    public Doctor(String name, Specialty specialty, String license, String phoneNumber){
         this.name = name;
         this.specialty = specialty;
-        this.location = location;
         this.license = license;
         this.phoneNumber = phoneNumber;
-        this.clinic = clinic;
     }
 
     public String getName() {
@@ -32,9 +27,6 @@ public class Doctor {
         return specialty;
     }
 
-    public Location getLocation() {
-        return location;
-    }
 
     public String getLicense() {
         return license;
@@ -44,7 +36,4 @@ public class Doctor {
         return phoneNumber;
     }
 
-    public Clinic getClinic() {
-        return clinic;
-    }
 }

@@ -52,7 +52,7 @@
                     <div>
                         <form:select path="clinic">
                             <c:forEach var="clinic" items="${clinics}">
-                                <form:option value="${clinic.name}"/>
+                                <form:option value="${clinic.id}"> <c:out value="${clinic.name}"/> </form:option>
                             </c:forEach>
                         </form:select>
                         <form:errors path="clinic" element="p"/>

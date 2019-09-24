@@ -24,7 +24,7 @@ public class ClinicDaoImpl implements ClinicDao {
         private final static RowMapper<Clinic> ROW_MAPPER = new RowMapper<Clinic>() {
         @Override
         public Clinic mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new Clinic(resultSet.getString("name"), new Location(resultSet.getString("location")), resultSet.getInt("consultPrice"));
+            return new Clinic(resultSet.getInt("id"),resultSet.getString("name"), new Location(resultSet.getString("location")));
         }
     };
 
@@ -34,26 +34,17 @@ public class ClinicDaoImpl implements ClinicDao {
         jdbcTemplate = new JdbcTemplate(ds);
 
         jdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
-                .withTableName("clinics");
-
-        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS clinics (" +
-                "name VARCHAR(20) PRIMARY KEY," +
-                "location VARCHAR(60) REFERENCES locations(name)," +
-                "consultPrice INTEGER"+
-                ")");
+                .withTableName("clinics")
+                .usingGeneratedKeyColumns("id");
     }
 
     @Override
-    public Clinic createClinic(String name, Location location, int consultPrice) {
+    public Clinic createClinic(String name, Location location) {
         final Map<String, Object> args = new HashMap<>();
         args.put("name", name);
         args.put("location", location.getLocationName());
-        args.put("consultPrice", consultPrice);
-        int result;
-
-        result = jdbcInsert.execute(args);
-
-        return new Clinic(name, location, consultPrice);
+        final Number id = jdbcInsert.executeAndReturnKey(args);
+        return new Clinic(id.intValue(), name, location);
     }
 
     @Override
@@ -68,5 +59,14 @@ public class ClinicDaoImpl implements ClinicDao {
     @Override
     public List<Clinic> getClinics(){
         return jdbcTemplate.query( "select * from clinics", ROW_MAPPER);
+    }
+
+    @Override
+    public Clinic getClinicById(int id) {
+        final List<Clinic> list = jdbcTemplate.query("select * from clinics where id = ?",ROW_MAPPER,id);
+        if(list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 }

@@ -6,7 +6,7 @@ public class SearchForm {
 
     private String Specialty;
 
-    private String clinic;
+    private int clinic;
 
     private String from;
 
@@ -28,11 +28,11 @@ public class SearchForm {
         Specialty = specialty;
     }
 
-    public String getClinic() {
+    public int getClinic() {
         return clinic;
     }
 
-    public void setClinic(String clinic) {
+    public void setClinic(int clinic) {
         this.clinic = clinic;
     }
 

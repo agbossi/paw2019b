@@ -4,32 +4,9 @@
 <html>
     <head>
         <%@ page isELIgnored="false" %>
-
-        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="">
-        <title>DoctorSearch - Add Doctor</title>
-
-        <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/navbar-fixed/">
-
-        <!-- Bootstrap core css -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <jsp:include page="base/adminnavbar.jsp" />
     </head>
     <body class="d-flex flex-column h-100">
-        <header>
-            <!-- Fixed navbar -->
-            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/admin">DoctorSearch<span class="sr-only">(current)</span></a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
         <h2>Doctor Information</h2>
         <div class="container">
             <c:url value="/addedDoctor" var="postPath"/>
@@ -49,15 +26,6 @@
                     <form:errors path="specialty" element="p"/>
                 </div>
                 <div>
-                    <form:label path="location">Location: </form:label>
-                    <form:select path="location">
-                        <c:forEach var="location" items="${locations}">
-                            <form:option value="${location.locationName}"/>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors path="location" element="p"/>
-                </div>
-                <div>
                     <form:label path="license">License: </form:label>
                     <form:input type="text" path="license"/>
                     <form:errors path="license" element="p"/>
@@ -66,15 +34,6 @@
                     <form:label path="phoneNumber">Phone Number: </form:label>
                     <form:input type="text" path="phoneNumber"/>
                     <form:errors path="phoneNumber" element="p"/>
-                </div>
-                <div>
-                    <form:label path="clinic">Clinic: </form:label>
-                    <form:select path="clinic">
-                        <c:forEach var="clinic" items="${clinics}">
-                            <form:option value="${clinic.name}"/>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors path="clinic" element="p"/>
                 </div>
                 <div>
                     <input type="submit" value="Add">
