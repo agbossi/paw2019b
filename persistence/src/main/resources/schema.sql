@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
     firstName VARCHAR(20),
     lastName varchar(20),
     password VARCHAR(60),
-    email VARCHAR(25),
+    email VARCHAR(25)
 );
 
 CREATE TABLE IF NOT EXISTS doctors (
@@ -46,3 +46,10 @@ CREATE TABLE IF NOT EXISTS schedule (
     PRIMARY KEY (day, hour, doctor),
     FOREIGN KEY (doctor, clinic) REFERENCES doctorclinics(doctorLicense, clinicid)
 );
+
+CREATE TABLE IF NOT EXISTS patients (
+    id VARCHAR(9) PRIMARY KEY REFERENCES users(id),
+    prepaid VARCHAR(20),
+    prepaidNumber VARCHAR(20)
+);
+  
