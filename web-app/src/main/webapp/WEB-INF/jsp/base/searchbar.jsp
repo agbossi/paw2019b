@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <html>
     <head>
@@ -19,7 +20,7 @@
 
                 <div class="list-group-item list-group-item-action">
                     <div>
-                        <form:label path="location">Location</form:label>
+                        <form:label path="location"><spring:message code="location"/></form:label>
                     </div>
                     <div>
                         <form:select path="location">
@@ -33,7 +34,7 @@
                 </div>
                 <div class="list-group-item list-group-item-action">
                     <div>
-                        <form:label path="specialty">Specialty</form:label>
+                        <form:label path="specialty"><spring:message code="specialty"/></form:label>
                     </div>
                     <div>
                         <form:select path="specialty">
@@ -47,7 +48,7 @@
                 </div>
                 <div class="list-group-item list-group-item-action">
                     <div>
-                        <form:label path="clinic">Clinic</form:label>
+                        <form:label path="clinic"><spring:message code="clinic"/></form:label>
                     </div>
                     <div>
                         <form:select path="clinic">
@@ -56,23 +57,6 @@
                             </c:forEach>
                         </form:select>
                         <form:errors path="clinic" element="p"/>
-                        <br/>
-                    </div>
-                </div>
-                <div class="list-group-item list-group-item-action">
-                    <div>
-                        <p>Availability</p>
-                    </div>
-                    <div class="md-form">
-                        <form:label path="from" for="inputFrom">From</form:label>
-                        <form:input path="from" type="date" id="inputFrom" class="form-control"/>
-                        <form:errors path="from" element="p"/>
-                        <br/>
-                    </div>
-                    <div class="md-form">
-                        <form:label path="to" for="inputTo">To</form:label>
-                        <form:input path="to" type="date" id="inputTo" class="form-control"/>
-                        <form:errors path="to" element="p"/>
                         <br/>
                     </div>
                 </div>
