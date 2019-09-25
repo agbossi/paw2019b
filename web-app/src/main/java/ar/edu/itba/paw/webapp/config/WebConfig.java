@@ -27,13 +27,11 @@ import java.nio.charset.StandardCharsets;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-    private String dbName = "paw";
+    private String dbUser = "paw-2019b-4";
 
-    private String dbUser = "root";
+    private String dbPassword = "7Up7gfwcS";
 
-    private String dbPassword = "root";
-
-    private String jdbcPath = "jdbc:postgresql://localhost/";
+    private String jdbcPath = "jdbc:postgresql://localhost/paw-2019b-4";
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
@@ -52,7 +50,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public DataSource dataSource(){
         final SimpleDriverDataSource ds = new SimpleDriverDataSource();
         ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl( jdbcPath + dbName );
+        ds.setUrl( jdbcPath );
         ds.setUsername( dbUser );
         ds.setPassword( dbPassword );
 
