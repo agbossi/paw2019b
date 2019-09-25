@@ -28,11 +28,12 @@ public class DoctorDaoImpl implements DoctorDao {
     private final static RowMapper<Doctor> ROW_MAPPER = new RowMapper<Doctor>() {
         @Override
         public Doctor mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new Doctor(resultSet.getString("doctorName"),
+            return new Doctor(resultSet.getString("firstName"),
+                    resultSet.getString("lastName"),
                    new Specialty(resultSet.getString("specialty")),
                     resultSet.getString("license"),
-                    resultSet.getString("phoneNumber")
-
+                    resultSet.getString("phoneNumber"),
+                    resultSet.getString("email")
             );
         }
     };
@@ -47,22 +48,23 @@ public class DoctorDaoImpl implements DoctorDao {
     }
 
     @Override
-    public Doctor createDoctor(final String name, final Specialty specialty, final String license, final String phoneNumber) {
+    public Doctor createDoctor(final Specialty specialty,final String license, final String phoneNumber, final String email) {
         final Map<String, Object> args = new HashMap<>();
-        args.put("doctorName", name);
         args.put("specialty", specialty.getSpecialtyName());
         args.put("license", license);
         args.put("phoneNumber", phoneNumber);
+        args.put("email",email);
         int result;
 
         result = jdbcInsert.execute(args);
 
-        return new Doctor(name, specialty, license, phoneNumber);
+        return this.getDoctorByLicense(license);
     }
 
     @Override
     public List<Doctor> getDoctors() {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors",ROW_MAPPER);
+        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName " +
+                "from doctors join users on doctors.email = users.email",ROW_MAPPER);
         if(list.isEmpty()){
             return null;
         }
@@ -71,8 +73,9 @@ public class DoctorDaoImpl implements DoctorDao {
 
 
     @Override
-    public List<Doctor> getDoctorByName(String name) {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where doctorName = ?",ROW_MAPPER,name);
+    public List<Doctor> getDoctorByName(String firstName,String lastName) {
+        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName " +
+                "from doctors join users on doctors.email = users.email where firstName = ? and lastName = ?",ROW_MAPPER,firstName,lastName);
         if(list.isEmpty()){
             return null;
         }
@@ -81,7 +84,8 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getDoctorBySpecialty(Specialty specialty) {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where specialty = ?",ROW_MAPPER,specialty.getSpecialtyName());
+        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName " +
+                               "from doctors join users on doctors.email = users.email where specialty = ?",ROW_MAPPER,specialty.getSpecialtyName());
         if(list.isEmpty()){
             return null;
         }
@@ -90,11 +94,18 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public Doctor getDoctorByLicense(String license) {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where license = ?",ROW_MAPPER,license);
+        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName"  +
+                                               " from doctors join users on doctors.email = users.email where license = ?",ROW_MAPPER,license);
         if(list.isEmpty()){
             return null;
         }
         return list.get(0);
+    }
+
+    @Override
+    public boolean isDoctor(String email) {
+        final List<Doctor> list = jdbcTemplate.query("select * from doctors where email = ?",ROW_MAPPER,email);
+        return list.isEmpty();
     }
 
 

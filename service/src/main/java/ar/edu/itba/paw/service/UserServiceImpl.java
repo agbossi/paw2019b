@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.interfaces.DoctorDao;
+import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.persistence.UserDaoImpl;
@@ -10,11 +12,14 @@ import org.springframework.stereotype.Component;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    UserDaoImpl userDao;
+    UserDao userDao;
+
+    @Autowired
+    DoctorDao doctorDao;
 
     @Override
-    public User createUser(String id, String firstName,String lastName, String password, String email) {
-        return userDao.createUser(id,firstName,lastName,password,email);
+    public User createUser(String firstName,String lastName, String password, String email) {
+        return userDao.createUser(firstName,lastName,password,email);
     }
 
     @Override
@@ -25,6 +30,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean userExists(String email) {
         return (userDao.findUserByEmail(email) != null);
+    }
+
+    @Override
+    public boolean isDoctor(String email) {
+        return doctorDao.isDoctor(email);
     }
 
 }

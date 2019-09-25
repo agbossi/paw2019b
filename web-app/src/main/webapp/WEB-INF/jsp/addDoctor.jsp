@@ -12,9 +12,14 @@
             <c:url value="/addedDoctor" var="postPath"/>
             <form:form modelAttribute="doctorForm" action="${postPath}" method="post">
                 <div>
-                    <form:label path="name">Name: </form:label>
-                    <form:input type="text" path="name"/>
-                    <form:errors path="name" element="p"/>
+                    <form:label path="firstName">First name: </form:label>
+                    <form:input type="text" path="firstName"/>
+                    <form:errors path="firstName" element="p"/>
+                </div>
+                <div>
+                    <form:label path="lastName">Last name: </form:label>
+                    <form:input type="text" path="lastName"/>
+                    <form:errors path="lastName" element="p"/>
                 </div>
                 <div>
                     <form:label path="specialty">Specialty: </form:label>
@@ -34,6 +39,21 @@
                     <form:label path="phoneNumber">Phone Number: </form:label>
                     <form:input type="text" path="phoneNumber"/>
                     <form:errors path="phoneNumber" element="p"/>
+                </div>
+                <div>
+                    <form:label path="email">Email: </form:label>
+                    <form:input type="text" path="email"/>
+                    <form:errors path="email" element="p"/>
+                </div>
+                <div>
+                    <form:label path="password">Password: </form:label>
+                    <form:input type="password" path="password" />
+                    <form:errors path="password" element="p"/></div>
+                </div>
+                <div>
+                    <form:label path="repeatPassword">Repeat password: </form:label>
+                    <form:input type="password" path="repeatPassword"/>
+                    <form:errors path="repeatPassword" element="p"/>
                 </div>
                 <div>
                     <input type="submit" value="Add">
