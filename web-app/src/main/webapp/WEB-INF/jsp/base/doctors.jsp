@@ -23,7 +23,7 @@
                         <rect width="100%" height="100%" fill="#777"></rect>
                         <text x="50%" y="50%" fill="#777" dy=".3em">140x140</text>
                     </svg>
-                    <h3>${doctorClinic.doctor.name}</h3>
+                    <h3>${doctorClinic.doctor.firstName} ${doctorClinic.doctor.lastName}</h3>
                     <p>${doctorClinic.doctor.specialty.specialtyName}</p>
                     <p>${doctorClinic.clinic.name}</p>
                     <p><a class="btn btn-secondary" href="/results/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}" role="button">View Details</a></p>

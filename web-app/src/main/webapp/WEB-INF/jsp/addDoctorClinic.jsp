@@ -16,7 +16,7 @@
                     <form:label path="doctor">Doctor: </form:label>
                     <form:select path="doctor">
                         <c:forEach var="doctor" items="${doctors}">
-                            <form:option value="${doctor.license}"> <c:out value="${doctor.name}"/> </form:option>
+                            <form:option value="${doctor.license}"> <c:out value="${doctor.firstName}"/> <c:out value="${doctor.lastName}"/> </form:option>
                         </c:forEach>
                     </form:select>
                     <form:errors path="doctor" element="p"/>
