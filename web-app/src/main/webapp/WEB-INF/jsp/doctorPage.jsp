@@ -11,7 +11,7 @@
     </head>
     <body>
         <div class="doctor-information">
-            <h2><c:out value="${doctor.doctor.name}"/></h2>
+            <h2><c:out value="${doctor.doctor.firstName}"/> <c:out value="${doctor.doctor.lastName}"/></h2>
             <div class="doctor-profile">
                 <ul class="list-group">
                     <li class="list-group-item">
@@ -19,6 +19,7 @@
                         <b><h6><spring:message code="clinic"/>  <c:out value="${doctor.clinic.name}"/> (<c:out value="${doctor.clinic.location.locationName}"/>)</h6></b>
                         <b><h6><spring:message code="specialty"/>  <c:out value="${doctor.doctor.specialty.specialtyName}"/></h6></b>
                         <b><h6><spring:message code="phone.number"/>  <c:out value="${doctor.doctor.phoneNumber}"/></h6></b>
+                        <b><h6><spring:message code="user.email"/>  <c:out value="${doctor.doctor.email}"/></h6></b>
                         <b><h6><spring:message code="schedule"/> </h6></b>
                     </li>
                 </ul>
