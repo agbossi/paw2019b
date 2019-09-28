@@ -28,9 +28,16 @@ public class SignUpForm {
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
     private String email;
 
+
     private String prepaid;
 
+    @Size(min=10, max=20)
+    @Pattern(regexp = "[\" \"0-9]+")
     private String prepaidNumber;
+
+    @Size(min = 8,max = 8)
+    @Pattern(regexp = "[0-9]+")
+    private String id;
 
     public String getFirstName() {
         return firstName;
@@ -86,5 +93,9 @@ public class SignUpForm {
 
     public void setPrepaidNumber(String prepaidNumber) {
         this.prepaidNumber = prepaidNumber;
+    }
+
+    public String getId() {
+        return id;
     }
 }

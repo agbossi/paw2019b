@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS schedule (
 
 CREATE TABLE IF NOT EXISTS patients (
     email VARCHAR(25) PRIMARY KEY REFERENCES users(email),
+    id varchar(8),
     prepaid VARCHAR(20),
     prepaidNumber varchar(20)
 );

@@ -28,6 +28,10 @@ public class PersonalInformationForm {
     @Pattern(regexp = "[\" \"0-9]+")
     private String prepaidNumber;
 
+    @Size(min = 8,max = 8)
+    @Pattern(regexp = "[0-9]+")
+    private String id;
+
 
     public String getFirstName() {
         return firstName;
@@ -75,5 +79,9 @@ public class PersonalInformationForm {
 
     public void setPrepaidNumber(String prepaidNumber) {
         this.prepaidNumber = prepaidNumber;
+    }
+
+    public String getId() {
+        return id;
     }
 }

@@ -7,8 +7,11 @@ public class Patient {
 
     private String prepaidNumber;
 
-    public Patient(String email, String prepaid, String prepaidNumber) {
+    private String id;
+
+    public Patient(String email,String id ,String prepaid, String prepaidNumber) {
         this.email = email;
+        this.id = id;
         this.prepaid = prepaid;
         this.prepaidNumber = prepaidNumber;
     }
@@ -23,5 +26,9 @@ public class Patient {
 
     public String getPrepaidNumber() {
         return prepaidNumber;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

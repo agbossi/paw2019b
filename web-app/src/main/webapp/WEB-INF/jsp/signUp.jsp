@@ -24,6 +24,11 @@
                     <form:input type="text" path="lastName"/>
                     <form:errors path="lastName" element="p"/>
                 </div>
+                <div>
+                    <form:label path="id">Id: </form:label>
+                    <form:input type="text" path="id"/>
+                    <form:errors path="id" element="p"/>
+                </div>
                  <div>
                     <form:label path="password">Password: </form:label>
                     <form:input type="password" path="password" />

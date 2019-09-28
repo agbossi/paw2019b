@@ -25,6 +25,7 @@ public class PatientDaoImpl implements PatientDao {
 
         @Override public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
             return new Patient(rs.getString("email"),
+                    rs.getString("id"),
                     rs.getString("prepaid"),
                     rs.getString("prepaidNumber"));
         }
@@ -40,19 +41,20 @@ public class PatientDaoImpl implements PatientDao {
 
 
     @Override
-    public Patient create(String email, String prepaid, String prepaidNumber) {
+    public Patient create(String email,String id, String prepaid, String prepaidNumber) {
         final Map<String, Object> args = new HashMap<>();
         args.put("email",email);
+        args.put("id",id);
         args.put("prepaid",prepaid);
         args.put("prepaidNumber",prepaidNumber);
 
         int result;
         result = jdbcInsert.execute(args);
-        return new Patient(email,prepaid,prepaidNumber);
+        return new Patient(email,id,prepaid,prepaidNumber);
     }
 
     @Override
-    public Patient getPatientById(String email) {
+    public Patient getPatientByEmail(String email) {
         List<Patient> patient = jdbcTemplate.query("select * from patients where email = ?", ROW_MAPPER, email);
         if(patient.isEmpty()) {
             return null;
