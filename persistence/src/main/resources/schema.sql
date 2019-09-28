@@ -51,4 +51,6 @@ CREATE TABLE IF NOT EXISTS patients (
     prepaid VARCHAR(20),
     prepaidNumber varchar(20)
 );
+
+insert into users values('admin','admin','admin','admin@test.com') on conflict do nothing;
   

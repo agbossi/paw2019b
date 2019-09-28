@@ -60,4 +60,9 @@ public class UserDaoImpl implements UserDao {
         }
         return list.get(0);
     }
+
+    @Override
+    public void changePassword(String password,String email){
+        jdbcTemplate.update("update users set password = ? where email = ?",password,email);
+    }
 }

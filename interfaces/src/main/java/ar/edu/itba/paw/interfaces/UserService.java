@@ -10,4 +10,6 @@ public interface UserService {
     public boolean userExists(String email);
 
     public boolean isDoctor(String email);
+
+    public void changePassword(String password,String email);
 }

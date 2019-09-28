@@ -20,4 +20,6 @@ public interface DoctorService {
 
     public Doctor getDoctorByLicense(String license);
 
+    public Doctor getDoctorByEmail(String email);
+
 }

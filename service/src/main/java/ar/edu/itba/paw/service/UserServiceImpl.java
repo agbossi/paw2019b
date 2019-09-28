@@ -36,5 +36,9 @@ public class UserServiceImpl implements UserService {
     public boolean isDoctor(String email) {
         return doctorDao.isDoctor(email);
     }
+    @Override
+    public void changePassword(String password, String email) {
+        userDao.changePassword(password,email);
+    }
 
 }

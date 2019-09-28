@@ -24,7 +24,7 @@
     <h5 class="my-0 mr-md-auto font-weight-normal"><a href="/admin">Doctor Search</a></h5>
 
     <nav class="my-2 my-md-0 mr-md-3">
-        <sec:authorize access="isAnonymous()">
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
             <a class="p-2 text-dark" href="/addDoctor">Add Doctor</a>
             <a class="p-2 text-dark" href="/addClinic">Add Clinic</a>
             <a class="p-2 text-dark" href="/addLocation">Add Location</a>
@@ -40,6 +40,9 @@
     <sec:authorize access="isAnonymous()">
         <a class="btn btn-outline-primary" href="/signUp">Sign up</a>
         <a class="btn btn-outline-primary" href="/login">log in</a>
+    </sec:authorize>
+    <sec:authorize access="hasRole('ROLE_DOCTOR')">
+        <a class="p-2 text-dark" href="/doctorProfile">doctor profile</a>
     </sec:authorize>
 </div>
 </body>

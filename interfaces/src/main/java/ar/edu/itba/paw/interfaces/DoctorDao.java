@@ -21,4 +21,6 @@ public interface DoctorDao {
     Doctor getDoctorByLicense(String license);
 
     boolean isDoctor(String email);
+
+    public Doctor getDoctorByEmail(String email);
 }

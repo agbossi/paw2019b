@@ -104,8 +104,19 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public boolean isDoctor(String email) {
-        final List<Doctor> list = jdbcTemplate.query("select * from doctors where email = ?",ROW_MAPPER,email);
+        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName" +
+                " from doctors join users on doctors.email = users.email where doctors.email = ?",ROW_MAPPER,email);
         return list.isEmpty();
+    }
+
+    @Override
+    public Doctor getDoctorByEmail(String email) {
+        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName" +
+                " from doctors join users on doctors.email = users.email where doctors.email = ?", ROW_MAPPER, email);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 
 

@@ -50,4 +50,9 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorDao.getDoctorByLicense(license);
     }
 
+    @Override
+    public Doctor getDoctorByEmail(String email) {
+        return doctorDao.getDoctorByEmail(email);
+    }
+
 }
