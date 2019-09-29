@@ -34,4 +34,9 @@ public class ClinicServiceImpl implements ClinicService {
     public Clinic getClinicById(int id) {
         return clinicDao.getClinicById(id);
     }
+
+    @Override
+    public List<Clinic> getClinicsByLocation(String location) {
+        return clinicDao.getClinicsByLocation(location);
+    }
 }

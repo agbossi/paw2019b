@@ -53,6 +53,7 @@
                     <div>
                         <form:select path="clinic">
                             <c:forEach var="clinic" items="${clinics}">
+                                <!-- need the selected location for this to work-->
                                 <form:option value="${clinic.id}"> <c:out value="${clinic.name}"/> </form:option>
                             </c:forEach>
                         </form:select>

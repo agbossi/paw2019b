@@ -110,7 +110,7 @@ public class UserController {
         return new ModelAndView("login");
     }
 
-    public String signUpSuccess(HttpServletRequest request) {
+    private String signUpSuccess(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (session != null) {
             String redirectUrl = (String) session.getAttribute("url_prior_login");

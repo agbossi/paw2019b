@@ -49,6 +49,7 @@ public class SearchController {
             return search(form);
 
         final ModelAndView mav = new ModelAndView("results");
+        //TODO  NOT HERE
         viewModifier.addSearchInfo(mav);
 
 
