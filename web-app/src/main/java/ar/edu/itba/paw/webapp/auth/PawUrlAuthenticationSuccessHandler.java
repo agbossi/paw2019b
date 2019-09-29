@@ -31,7 +31,7 @@ public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthent
                     getRedirectStrategy().sendRedirect(request, response, "/admin");
                 }else {
                     // then we redirect
-                    getRedirectStrategy().sendRedirect(request, response, getDefaultTargetUrl());
+                    getRedirectStrategy().sendRedirect(request, response, redirectUrl);
                 }
             } else {
                 super.onAuthenticationSuccess(request, response, authentication);

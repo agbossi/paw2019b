@@ -34,7 +34,7 @@
         </sec:authorize>
     </nav>
 
-    <sec:authorize access="hasRole('ROLE_USER')">
+    <sec:authorize access="hasAnyRole('ROLE_USER','ROLE_DOCTOR','ROLE_ADMIN')">
         <a class="btn btn-outline-primary" href="/logout">log out</a>
     </sec:authorize>
     <sec:authorize access="isAnonymous()">
