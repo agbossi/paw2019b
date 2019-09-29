@@ -106,7 +106,7 @@ public class DoctorDaoImpl implements DoctorDao {
     public boolean isDoctor(String email) {
         final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName" +
                 " from doctors join users on doctors.email = users.email where doctors.email = ?",ROW_MAPPER,email);
-        return list.isEmpty();
+        return !list.isEmpty();
     }
 
     @Override

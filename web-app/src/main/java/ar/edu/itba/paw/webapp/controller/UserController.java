@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.auth.PawUrlAuthenticationSuccessHandler;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
@@ -13,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -50,6 +53,10 @@ public class UserController {
 
     private void authWithAuthManager(HttpServletRequest request, String email, String password) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password);
+
+        // generate session if one doesn't exist
+        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+
         authToken.setDetails(new WebAuthenticationDetails(request));
         Authentication authentication = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -92,11 +99,12 @@ public class UserController {
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
 
-        userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
+        User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
         patientService.create(form.getEmail(),form.getId(),form.getPrepaid(), form.getPrepaidNumber());
 
         //TODO this should send an email or something of confirmation and then login ???
-        //authWithAuthManager(request, form.getEmail(), encodedPassword);
+
+        authWithAuthManager(request, form.getEmail(), form.getPassword());
 
         //TODO how to send back to the previous page with its parameters
         //need to get parameter stored in request

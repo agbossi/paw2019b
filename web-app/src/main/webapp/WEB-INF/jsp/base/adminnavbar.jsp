@@ -42,7 +42,8 @@
         <a class="btn btn-outline-primary" href="/login">log in</a>
     </sec:authorize>
     <sec:authorize access="hasRole('ROLE_DOCTOR')">
-        <a class="p-2 text-dark" href="/doctorProfile">doctor profile</a>
+        <a class="p-2 text-dark" href="/doctorProfile">profile</a>
+        <a class="p-2 text-dark" href="/doctorAppointments">appointments</a>
     </sec:authorize>
 </div>
 </body>
