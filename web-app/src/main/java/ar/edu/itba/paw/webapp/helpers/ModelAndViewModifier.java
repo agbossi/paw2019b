@@ -35,7 +35,7 @@ public class ModelAndViewModifier {
         List<Clinic> clinics = clinicService.getClinics();
         mav.addObject("locations", locations);
         mav.addObject("specialties", specialties);
-        mav.addObject("clinics", clinics);
+        mav.addObject("clinics",clinics );
 
         return mav;
     }

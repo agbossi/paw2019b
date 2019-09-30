@@ -13,4 +13,6 @@ public interface ClinicDao {
     public List<Clinic> getClinics();
 
     Clinic getClinicById(int id);
+
+    public List<Clinic> getClinicsByLocation(String location);
 }

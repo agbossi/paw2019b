@@ -69,4 +69,13 @@ public class ClinicDaoImpl implements ClinicDao {
         }
         return list.get(0);
     }
+
+    @Override
+    public List<Clinic> getClinicsByLocation(String location) {
+        final List<Clinic> list = jdbcTemplate.query("select * from clinics where location = ?",ROW_MAPPER,location);
+        if(list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
 }

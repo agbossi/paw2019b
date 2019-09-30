@@ -13,12 +13,12 @@ public class PatientServiceImpl implements PatientService {
     private PatientDao patientDao;
 
     @Override
-    public Patient create(String id, String prepaid, String prepaidNumber) {
-        return patientDao.create(id, prepaid, prepaidNumber);
+    public Patient create(String email,String id, String prepaid, String prepaidNumber) {
+        return patientDao.create(email,id, prepaid, prepaidNumber);
     }
 
     @Override
-    public Patient getPatientById(String id) {
-        return patientDao.getPatientById(id);
+    public Patient getPatientByEmail(String email) {
+        return patientDao.getPatientByEmail(email);
     }
 }

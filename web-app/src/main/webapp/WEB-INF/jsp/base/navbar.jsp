@@ -30,6 +30,7 @@
                 </sec:authorize>
             </nav>
 
+            <!-- hasAnyRole('ROLE_USER','ROLE_ADMIN','ROLE_DOCTOR') -->
             <sec:authorize access="hasRole('ROLE_USER')">
                 <a class="btn btn-outline-primary" href="/logout">Log out</a>
             </sec:authorize>

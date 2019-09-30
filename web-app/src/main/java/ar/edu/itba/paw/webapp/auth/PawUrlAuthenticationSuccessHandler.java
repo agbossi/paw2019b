@@ -27,11 +27,11 @@ public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthent
                 // we do not forget to clean this attribute from session
                 session.removeAttribute("url_prior_login");
                 String role = determineTargetUrl(authentication);
-                if(role.equals("ROLE_ADMIN") && redirectUrl.equals("/")){
+                if(role.equals("ROLE_ADMIN") || role.equals("ROLE_DOCTOR")){
                     getRedirectStrategy().sendRedirect(request, response, "/admin");
                 }else {
                     // then we redirect
-                    getRedirectStrategy().sendRedirect(request, response, getDefaultTargetUrl());
+                    getRedirectStrategy().sendRedirect(request, response, redirectUrl);
                 }
             } else {
                 super.onAuthenticationSuccess(request, response, authentication);
@@ -43,15 +43,22 @@ public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     protected String determineTargetUrl(Authentication authentication) {
         boolean isUser = false;
         boolean isAdmin = false;
+        boolean isDoctor = false;
+
         Collection<? extends GrantedAuthority> authorities
                 = authentication.getAuthorities();
+        label:
         for (GrantedAuthority grantedAuthority : authorities) {
-            if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
-                isAdmin = true;
-                break;
-            } else if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
-                isUser = true;
-                break;
+            switch (grantedAuthority.getAuthority()) {
+                case "ROLE_ADMIN":
+                    isAdmin = true;
+                    break label;
+                case "ROLE_DOCTOR":
+                    isDoctor = true;
+                    break label;
+                case "ROLE_USER":
+                    isUser = true;
+                    break label;
             }
         }
 
@@ -59,6 +66,8 @@ public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthent
             return "ROLE_USER";
         } else if (isAdmin) {
             return "ROLE_ADMIN";
+        }  else if(isDoctor){
+            return "ROLE_DOCTOR";
         } else {
             throw new IllegalStateException();
         }

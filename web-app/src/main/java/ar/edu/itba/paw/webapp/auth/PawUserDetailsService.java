@@ -29,8 +29,16 @@ public class PawUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("No user by the email " + email);
         }
 
-        final Collection<? extends GrantedAuthority> authorities = Arrays.asList(
-                new SimpleGrantedAuthority("ROLE_USER"));
+        final Collection<? extends GrantedAuthority> authorities;
+
+        if(user.getEmail().equals("admin@test.com")){
+            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+        else if(us.isDoctor(email)){
+            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_DOCTOR"));
+        }else {
+            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        }
 
         return new org.springframework.security.core.userdetails.User(email, user.getPassword(), authorities);
     }
