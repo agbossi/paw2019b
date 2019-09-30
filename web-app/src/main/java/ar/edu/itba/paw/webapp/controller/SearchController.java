@@ -71,6 +71,10 @@ public class SearchController {
 
         viewModifier.addSearchInfo(mav);
 
+        viewModifier.addDaysAdnTimes(mav);
+
+        viewModifier.addCurrentDates(mav);
+
         mav.addObject("doctor", doctor);
 
         return mav;

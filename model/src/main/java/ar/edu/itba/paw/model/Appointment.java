@@ -1,11 +1,31 @@
 package ar.edu.itba.paw.model;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Appointment {
-    private DoctorClinic doctorClinic;
 
-    private Patient patient;
+    private Calendar date;
 
-    private Date date;
+    DoctorClinic doctorClinic;
+
+    Patient patient;
+
+    public Appointment(Calendar date, DoctorClinic doctorClinic, Patient patient) {
+        this.date = date;
+        this.doctorClinic = doctorClinic;
+        this.patient = patient;
+    }
+
+    public Calendar getDate() {
+        return date;
+    }
+
+    public DoctorClinic getDoctorClinic() {
+        return doctorClinic;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
 }

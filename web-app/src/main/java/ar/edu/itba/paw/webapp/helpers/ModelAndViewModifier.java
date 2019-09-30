@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
+import java.util.*;
 
 @Component
 public class ModelAndViewModifier {
@@ -86,5 +86,50 @@ public class ModelAndViewModifier {
 
         return mav;
     }
+
+    public ModelAndView addDaysAdnTimes(ModelAndView mav){
+        List<Integer> days= new LinkedList<>();
+        days.add(Calendar.MONDAY);
+        days.add(Calendar.TUESDAY);
+        days.add(Calendar.WEDNESDAY);
+        days.add(Calendar.THURSDAY);
+        days.add(Calendar.FRIDAY);
+        mav.addObject("days", days);
+
+        List<Integer> times= new LinkedList<>();
+        times.add(8);
+        times.add(9);
+        times.add(10);
+        times.add(11);
+        times.add(12);
+        times.add(13);
+        times.add(14);
+        times.add(15);
+        times.add(16);
+        times.add(17);
+        times.add(18);
+        times.add(19);
+
+        mav.addObject("times", times);
+
+        return mav;
+    }
+
+    public ModelAndView addCurrentDates(ModelAndView mav){
+        Calendar date = Calendar.getInstance();
+        int firstDay;
+        if(date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+            firstDay  = date.get(Calendar.DAY_OF_MONTH) - 6;
+        }else{
+            firstDay = date.get(Calendar.DAY_OF_MONTH) - date.get(Calendar.DAY_OF_WEEK) + 2;
+        }
+
+        mav.addObject("year", date.get(Calendar.YEAR));
+        mav.addObject("month",date.get(Calendar.MONTH));
+        mav.addObject("firstDay", firstDay);
+
+        return mav;
+    }
+
     
 }
