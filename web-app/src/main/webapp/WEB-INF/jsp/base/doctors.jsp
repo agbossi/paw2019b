@@ -9,7 +9,7 @@
 
 </head>
 <body class="d-flex flex-column h-100">
-<div class="container marketing" id="doctors">
+<div class="container marketing " id="doctors">
     <div class="row">
         <c:if test="${!empty doctorClinics}">
             <c:forEach var="doctorClinic" items="${doctorClinics}">
@@ -25,7 +25,7 @@
                     </svg>
                     <h3>${doctorClinic.doctor.firstName} ${doctorClinic.doctor.lastName}</h3>
                     <p>${doctorClinic.doctor.specialty.specialtyName}</p>
-                    <p>${doctorClinic.clinic.name}</p>
+                    <p>${doctorClinic.clinic.name} (${doctorClinic.clinic.location.locationName})</p>
                     <p><a class="btn btn-secondary" href="/results/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}" role="button">View Details</a></p>
                 </div>
             </c:forEach>

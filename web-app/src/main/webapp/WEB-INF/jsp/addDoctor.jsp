@@ -48,7 +48,7 @@
                 <div>
                     <form:label path="password">Password: </form:label>
                     <form:input type="password" path="password" />
-                    <form:errors path="password" element="p"/></div>
+                    <form:errors path="password" element="p"/>
                 </div>
                 <div>
                     <form:label path="repeatPassword">Repeat password: </form:label>

@@ -27,7 +27,7 @@
                             </svg>
                             <h3>${doctorClinic.doctor.firstName} ${doctorClinic.doctor.lastName}</h3>
                             <p>${doctorClinic.doctor.specialty.specialtyName}</p>
-                            <p>${doctorClinic.clinic.name}</p>
+                            <p>${doctorClinic.clinic.name} (${doctorClinic.clinic.location.locationName})</p>
                             <p><a class="btn btn-secondary" href="/addSchedule/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}" role="button">Add Schedule</a></p>
                         </div>
                     </c:forEach>

@@ -20,21 +20,24 @@
             <p><b><spring:message code="user.email"/></b></p>
             <p>${user.email}</p>
         </div>
-    <h2><spring:message code="patient.header"/></h2>
-    <div>
-        <p><b><spring:message code="user.id"/></b></p>
-        <p>${user.id}</p>
-    </div>
-    <c:if test="${not empty patient.prepaid}">
-        <div>
-            <p><b><spring:message code="patient.prepaid"/></b></p>
-            <p>${patient.prepaid}</p>
-        </div>
-        <div>
-            <p><b><spring:message code="patient.prepaid.number"/></b></p>
-            <p>${patient.prepaidNumber}</p>
-        </div>
-    </c:if>
+
+    <c:choose>
+        <c:when test="${not empty patient.prepaid}">
+            <h2><spring:message code="patient.header"/></h2>
+            <div>
+                <p><b><spring:message code="patient.prepaid"/></b></p>
+                <p>${patient.prepaid}</p>
+            </div>
+            <div>
+                <p><b><spring:message code="patient.prepaid.number"/></b></p>
+                <p>${patient.prepaidNumber}</p>
+            </div>
+        </c:when>
+        <c:otherwise>
+        </c:otherwise>
+
+    </c:choose>
+
 
     <!-- <a class="btn btn-outline-primary" href="/editProfile"><spring:message code="edit.personal"/></a> -->
 </body>

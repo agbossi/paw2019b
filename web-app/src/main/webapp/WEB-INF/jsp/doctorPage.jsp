@@ -15,12 +15,12 @@
             <div class="doctor-profile">
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <b><h6><spring:message code="license"/> <c:out value="${doctor.doctor.license}"/></h6></b>
-                        <b><h6><spring:message code="clinic"/>  <c:out value="${doctor.clinic.name}"/> (<c:out value="${doctor.clinic.location.locationName}"/>)</h6></b>
-                        <b><h6><spring:message code="specialty"/>  <c:out value="${doctor.doctor.specialty.specialtyName}"/></h6></b>
-                        <b><h6><spring:message code="phone.number"/>  <c:out value="${doctor.doctor.phoneNumber}"/></h6></b>
-                        <b><h6><spring:message code="user.email"/>  <c:out value="${doctor.doctor.email}"/></h6></b>
-                        <b><h6><spring:message code="schedule"/> </h6></b>
+                        <h6><b><spring:message code="license"/></b> <c:out value="${doctor.doctor.license}"/></h6>
+                        <h6><b><spring:message code="clinic"/></b>  <c:out value="${doctor.clinic.name}"/> (<c:out value="${doctor.clinic.location.locationName}"/>)</h6>
+                        <h6><b><spring:message code="specialty"/></b>  <c:out value="${doctor.doctor.specialty.specialtyName}"/></h6>
+                        <h6><b><spring:message code="phone.number"/></b>  <c:out value="${doctor.doctor.phoneNumber}"/></h6>
+                        <h6><b><spring:message code="user.email"/></b>  <c:out value="${doctor.doctor.email}"/></h6>
+                        <h6><b><spring:message code="schedule"/></b> </h6>
                     </li>
                 </ul>
             </div>
