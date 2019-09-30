@@ -8,6 +8,11 @@
         <%@ page isELIgnored="false" %>
         <link href="<c:url value="/resources/css/searchbar.css" />" rel="stylesheet" type="text/css" />
         <jsp:include page="navbar.jsp" />
+        <script>
+            function clinicByLocation() {
+
+            }
+        </script>
     </head>
     <body>
         <div class="search-bar">
@@ -53,7 +58,7 @@
                     <div>
                         <form:select path="clinic">
                             <c:forEach var="clinic" items="${clinics}">
-                                <form:option value="${clinic.id}"> <c:out value="${clinic.name}"/> </form:option>
+                                <form:option value="${clinic.id}"> <c:out value="${clinic.name}"/> (<c:out value="${clinic.location.locationName}"/>)</form:option>
                             </c:forEach>
                         </form:select>
                         <form:errors path="clinic" element="p"/>

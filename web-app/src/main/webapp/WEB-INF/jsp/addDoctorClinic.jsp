@@ -25,7 +25,7 @@
                     <form:label path="clinic">Clinic: </form:label>
                     <form:select path="clinic">
                         <c:forEach var="clinic" items="${clinics}">
-                            <form:option value="${clinic.id}"> <c:out value="${clinic.name}"/> </form:option>
+                            <form:option value="${clinic.id}"> <c:out value="${clinic.name}"/> (<c:out value="${clinic.location.locationName}"/>) </form:option>
                         </c:forEach>
                     </form:select>
                     <form:errors path="clinic" element="p"/>
