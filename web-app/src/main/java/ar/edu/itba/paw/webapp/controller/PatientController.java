@@ -41,7 +41,7 @@ public class PatientController {
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
 
-        final ModelAndView mav = new ModelAndView("/profile");
+        final ModelAndView mav = new ModelAndView("patient/profile");
         mav.addObject("user", user);
         mav.addObject("patient", patient);
 
@@ -56,7 +56,7 @@ public class PatientController {
 
         setFormInformation(form, user, patient);
 
-        final ModelAndView mav = new ModelAndView("/editProfile");
+        final ModelAndView mav = new ModelAndView("patient/editProfile");
         return mav;
     }
 
@@ -69,7 +69,7 @@ public class PatientController {
 
     @RequestMapping(value = "/appointments", method = { RequestMethod.GET })
     public ModelAndView appointments() {
-        final ModelAndView mav = new ModelAndView("/appointments");
+        final ModelAndView mav = new ModelAndView("patient/appointments");
         return mav;
     }
 

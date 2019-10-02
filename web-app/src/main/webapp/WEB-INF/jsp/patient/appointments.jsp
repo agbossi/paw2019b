@@ -2,7 +2,7 @@
 <html>
 <head>
     <%@ page isELIgnored="false" %>
-    <jsp:include page="base/navbar.jsp" />
+    <jsp:include page="../base/navbar.jsp" />
 </head>
 <body>
 This page should have appointments information!!

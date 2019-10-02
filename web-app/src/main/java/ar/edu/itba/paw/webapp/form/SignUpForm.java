@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -31,8 +32,8 @@ public class SignUpForm {
 
     private String prepaid;
 
-    @Size(min=10, max=20)
-    @Pattern(regexp = "[\" \"0-9]+")
+    @Size(max=20)
+    @Pattern(regexp = "[0-9]*")
     private String prepaidNumber;
 
     @Size(min = 8,max = 8)

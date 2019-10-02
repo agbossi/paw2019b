@@ -10,15 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
@@ -34,69 +33,32 @@ public class AdminController {
     private SpecialtyService specialtyService;
 
     @Autowired
-    private DoctorClinicService doctorClinicService;
-
-    @Autowired
     private ModelAndViewModifier viewModifier;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private ScheduleService scheduleService;
 
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "/admin", method = { RequestMethod.GET })
+    @RequestMapping(value = "", method = { RequestMethod.GET })
     public ModelAndView admin(){
-        final ModelAndView mav = new ModelAndView("admin");
+        final ModelAndView mav = new ModelAndView("admin/admin");
         return mav;
     }
 
     @RequestMapping(value = "/addDoctor", method = { RequestMethod.GET })
     public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form){
-        final ModelAndView mav = new ModelAndView("addDoctor");
+        final ModelAndView mav = new ModelAndView("admin/addDoctor");
 
         viewModifier.addSearchInfo(mav);
 
         return mav;
     }
 
-    @RequestMapping(value = "/addDoctorClinic", method = { RequestMethod.GET })
-    public ModelAndView addDoctorClinic(@ModelAttribute("doctorClinicForm") final DoctorClinicForm form){
-        final ModelAndView mav = new ModelAndView("addDoctorClinic");
-
-        viewModifier.addClinics(mav);
-        viewModifier.addDoctors(mav);
-
-        return mav;
-    }
-
-    @RequestMapping(value ="/addSchedule", method = { RequestMethod.GET })
-    public ModelAndView addSchedule(){
-        final ModelAndView mav = new ModelAndView("addSchedule");
-
-        viewModifier.addDoctorClinics(mav);
-
-        return mav;
-    }
-
-    @RequestMapping(value = "addSchedule/{clinicid}/{license}", method = {RequestMethod.GET})
-    public ModelAndView addDoctorShedule( @PathVariable(value = "clinicid") int clinic, @PathVariable(value = "license") String license, @ModelAttribute("scheduleForm") final ScheduleForm form){
-
-        final ModelAndView mav = new ModelAndView("doctorSchedule");
-        Doctor doc = doctorService.getDoctorByLicense(license);
-        Clinic cli = clinicService.getClinicById(clinic);
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
-
-        mav.addObject("doctorClinic", doctorClinic);
-        return mav;
-
-    }
-
     @RequestMapping(value = "/addClinic", method = { RequestMethod.GET })
     public ModelAndView addClinic(@ModelAttribute("clinicForm") final ClinicForm form){
-        final ModelAndView mav = new ModelAndView("addClinic");
+        final ModelAndView mav = new ModelAndView("admin/addClinic");
 
         viewModifier.addLocations(mav);
 
@@ -105,13 +67,13 @@ public class AdminController {
 
     @RequestMapping(value = "/addLocation", method = { RequestMethod.GET })
     public ModelAndView addLocation(@ModelAttribute("locationForm") final LocationForm form){
-        final ModelAndView mav = new ModelAndView("addLocation");
+        final ModelAndView mav = new ModelAndView("admin/addLocation");
         return mav;
     }
 
     @RequestMapping(value = "/addSpecialty", method = {RequestMethod.GET})
     public ModelAndView addSpecialty(@ModelAttribute("specialtyForm") final SpecialtyForm form){
-        final ModelAndView mav = new ModelAndView("addSpecialty");
+        final ModelAndView mav = new ModelAndView("admin/addSpecialty");
         return mav;
     }
 
@@ -135,48 +97,17 @@ public class AdminController {
             return addDoctor(form);
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
-
         userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
+        Doctor doctor = doctorService.createDoctor(new Specialty(form.getSpecialty()),
+                                            form.getLicense(),
+                                            form.getPhoneNumber(),
+                                            form.getEmail()
+                                            );
 
-        doctorService.createDoctor(new Specialty(form.getSpecialty()),
-                form.getLicense(),
-                form.getPhoneNumber(),form.getEmail()
-                );
 
 
-
-        final ModelAndView mav = new ModelAndView("addedDoctor");
-
-        return mav;
-    }
-
-    @RequestMapping(value = "/addedDoctorClinic", method = { RequestMethod.POST })
-    public ModelAndView addedDoctorClinic(@Valid @ModelAttribute("doctorClinicForm") final DoctorClinicForm form, final BindingResult errors){
-
-        if(errors.hasErrors())
-            return addDoctorClinic(form);
-
-        doctorClinicService.createDoctorClinic(doctorService.getDoctorByLicense(form.getDoctor()),
-                clinicService.getClinicById(form.getClinic()),
-                form.getConsultPrice());
-
-        final ModelAndView mav = new ModelAndView("addedDoctorClinic");
-
-        return mav;
-    }
-
-    @RequestMapping(value = "/addedSchedule/{clinicid}/{license}", method = {RequestMethod.POST})
-    public ModelAndView addedSchedule(@PathVariable(value = "clinicid") int clinic, @PathVariable(value = "license") String license,@Valid @ModelAttribute("scheduleForm") final ScheduleForm form, final BindingResult errors){
-
-        if(errors.hasErrors())
-            return addDoctorShedule(clinic, license, form);
-        Doctor doc = doctorService.getDoctorByLicense(license);
-        Clinic cli = clinicService.getClinicById(clinic);
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
-
-        scheduleService.createSchedule(form.getHour(), form.getDay(), doctorClinic);
-
-        final ModelAndView mav = new ModelAndView("addedSchedule");
+        final ModelAndView mav = new ModelAndView("admin/addedDoctor");
+        mav.addObject("doctor", doctor);
 
         return mav;
     }
@@ -189,7 +120,8 @@ public class AdminController {
 
         final Clinic clinic = clinicService.createClinic(form.getName(), new Location(form.getLocation()));
 
-        final ModelAndView mav = new ModelAndView("addedClinic");
+        final ModelAndView mav = new ModelAndView("admin/addedClinic");
+        mav.addObject("clinic", clinic);
 
         return mav;
     }
@@ -202,9 +134,8 @@ public class AdminController {
 
         final Location location = locationService.createLocation(form.getName());
 
-        // this could show something more specific, for example, the recently added location.
-        // same goes for doctors and clinics and everything you can add
-        final ModelAndView mav = new ModelAndView("addedLocation");
+        final ModelAndView mav = new ModelAndView("admin/addedLocation");
+        mav.addObject("location", location);
 
         return mav;
     }
@@ -217,7 +148,9 @@ public class AdminController {
 
         final Specialty specialty = specialtyService.createSpecialty(form.getName());
 
-        final ModelAndView mav = new ModelAndView("addedSpecialty");
+        final ModelAndView mav = new ModelAndView("admin/addedSpecialty");
+        mav.addObject("specialty", specialty);
+
         return mav;
     }
 }

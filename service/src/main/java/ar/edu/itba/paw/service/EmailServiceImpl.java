@@ -26,8 +26,9 @@ public class EmailServiceImpl implements EmailService {
         emailSender.send(message);
     }
 
-
-    //guardar el test
+    //if throws dont solve, try catch. ya van dos con esto ultimo
+    //el from es harcodeado no? --> sep
+    //re escribir los defaults de ejemplo de config y probar. guardar el test
 
 
     //for emails with images
