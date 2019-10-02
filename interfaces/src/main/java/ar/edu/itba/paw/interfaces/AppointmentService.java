@@ -13,4 +13,6 @@ public interface AppointmentService {
     List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic);
 
     List<Appointment> getPatientsAppointments(Patient patient);
+
+    void cancelAppointment(DoctorClinic doctorClinic, Patient patient, Calendar date);
 }

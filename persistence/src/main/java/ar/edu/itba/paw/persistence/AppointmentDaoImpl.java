@@ -85,4 +85,11 @@ public class AppointmentDaoImpl implements AppointmentDao {
         }
         return list;
     }
+
+    @Override
+    public void cancelAppointment(DoctorClinic doctorClinic, Patient patient, Calendar date){
+        Object[] args = new Object[] {patient.getId(), doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), date.getTime()};
+        jdbcTemplate.update("delete from appointments where patient = ? and doctor = ? and clinic = ? and date = ?", args);
+
+    }
 }
