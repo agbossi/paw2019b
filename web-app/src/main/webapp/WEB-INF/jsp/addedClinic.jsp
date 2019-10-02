@@ -8,6 +8,6 @@
     </head>
     <body class="d-flex flex-column h-100">
         <h2>Clinic added!</h2>
-        <a class="nav-link" href="/addClinic">Add another clinic</a>
+        <a class="nav-link" href="/admin/addClinic">Add another clinic</a>
     </body>
 </html>

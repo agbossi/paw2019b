@@ -7,6 +7,6 @@
     </head>
     <body class="d-flex flex-column h-100">
         <h2>Specialty added!</h2>
-        <a class="nav-link" href="/addSpecialty">Add another specialty</a>
+        <a class="nav-link" href="/admin/addSpecialty">Add another specialty</a>
     </body>
 </html>

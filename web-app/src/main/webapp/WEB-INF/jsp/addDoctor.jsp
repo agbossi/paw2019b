@@ -9,7 +9,7 @@
     <body class="d-flex flex-column h-100">
         <h2>Doctor Information</h2>
         <div class="container">
-            <c:url value="/addedDoctor" var="postPath"/>
+            <c:url value="/admin/addedDoctor" var="postPath"/>
             <form:form modelAttribute="doctorForm" action="${postPath}" method="post">
                 <div>
                     <form:label path="firstName">First name: </form:label>
