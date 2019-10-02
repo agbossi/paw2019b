@@ -23,7 +23,7 @@
         <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
             <h5 class="my-0 mr-md-auto font-weight-normal"><a href="/">Doctor Search</a></h5>
             <nav class="my-2 my-md-0 mr-md-3">
-                <sec:authorize access="hasRole('ROLE_USER')">
+                <sec:authorize access="hasRole('ROLE_ADMIN')">
                     <a class="p-2 text-dark" href="/admin/addDoctor">Add Doctor</a>
                     <a class="p-2 text-dark" href="/admin/addClinic">Add Clinic</a>
                     <a class="p-2 text-dark" href="/admin/addLocation">Add Location</a>
@@ -31,12 +31,11 @@
                 </sec:authorize>
 
                 <sec:authorize access="hasRole('ROLE_DOCTOR')">
-                    <a class="btn btn-outline-primary" href="/logout">log out</a>
-                    <a class="p-2 text-dark" href="/addSchedule">Add Week Schedule</a>
-                    <a class="p-2 text-dark" href="/addDoctorClinic">Subscribe to a Clinic</a>
+                    <a class="p-2 text-dark" href="/doctor/addSchedule">Add Week Schedule</a>
+                    <a class="p-2 text-dark" href="/doctor/addDoctorClinic">Subscribe to a Clinic</a>
                 </sec:authorize>
 
-                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                <sec:authorize access="hasRole('ROLE_USER')">
                     <a class="p-2 text-dark" href="/appointments">Appointments</a>
                     <a class="p-2 text-dark" href="/profile">Profile</a>
                 </sec:authorize>

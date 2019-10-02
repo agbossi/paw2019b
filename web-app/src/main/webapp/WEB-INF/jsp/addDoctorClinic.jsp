@@ -10,7 +10,7 @@
 
         <h2>Add a Doctor to a Clinic</h2>
         <div class="container">
-            <c:url value="/addedDoctorClinic" var="postPath"/>
+            <c:url value="/doctor/addedDoctorClinic" var="postPath"/>
             <form:form modelAttribute="doctorClinicForm" action="${postPath}" method="post">
                 <div>
                     <form:label path="doctor">Doctor: </form:label>

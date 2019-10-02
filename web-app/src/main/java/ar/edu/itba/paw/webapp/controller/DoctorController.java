@@ -88,7 +88,6 @@ public class DoctorController {
 
     }
 
-
     @RequestMapping(value = "/addedDoctorClinic", method = { RequestMethod.POST })
     public ModelAndView addedDoctorClinic(@Valid @ModelAttribute("doctorClinicForm") final DoctorClinicForm form,
                                           final BindingResult errors){
