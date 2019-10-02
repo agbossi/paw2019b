@@ -5,7 +5,7 @@
 <head>
     <head>
         <%@ page isELIgnored="false" %>
-        <jsp:include page="base/adminnavbar.jsp" />
+        <jsp:include page="base/navbar.jsp" />
 
     </head>
     <body class="d-flex flex-column h-100">

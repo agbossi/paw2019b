@@ -35,9 +35,7 @@
         </c:when>
         <c:otherwise>
         </c:otherwise>
-
     </c:choose>
-
 
     <!-- <a class="btn btn-outline-primary" href="/editProfile"><spring:message code="edit.personal"/></a> -->
 </body>

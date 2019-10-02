@@ -5,34 +5,42 @@
 <html>
 <head>
     <%@ page isELIgnored="false" %>
-    <jsp:include page="base/adminnavbar.jsp" />
+    <jsp:include page="base/navbar.jsp" />
 </head>
 <body>
     <h2><spring:message code="account.header"/></h2>
-    <div>
-        <p><b><spring:message code="user.first.name"/></b></p>
-        <p>${user.firstName}</p>
-    </div>
-    <div>
-        <p><b><spring:message code="user.last.name"/></b></p>
-        <p>${user.lastName}</p>
-    </div>
-    <div>
-        <p><b><spring:message code="user.email"/></b></p>
-        <p>${user.email}</p>
-    </div>
-    <h2><spring:message code="doctor.header"/></h2>
-    <div>
-        <p><b><spring:message code="doctor.license"/></b></p>
-        <p>${doctor.license}</p>
-    </div>
-    <div>
-        <p><b><spring:message code="doctor.specialty"/></b></p>
-        <p>${doctor.specialty}</p>
-    </div>
-    <div>
-        <p><b><spring:message code="doctor.phone.number"/></b></p>
-        <p>${doctor.phoneNumber}</p>
-    </div>
+    <c:choose>
+        <c:when test="${user}">
+            <div>
+                <p><b><spring:message code="user.first.name"/></b></p>
+                <p>${user.firstName}</p>
+            </div>
+            <div>
+                <p><b><spring:message code="user.last.name"/></b></p>
+                <p>${user.lastName}</p>
+            </div>
+            <div>
+                <p><b><spring:message code="user.email"/></b></p>
+                <p>${user.email}</p>
+            </div>
+            <h2><spring:message code="doctor.header"/></h2>
+            <div>
+                <p><b><spring:message code="doctor.license"/></b></p>
+                <p>${doctor.license}</p>
+            </div>
+            <div>
+                <p><b><spring:message code="doctor.specialty"/></b></p>
+                <p>${doctor.specialty}</p>
+            </div>
+            <div>
+                <p><b><spring:message code="doctor.phone.number"/></b></p>
+                <p>${doctor.phoneNumber}</p>
+            </div>
+        </c:when>
+        <c:otherwise>
+            <div><h2><spring:message code="user.does.not.exist"/></h2></div>
+        </c:otherwise>
+    </c:choose>
+
 </body>
 </html>
