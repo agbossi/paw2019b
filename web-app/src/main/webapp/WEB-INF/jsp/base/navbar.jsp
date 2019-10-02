@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <html>
@@ -21,32 +22,32 @@
 
     <body>
         <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-            <h5 class="my-0 mr-md-auto font-weight-normal"><a href="/">Doctor Search</a></h5>
+            <h5 class="my-0 mr-md-auto font-weight-normal"><a href="/"><spring:message code="doctor.search.title"/></a></h5>
             <nav class="my-2 my-md-0 mr-md-3">
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
-                    <a class="p-2 text-dark" href="/admin/addDoctor">Add Doctor</a>
-                    <a class="p-2 text-dark" href="/admin/addClinic">Add Clinic</a>
-                    <a class="p-2 text-dark" href="/admin/addLocation">Add Location</a>
-                    <a class="p-2 text-dark" href="/admin/addSpecialty">Add Specialty</a>
+                    <a class="p-2 text-dark" href="/admin/addDoctor"><spring:message code="add.doctor"/></a>
+                    <a class="p-2 text-dark" href="/admin/addClinic"><spring:message code="add.clinic"/></a>
+                    <a class="p-2 text-dark" href="/admin/addLocation"><spring:message code="add.location"/></a>
+                    <a class="p-2 text-dark" href="/admin/addSpecialty"><spring:message code="add.specialty"/></a>
                 </sec:authorize>
 
                 <sec:authorize access="hasRole('ROLE_DOCTOR')">
-                    <a class="p-2 text-dark" href="/doctor/addSchedule">Add Week Schedule</a>
-                    <a class="p-2 text-dark" href="/doctor/addDoctorClinic">Subscribe to a Clinic</a>
+                    <a class="p-2 text-dark" href="/doctor/addSchedule"><spring:message code="add.week.schedule"/></a>
+                    <a class="p-2 text-dark" href="/doctor/addDoctorClinic"><spring:message code="subscribe.to.clinic"/></a>
                 </sec:authorize>
 
                 <sec:authorize access="hasRole('ROLE_USER')">
-                    <a class="p-2 text-dark" href="/appointments">Appointments</a>
-                    <a class="p-2 text-dark" href="/profile">Profile</a>
+                    <a class="p-2 text-dark" href="/appointments"><spring:message code="appointments"/></a>
+                    <a class="p-2 text-dark" href="/profile"><spring:message code="profile"/></a>
                 </sec:authorize>
 
                 <sec:authorize access="hasAnyRole('ROLE_USER','ROLE_DOCTOR','ROLE_ADMIN')">
-                    <a class="btn btn-outline-primary" href="/logout">log out</a>
+                    <a class="btn btn-outline-primary" href="/logout"><spring:message code="log.out"/></a>
                 </sec:authorize>
 
                 <sec:authorize access="isAnonymous()">
-                    <a class="btn btn-outline-primary" href="/signUp">Sign up</a>
-                    <a class="btn btn-outline-primary" href="/login">Log in</a>
+                    <a class="btn btn-outline-primary" href="/signUp"><spring:message code="sign.up"/></a>
+                    <a class="btn btn-outline-primary" href="/login"><spring:message code="log.in"/></a>
                 </sec:authorize>
             </nav>
         </div>
