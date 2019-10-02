@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
@@ -21,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -43,9 +43,6 @@ public class UserController {
 
     @Autowired
     private ModelAndViewModifier modelAndViewModifier;
-
-    @Autowired
-    private EmailService emailService;
 
     private void authWithAuthManager(HttpServletRequest request, String email, String password) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password);
@@ -108,7 +105,6 @@ public class UserController {
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
         userService.changePassword(passwordEncoder.encode("admin"),"admin@test.com");
-        emailService.sendSimpleMail("abossi@itba.edu.ar","test","testing mail functionality");
         return new ModelAndView("login");
     }
 
