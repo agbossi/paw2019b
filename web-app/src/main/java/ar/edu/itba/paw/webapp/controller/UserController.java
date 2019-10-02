@@ -108,7 +108,9 @@ public class UserController {
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
         userService.changePassword(passwordEncoder.encode("admin"),"admin@test.com");
-        emailService.sendSimpleMail("abossi@itba.edu.ar","test","testing mail functionality");
+
+
+
         return new ModelAndView("login");
     }
 
