@@ -3,7 +3,7 @@
 
 <html>
 <head>
-    <jsp:include page="base/adminnavbar.jsp" />
+    <jsp:include page="../base/navbar.jsp" />
 </head>
 <body>
 </body>

@@ -4,13 +4,13 @@
 <html>
     <head>
         <%@ page isELIgnored="false" %>
-        <jsp:include page="base/adminnavbar.jsp" />
+        <jsp:include page="../base/navbar.jsp" />
 
     </head>
     <body class="d-flex flex-column h-100">
     <h2>Location Information</h2>
     <div class="container">
-        <c:url value="/addedLocation" var="postPath"/>
+        <c:url value="/admin/addedLocation" var="postPath"/>
         <form:form modelAttribute="locationForm" action="${postPath}" method="post">
             <div>
                 <form:label path="name">Name: </form:label>

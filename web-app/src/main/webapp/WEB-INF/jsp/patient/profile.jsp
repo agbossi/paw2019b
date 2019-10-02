@@ -4,7 +4,7 @@
 <html>
 <head>
     <%@ page isELIgnored="false" %>
-    <jsp:include page="base/navbar.jsp" />
+    <jsp:include page="../base/navbar.jsp" />
 </head>
 <body>
     <h2><spring:message code="account.header"/></h2>
@@ -35,9 +35,7 @@
         </c:when>
         <c:otherwise>
         </c:otherwise>
-
     </c:choose>
-
 
     <!-- <a class="btn btn-outline-primary" href="/editProfile"><spring:message code="edit.personal"/></a> -->
 </body>
