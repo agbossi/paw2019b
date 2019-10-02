@@ -117,16 +117,30 @@ public class ModelAndViewModifier {
 
     public ModelAndView addCurrentDates(ModelAndView mav){
         Calendar date = Calendar.getInstance();
-        int firstDay;
+        Calendar first;
+        List<Calendar> month = new ArrayList<>();
+        int monthChange;
         if(date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
-            firstDay  = date.get(Calendar.DAY_OF_MONTH) - 6;
+            first = date;
+            first.add(Calendar.DATE, 1);
+        }else if(date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
+            first = date;
+            first.add(Calendar.DATE, 2);
         }else{
-            firstDay = date.get(Calendar.DAY_OF_MONTH) - date.get(Calendar.DAY_OF_WEEK) + 2;
+            first = date;
+            first.add(Calendar.DATE, -(date.get(Calendar.DAY_OF_WEEK)) + 2);
         }
 
-        mav.addObject("year", date.get(Calendar.YEAR));
-        mav.addObject("month",date.get(Calendar.MONTH));
-        mav.addObject("firstDay", firstDay);
+        for (int i = 0; i < 7; i++){
+            Calendar day = Calendar.getInstance();
+            day.setTime(first.getTime());
+            day.add(Calendar.DATE, i);
+            month.add(day);
+        }
+
+        mav.addObject("days", month);
+        mav.addObject("today", date);
+
 
         return mav;
     }

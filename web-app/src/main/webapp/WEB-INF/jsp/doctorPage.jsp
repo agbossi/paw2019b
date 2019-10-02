@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="format" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
     <head>
@@ -24,440 +25,194 @@
                     </li>
                 </ul>
             </div>
-            <table>
-                <th>
-                    <table class="table doctor-schedule">
-                        <tr>
-                            <th></th>
-                            <th><spring:message code="monday"/></th>
-                            <th><spring:message code="tuesday"/></th>
-                            <th><spring:message code="wednesday"/></th>
-                            <th><spring:message code="thursday"/></th>
-                            <th><spring:message code="friday"/></th>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="8AM"/></td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 2 && schedule.hour == 8}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 3 && schedule.hour == 8}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 1}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 4 && schedule.hour == 8}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 2}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 5 && schedule.hour == 8}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 3}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 6 && schedule.hour == 8}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 4}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="9AM"/></td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 2 && schedule.hour == 9}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 3 && schedule.hour == 9}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 1}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 4 && schedule.hour == 9}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 2}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 5 && schedule.hour == 9}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 3}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 6 && schedule.hour == 9}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 4}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="10AM"/></td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 2 && schedule.hour == 10}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 3 && schedule.hour == 10}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 1}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 4 && schedule.hour == 10}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 2}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 5 && schedule.hour == 10}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 3}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 6 && schedule.hour == 10}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 4}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="11AM"/></td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 2 && schedule.hour == 11}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 3 && schedule.hour == 11}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 1}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 4 && schedule.hour == 11}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 2}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 5 && schedule.hour == 11}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 3}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 6 && schedule.hour == 11}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 4}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="1PM"/></td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 2 && schedule.hour == 13}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 3 && schedule.hour == 13}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 1}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 4 && schedule.hour == 13}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 2}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 5 && schedule.hour == 13}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 3}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 6 && schedule.hour == 13}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 4}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="2PM"/></td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 2 && schedule.hour == 14}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 3 && schedule.hour == 14}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 1}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 4 && schedule.hour == 14}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 2}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 5 && schedule.hour == 14}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 3}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 6 && schedule.hour == 14}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 4}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="3PM"/></td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 2 && schedule.hour == 15}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 3 && schedule.hour == 15}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 1}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 4 && schedule.hour == 15}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 2}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 5 && schedule.hour == 15}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 3}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 6 && schedule.hour == 15}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 4}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="4PM"/></td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 2 && schedule.hour == 16}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 3 && schedule.hour == 16}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 1}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 4 && schedule.hour == 16}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 2}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 5 && schedule.hour == 16}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 3}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 6 && schedule.hour == 16}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 4}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="5PM"/></td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 2 && schedule.hour == 17}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 3 && schedule.hour == 17}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 1}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 4 && schedule.hour == 17}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 2}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 5 && schedule.hour == 17}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 3}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 6 && schedule.hour == 17}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 4}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="6PM"/></td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 2 && schedule.hour == 18}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 3 && schedule.hour == 18}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 1}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 4 && schedule.hour == 18}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 2}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 5 && schedule.hour == 18}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 3}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 6 && schedule.hour == 18}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 4}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><spring:message code="7PM"/></td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 2 && schedule.hour == 19}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 3 && schedule.hour == 19}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 1}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 4 && schedule.hour == 19}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 2}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 5 && schedule.hour == 19}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 3}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                            <td>
-                                <c:forEach var="schedule" items="${doctor.schedule}">
-                                    <c:if test="${schedule.day == 6 && schedule.hour == 19}">
-                                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${year}-${month}-${firstDay + 4}-${schedule.hour}"><spring:message code="available"/></a>
-                                    </c:if>
-                                </c:forEach>
-                            </td>
-                        </tr>
-                    </table>
-                </th>
-                <th>
-                    <!-- SOMETHING TO CHOOSE DATE AND TIME SHOULD GO HERE -->
-                </th>
+        </div>
+        <div>
+            <table class="table doctor-schedule">
+                <tr>
+                    <th></th>
+                    <c:forEach var="day" items="${days}">
+                        <c:choose>
+                            <c:when test="${day.get(7) == 2}">
+                                <th><spring:message code="monday"/>
+                                    <format:formatDate value="${day.getTime()}" type="date" pattern="dd/MM"/></th>
+                            </c:when>
+                            <c:when test="${day.get(7) == 3}">
+                                <th><spring:message code="tuesday"/>
+                                    <format:formatDate value="${day.getTime()}" type="date" pattern="dd/MM"/></th>
+                            </c:when>
+                            <c:when test="${day.get(7) == 4}">
+                                <th><spring:message code="wednesday"/>
+                                    <format:formatDate value="${day.getTime()}" type="date" pattern="dd/MM"/></th>
+                            </c:when>
+                            <c:when test="${day.get(7) == 5}">
+                                <th><spring:message code="thursday"/>
+                                    <format:formatDate value="${day.getTime()}" type="date" pattern="dd/MM"/></th>
+                            </c:when>
+                            <c:when test="${day.get(7) == 6}">
+                                <th><spring:message code="friday"/>
+                                    <format:formatDate value="${day.getTime()}" type="date" pattern="dd/MM"/></th>
+                            </c:when>
+                        </c:choose>
+
+                    </c:forEach>
+
+                </tr>
+                <tr>
+                    <td><spring:message code="8AM"/></td>
+
+                    <c:forEach var="day" items="${days}">
+                        <td>
+                            <c:forEach var="schedule" items="${doctor.schedule}">
+                                <c:if test="${schedule.day == day.get(7) && schedule.hour == 8 && today.compareTo(day) < 0}">
+                                    <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${day.get(1)}-${day.get(2)}-${day.get(5)}-${schedule.hour}"><spring:message code="available"/></a>
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                    </c:forEach>
+                </tr>
+                <tr>
+                    <td><spring:message code="9AM"/></td>
+
+                    <c:forEach var="day" items="${days}">
+                        <td>
+                            <c:forEach var="schedule" items="${doctor.schedule}">
+                                <c:if test="${schedule.day == day.get(7) && schedule.hour == 9 && today.compareTo(day) < 0}">
+                                    <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${day.get(1)}-${day.get(2)}-${day.get(5)}-${schedule.hour}"><spring:message code="available"/></a>
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                    </c:forEach>
+                </tr>
+                <tr>
+                    <td><spring:message code="10AM"/></td>
+
+                    <c:forEach var="day" items="${days}">
+                        <td>
+                            <c:forEach var="schedule" items="${doctor.schedule}">
+                                <c:if test="${schedule.day == day.get(7) && schedule.hour == 10 && today.compareTo(day) < 0}">
+                                    <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${day.get(1)}-${day.get(2)}-${day.get(5)}-${schedule.hour}"><spring:message code="available"/></a>
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                    </c:forEach>
+                </tr>
+                <tr>
+                    <td><spring:message code="11AM"/></td>
+
+                    <c:forEach var="day" items="${days}">
+                        <td>
+                            <c:forEach var="schedule" items="${doctor.schedule}">
+                                <c:if test="${schedule.day == day.get(7) && schedule.hour == 11 && today.compareTo(day) < 0}">
+                                    <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${day.get(1)}-${day.get(2)}-${day.get(5)}-${schedule.hour}"><spring:message code="available"/></a>
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                    </c:forEach>
+                </tr>
+                <tr>
+                    <td><spring:message code="12AM"/></td>
+
+                    <c:forEach var="day" items="${days}">
+                        <td>
+                            <c:forEach var="schedule" items="${doctor.schedule}">
+                                <c:if test="${schedule.day == day.get(7) && schedule.hour == 12 && today.compareTo(day) < 0}">
+                                    <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${day.get(1)}-${day.get(2)}-${day.get(5)}-${schedule.hour}"><spring:message code="available"/></a>
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                    </c:forEach>
+                </tr>
+                <tr>
+                    <td><spring:message code="1PM"/></td>
+
+                    <c:forEach var="day" items="${days}">
+                        <td>
+                            <c:forEach var="schedule" items="${doctor.schedule}">
+                                <c:if test="${schedule.day == day.get(7) && schedule.hour == 13 && today.compareTo(day) < 0}">
+                                    <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${day.get(1)}-${day.get(2)}-${day.get(5)}-${schedule.hour}"><spring:message code="available"/></a>
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                    </c:forEach>
+                </tr>
+                <tr>
+                    <td><spring:message code="2PM"/></td>
+
+                    <c:forEach var="day" items="${days}">
+                        <td>
+                            <c:forEach var="schedule" items="${doctor.schedule}">
+                                <c:if test="${schedule.day == day.get(7) && schedule.hour == 14 && today.compareTo(day) < 0}">
+                                    <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${day.get(1)}-${day.get(2)}-${day.get(5)}-${schedule.hour}"><spring:message code="available"/></a>
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                    </c:forEach>
+                </tr>
+                <tr>
+                    <td><spring:message code="3PM"/></td>
+
+                    <c:forEach var="day" items="${days}">
+                        <td>
+                            <c:forEach var="schedule" items="${doctor.schedule}">
+                                <c:if test="${schedule.day == day.get(7) && schedule.hour == 15 && today.compareTo(day) < 0}">
+                                    <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${day.get(1)}-${day.get(2)}-${day.get(5)}-${schedule.hour}"><spring:message code="available"/></a>
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                    </c:forEach>
+                </tr>
+                <tr>
+                    <td><spring:message code="4PM"/></td>
+
+                    <c:forEach var="day" items="${days}">
+                        <td>
+                            <c:forEach var="schedule" items="${doctor.schedule}">
+                                <c:if test="${schedule.day == day.get(7) && schedule.hour == 16 && today.compareTo(day) < 0}">
+                                    <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${day.get(1)}-${day.get(2)}-${day.get(5)}-${schedule.hour}"><spring:message code="available"/></a>
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                    </c:forEach>
+                </tr>
+                <tr>
+                    <td><spring:message code="5PM"/></td>
+
+                    <c:forEach var="day" items="${days}">
+                        <td>
+                            <c:forEach var="schedule" items="${doctor.schedule}">
+                                <c:if test="${schedule.day == day.get(7) && schedule.hour == 17 && today.compareTo(day) < 0}">
+                                    <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${day.get(1)}-${day.get(2)}-${day.get(5)}-${schedule.hour}"><spring:message code="available"/></a>
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                    </c:forEach>
+                </tr>
+                <tr>
+                    <td><spring:message code="6PM"/></td>
+
+                    <c:forEach var="day" items="${days}">
+                        <td>
+                            <c:forEach var="schedule" items="${doctor.schedule}">
+                                <c:if test="${schedule.day == day.get(7) && schedule.hour == 18 && today.compareTo(day) < 0 }">
+                                    <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${day.get(1)}-${day.get(2)}-${day.get(5)}-${schedule.hour}"><spring:message code="available"/></a>
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                    </c:forEach>
+                </tr>
+                <tr>
+                    <td><spring:message code="7PM"/></td>
+
+                    <c:forEach var="day" items="${days}">
+                        <td>
+                            <c:forEach var="schedule" items="${doctor.schedule}">
+                                <c:if test="${schedule.day == day.get(7) && schedule.hour == 19  && today.compareTo(day) < 0}">
+                                    <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${day.get(1)}-${day.get(2)}-${day.get(5)}-${schedule.hour}"><spring:message code="available"/></a>
+                                </c:if>
+                            </c:forEach>
+                        </td>
+                    </c:forEach>
+                </tr>
             </table>
         </div>
     </body>

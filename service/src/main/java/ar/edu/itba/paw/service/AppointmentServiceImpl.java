@@ -23,11 +23,15 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Appointment createAppointment(DoctorClinic doctorClinic, Patient patient, Calendar date) {
-        for (Schedule schedule: doctorClinic.getSchedule()) {
-            if(date.get(Calendar.DAY_OF_WEEK) == schedule.getDay() && date.get(Calendar.HOUR_OF_DAY) == schedule.getHour()){
-                return appointmentDao.createAppointment(doctorClinic,patient,date);
+        Calendar today = Calendar.getInstance();
+        if (today.compareTo(date) < 0){
+            for (Schedule schedule: doctorClinic.getSchedule()) {
+                if(date.get(Calendar.DAY_OF_WEEK) == schedule.getDay() && date.get(Calendar.HOUR_OF_DAY) == schedule.getHour()){
+                    return appointmentDao.createAppointment(doctorClinic,patient,date);
+                }
             }
         }
+
         return null;
     }
 
