@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <html>
     <head>
         <%@ page isELIgnored="false" %>
@@ -7,7 +9,11 @@
 
     </head>
     <body class="d-flex flex-column h-100">
-        <h2>Location added!</h2>
-        <a class="nav-link" href="/admin/addLocation">Add another location</a>
-    </body>
+        <div>
+            <h2><spring:message code="location.added"/></h2>
+        </div>
+        <div>
+            ${location.name}
+        </div>
+        <a class="nav-link" href="/admin/addLocation"><spring:message code="add.another.location"/></a>
 </html>

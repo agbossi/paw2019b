@@ -35,15 +35,10 @@ public class AdminController {
     private SpecialtyService specialtyService;
 
     @Autowired
-    private DoctorClinicService doctorClinicService;
-
-    @Autowired
     private ModelAndViewModifier viewModifier;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private ScheduleService scheduleService;
 
     @Autowired
     UserService userService;
@@ -104,17 +99,17 @@ public class AdminController {
             return addDoctor(form);
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
-
         userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
-
-        doctorService.createDoctor(new Specialty(form.getSpecialty()),
-                form.getLicense(),
-                form.getPhoneNumber(),form.getEmail()
-                );
+        Doctor doctor = doctorService.createDoctor(new Specialty(form.getSpecialty()),
+                                            form.getLicense(),
+                                            form.getPhoneNumber(),
+                                            form.getEmail()
+                                            );
 
 
 
         final ModelAndView mav = new ModelAndView("addedDoctor");
+        mav.addObject("doctor", doctor);
 
         return mav;
     }
@@ -128,6 +123,7 @@ public class AdminController {
         final Clinic clinic = clinicService.createClinic(form.getName(), new Location(form.getLocation()));
 
         final ModelAndView mav = new ModelAndView("addedClinic");
+        mav.addObject("clinic", clinic);
 
         return mav;
     }
@@ -140,9 +136,8 @@ public class AdminController {
 
         final Location location = locationService.createLocation(form.getName());
 
-        // this could show something more specific, for example, the recently added location.
-        // same goes for doctors and clinics and everything you can add
         final ModelAndView mav = new ModelAndView("addedLocation");
+        mav.addObject("location", location);
 
         return mav;
     }
@@ -156,6 +151,8 @@ public class AdminController {
         final Specialty specialty = specialtyService.createSpecialty(form.getName());
 
         final ModelAndView mav = new ModelAndView("addedSpecialty");
+        mav.addObject("specialty", specialty);
+
         return mav;
     }
 }

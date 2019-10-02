@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <html>
     <head>
         <%@ page isELIgnored="false" %>
@@ -7,7 +9,24 @@
 
     </head>
     <body class="d-flex flex-column h-100">
-        <h2>Doctor added!</h2>
-        <a class="nav-link" href="/admin/addDoctor">Add another doctor</a>
+        <div>
+            <h2><spring:message code="doctor.added"/></h2>
+        </div>
+        <div>
+            ${doctor.firstName}
+        </div>
+        <div>
+            ${doctor.lastName}
+        </div>
+        <div>
+            ${doctor.specialty.specialtyName}
+        </div>
+        <div>
+            ${doctor.license}
+        </div>
+        <div>
+            ${doctor.email}
+        </div>
+        <a class="nav-link" href="/admin/addDoctor"><spring:message code="add.another.doctor"/></a>
     </body>
 </html>
