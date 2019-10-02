@@ -10,13 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -45,13 +43,13 @@ public class AdminController {
 
     @RequestMapping(value = "", method = { RequestMethod.GET })
     public ModelAndView admin(){
-        final ModelAndView mav = new ModelAndView("admin");
+        final ModelAndView mav = new ModelAndView("admin/admin");
         return mav;
     }
 
     @RequestMapping(value = "/addDoctor", method = { RequestMethod.GET })
     public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form){
-        final ModelAndView mav = new ModelAndView("addDoctor");
+        final ModelAndView mav = new ModelAndView("admin/addDoctor");
 
         viewModifier.addSearchInfo(mav);
 
@@ -60,7 +58,7 @@ public class AdminController {
 
     @RequestMapping(value = "/addClinic", method = { RequestMethod.GET })
     public ModelAndView addClinic(@ModelAttribute("clinicForm") final ClinicForm form){
-        final ModelAndView mav = new ModelAndView("addClinic");
+        final ModelAndView mav = new ModelAndView("admin/addClinic");
 
         viewModifier.addLocations(mav);
 
@@ -69,13 +67,13 @@ public class AdminController {
 
     @RequestMapping(value = "/addLocation", method = { RequestMethod.GET })
     public ModelAndView addLocation(@ModelAttribute("locationForm") final LocationForm form){
-        final ModelAndView mav = new ModelAndView("addLocation");
+        final ModelAndView mav = new ModelAndView("admin/addLocation");
         return mav;
     }
 
     @RequestMapping(value = "/addSpecialty", method = {RequestMethod.GET})
     public ModelAndView addSpecialty(@ModelAttribute("specialtyForm") final SpecialtyForm form){
-        final ModelAndView mav = new ModelAndView("addSpecialty");
+        final ModelAndView mav = new ModelAndView("admin/addSpecialty");
         return mav;
     }
 
@@ -108,7 +106,7 @@ public class AdminController {
 
 
 
-        final ModelAndView mav = new ModelAndView("addedDoctor");
+        final ModelAndView mav = new ModelAndView("admin/addedDoctor");
         mav.addObject("doctor", doctor);
 
         return mav;
@@ -122,7 +120,7 @@ public class AdminController {
 
         final Clinic clinic = clinicService.createClinic(form.getName(), new Location(form.getLocation()));
 
-        final ModelAndView mav = new ModelAndView("addedClinic");
+        final ModelAndView mav = new ModelAndView("admin/addedClinic");
         mav.addObject("clinic", clinic);
 
         return mav;
@@ -136,7 +134,7 @@ public class AdminController {
 
         final Location location = locationService.createLocation(form.getName());
 
-        final ModelAndView mav = new ModelAndView("addedLocation");
+        final ModelAndView mav = new ModelAndView("admin/addedLocation");
         mav.addObject("location", location);
 
         return mav;
@@ -150,7 +148,7 @@ public class AdminController {
 
         final Specialty specialty = specialtyService.createSpecialty(form.getName());
 
-        final ModelAndView mav = new ModelAndView("addedSpecialty");
+        final ModelAndView mav = new ModelAndView("admin/addedSpecialty");
         mav.addObject("specialty", specialty);
 
         return mav;

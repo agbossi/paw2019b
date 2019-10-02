@@ -3,10 +3,11 @@
 <html>
     <head>
         <%@ page isELIgnored="false" %>
-        <jsp:include page="base/navbar.jsp" />
+        <jsp:include page="../base/navbar.jsp" />
+
     </head>
     <body class="d-flex flex-column h-100">
-        <h2>Schedule added!</h2>
-        <a class="nav-link" href="/doctor/addSchedule/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}">Add another schedule</a>
+        <h2>Doctor added to clinic!</h2>
+        <a class="nav-link" href="/doctor/addDoctorClinic">Add another doctor to a clinic</a>
     </body>
 </html>

@@ -44,7 +44,7 @@ public class DoctorController {
 
     @RequestMapping(value = "", method = { RequestMethod.GET })
     public ModelAndView doctorProfile() {
-        final ModelAndView mav = new ModelAndView("/doctorProfile");
+        final ModelAndView mav = new ModelAndView("doctor/doctorProfile");
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
@@ -56,7 +56,7 @@ public class DoctorController {
 
     @RequestMapping(value = "/addDoctorClinic", method = { RequestMethod.GET })
     public ModelAndView addDoctorClinic(@ModelAttribute("doctorClinicForm") final DoctorClinicForm form){
-        final ModelAndView mav = new ModelAndView("addDoctorClinic");
+        final ModelAndView mav = new ModelAndView("doctor/addDoctorClinic");
 
         viewModifier.addClinics(mav);
         viewModifier.addDoctors(mav);
@@ -66,7 +66,7 @@ public class DoctorController {
 
     @RequestMapping(value ="/addSchedule", method = { RequestMethod.GET })
     public ModelAndView addSchedule(){
-        final ModelAndView mav = new ModelAndView("addSchedule");
+        final ModelAndView mav = new ModelAndView("doctor/addSchedule");
 
         viewModifier.addDoctorClinics(mav);
 
@@ -78,7 +78,7 @@ public class DoctorController {
                                          @PathVariable(value = "license") String license,
                                          @ModelAttribute("scheduleForm") final ScheduleForm form){
 
-        final ModelAndView mav = new ModelAndView("doctorSchedule");
+        final ModelAndView mav = new ModelAndView("doctor/doctorSchedule");
         Doctor doc = doctorService.getDoctorByLicense(license);
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
@@ -99,7 +99,7 @@ public class DoctorController {
                 clinicService.getClinicById(form.getClinic()),
                 form.getConsultPrice());
 
-        final ModelAndView mav = new ModelAndView("addedDoctorClinic");
+        final ModelAndView mav = new ModelAndView("doctor/addedDoctorClinic");
 
         return mav;
     }
@@ -118,7 +118,7 @@ public class DoctorController {
 
         scheduleService.createSchedule(form.getHour(), form.getDay(), doctorClinic);
 
-        final ModelAndView mav = new ModelAndView("addedSchedule");
+        final ModelAndView mav = new ModelAndView("doctor/addedSchedule");
 
         return mav;
     }

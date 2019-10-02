@@ -5,7 +5,7 @@
 <html>
     <head>
         <%@ page isELIgnored="false" %>
-        <jsp:include page="base/navbar.jsp" />
+        <jsp:include page="../base/navbar.jsp" />
     </head>
     <body>
         <a class="btn btn-outline-primary" href="/profile"><spring:message code="profile.message"/></a>

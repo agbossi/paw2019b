@@ -5,19 +5,15 @@
 <html>
     <head>
         <%@ page isELIgnored="false" %>
-        <jsp:include page="base/navbar.jsp" />
-
+        <jsp:include page="../base/navbar.jsp" />
     </head>
     <body class="d-flex flex-column h-100">
         <div>
-            <h2><spring:message code="clinic.added"/></h2>
+            <h2><spring:message code="specialty.added"/></h2>
         </div>
         <div>
-            ${clinic.name}
+            ${specialty.name}
         </div>
-        <div>
-            ${clinic.location.locationName}
-        </div>
-        <a class="nav-link" href="/admin/addClinic"><spring:message code="add.another.clinic"/></a>
+        <a class="nav-link" href="/admin/addSpecialty"><spring:message code="add.another.specialty"/></a>
     </body>
 </html>
