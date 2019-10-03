@@ -105,7 +105,6 @@ public class AdminController {
                                             );
 
 
-
         final ModelAndView mav = new ModelAndView("admin/addedDoctor");
         mav.addObject("doctor", doctor);
 

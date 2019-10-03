@@ -16,7 +16,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     ScheduleDao scheduleDao;
 
     @Override
-    public Schedule createSchedule(String hour, String day, DoctorClinic doctorClinic) {
+    public Schedule createSchedule(int hour, int day, DoctorClinic doctorClinic) {
         return scheduleDao.createSchedule(hour, day, doctorClinic);
     }
 

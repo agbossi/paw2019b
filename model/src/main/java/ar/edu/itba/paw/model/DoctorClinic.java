@@ -13,11 +13,12 @@ public class DoctorClinic {
 
     List<Schedule> schedule;
 
+    List<Appointment> appointments;
+
     public DoctorClinic(Doctor doctor, Clinic clinic, int consultPrice){
         this.doctor = doctor;
         this.clinic = clinic;
         this.consultPrice = consultPrice;
-        this.schedule = schedule;
     }
 
     public Doctor getDoctor() {
@@ -50,5 +51,13 @@ public class DoctorClinic {
 
     public void setSchedule(List<Schedule> schedule) {
         this.schedule = schedule;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
 }

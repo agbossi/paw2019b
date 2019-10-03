@@ -7,7 +7,7 @@ import java.util.List;
 public interface DoctorClinicService {
     DoctorClinic createDoctorClinic(Doctor doctor,  Clinic clinic, int consultPrice);
 
-    void setSchedule(DoctorClinic doctorClinic, String day, String hour);
+    void setSchedule(DoctorClinic doctorClinic, int day, int hour);
 
     List<DoctorClinic> getDoctorClinics();
 

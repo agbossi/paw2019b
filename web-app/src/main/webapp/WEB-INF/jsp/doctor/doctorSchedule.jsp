@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <html>
 <head>
     <head>
@@ -16,29 +17,75 @@
         <div>
             <form:label path="day">Day: </form:label>
             <form:select path="day">
-                <form:option value="MONDAY"/>
-                <form:option value="TUESDAY"/>
-                <form:option value="WEDNESDAY"/>
-                <form:option value="THURSDAY"/>
-                <form:option value="FRIDAY"/>
+               <c:forEach var="day" items="${days}">
+                   <form:option value="${day}">
+                       <c:choose>
+                           <c:when test="${day == 2}">
+                               <spring:message code="monday"/>
+                           </c:when>
+                           <c:when test="${day == 3}">
+                               <spring:message code="tuesday"/>
+                           </c:when>
+                           <c:when test="${day == 4}">
+                               <spring:message code="wednesday"/>
+                           </c:when>
+                           <c:when test="${day == 5}">
+                               <spring:message code="thursday"/>
+                           </c:when>
+                           <c:when test="${day == 6}">
+                               <spring:message code="friday"/>
+                           </c:when>
+                       </c:choose>
+                   </form:option>
+               </c:forEach>
             </form:select>
             <form:errors path="day" element="p"/>
         </div>
         <div>
             <form:label path="hour">Day: </form:label>
             <form:select path="hour">
-                <form:option value="8:00"/>
-                <form:option value="9:00"/>
-                <form:option value="10:00"/>
-                <form:option value="11:00"/>
-                <form:option value="12:00"/>
-                <form:option value="13:00"/>
-                <form:option value="14:00"/>
-                <form:option value="15:00"/>
-                <form:option value="16:00"/>
-                <form:option value="17:00"/>
-                <form:option value="18:00"/>
-                <form:option value="19:00"/>
+                <c:forEach var="time" items="${times}">
+                    <form:option value="${time}">
+                        <c:choose>
+                            <c:when test="${time == 8}">
+                                <spring:message code="8AM"/>
+                            </c:when>
+                            <c:when test="${time == 9}">
+                                <spring:message code="9AM"/>
+                            </c:when>
+                            <c:when test="${time == 10}">
+                                <spring:message code="10AM"/>
+                            </c:when>
+                            <c:when test="${time == 11}">
+                                <spring:message code="11AM"/>
+                            </c:when>
+                            <c:when test="${time == 12}">
+                                <spring:message code="12AM"/>
+                            </c:when>
+                            <c:when test="${time == 13}">
+                                <spring:message code="1PM"/>
+                            </c:when>
+                            <c:when test="${time == 14}">
+                                <spring:message code="2PM"/>
+                            </c:when>
+                            <c:when test="${time == 15}">
+                                <spring:message code="3PM"/>
+                            </c:when>
+                            <c:when test="${time == 16}">
+                                <spring:message code="4PM"/>
+                            </c:when>
+                            <c:when test="${time == 17}">
+                                <spring:message code="5PM"/>
+                            </c:when>
+                            <c:when test="${time == 18}">
+                                <spring:message code="6PM"/>
+                            </c:when>
+                            <c:when test="${time == 19}">
+                                <spring:message code="7PM"/>
+                            </c:when>
+                        </c:choose>
+                    </form:option>
+                </c:forEach>
             </form:select>
             <form:errors path="day" element="p"/>
         </div>

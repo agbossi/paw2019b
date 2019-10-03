@@ -6,4 +6,6 @@ public interface PatientService {
     Patient create(String email,String id, String prepaid, String prepaidNumber);
 
     Patient getPatientByEmail(String email);
+
+    void setAppointments(Patient patient);
 }

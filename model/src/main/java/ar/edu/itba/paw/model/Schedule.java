@@ -3,27 +3,27 @@ package ar.edu.itba.paw.model;
 import java.util.List;
 
 public class Schedule {
-    String day;
-    String hour;
+    int day;
+    int hour;
 
-    public Schedule(String day, String hour) {
+    public Schedule(int day, int hour) {
         this.day = day;
         this.hour = hour;
     }
 
-    public String getDay() {
+    public int getDay() {
         return day;
     }
 
-    public void setDay(String day) {
+    public void setDay(int day) {
         this.day = day;
     }
 
-    public String getHour() {
+    public int getHour() {
         return hour;
     }
 
-    public void setHour(String hour) {
+    public void setHour(int hour) {
         this.hour = hour;
     }
 }

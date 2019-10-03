@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.model;
 
+import java.util.List;
+
 public class Patient {
     private String email;
 
@@ -9,7 +11,9 @@ public class Patient {
 
     private String id;
 
-    public Patient(String email,String id ,String prepaid, String prepaidNumber) {
+    List<Appointment> appointments;
+
+    public Patient(String email, String id, String prepaid, String prepaidNumber) {
         this.email = email;
         this.id = id;
         this.prepaid = prepaid;
@@ -28,7 +32,16 @@ public class Patient {
         return prepaidNumber;
     }
 
+
     public String getEmail() {
         return email;
+    }
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
     }
 }
