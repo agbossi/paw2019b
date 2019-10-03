@@ -133,7 +133,8 @@ public class PatientController {
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, clinic);
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Patient patient = patientService.getPatientById(user.getEmail());
+        Patient patient = patientService.getPatientByEmail(user.getEmail());
+        patientService.setAppointments(patient);
 
         appointmentService.cancelAppointment(doctorClinic, patient, cal);
 

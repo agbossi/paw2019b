@@ -34,6 +34,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
                                     new Location(resultSet.getString("location"))),
                             resultSet.getInt("consultPrice")),
                     new Patient(resultSet.getString("email"),
+                            resultSet.getString("id"),
                             resultSet.getString("prepaid"),
                             resultSet.getString("prepaidNumber")));
         }
