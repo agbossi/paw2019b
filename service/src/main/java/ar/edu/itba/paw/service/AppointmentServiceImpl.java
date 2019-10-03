@@ -49,4 +49,5 @@ public class AppointmentServiceImpl implements AppointmentService {
     public void cancelAppointment(DoctorClinic doctorClinic, Patient patient, Calendar date) {
         appointmentDao.cancelAppointment(doctorClinic,patient,date);
     }
+
 }

@@ -62,8 +62,8 @@ public class SearchController {
         return mav;
     }
 
-    @RequestMapping(value = "/results/{clinicId}/{doctorId}", method = {RequestMethod.GET})
-    public ModelAndView doctorsPage(@PathVariable(value = "clinicId") int clinic, @PathVariable(value = "doctorId") String license) {
+    @RequestMapping(value = "/results/{clinicId}/{doctorId}/{week}", method = {RequestMethod.GET})
+    public ModelAndView doctorsPage(@PathVariable(value = "clinicId") int clinic, @PathVariable(value = "doctorId") String license, @PathVariable(value = "week") int week) {
         ModelAndView mav = new ModelAndView("doctorPage");
 
 
@@ -73,9 +73,11 @@ public class SearchController {
 
         viewModifier.addDaysAdnTimes(mav);
 
-        viewModifier.addCurrentDates(mav);
+        viewModifier.addCurrentDates(mav,week);
 
         mav.addObject("doctor", doctor);
+
+        mav.addObject("week", week);
 
         return mav;
     }

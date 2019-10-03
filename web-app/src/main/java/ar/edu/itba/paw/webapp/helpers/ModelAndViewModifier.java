@@ -115,11 +115,11 @@ public class ModelAndViewModifier {
         return mav;
     }
 
-    public ModelAndView addCurrentDates(ModelAndView mav){
+    public ModelAndView addCurrentDates(ModelAndView mav, int week){
         Calendar date = Calendar.getInstance();
+        date.add(Calendar.DATE, 7 * (week - 1));
         Calendar first;
         List<Calendar> month = new ArrayList<>();
-        int monthChange;
         if(date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
             first = date;
             first.add(Calendar.DATE, 1);
@@ -139,7 +139,7 @@ public class ModelAndViewModifier {
         }
 
         mav.addObject("days", month);
-        mav.addObject("today", date);
+        mav.addObject("today", Calendar.getInstance());
 
 
         return mav;

@@ -96,7 +96,7 @@ public class PatientController {
         return mav;
     }
 
-    @RequestMapping(value = "/results/{clinicId}/{doctorId}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/createApp/{clinicId}/{doctorId}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
     public ModelAndView makeAppointment(@PathVariable(value = "clinicId") int clinicId, @PathVariable(value = "doctorId") String license,
                                         @PathVariable(value = "day") int day, @PathVariable(value = "year") int year,
                                         @PathVariable(value = "month") int month, @PathVariable(value = "time") int time){
