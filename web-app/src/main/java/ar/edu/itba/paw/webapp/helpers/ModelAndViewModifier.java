@@ -27,7 +27,10 @@ public class ModelAndViewModifier {
     private PrepaidService prepaidService;
 
     @Autowired
-    DoctorClinicService doctorClinicService;
+    private DoctorClinicService doctorClinicService;
+
+    @Autowired
+    private DoctorHourService doctorHourService;
 
     public ModelAndView addSearchInfo(ModelAndView mav){
         List<Location> locations = locationService.getLocations();
@@ -144,6 +147,4 @@ public class ModelAndViewModifier {
 
         return mav;
     }
-
-    
 }

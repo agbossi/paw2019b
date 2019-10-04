@@ -96,52 +96,5 @@ public class PatientController {
         return mav;
     }
 
-    @RequestMapping(value = "/createApp/{clinicId}/{doctorId}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
-    public ModelAndView makeAppointment(@PathVariable(value = "clinicId") int clinicId, @PathVariable(value = "doctorId") String license,
-                                        @PathVariable(value = "day") int day, @PathVariable(value = "year") int year,
-                                        @PathVariable(value = "month") int month, @PathVariable(value = "time") int time){
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month, day, time, 0, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        Doctor doc = doctorService.getDoctorByLicense(license);
-        Clinic clinic = clinicService.getClinicById(clinicId);
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, clinic);
-
-        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Patient patient = patientService.getPatientByEmail(user.getEmail());
-        patientService.setAppointments(patient);
-
-        appointmentService.createAppointment(doctorClinic, patient, cal);
-
-        final ModelAndView mav = new ModelAndView("redirect:/appointments");
-
-        return mav;
-
-    }
-
-    @RequestMapping(value = "/cancelApp/{clinicId}/{doctorId}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
-    public ModelAndView cancelAppointment(@PathVariable(value = "clinicId") int clinicId, @PathVariable(value = "doctorId") String license,
-                                          @PathVariable(value = "day") int day, @PathVariable(value = "year") int year,
-                                          @PathVariable(value = "month") int month, @PathVariable(value = "time") int time){
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month, day, time, 0, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
-        Doctor doc = doctorService.getDoctorByLicense(license);
-        Clinic clinic = clinicService.getClinicById(clinicId);
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, clinic);
-
-        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Patient patient = patientService.getPatientByEmail(user.getEmail());
-        patientService.setAppointments(patient);
-
-        appointmentService.cancelAppointment(doctorClinic, patient, cal);
-
-        final ModelAndView mav = new ModelAndView("redirect:/appointments");
-
-        return mav;
-    }
-
 
 }

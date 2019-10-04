@@ -2,10 +2,9 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.AppointmentDao;
 import ar.edu.itba.paw.interfaces.AppointmentService;
-import ar.edu.itba.paw.model.Appointment;
-import ar.edu.itba.paw.model.DoctorClinic;
-import ar.edu.itba.paw.model.Patient;
-import ar.edu.itba.paw.model.Schedule;
+import ar.edu.itba.paw.interfaces.DoctorClinicService;
+import ar.edu.itba.paw.interfaces.PatientService;
+import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +18,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     AppointmentDao appointmentDao;
 
     @Autowired
-    DoctorClinicServiceImpl doctorClinicService;
+    DoctorClinicService doctorClinicService;
+
+    @Autowired
+    PatientService patientService;
 
     @Override
     public Appointment createAppointment(DoctorClinic doctorClinic, Patient patient, Calendar date) {
@@ -50,4 +52,18 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentDao.cancelAppointment(doctorClinic,patient,date);
     }
 
+    @Override
+    public boolean hasAppointment(DoctorClinic doctorClinic, Calendar date) {
+        return appointmentDao.hasAppointment(doctorClinic, date);
+    }
+
+    @Override
+    public List<Appointment> getAllDoctorsAppointments(Doctor doctor) {
+        List<Appointment> appointments = appointmentDao.getAllDoctorsAppointments(doctor);
+        for (Appointment a: appointments) {
+            patientService.setName(a.getPatient());
+        }
+
+        return appointments;
+    }
 }

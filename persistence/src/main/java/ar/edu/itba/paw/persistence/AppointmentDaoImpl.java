@@ -33,7 +33,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
                             new Clinic(resultSet.getInt("clinicid"),resultSet.getString("name"),
                                     new Location(resultSet.getString("location"))),
                             resultSet.getInt("consultPrice")),
-                    new Patient(resultSet.getString("email"),
+                    new Patient(resultSet.getString("patient"),
                             resultSet.getString("id"),
                             resultSet.getString("prepaid"),
                             resultSet.getString("prepaidNumber")));
@@ -54,7 +54,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
         args.put("doctor", doctorClinic.getDoctor().getLicense());
         args.put("clinic", doctorClinic.getClinic().getId());
         args.put("date", date.getTime());
-        args.put("patient", patient.getId());
+        args.put("patient", patient.getEmail());
         jdbcInsert.execute(args);
 
         return new Appointment(date, doctorClinic, patient);
@@ -80,7 +80,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
                 "join clinics on doctorclinics.clinicid = clinics.id)" +
                 "join users on doctors.email = users.email)" +
                 "on (doctors.license = appointments.doctor and doctorclinics.clinicid = appointments.clinic) join patients on appointments.patient = patients.email" +
-                ") where appointments.patient = ?",ROW_MAPPER,patient.getId());
+                ") where appointments.patient = ?",ROW_MAPPER,patient.getEmail());
         if(list.isEmpty()){
             return null;
         }
@@ -89,8 +89,36 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
     @Override
     public void cancelAppointment(DoctorClinic doctorClinic, Patient patient, Calendar date){
-        Object[] args = new Object[] {patient.getId(), doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), date.getTime()};
+        Object[] args = new Object[] {patient.getEmail(), doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), date.getTime()};
         jdbcTemplate.update("delete from appointments where patient = ? and doctor = ? and clinic = ? and date = ?", args);
 
+    }
+
+    @Override
+    public boolean hasAppointment(DoctorClinic doctorClinic, Calendar date) {
+        final List<Appointment> list = jdbcTemplate.query("select * from (appointments join (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) " +
+                        "join clinics on doctorclinics.clinicid = clinics.id)" +
+                        "join users on doctors.email = users.email)" +
+                        "on (doctors.license = appointments.doctor and doctorclinics.clinicid = appointments.clinic) join patients on appointments.patient = patients.email" +
+                        ") where appointments.doctor = ? and appointments.clinic = ? and date = ?",ROW_MAPPER,
+                            doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), date.getTime());
+        if(list.isEmpty()){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public List<Appointment> getAllDoctorsAppointments(Doctor doctor) {
+        final List<Appointment> list = jdbcTemplate.query("select * from (appointments join (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) " +
+                        "join clinics on doctorclinics.clinicid = clinics.id)" +
+                        "join users on doctors.email = users.email)" +
+                        "on (doctors.license = appointments.doctor and doctorclinics.clinicid = appointments.clinic) join patients on appointments.patient = patients.email" +
+                        ") where appointments.doctor = ?",ROW_MAPPER,
+                doctor.getLicense());
+        if(list.isEmpty()){
+            return null;
+        }
+        return list;
     }
 }

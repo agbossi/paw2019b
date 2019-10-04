@@ -10,4 +10,6 @@ public interface ScheduleService {
 
     List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic);
 
+    boolean hasSchedule(DoctorClinic doctorClinic, int day, int hour);
+
 }

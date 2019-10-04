@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.*;
-import ar.edu.itba.paw.model.Clinic;
-import ar.edu.itba.paw.model.Doctor;
-import ar.edu.itba.paw.model.DoctorClinic;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.DoctorClinicForm;
 import ar.edu.itba.paw.webapp.form.ScheduleForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
@@ -20,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/doctor")
@@ -40,6 +38,9 @@ public class DoctorController {
     private ScheduleService scheduleService;
 
     @Autowired
+    private AppointmentService appointmentService;
+
+    @Autowired
     private ModelAndViewModifier viewModifier;
 
     @RequestMapping(value = "", method = { RequestMethod.GET })
@@ -48,9 +49,12 @@ public class DoctorController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
+        List<Appointment> appointments = appointmentService.getAllDoctorsAppointments(doctor);
+
 
         mav.addObject("user", user);
         mav.addObject("doctor", doctor);
+        mav.addObject("appointments",appointments);
         return mav;
     }
 
@@ -82,7 +86,7 @@ public class DoctorController {
         Doctor doc = doctorService.getDoctorByLicense(license);
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
-
+        viewModifier.addDaysAdnTimes(mav);
         mav.addObject("doctorClinic", doctorClinic);
         return mav;
 
