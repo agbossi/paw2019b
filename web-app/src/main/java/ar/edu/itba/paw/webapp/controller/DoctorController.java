@@ -51,6 +51,7 @@ public class DoctorController {
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
         List<Appointment> appointments = appointmentService.getAllDoctorsAppointments(doctor);
 
+
         mav.addObject("user", user);
         mav.addObject("doctor", doctor);
         mav.addObject("appointments",appointments);

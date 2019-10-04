@@ -3,8 +3,10 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.AppointmentDao;
 import ar.edu.itba.paw.interfaces.PatientDao;
 import ar.edu.itba.paw.interfaces.PatientService;
+import ar.edu.itba.paw.interfaces.UserDao;
 import ar.edu.itba.paw.model.Appointment;
 import ar.edu.itba.paw.model.Patient;
+import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private AppointmentDao appointmentDao;
+
+    @Autowired
+    private UserDao userDao;
 
     @Override
     public Patient create(String email,String id, String prepaid, String prepaidNumber) {
@@ -35,4 +40,11 @@ public class PatientServiceImpl implements PatientService {
         patient.setAppointments(appointments);
     }
 
+    @Override
+    public void setName(Patient patient) {
+        User user =  userDao.findUserByEmail(patient.getEmail());
+
+        patient.setFirstName(user.getFirstName());
+        patient.setLastName(user.getLastName());
+    }
 }

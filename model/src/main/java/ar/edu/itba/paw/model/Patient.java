@@ -3,6 +3,11 @@ package ar.edu.itba.paw.model;
 import java.util.List;
 
 public class Patient {
+
+    private String firstName;
+
+    private String lastName;
+
     private String email;
 
     private String prepaid;
@@ -43,5 +48,21 @@ public class Patient {
 
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }
