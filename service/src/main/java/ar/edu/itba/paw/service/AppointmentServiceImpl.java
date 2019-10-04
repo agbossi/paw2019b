@@ -50,4 +50,8 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentDao.cancelAppointment(doctorClinic,patient,date);
     }
 
+    @Override
+    public boolean hasAppointment(DoctorClinic doctorClinic, Calendar date) {
+        return appointmentDao.hasAppointment(doctorClinic, date);
+    }
 }

@@ -29,6 +29,9 @@ public class ModelAndViewModifier {
     @Autowired
     DoctorClinicService doctorClinicService;
 
+    @Autowired
+    DoctorHourService doctorHourService;
+
     public ModelAndView addSearchInfo(ModelAndView mav){
         List<Location> locations = locationService.getLocations();
         List<Specialty> specialties = specialtyService.getSpecialties();
@@ -144,6 +147,4 @@ public class ModelAndViewModifier {
 
         return mav;
     }
-
-    
 }

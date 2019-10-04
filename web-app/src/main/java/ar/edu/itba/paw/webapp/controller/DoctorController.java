@@ -82,7 +82,7 @@ public class DoctorController {
         Doctor doc = doctorService.getDoctorByLicense(license);
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
-
+        viewModifier.addDaysAdnTimes(mav);
         mav.addObject("doctorClinic", doctorClinic);
         return mav;
 

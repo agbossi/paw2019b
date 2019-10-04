@@ -93,4 +93,18 @@ public class AppointmentDaoImpl implements AppointmentDao {
         jdbcTemplate.update("delete from appointments where patient = ? and doctor = ? and clinic = ? and date = ?", args);
 
     }
+
+    @Override
+    public boolean hasAppointment(DoctorClinic doctorClinic, Calendar date) {
+        final List<Appointment> list = jdbcTemplate.query("select * from (appointments join (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) " +
+                        "join clinics on doctorclinics.clinicid = clinics.id)" +
+                        "join users on doctors.email = users.email)" +
+                        "on (doctors.license = appointments.doctor and doctorclinics.clinicid = appointments.clinic) join patients on appointments.patient = patients.email" +
+                        ") where appointments.doctor = ? and appointments.clinic = ? and date = ?",ROW_MAPPER,
+                            doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), date.getTime());
+        if(list.isEmpty()){
+            return false;
+        }
+        return true;
+    }
 }

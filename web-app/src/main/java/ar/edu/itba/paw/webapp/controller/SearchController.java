@@ -2,11 +2,9 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.ClinicService;
 import ar.edu.itba.paw.interfaces.DoctorClinicService;
+import ar.edu.itba.paw.interfaces.DoctorHourService;
 import ar.edu.itba.paw.interfaces.DoctorService;
-import ar.edu.itba.paw.model.Doctor;
-import ar.edu.itba.paw.model.DoctorClinic;
-import ar.edu.itba.paw.model.Location;
-import ar.edu.itba.paw.model.Specialty;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.SearchForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +30,9 @@ public class SearchController {
 
     @Autowired
     private ModelAndViewModifier viewModifier;
+
+    @Autowired
+    private DoctorHourService doctorHourService;
 
     @RequestMapping(value = "/search", method = {RequestMethod.GET})
     public ModelAndView search(@ModelAttribute("searchForm") final SearchForm form) {
@@ -71,13 +72,15 @@ public class SearchController {
 
         viewModifier.addSearchInfo(mav);
 
-        viewModifier.addDaysAdnTimes(mav);
+        viewModifier.addCurrentDates(mav, week);
 
-        viewModifier.addCurrentDates(mav,week);
+        List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctor, week);
 
+
+        mav.addObject("week", doctorsWeek);
+        mav.addObject("weekNum", week);
         mav.addObject("doctor", doctor);
 
-        mav.addObject("week", week);
 
         return mav;
     }

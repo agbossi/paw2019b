@@ -17,11 +17,16 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public Schedule createSchedule(int hour, int day, DoctorClinic doctorClinic) {
-        return scheduleDao.createSchedule(hour, day, doctorClinic);
+        return scheduleDao.createSchedule(day, hour, doctorClinic);
     }
 
     @Override
     public List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic) {
         return scheduleDao.getDoctorClinicSchedule(doctorClinic);
+    }
+
+    @Override
+    public boolean hasSchedule(DoctorClinic doctorClinic, int day, int hour) {
+        return scheduleDao.hasSchedule(doctorClinic, day, hour);
     }
 }
