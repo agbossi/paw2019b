@@ -25,7 +25,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
     private final static RowMapper<Schedule> ROW_MAPPER = new RowMapper<Schedule>() {
         @Override
         public Schedule mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new Schedule(resultSet.getInt("hour"), resultSet.getInt("day"));
+            return new Schedule(resultSet.getInt("day"), resultSet.getInt("hour"));
         }
     };
     @Autowired

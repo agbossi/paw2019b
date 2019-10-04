@@ -2,10 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.AppointmentDao;
 import ar.edu.itba.paw.interfaces.AppointmentService;
-import ar.edu.itba.paw.model.Appointment;
-import ar.edu.itba.paw.model.DoctorClinic;
-import ar.edu.itba.paw.model.Patient;
-import ar.edu.itba.paw.model.Schedule;
+import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -53,5 +50,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public boolean hasAppointment(DoctorClinic doctorClinic, Calendar date) {
         return appointmentDao.hasAppointment(doctorClinic, date);
+    }
+
+    @Override
+    public List<Appointment> getAllDoctorsAppointments(Doctor doctor) {
+        return appointmentDao.getAllDoctorsAppointments(doctor);
     }
 }

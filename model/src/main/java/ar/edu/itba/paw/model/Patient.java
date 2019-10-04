@@ -21,7 +21,7 @@ public class Patient {
     }
 
     public String getId() {
-        return email;
+        return id;
     }
 
     public String getPrepaid() {
