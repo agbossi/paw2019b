@@ -105,7 +105,7 @@ public class AppointmentController {
         appointmentService.cancelAppointment(docCli, patient, cal);
         emailService.sendSimpleMail(patient.getEmail(),"${appointment.cancelled.subject}","${appointment.cancelled.text}");
 
-        final ModelAndView mav = new ModelAndView("redirect:/doctor");
+        final ModelAndView mav = new ModelAndView("redirect:/doctor/");
 
         return mav;
     }
