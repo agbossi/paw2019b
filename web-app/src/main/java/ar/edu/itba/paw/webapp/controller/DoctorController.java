@@ -49,12 +49,12 @@ public class DoctorController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
-        List<Appointment> appointments = appointmentService.getAllDoctorsAppointments(doctor);
+        //List<Appointment> appointments = appointmentService.getDoctorsAppointments(doctor);
 
 
         mav.addObject("user", user);
         mav.addObject("doctor", doctor);
-        mav.addObject("appointments",appointments);
+        //mav.addObject("appointments",appointments);
         return mav;
     }
 
