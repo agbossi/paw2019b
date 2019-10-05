@@ -14,6 +14,6 @@
         <div>
             ${specialty.name}
         </div>
-        <a class="nav-link" href="/admin/addSpecialty"><spring:message code="add.another.specialty"/></a>
+        <a class="nav-link" href="<c:url value="/admin/addSpecialty"/>"><spring:message code="add.another.specialty"/></a>
     </body>
 </html>

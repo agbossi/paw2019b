@@ -27,6 +27,6 @@
         <div>
             ${doctor.email}
         </div>
-        <a class="nav-link" href="/admin/addDoctor"><spring:message code="add.another.doctor"/></a>
+        <a class="nav-link" href="<c:url value="/admin/addDoctor"/>"><spring:message code="add.another.doctor"/></a>
     </body>
 </html>

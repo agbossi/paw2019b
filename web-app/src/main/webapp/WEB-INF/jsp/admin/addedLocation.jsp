@@ -15,5 +15,6 @@
         <div>
             ${location.name}
         </div>
-        <a class="nav-link" href="/admin/addLocation"><spring:message code="add.another.location"/></a>
+        <a class="nav-link" href="<c:url value="/admin/addLocation"/>"><spring:message code="add.another.location"/></a>
+    </body>
 </html>

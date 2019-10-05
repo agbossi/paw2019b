@@ -25,7 +25,7 @@
             <input type="submit" value="Login"/>
         </div>
         <div>
-            <a href="/signUp">Sign up</a>
+            <a href="<c:url value="/signUp"/>">Sign up</a>
         </div>
     </div>
 

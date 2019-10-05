@@ -12,10 +12,10 @@
         <meta name="description" content="">
         <title>DoctorSearch</title>
 
-        <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/navbar-fixed/">
+        <link rel="canonical" href="<c:url value="https://getbootstrap.com/docs/4.3/examples/navbar-fixed/"/>">
 
         <!-- Bootstrap core css -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="<c:url value="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
     </head>
@@ -25,29 +25,29 @@
             <h5 class="my-0 mr-md-auto font-weight-normal"><a href="/"><spring:message code="doctor.search.title"/></a></h5>
             <nav class="my-2 my-md-0 mr-md-3">
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
-                    <a class="p-2 text-dark" href="/admin/addDoctor"><spring:message code="add.doctor"/></a>
-                    <a class="p-2 text-dark" href="/admin/addClinic"><spring:message code="add.clinic"/></a>
-                    <a class="p-2 text-dark" href="/admin/addLocation"><spring:message code="add.location"/></a>
-                    <a class="p-2 text-dark" href="/admin/addSpecialty"><spring:message code="add.specialty"/></a>
+                    <a class="p-2 text-dark" href="<c:url value="/admin/addDoctor"/>"><spring:message code="add.doctor"/></a>
+                    <a class="p-2 text-dark" href="<c:url value="/admin/addClinic"/>"><spring:message code="add.clinic"/></a>
+                    <a class="p-2 text-dark" href="<c:url value="/admin/addLocation"/>"><spring:message code="add.location"/></a>
+                    <a class="p-2 text-dark" href="<c:url value="/admin/addSpecialty"/>"><spring:message code="add.specialty"/></a>
                 </sec:authorize>
 
                 <sec:authorize access="hasRole('ROLE_DOCTOR')">
-                    <a class="p-2 text-dark" href="/doctor/addSchedule"><spring:message code="add.week.schedule"/></a>
-                    <a class="p-2 text-dark" href="/doctor/addDoctorClinic"><spring:message code="subscribe.to.clinic"/></a>
+                    <a class="p-2 text-dark" href="<c:url value="/doctor/addSchedule"/>"><spring:message code="add.week.schedule"/></a>
+                    <a class="p-2 text-dark" href="<c:url value="/doctor/addDoctorClinic"/>"><spring:message code="subscribe.to.clinic"/></a>
                 </sec:authorize>
 
                 <sec:authorize access="hasRole('ROLE_USER')">
-                    <a class="p-2 text-dark" href="/appointments"><spring:message code="appointments"/></a>
-                    <a class="p-2 text-dark" href="/profile"><spring:message code="profile"/></a>
+                    <a class="p-2 text-dark" href="<c:url value="/appointments"/>"><spring:message code="appointments"/></a>
+                    <a class="p-2 text-dark" href="<c:url value="/profile"/>"><spring:message code="profile"/></a>
                 </sec:authorize>
 
                 <sec:authorize access="hasAnyRole('ROLE_USER','ROLE_DOCTOR','ROLE_ADMIN')">
-                    <a class="btn btn-outline-primary" href="/logout"><spring:message code="log.out"/></a>
+                    <a class="btn btn-outline-primary" href="<c:url value="/logout"/>"><spring:message code="log.out"/></a>
                 </sec:authorize>
 
                 <sec:authorize access="isAnonymous()">
-                    <a class="btn btn-outline-primary" href="/signUp"><spring:message code="sign.up"/></a>
-                    <a class="btn btn-outline-primary" href="/login"><spring:message code="log.in"/></a>
+                    <a class="btn btn-outline-primary" href="<c:url value="/signUp"/>"><spring:message code="sign.up"/></a>
+                    <a class="btn btn-outline-primary" href="<c:url value="/login"/>"><spring:message code="log.in"/></a>
                 </sec:authorize>
             </nav>
         </div>
