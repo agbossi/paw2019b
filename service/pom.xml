@@ -38,10 +38,10 @@
       <artifactId>persistence</artifactId>
       <version>${project.parent.version}</version>
     </dependency>
-      <dependency>
+    <dependency>
           <groupId>org.springframework</groupId>
           <artifactId>spring-context-support</artifactId>
-      </dependency>
+    </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context-support</artifactId>
@@ -49,6 +49,10 @@
     <dependency>
       <groupId>javax.mail</groupId>
       <artifactId>javax.mail-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
     </dependency>
   </dependencies>
 
