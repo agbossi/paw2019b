@@ -34,6 +34,9 @@ public class AppointmentController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private  EmailService emailService;
+
     @RequestMapping(value = "/createApp/{clinicId}/{doctorId}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
     public ModelAndView makeAppointment(@PathVariable(value = "clinicId") int clinicId, @PathVariable(value = "doctorId") String license,
                                         @PathVariable(value = "day") int day, @PathVariable(value = "year") int year,
@@ -51,6 +54,7 @@ public class AppointmentController {
         patientService.setAppointments(patient);
 
         appointmentService.createAppointment(doctorClinic, patient, cal);
+        emailService.sendSimpleMail(patient.getEmail(),"${appointment.created.subject}","${appointment.created.text}");
 
         final ModelAndView mav = new ModelAndView("redirect:/appointments");
 
@@ -99,6 +103,7 @@ public class AppointmentController {
         DoctorClinic docCli = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, clinic);
 
         appointmentService.cancelAppointment(docCli, patient, cal);
+        emailService.sendSimpleMail(patient.getEmail(),"${appointment.cancelled.subject}","${appointment.cancelled.text}");
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor");
 
