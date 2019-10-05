@@ -41,7 +41,7 @@ public class AdminController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "", method = { RequestMethod.GET })
+    @RequestMapping(value = "/", method = { RequestMethod.GET })
     public ModelAndView admin(){
         final ModelAndView mav = new ModelAndView("admin/admin");
         return mav;

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.controller;
 
+import ar.edu.itba.paw.interfaces.EmailService;
 import ar.edu.itba.paw.interfaces.PatientService;
 import ar.edu.itba.paw.interfaces.UserService;
 import ar.edu.itba.paw.model.User;
@@ -43,6 +44,9 @@ public class UserController {
 
     @Autowired
     private ModelAndViewModifier modelAndViewModifier;
+
+    @Autowired
+    private EmailService emailService;
 
     private void authWithAuthManager(HttpServletRequest request, String email, String password) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password);
@@ -90,8 +94,7 @@ public class UserController {
         User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
         patientService.create(form.getEmail(),form.getId(),form.getPrepaid(), form.getPrepaidNumber());
 
-        //TODO this should send an email or something of confirmation and then login ???
-
+        emailService.sendSimpleMail(form.getEmail(),"${sign.up.subject}","${sign.up.message}");
         authWithAuthManager(request, form.getEmail(), form.getPassword());
 
         String ret = signUpSuccess(request);
@@ -105,6 +108,7 @@ public class UserController {
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
         userService.changePassword(passwordEncoder.encode("admin"),"admin@test.com");
+
         return new ModelAndView("login");
     }
 
@@ -114,7 +118,9 @@ public class UserController {
             String redirectUrl = (String) session.getAttribute("url_prior_login");
             if (redirectUrl != null) {
                 session.removeAttribute("url_prior_login");
-                return redirectUrl;
+                if(!redirectUrl.equals("/login") && !redirectUrl.equals("/signUp")){
+                    return redirectUrl;
+                }
             }
         }
         return "/";

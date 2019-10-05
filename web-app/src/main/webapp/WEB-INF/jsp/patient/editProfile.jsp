@@ -8,7 +8,7 @@
         <jsp:include page="../base/navbar.jsp" />
     </head>
     <body>
-        <a class="btn btn-outline-primary" href="/profile"><spring:message code="profile.message"/></a>
+        <a class="btn btn-outline-primary" href="<c:url value="/profile"/>"><spring:message code="profile.message"/></a>
         <div class="container">
             <c:url value="/editProfile" var="postPath"/>
             <form:form modelAttribute="form" action="${postPath}" method="post">

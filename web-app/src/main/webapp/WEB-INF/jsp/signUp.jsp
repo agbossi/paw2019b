@@ -64,7 +64,7 @@
                 </div>
             </form:form>
             <div>
-                <a href="/login">Login</a>
+                <a href="<c:url value="/login"/>">Login</a>
             </div>
         </div>
     </body>

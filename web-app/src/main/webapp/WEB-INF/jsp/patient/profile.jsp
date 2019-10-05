@@ -36,7 +36,6 @@
         <c:otherwise>
         </c:otherwise>
     </c:choose>
-
-    <!-- <a class="btn btn-outline-primary" href="/editProfile"><spring:message code="edit.personal"/></a> -->
+    <a class="btn btn-outline-primary" href="<c:url value="/editProfile"/>"><spring:message code="edit.personal"/></a> -->
 </body>
 </html>

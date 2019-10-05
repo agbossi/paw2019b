@@ -23,7 +23,6 @@ public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         if (session != null) {
             String redirectUrl = (String) session.getAttribute("url_prior_login");
             if (redirectUrl != null) {
-
                 // we do not forget to clean this attribute from session
                 session.removeAttribute("url_prior_login");
                 String role = determineTargetUrl(authentication);
@@ -36,7 +35,12 @@ public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthent
                 }
                 else {
                     // we redirect home page
-                    getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+                    if(!redirectUrl.equals("/login") && !redirectUrl.equals("/signUp")){
+                        getRedirectStrategy().sendRedirect(request, response, redirectUrl);
+                    }
+                    else {
+                        super.onAuthenticationSuccess(request, response, authentication);
+                    }
                 }
             } else {
                 super.onAuthenticationSuccess(request, response, authentication);

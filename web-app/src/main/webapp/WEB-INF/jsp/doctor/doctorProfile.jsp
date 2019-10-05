@@ -54,7 +54,7 @@
                     <h6><b><spring:message code="a.patientname" /></b> <c:out value="${appointment.patient.lastName}"/>, <c:out value="${appointment.patient.firstName}"/></h6>
                     <h6><b><spring:message code="user.email"/></b> <c:out value="${appointment.patient.email}"/></h6>
                     <h6><spring:message code="a.at"/> <b>${appointment.doctorClinic.clinic.name} (${appointment.doctorClinic.clinic.location.locationName})</b></h6>
-                    <a class="btn btn-outline-primary" href="/docCancelApp/${appointment.doctorClinic.clinic.id}/${appointment.patient.email}/${appointment.date.get(1)}-${appointment.date.get(2)}-${appointment.date.get(5)}-${appointment.date.get(11)}"><spring:message code="a.cancel"/></a>
+                    <a class="btn btn-outline-primary" href="<c:url value="/docCancelApp/${appointment.doctorClinic.clinic.id}/${appointment.patient.email}/${appointment.date.get(1)}-${appointment.date.get(2)}-${appointment.date.get(5)}-${appointment.date.get(11)}"/>"><spring:message code="a.cancel"/></a>
                 </div>
             </c:forEach>
         </div>
