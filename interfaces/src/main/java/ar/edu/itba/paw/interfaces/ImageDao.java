@@ -5,7 +5,7 @@ import ar.edu.itba.paw.model.Image;
 
 public interface ImageDao {
 
-    Image createProfileImage(byte[] image, Doctor doctor);
+    long createProfileImage(byte[] image, String doctor);
 
-    Image getProfileImage(Doctor doctor);
+    Image getProfileImage(String doctor);
 }

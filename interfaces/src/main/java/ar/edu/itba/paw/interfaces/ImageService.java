@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {
 
-    Image createProfileImage(MultipartFile file, Doctor doctor);
+    long createProfileImage(MultipartFile file, Doctor doctor);
 
     Image getProfileImage(Doctor doctor);
 }
