@@ -62,4 +62,10 @@ CREATE TABLE IF NOT EXISTS appointments (
     FOREIGN KEY (doctor, clinic) REFERENCES doctorclinics(doctorLicense, clinicid)
 );
 
+CREATE TABLE IF NOT EXISTS images (
+    id SERIAL PRIMARY KEY,
+    doctor VARCHAR(20) REFERENCES doctors(license),
+    image bytea
+);
+
 insert into users values('admin','admin','admin','admin@test.com') on conflict do nothing;

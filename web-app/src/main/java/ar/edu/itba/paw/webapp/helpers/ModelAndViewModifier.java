@@ -64,8 +64,8 @@ public class ModelAndViewModifier {
         return mav;
     }
 
-    public ModelAndView addDoctorClinics(ModelAndView mav){
-        List<DoctorClinic> doctors = doctorClinicService.getDoctorClinics();
+    public ModelAndView addDoctorClinicsForDoctor(ModelAndView mav, Doctor doctor){
+        List<DoctorClinic> doctors = doctorClinicService.getDoctorClinicsForDoctor(doctor);
         mav.addObject("doctorClinics", doctors);
 
         return mav;

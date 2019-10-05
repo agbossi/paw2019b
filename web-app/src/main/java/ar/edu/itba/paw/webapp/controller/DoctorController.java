@@ -9,6 +9,7 @@ import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,9 @@ public class DoctorController {
     private AppointmentService appointmentService;
 
     @Autowired
+    private ImageService imageService;
+
+    @Autowired
     private ModelAndViewModifier viewModifier;
 
     @RequestMapping(value = "/", method = { RequestMethod.GET })
@@ -49,12 +53,31 @@ public class DoctorController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
-        List<Appointment> appointments = appointmentService.getAllDoctorsAppointments(doctor);
+        //List<Appointment> appointments = appointmentService.getDoctorsAppointments(doctor);
 
+        //mav.addObject("appointments",appointments);
+        return mav;
+    }
+
+    @RequestMapping(value = "/editProfile", method = { RequestMethod.GET })
+    public ModelAndView editProfile() {
+
+        final ModelAndView mav = new ModelAndView("/doctor/editProfile");
+
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
+        Image image = imageService.getProfileImage(doctor);
 
         mav.addObject("user", user);
         mav.addObject("doctor", doctor);
-        mav.addObject("appointments",appointments);
+        mav.addObject("image", image);
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/uploadPicture", method = { RequestMethod.GET })
+    public ModelAndView uploadPicture() {
+        final ModelAndView mav = new ModelAndView("doctor/uploadPicture");
         return mav;
     }
 
@@ -72,7 +95,10 @@ public class DoctorController {
     public ModelAndView addSchedule(){
         final ModelAndView mav = new ModelAndView("doctor/addSchedule");
 
-        viewModifier.addDoctorClinics(mav);
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
+
+        viewModifier.addDoctorClinicsForDoctor(mav, doctor);
 
         return mav;
     }

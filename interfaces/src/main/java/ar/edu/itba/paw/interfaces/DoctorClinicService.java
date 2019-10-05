@@ -11,6 +11,8 @@ public interface DoctorClinicService {
 
     List<DoctorClinic> getDoctorClinics();
 
+    List<DoctorClinic> getDoctorClinicsForDoctor(Doctor doctor);
+
     List<DoctorClinic> getDoctorsFromClinic(Clinic clinic);
 
     DoctorClinic getDoctorClinicFromDoctorAndClinic(Doctor doctor, Clinic clinic);

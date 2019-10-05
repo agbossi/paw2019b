@@ -74,6 +74,20 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     }
 
     @Override
+    public List<DoctorClinic> getDoctorClinicsForDoctor(Doctor doctor) {
+        final List<DoctorClinic> list = jdbcTemplate.query(
+           "select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinicid,name,location,consultPrice" +
+                " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
+                " join clinics on doctorclinics.clinicid = clinics.id)" +
+                " join users on doctors.email = users.email" +
+                "where doctorLicense = ?",ROW_MAPPER, doctor.getLicense());
+        if(list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
+
+    @Override
     public List<DoctorClinic> getDoctorsInClinic(int clinic) {
         final List<DoctorClinic> list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinicid,name,location,consultPrice" +
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
