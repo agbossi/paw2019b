@@ -6,8 +6,10 @@ import ar.edu.itba.paw.model.Schedule;
 import java.util.List;
 
 public interface ScheduleService {
-    Schedule createSchedule(String hour, String day, DoctorClinic doctorClinic);
+    Schedule createSchedule(int hour, int day, DoctorClinic doctorClinic);
 
     List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic);
+
+    boolean hasSchedule(DoctorClinic doctorClinic, int day, int hour);
 
 }

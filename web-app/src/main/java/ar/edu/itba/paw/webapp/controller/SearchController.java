@@ -2,11 +2,9 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.ClinicService;
 import ar.edu.itba.paw.interfaces.DoctorClinicService;
+import ar.edu.itba.paw.interfaces.DoctorHourService;
 import ar.edu.itba.paw.interfaces.DoctorService;
-import ar.edu.itba.paw.model.Doctor;
-import ar.edu.itba.paw.model.DoctorClinic;
-import ar.edu.itba.paw.model.Location;
-import ar.edu.itba.paw.model.Specialty;
+import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.SearchForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +30,9 @@ public class SearchController {
 
     @Autowired
     private ModelAndViewModifier viewModifier;
+
+    @Autowired
+    private DoctorHourService doctorHourService;
 
     @RequestMapping(value = "/search", method = {RequestMethod.GET})
     public ModelAndView search(@ModelAttribute("searchForm") final SearchForm form) {
@@ -62,8 +63,8 @@ public class SearchController {
         return mav;
     }
 
-    @RequestMapping(value = "/results/{clinicId}/{doctorId}", method = {RequestMethod.GET})
-    public ModelAndView doctorsPage(@PathVariable(value = "clinicId") int clinic, @PathVariable(value = "doctorId") String license) {
+    @RequestMapping(value = "/results/{clinicId}/{doctorId}/{week}", method = {RequestMethod.GET})
+    public ModelAndView doctorsPage(@PathVariable(value = "clinicId") int clinic, @PathVariable(value = "doctorId") String license, @PathVariable(value = "week") int week) {
         ModelAndView mav = new ModelAndView("doctorPage");
 
 
@@ -71,7 +72,15 @@ public class SearchController {
 
         viewModifier.addSearchInfo(mav);
 
+        viewModifier.addCurrentDates(mav, week);
+
+        List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctor, week);
+
+
+        mav.addObject("week", doctorsWeek);
+        mav.addObject("weekNum", week);
         mav.addObject("doctor", doctor);
+
 
         return mav;
     }

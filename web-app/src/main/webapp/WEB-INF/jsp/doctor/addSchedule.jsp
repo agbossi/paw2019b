@@ -1,6 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <html>
 <head>
     <head>
@@ -28,7 +31,10 @@
                             <h3>${doctorClinic.doctor.firstName} ${doctorClinic.doctor.lastName}</h3>
                             <p>${doctorClinic.doctor.specialty.specialtyName}</p>
                             <p>${doctorClinic.clinic.name} (${doctorClinic.clinic.location.locationName})</p>
-                            <p><a class="btn btn-secondary" href="<c:url value="/doctor/addSchedule/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}"/>" role="button">Add Schedule</a></p>
+                            <p><a class="btn btn-secondary" href="/doctor/addSchedule/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}" role="button">
+                                <spring:message code="add.week.schedule"/>
+                                </a>
+                            </p>
                         </div>
                     </c:forEach>
                 </c:if>

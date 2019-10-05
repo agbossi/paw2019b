@@ -25,7 +25,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
     private final static RowMapper<Schedule> ROW_MAPPER = new RowMapper<Schedule>() {
         @Override
         public Schedule mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new Schedule(resultSet.getString("hour"), resultSet.getString("day"));
+            return new Schedule(resultSet.getInt("day"), resultSet.getInt("hour"));
         }
     };
     @Autowired
@@ -39,7 +39,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
     }
 
     @Override
-    public Schedule createSchedule(String day, String hour, DoctorClinic doctorClinic) {
+    public Schedule createSchedule(int day, int hour, DoctorClinic doctorClinic) {
         final Map<String, Object> args = new HashMap<>();
         args.put("day", day);
         args.put("hour", hour);
@@ -54,5 +54,14 @@ public class ScheduleDaoImpl implements ScheduleDao {
     @Override
     public List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic) {
         return jdbcTemplate.query( "select * from schedule where doctor = ? and clinic =?", ROW_MAPPER, doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId());
+    }
+
+    @Override
+    public boolean hasSchedule(DoctorClinic doctorClinic, int day, int hour) {
+        final List<Schedule> list = jdbcTemplate.query( "select * from schedule where doctor = ? and clinic =? and day = ? and hour = ?", ROW_MAPPER, doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), day, hour);
+        if(list.isEmpty()){
+            return false;
+        }
+        return true;
     }
 }

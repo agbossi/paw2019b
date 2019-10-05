@@ -2,23 +2,23 @@ package ar.edu.itba.paw.webapp.form;
 
 public class ScheduleForm {
 
-    private String day;
+    private int day;
 
-    private String hour;
+    private int hour;
 
-    public String getDay() {
+    public int getDay() {
         return day;
     }
 
-    public void setDay(String day) {
+    public void setDay(int day) {
         this.day = day;
     }
 
-    public String getHour() {
+    public int getHour() {
         return hour;
     }
 
-    public void setHour(String hour) {
+    public void setHour(int hour) {
         this.hour = hour;
     }
 }

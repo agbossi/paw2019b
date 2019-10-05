@@ -38,8 +38,8 @@ CREATE TABLE IF NOT EXISTS doctorclinics (
 );
 
 CREATE TABLE IF NOT EXISTS schedule (
-    day VARCHAR(15),
-    hour VARCHAR(10),
+    day INTEGER,
+    hour INTEGER,
     doctor VARCHAR(20),
     clinic INTEGER,
     PRIMARY KEY (day, hour, doctor),
@@ -53,5 +53,13 @@ CREATE TABLE IF NOT EXISTS patients (
     prepaidNumber varchar(20)
 );
 
+CREATE TABLE IF NOT EXISTS appointments (
+    doctor VARCHAR(20),
+    clinic INTEGER,
+    patient VARCHAR(25) REFERENCES patients(email),
+    date TIMESTAMP,
+    PRIMARY KEY (doctor, clinic, date),
+    FOREIGN KEY (doctor, clinic) REFERENCES doctorclinics(doctorLicense, clinicid)
+);
+
 insert into users values('admin','admin','admin','admin@test.com') on conflict do nothing;
-  
