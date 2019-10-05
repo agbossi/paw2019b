@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.ClinicService;
-import ar.edu.itba.paw.interfaces.DoctorClinicService;
-import ar.edu.itba.paw.interfaces.DoctorHourService;
-import ar.edu.itba.paw.interfaces.DoctorService;
+import ar.edu.itba.paw.interfaces.service.ClinicService;
+import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
+import ar.edu.itba.paw.interfaces.service.DoctorHourService;
+import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.SearchForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;

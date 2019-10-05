@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.model.Specialty;
-import ar.edu.itba.paw.interfaces.SpecialtyDao;
+import ar.edu.itba.paw.interfaces.dao.SpecialtyDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

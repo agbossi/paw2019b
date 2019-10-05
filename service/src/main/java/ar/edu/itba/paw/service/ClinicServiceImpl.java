@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.ClinicDao;
-import ar.edu.itba.paw.interfaces.ClinicService;
+import ar.edu.itba.paw.interfaces.dao.ClinicDao;
+import ar.edu.itba.paw.interfaces.service.ClinicService;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import org.springframework.beans.factory.annotation.Autowired;

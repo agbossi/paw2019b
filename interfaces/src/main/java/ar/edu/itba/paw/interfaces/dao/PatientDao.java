@@ -1,13 +1,11 @@
-package ar.edu.itba.paw.interfaces;
+package ar.edu.itba.paw.interfaces.dao;
 
 import ar.edu.itba.paw.model.Patient;
 
-public interface PatientService {
+public interface PatientDao {
     Patient create(String email, String id, String prepaid, String prepaidNumber);
 
     Patient getPatientByEmail(String email);
 
-    void setAppointments(Patient patient);
 
-    void setName(Patient patient);
 }

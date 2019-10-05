@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.ImageDao;
-import ar.edu.itba.paw.model.Doctor;
+import ar.edu.itba.paw.interfaces.dao.ImageDao;
 import ar.edu.itba.paw.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

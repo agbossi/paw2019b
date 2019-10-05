@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.PatientDao;
+import ar.edu.itba.paw.interfaces.dao.PatientDao;
 import ar.edu.itba.paw.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

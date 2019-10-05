@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.ImageDao;
-import ar.edu.itba.paw.interfaces.ImageService;
+import ar.edu.itba.paw.interfaces.dao.ImageDao;
+import ar.edu.itba.paw.interfaces.service.ImageService;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;

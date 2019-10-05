@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.ClinicDao;
+import ar.edu.itba.paw.interfaces.dao.ClinicDao;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import org.springframework.beans.factory.annotation.Autowired;

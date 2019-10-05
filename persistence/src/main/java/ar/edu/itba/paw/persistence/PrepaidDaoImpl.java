@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.PrepaidDao;
+import ar.edu.itba.paw.interfaces.dao.PrepaidDao;
 import ar.edu.itba.paw.model.Prepaid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

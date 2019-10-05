@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.AppointmentDao;
-import ar.edu.itba.paw.interfaces.PatientDao;
-import ar.edu.itba.paw.interfaces.PatientService;
-import ar.edu.itba.paw.interfaces.UserDao;
+import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
+import ar.edu.itba.paw.interfaces.dao.PatientDao;
+import ar.edu.itba.paw.interfaces.service.PatientService;
+import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.model.Appointment;
 import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.User;
