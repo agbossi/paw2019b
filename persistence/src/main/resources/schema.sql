@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS appointments (
 
 CREATE TABLE IF NOT EXISTS images (
     id SERIAL PRIMARY KEY,
-    doctor VARCHAR(20) FOREIGN KEY REFERENCES doctors(license) ON DELETE CASCADE,
+    doctor VARCHAR(20) REFERENCES doctors(license),
     image bytea
 );
 
