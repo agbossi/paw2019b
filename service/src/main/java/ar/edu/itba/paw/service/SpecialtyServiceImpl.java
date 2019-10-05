@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.SpecialtyDao;
-import ar.edu.itba.paw.interfaces.SpecialtyService;
+import ar.edu.itba.paw.interfaces.dao.SpecialtyDao;
+import ar.edu.itba.paw.interfaces.service.SpecialtyService;
 import ar.edu.itba.paw.model.Specialty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

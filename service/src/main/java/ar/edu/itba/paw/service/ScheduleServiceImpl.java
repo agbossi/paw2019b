@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.ScheduleDao;
-import ar.edu.itba.paw.interfaces.ScheduleService;
+import ar.edu.itba.paw.interfaces.dao.ScheduleDao;
+import ar.edu.itba.paw.interfaces.service.ScheduleService;
 import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;

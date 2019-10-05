@@ -1,10 +1,9 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.DoctorDao;
-import ar.edu.itba.paw.interfaces.UserDao;
-import ar.edu.itba.paw.interfaces.UserService;
+import ar.edu.itba.paw.interfaces.dao.DoctorDao;
+import ar.edu.itba.paw.interfaces.dao.UserDao;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.persistence.UserDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

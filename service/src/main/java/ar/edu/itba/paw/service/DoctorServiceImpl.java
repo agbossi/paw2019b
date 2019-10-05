@@ -1,10 +1,8 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.DoctorDao;
-import ar.edu.itba.paw.interfaces.DoctorService;
-import ar.edu.itba.paw.model.Clinic;
+import ar.edu.itba.paw.interfaces.dao.DoctorDao;
+import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.model.Doctor;
-import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Specialty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

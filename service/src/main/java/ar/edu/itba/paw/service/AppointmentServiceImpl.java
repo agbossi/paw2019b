@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.AppointmentDao;
-import ar.edu.itba.paw.interfaces.AppointmentService;
-import ar.edu.itba.paw.interfaces.DoctorClinicService;
-import ar.edu.itba.paw.interfaces.PatientService;
+import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
+import ar.edu.itba.paw.interfaces.service.AppointmentService;
+import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
+import ar.edu.itba.paw.interfaces.service.PatientService;
 import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

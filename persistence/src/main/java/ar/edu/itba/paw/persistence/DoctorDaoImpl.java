@@ -1,19 +1,16 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.DoctorDao;
-import ar.edu.itba.paw.model.Clinic;
+import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Specialty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
