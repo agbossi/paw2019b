@@ -31,7 +31,7 @@
                 <tr>
                     <th>
                         <c:if test="${weekNum > 1}">
-                            <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${weekNum - 1}"> - </a>
+                            <a href="<c:url value="/results/${doctor.clinic.id}/${doctor.doctor.license}/${weekNum - 1}"/>"> - </a>
                         </c:if>
                     </th>
                     <c:forEach var="d" items="${days}">
@@ -59,7 +59,7 @@
                         </c:choose>
                     </c:forEach>
                     <th>
-                        <a href="/results/${doctor.clinic.id}/${doctor.doctor.license}/${weekNum + 1}"> + </a>
+                        <a href="<c:url value="/results/${doctor.clinic.id}/${doctor.doctor.license}/${weekNum + 1}"/>"> + </a>
                     </th>
                 </tr>
 
@@ -72,7 +72,7 @@
                            </c:if>
                            <td>
                                <c:if test="${day.scheduled && !day.hasAppointment}">
-                                   <a href="/createApp/${doctor.clinic.id}/${doctor.doctor.license}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"><spring:message code="available"/></a>
+                                   <a href="<c:url value="/createApp/${doctor.clinic.id}/${doctor.doctor.license}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="available"/></a>
                                </c:if>
                            </td>
                        </c:forEach>

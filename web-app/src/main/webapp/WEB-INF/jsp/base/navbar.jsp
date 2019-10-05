@@ -22,7 +22,7 @@
 
     <body>
         <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-            <h5 class="my-0 mr-md-auto font-weight-normal"><a href="/"><spring:message code="doctor.search.title"/></a></h5>
+            <h5 class="my-0 mr-md-auto font-weight-normal"><a href="<c:url value="/"/>"><spring:message code="doctor.search.title"/></a></h5>
             <nav class="my-2 my-md-0 mr-md-3">
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
                     <a class="p-2 text-dark" href="<c:url value="/admin/addDoctor"/>"><spring:message code="add.doctor"/></a>
@@ -34,7 +34,7 @@
                 <sec:authorize access="hasRole('ROLE_DOCTOR')">
                     <a class="p-2 text-dark" href="<c:url value="/doctor/addSchedule"/>"><spring:message code="add.week.schedule"/></a>
                     <a class="p-2 text-dark" href="<c:url value="/doctor/addDoctorClinic"/>"><spring:message code="subscribe.to.clinic"/></a>
-                    <a class="p-2 text-dark" href="/doctor"><spring:message code="profile"/></a>
+                    <a class="p-2 text-dark" href="<c:url value="/doctor"/>"><spring:message code="profile"/></a>
                 </sec:authorize>
 
                 <sec:authorize access="hasRole('ROLE_USER')">
