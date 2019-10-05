@@ -41,6 +41,9 @@ public class DoctorController {
     private AppointmentService appointmentService;
 
     @Autowired
+    private ImageService imageService;
+
+    @Autowired
     private ModelAndViewModifier viewModifier;
 
     @RequestMapping(value = "/", method = { RequestMethod.GET })
@@ -50,11 +53,18 @@ public class DoctorController {
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
         //List<Appointment> appointments = appointmentService.getDoctorsAppointments(doctor);
-
+        Image image = imageService.getProfileImage(doctor);
 
         mav.addObject("user", user);
         mav.addObject("doctor", doctor);
+        mav.addObject("image", image);
         //mav.addObject("appointments",appointments);
+        return mav;
+    }
+
+    @RequestMapping(value = "/uploadPicture", method = { RequestMethod.GET })
+    public ModelAndView uploadPicture() {
+        final ModelAndView mav = new ModelAndView("doctor/uploadPicture");
         return mav;
     }
 

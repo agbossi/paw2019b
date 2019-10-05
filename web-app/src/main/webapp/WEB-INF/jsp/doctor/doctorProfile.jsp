@@ -41,6 +41,17 @@
                         <h4><b><spring:message code="doctor.phone.number"/></b></h4>
                         <h6><c:out value="${doctor.phoneNumber}"/></h6>
                     </div>
+                    <div>
+                        <c:choose>
+                            <c:when test="${not empty image}">
+                                <img class="card-img-top" src="<c:url value="/images/${doctor.license}"/>" alt="Doctor Profile Image">
+                            </c:when>
+                            <c:otherwise>
+                                You still haven't upload an profile picture.
+                                To do so click <a href="/doctor/uploadPicture">here</a>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
                 </div>
             </div>
         </div>

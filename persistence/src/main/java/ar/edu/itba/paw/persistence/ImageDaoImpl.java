@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -26,7 +27,7 @@ public class ImageDaoImpl implements ImageDao {
         public Image mapRow(ResultSet resultSet, int i) throws SQLException {
             return new Image(resultSet.getLong("id"),
                              resultSet.getString("doctor"),
-                             resultSet.getBinaryStream("doctorImage"));
+                             resultSet.getBinaryStream("image"));
         }
     };
 
@@ -43,14 +44,18 @@ public class ImageDaoImpl implements ImageDao {
     public long createProfileImage(byte[] image, String doctor) {
         Map<String, Object> args = new HashMap<>();
         args.put("doctor", doctor);
-        args.put("doctorImage", image);
+        args.put("image", image);
         Number id = jdbcInsert.executeAndReturnKey(args);
         return id.longValue();
     }
 
     @Override
     public Image getProfileImage(String doctor) {
-        return jdbcTemplate.queryForObject("SELECT * FROM images WHERE doctor = ?", Image.class, doctor);
+        final List<Image> list = jdbcTemplate.query("SELECT * FROM images WHERE doctor = ?",ROW_MAPPER,doctor);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list.get(0);
     }
 
 }

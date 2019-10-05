@@ -34,7 +34,7 @@
                 <sec:authorize access="hasRole('ROLE_DOCTOR')">
                     <a class="p-2 text-dark" href="<c:url value="/doctor/addSchedule"/>"><spring:message code="add.week.schedule"/></a>
                     <a class="p-2 text-dark" href="<c:url value="/doctor/addDoctorClinic"/>"><spring:message code="subscribe.to.clinic"/></a>
-                    <a class="p-2 text-dark" href="<c:url value="/doctor/"/>"><spring:message code="profile"/></a>
+                    <a class="p-2 text-dark" href="<c:url value="/doctor/editProfile"/>"><spring:message code="profile"/></a>
                 </sec:authorize>
 
                 <sec:authorize access="hasRole('ROLE_USER')">
