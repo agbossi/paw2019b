@@ -15,8 +15,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -113,6 +116,19 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public MultipartResolver multipartResolver() {
         return new CommonsMultipartResolver();
+    }
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        CookieLocaleResolver localeResolver = new CookieLocaleResolver();
+        return localeResolver;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+        localeChangeInterceptor.setParamName("lang");
+        registry.addInterceptor(localeChangeInterceptor);
     }
 
 }

@@ -29,8 +29,8 @@
                 </h5>
 
             <nav class="my-2 my-md-0 mr-md-3">
-                <a href="<c:url value="/"/>"><spring:message code="english"/></a>
-                <a href="<c:url value="/"/>"><spring:message code="spanish"/></a>
+                <a href="?lang=en"/><spring:message code="english"/></a>
+                <a href="?lang=es"/><spring:message code="spanish"/></a>
                 &nbsp;
 
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
