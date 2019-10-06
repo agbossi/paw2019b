@@ -8,13 +8,13 @@ import ar.edu.itba.paw.model.Specialty;
 import java.util.List;
 
 public interface DoctorDao {
-    public Doctor createDoctor(Specialty specialty,String license, String phoneNumber,String email);
+    Doctor createDoctor(Specialty specialty,String license, String phoneNumber,String email);
 
-    public List<Doctor> getDoctors();
+    List<Doctor> getDoctors();
 
-    public List<Doctor> getDoctorByName(String fistName,String lastName);
+    List<Doctor> getDoctorByName(String fistName,String lastName);
 
-    public List<Doctor> getDoctorBySpecialty(Specialty specialty);
+    List<Doctor> getDoctorBySpecialty(Specialty specialty);
 
     List<Doctor> getFilteredDoctors(Location location, Specialty specialty, String clinic);
 
@@ -22,5 +22,5 @@ public interface DoctorDao {
 
     boolean isDoctor(String email);
 
-    public Doctor getDoctorByEmail(String email);
+    Doctor getDoctorByEmail(String email);
 }

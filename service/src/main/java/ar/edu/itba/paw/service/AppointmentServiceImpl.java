@@ -55,7 +55,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public Appointment hasAppointment(DoctorClinic doctorClinic, Calendar date) {
         return appointmentDao.hasAppointment(doctorClinic, date);
-
     }
 
     @Override

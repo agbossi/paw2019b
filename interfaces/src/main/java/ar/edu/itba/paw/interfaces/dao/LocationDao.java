@@ -7,7 +7,7 @@ import java.util.List;
 public interface LocationDao {
     Location createLocation(String name);
 
-    public Location getLocationByName(String locationName);
+    Location getLocationByName(String locationName);
 
-    public List<Location> getLocations();
+    List<Location> getLocations();
 }
