@@ -16,7 +16,7 @@
             <div class="schedule">
                 <table class="table doctor-schedule">
                     <tr>
-                        <th>
+                        <th class="mycell">
                             <c:if test="${weekNum > 1}">
                                 <a href="<c:url value="/results/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}/${weekNum - 1}"/>"> - </a>
                             </c:if>
@@ -24,28 +24,28 @@
                         <c:forEach var="d" items="${days}">
                             <c:choose>
                                 <c:when test="${d.get(7) == 2}">
-                                    <th><spring:message code="monday"/>
+                                    <th class="mycell"><spring:message code="monday"/>
                                         <format:formatDate value="${d.getTime()}" type="date" pattern="dd/MM"/></th>
                                 </c:when>
                                 <c:when test="${d.get(7) == 3}">
-                                    <th><spring:message code="tuesday"/>
+                                    <th class="mycell"><spring:message code="tuesday"/>
                                         <format:formatDate value="${d.getTime()}" type="date" pattern="dd/MM"/></th>
                                 </c:when>
                                 <c:when test="${d.get(7) == 4}">
-                                    <th><spring:message code="wednesday"/>
+                                    <th class="mycell"><spring:message code="wednesday"/>
                                         <format:formatDate value="${d.getTime()}" type="date" pattern="dd/MM"/></th>
                                 </c:when>
                                 <c:when test="${d.get(7) == 5}">
-                                    <th><spring:message code="thursday"/>
+                                    <th class="mycell"><spring:message code="thursday"/>
                                         <format:formatDate value="${d.getTime()}" type="date" pattern="dd/MM"/></th>
                                 </c:when>
                                 <c:when test="${d.get(7) == 6}">
-                                    <th><spring:message code="friday"/>
+                                    <th class="mycell"><spring:message code="friday"/>
                                         <format:formatDate value="${d.getTime()}" type="date" pattern="dd/MM"/></th>
                                 </c:when>
                             </c:choose>
                         </c:forEach>
-                        <th>
+                        <th class="mycell">
                             <a href="<c:url value="/results/${doctor.clinic.id}/${doctor.doctor.license}/${weekNum + 1}"/>"> + </a>
                         </th>
                     </tr>
@@ -57,18 +57,21 @@
                                 <c:if test="${day.date.get(7) == 2}">
                                     <td><spring:message code="hour.${day.date.get(11)}"/></td>
                                 </c:if>
-                                <td>
+                                <td class="mycell">
+
                                     <c:choose>
                                         <c:when test="${day.scheduled && empty day.hasAppointment}">
                                             <a href="<c:url value="/createApp/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="available"/></a>
                                         </c:when>
                                         <c:when test="${day.scheduled && not empty day.hasAppointment}">
-                                            <p>
-                                                <c:out value="${day.hasAppointment.patient.lastName}"/>, <c:out value="${day.hasAppointment.patient.firstName}"/>
-                                            </p>
-                                            <p>
-                                                <c:out value="${day.hasAppointment.patient.email}"/>
-                                            </p>
+                                            <div class="info">
+                                                <p>
+                                                    <c:out value="${day.hasAppointment.patient.lastName}"/>, <c:out value="${day.hasAppointment.patient.firstName}"/>
+                                                </p>
+                                                <p>
+                                                    <c:out value="${day.hasAppointment.patient.email}"/>
+                                                </p>
+                                            </div>
                                             <a href="<c:url value="/docCancelApp/${doctorClinic.clinic.id}/${day.hasAppointment.patient.email}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="a.cancel"/></a>
                                         </c:when>
                                     </c:choose>

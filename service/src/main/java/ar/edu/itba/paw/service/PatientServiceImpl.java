@@ -25,8 +25,8 @@ public class PatientServiceImpl implements PatientService {
     private UserDao userDao;
 
     @Override
-    public Patient create(String email,String id, String prepaid, String prepaidNumber) {
-        return patientDao.create(email,id, prepaid, prepaidNumber);
+    public Patient create(String email,String id, String prepaid, String prepaidNumber, User user) {
+        return patientDao.create(email,id, prepaid, prepaidNumber, user);
     }
 
     @Override
@@ -40,11 +40,4 @@ public class PatientServiceImpl implements PatientService {
         patient.setAppointments(appointments);
     }
 
-    @Override
-    public void setName(Patient patient) {
-        User user =  userDao.findUserByEmail(patient.getEmail());
-
-        patient.setFirstName(user.getFirstName());
-        patient.setLastName(user.getLastName());
-    }
 }

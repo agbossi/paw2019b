@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.PatientDao;
 import ar.edu.itba.paw.model.Patient;
+import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,10 +25,12 @@ public class PatientDaoImpl implements PatientDao {
     private final static RowMapper<Patient> ROW_MAPPER = new RowMapper<Patient>() {
 
         @Override public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Patient(rs.getString("email"),
+            return new Patient(rs.getString("patients.email"),
                     rs.getString("id"),
                     rs.getString("prepaid"),
-                    rs.getString("prepaidNumber"));
+                    rs.getString("prepaidNumber"),
+                    rs.getString("firstName"),
+                    rs.getString("lastName"));
         }
     };
 
@@ -41,21 +44,21 @@ public class PatientDaoImpl implements PatientDao {
 
 
     @Override
-    public Patient create(String email,String id, String prepaid, String prepaidNumber) {
+    public Patient create(String email, String id, String prepaid, String prepaidNumber, User user) {
         final Map<String, Object> args = new HashMap<>();
-        args.put("email",email);
+        args.put("email",user.getEmail());
         args.put("id",id);
         args.put("prepaid",prepaid);
         args.put("prepaidNumber",prepaidNumber);
 
         int result;
         result = jdbcInsert.execute(args);
-        return new Patient(email,id,prepaid,prepaidNumber);
+        return new Patient(user.getEmail(),id,prepaid,prepaidNumber, user.getFirstName(), user.getLastName());
     }
 
     @Override
     public Patient getPatientByEmail(String email) {
-        List<Patient> patient = jdbcTemplate.query("select * from patients where email = ?", ROW_MAPPER, email);
+        List<Patient> patient = jdbcTemplate.query("select * from patients join users on users. email = patients.email where email = ?", ROW_MAPPER, email);
         if(patient.isEmpty()) {
             return null;
         }

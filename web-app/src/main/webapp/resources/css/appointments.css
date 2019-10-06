@@ -12,3 +12,12 @@
     margin-left: 0%;
     padding-bottom: 2%;
 }
+
+.info{
+    font-size: 70%;
+}
+
+.mycell{
+    text-align: center;
+    vertical-align: center;
+}

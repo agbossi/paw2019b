@@ -54,18 +54,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public Appointment hasAppointment(DoctorClinic doctorClinic, Calendar date) {
-        Appointment a = appointmentDao.hasAppointment(doctorClinic, date);
-        patientService.setName(a.getPatient());
-        return a;
+        return appointmentDao.hasAppointment(doctorClinic, date);
+
     }
 
     @Override
     public List<Appointment> getAllDoctorsAppointments(Doctor doctor) {
         List<Appointment> appointments = appointmentDao.getAllDoctorsAppointments(doctor);
-        for (Appointment a: appointments) {
-            patientService.setName(a.getPatient());
-        }
-
         return appointments;
     }
 }
