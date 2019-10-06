@@ -51,20 +51,45 @@
                         <br/>
                     </div>
                 </div>
-                <div class="list-group-item list-group-item-action">
-                    <div>
-                        <form:label path="clinic"><spring:message code="clinic"/></form:label>
+                    <div class="list-group-item list-group-item-action">
+                        <div>
+                            <form:label path="prepaid"><spring:message code="prepaid"/></form:label>
+                        </div>
+                        <div>
+                            <form:select path="prepaid">
+                                <c:forEach var="prepaid" items="${prepaids}">
+                                    <form:option value="${prepaid.name}"/>
+                                </c:forEach>
+                            </form:select>
+                            <form:errors path="prepaid" element="p"/>
+                            <br/>
+                        </div>
+                    </div>
+                    <div class="list-group-item">
+                        <div>
+                            <form:label path="firstName"><spring:message code="user.first.name"/></form:label>
+                        </div>
+                        <div>
+                            <form:input type="text" path="firstName"/>
+                            <form:errors path="firstName" element="p"/>
+                            <br/>
+                        </div>
+                    </div>
+                    <div class="list-group-item">
+                        <div>
+                            <form:label path="lastName"><spring:message code="user.last.name"/></form:label>
+                        </div>
+                        <div>
+                            <form:input type="text" path="lastName"/>
+                            <form:errors path="lastName" element="p"/>
+                            <br/>
+                        </div>
                     </div>
                     <div>
-                        <form:select path="clinic">
-                            <c:forEach var="clinic" items="${clinics}">
-                                <form:option value="${clinic.id}"> <c:out value="${clinic.name}"/> (<c:out value="${clinic.location.locationName}"/>)</form:option>
-                            </c:forEach>
-                        </form:select>
-                        <form:errors path="clinic" element="p"/>
-                        <br/>
+                        <form:label path="consultPrice"><spring:message code="consult.price"/> </form:label>
+                        <form:input type="number" path="consultPrice"/>
+                        <form:errors path="consultPrice" element="p"/>
                     </div>
-                </div>
                 <div class="list-group-item">
                     <input type="submit" value="<spring:message code="submit.search"/>">
                 </div>
