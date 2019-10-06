@@ -18,7 +18,7 @@ public class FrontController {
     public ModelAndView index(@ModelAttribute("searchForm") final SearchForm form){
         final ModelAndView mav = new ModelAndView("index");
         viewModifier.addSearchInfo(mav);
-        viewModifier.addDoctors(mav);
+        viewModifier.addDoctorsWithAvailability(mav);
 
         return mav;
     }

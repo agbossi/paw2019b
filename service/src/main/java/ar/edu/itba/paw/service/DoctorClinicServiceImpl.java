@@ -26,6 +26,17 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     @Autowired
     AppointmentDao appointmentDao;
 
+    private void setScheduleAndAppointments(List<DoctorClinic> list) {
+        if(list != null) {
+            for (DoctorClinic doctorClinic: list) {
+                List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
+                List<Appointment> appointments = appointmentDao.getDoctorsAppointments(doctorClinic);
+
+                doctorClinic.setSchedule(schedules);
+                doctorClinic.setAppointments(appointments);
+            }
+        }
+    }
 
     @Override
     public DoctorClinic createDoctorClinic(Doctor doctor, Clinic clinic, int consultPrice) {
@@ -35,15 +46,7 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     @Override
     public List<DoctorClinic> getDoctorClinics() {
         List<DoctorClinic> list = doctorClinicDao.getDoctorClinics();
-        if(list!=null){
-            for (DoctorClinic doctorClinic: list) {
-                List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
-                doctorClinic.setSchedule(schedules);
-                List<Appointment> appointments = appointmentDao.getDoctorsAppointments(doctorClinic);
-                doctorClinic.setAppointments(appointments);
-            }
-        }
-
+        setScheduleAndAppointments(list);
         return list;
     }
 
@@ -63,15 +66,7 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     @Override
     public List<DoctorClinic> getDoctorsFromClinic(Clinic clinic) {
         List<DoctorClinic> list = doctorClinicDao.getDoctorsInClinic(clinic.getId());
-        if(list != null){
-            for (DoctorClinic doctorClinic: list) {
-                List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
-                doctorClinic.setSchedule(schedules);
-                List<Appointment> appointments = appointmentDao.getDoctorsAppointments(doctorClinic);
-                doctorClinic.setAppointments(appointments);
-            }
-        }
-
+        setScheduleAndAppointments(list);
         return list;
     }
 
@@ -80,8 +75,9 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
         DoctorClinic doctorClinic = doctorClinicDao.getDoctorInClinic(doctor.getLicense(), clinic.getId());
         if(doctorClinic != null) {
             List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
-            doctorClinic.setSchedule(schedules);
             List<Appointment> appointments = appointmentDao.getDoctorsAppointments(doctorClinic);
+
+            doctorClinic.setSchedule(schedules);
             doctorClinic.setAppointments(appointments);
         }
 
@@ -91,14 +87,7 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     @Override
     public List<DoctorClinic> getDoctorBy(Location location, Specialty specialty, int clinic) {
         List<DoctorClinic> list = doctorClinicDao.getFilteredDoctors(location, specialty, clinic);
-        if(list != null){
-            for (DoctorClinic doctorClinic: list) {
-                List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
-                doctorClinic.setSchedule(schedules);
-                List<Appointment> appointments = appointmentDao.getDoctorsAppointments(doctorClinic);
-                doctorClinic.setAppointments(appointments);
-            }
-        }
+        setScheduleAndAppointments(list);
         return list;
     }
 }

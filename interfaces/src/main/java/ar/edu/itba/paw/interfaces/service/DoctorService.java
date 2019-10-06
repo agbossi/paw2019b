@@ -22,4 +22,6 @@ public interface DoctorService {
 
     Doctor getDoctorByEmail(String email);
 
+    List<Doctor> getDoctorsWithAvailability();
+
 }
