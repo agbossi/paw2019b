@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.webapp.form;
 
+import javax.validation.constraints.Pattern;
+
 public class ClinicForm {
 
+    @Pattern(regexp = "[a-zA-Z0-9]+")
     private String name;
 
     private String location;

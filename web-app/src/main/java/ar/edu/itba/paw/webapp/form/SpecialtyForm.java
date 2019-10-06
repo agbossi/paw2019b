@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.webapp.form;
 
+import javax.validation.constraints.Pattern;
+
 public class SpecialtyForm {
 
+    @Pattern(regexp = "[a-zA-Z]+")
     private String name;
 
     public String getName() {

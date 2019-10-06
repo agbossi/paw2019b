@@ -7,6 +7,7 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Locale;
 
 @Controller
 public class UserController {
@@ -47,6 +49,9 @@ public class UserController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private MessageSource messageSource;
 
     private void authWithAuthManager(HttpServletRequest request, String email, String password) {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password);
@@ -73,15 +78,15 @@ public class UserController {
     }
 
     @RequestMapping(value = "/signUp",method = { RequestMethod.POST })
-    public ModelAndView signUpValidation(@Valid @ModelAttribute("signUpForm") final SignUpForm form, final BindingResult errors, HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView signUpValidation(@Valid @ModelAttribute("signUpForm") final SignUpForm form, final BindingResult errors, HttpServletRequest request, HttpServletResponse response, Locale locale) {
 
         if(!form.getPassword().equals(form.getRepeatPassword())){
-            FieldError passwordNotMatchingError = new FieldError("form","repeatPassword","${user.password.not.matching}");
+            FieldError passwordNotMatchingError = new FieldError("form","repeatPassword",messageSource.getMessage("user.password.not.matching",null,locale));
             errors.addError(passwordNotMatchingError);
         }
 
         if (userService.userExists(form.getEmail())) {
-            FieldError ssoError = new FieldError("form", "email","${user.exist.error.message}" );
+            FieldError ssoError = new FieldError("form", "email",messageSource.getMessage("user.exist.error.message",null,locale));
             errors.addError(ssoError);
         }
 
@@ -94,7 +99,7 @@ public class UserController {
         User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
         patientService.create(form.getEmail(),form.getId(),form.getPrepaid(), form.getPrepaidNumber());
 
-        emailService.sendSimpleMail(form.getEmail(),"${sign.up.subject}","${sign.up.message}");
+        emailService.sendSimpleMail(form.getEmail(),messageSource.getMessage("sign.up.subject",null,locale),messageSource.getMessage("sign.up.message",null,locale));
         authWithAuthManager(request, form.getEmail(), form.getPassword());
 
         String ret = signUpSuccess(request);

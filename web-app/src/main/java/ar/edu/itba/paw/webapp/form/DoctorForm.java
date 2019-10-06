@@ -21,12 +21,10 @@ public class DoctorForm {
     private String phoneNumber;
 
     @Size(min = 8, max = 20)
-    //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String password;
 
     @Size(min = 8, max = 20)
-    //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String repeatPassword;
 

@@ -13,19 +13,18 @@ public class PersonalInformationForm {
     private String lastName;
 
     @Size(min = 8, max = 20)
-    //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String password;
 
     @Size(min = 8, max = 20)
-    //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String repeatPassword;
 
+    @Pattern(regexp = "[a-zA-Z0-9]+")
     private String prepaid;
 
     @Size(min=10, max=20)
-    @Pattern(regexp = "[\" \"0-9]+")
+    @Pattern(regexp = "[0-9]*")
     private String prepaidNumber;
 
     @Size(min = 8,max = 8)
