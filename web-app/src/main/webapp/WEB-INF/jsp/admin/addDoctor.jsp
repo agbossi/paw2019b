@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <html>
     <head>
         <%@ page isELIgnored="false" %>
@@ -12,17 +14,17 @@
             <c:url value="/admin/addedDoctor" var="postPath"/>
             <form:form modelAttribute="doctorForm" action="${postPath}" method="post">
                 <div>
-                    <form:label path="firstName">First name: </form:label>
+                    <form:label path="firstName"><spring:message code="user.first.name"/> </form:label>
                     <form:input type="text" path="firstName"/>
                     <form:errors path="firstName" element="p"/>
                 </div>
                 <div>
-                    <form:label path="lastName">Last name: </form:label>
+                    <form:label path="lastName"><spring:message code="user.last.name"/> </form:label>
                     <form:input type="text" path="lastName"/>
                     <form:errors path="lastName" element="p"/>
                 </div>
                 <div>
-                    <form:label path="specialty">Specialty: </form:label>
+                    <form:label path="specialty"><spring:message code="specialty"/> </form:label>
                     <form:select path="specialty">
                         <c:forEach var="specialty" items="${specialties}">
                             <form:option value="${specialty.specialtyName}"/>
@@ -31,32 +33,32 @@
                     <form:errors path="specialty" element="p"/>
                 </div>
                 <div>
-                    <form:label path="license">License: </form:label>
+                    <form:label path="license"><spring:message code="license"/> </form:label>
                     <form:input type="text" path="license"/>
                     <form:errors path="license" element="p"/>
                 </div>
                 <div>
-                    <form:label path="phoneNumber">Phone Number: </form:label>
+                    <form:label path="phoneNumber"><spring:message code="phone.number"/> </form:label>
                     <form:input type="text" path="phoneNumber"/>
                     <form:errors path="phoneNumber" element="p"/>
                 </div>
                 <div>
-                    <form:label path="email">Email: </form:label>
+                    <form:label path="email"><spring:message code="user.email"/> </form:label>
                     <form:input type="text" path="email"/>
                     <form:errors path="email" element="p"/>
                 </div>
                 <div>
-                    <form:label path="password">Password: </form:label>
+                    <form:label path="password"><spring:message code="password"/> </form:label>
                     <form:input type="password" path="password" />
                     <form:errors path="password" element="p"/>
                 </div>
                 <div>
-                    <form:label path="repeatPassword">Repeat password: </form:label>
+                    <form:label path="repeatPassword"><spring:message code="repeat.password"/> </form:label>
                     <form:input type="password" path="repeatPassword"/>
                     <form:errors path="repeatPassword" element="p"/>
                 </div>
                 <div>
-                    <input type="submit" value="Add">
+                    <input type="submit" value="<spring:message code="submit.add"/>">
                 </div>
             </form:form>
         </div>

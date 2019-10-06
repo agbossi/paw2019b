@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="spring" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <html>
     <head>
@@ -15,39 +15,39 @@
             <c:url value="/signUp" var="postPath"/>
             <form:form modelAttribute="signUpForm" action="${postPath}" method="post">
                 <div>
-                    <form:label path="firstName">First name: </form:label>
+                    <form:label path="firstName"><spring:message code="user.first.name"/> </form:label>
                     <form:input type="text" path="firstName"/>
                     <form:errors path="firstName" element="p"/>
                 </div>
                 <div>
-                    <form:label path="lastName">Last name: </form:label>
+                    <form:label path="lastName"><spring:message code="user.last.name"/> </form:label>
                     <form:input type="text" path="lastName"/>
                     <form:errors path="lastName" element="p"/>
                 </div>
                 <div>
-                    <form:label path="id">Id: </form:label>
+                    <form:label path="id"><spring:message code="user.id"/> </form:label>
                     <form:input type="text" path="id"/>
                     <form:errors path="id" element="p"/>
                 </div>
                  <div>
-                    <form:label path="password">Password: </form:label>
+                    <form:label path="password"><spring:message code="password"/> </form:label>
                     <form:input type="password" path="password" />
                     <form:errors path="password" element="p"/>
                 </div>
                 <div>
-                    <form:label path="repeatPassword">Repeat password: </form:label>
+                    <form:label path="repeatPassword"><spring:message code="repeat.password"/> </form:label>
                     <form:input type="password" path="repeatPassword"/>
                     <form:errors path="repeatPassword" element="p"/>
                 </div>
                 <div>
-                    <form:label path="email">Email: </form:label>
+                    <form:label path="email"><spring:message code="user.email"/> </form:label>
                     <form:input type="text" path="email"/>
                     <form:errors path="email" element="p"/>
                 </div>
                 <div>
-                    <form:label path="prepaid">Prepaid:</form:label>
+                    <form:label path="prepaid"><spring:message code="patient.prepaid"/></form:label>
                     <form:select type="select" path="prepaid">
-                        <form:option value="">None</form:option>
+                        <form:option value=""><spring:message code="no.prepaid"/></form:option>
                         <c:forEach var="prepaid" items="${prepaids}">
                             <form:option value="${prepaid.name}"/>
                         </c:forEach>
@@ -55,16 +55,16 @@
                     <form:errors path="prepaid" element="p"/>
                 </div>
                 <div>
-                    <form:label path="prepaidNumber">Prepaid Number: </form:label>
+                    <form:label path="prepaidNumber"><spring:message code="patient.prepaid.number"/> </form:label>
                     <form:input type="text" path="prepaidNumber" placeholder="Insert prepaid number"/>
                     <form:errors path="prepaidNumber" element="p"/>
                 </div>
                 <div>
-                    <input type="submit" value="Register!">
+                    <input type="submit" value="<spring:message code="submit.register"/>">
                 </div>
             </form:form>
             <div>
-                <a href="<c:url value="/login"/>">Login</a>
+                <a href="<c:url value="/login"/>"><spring:message code="log.in"/></a>
             </div>
         </div>
     </body>

@@ -89,7 +89,7 @@
             <form:errors path="day" element="p"/>
         </div>
         <div>
-            <input type="submit" value="Add">
+            <input type="submit" value="<spring:message code="submit.add"/>">
         </div>
     </form:form>
 </div>

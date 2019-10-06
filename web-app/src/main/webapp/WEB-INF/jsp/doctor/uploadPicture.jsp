@@ -14,7 +14,7 @@
                     <spring:message code="upload.photo"/> <input type="file" name="photo"/>
                 </div>
                 <div>
-                    <input type="submit" value="Submit"/>
+                    <input type="submit" value="<spring:message code="submit.load.pic"/>"/>
                 </div>
             </div>
         </form>

@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+
 <html>
     <head>
         <%@ page isELIgnored="false" %>
@@ -7,7 +9,7 @@
 
     </head>
     <body class="d-flex flex-column h-100">
-        <h2>Doctor added to clinic!</h2>
-        <a class="nav-link" href="<c:url value="/doctor/addDoctorClinic"/>">Add another doctor to a clinic</a>
+        <h2><spring:message code="doctor.added.to.clinic"/></h2>
+        <a class="nav-link" href="<c:url value="/doctor/addDoctorClinic"/>"><spring:message code="add.another.doctor.to.clinic"/></a>
     </body>
 </html>

@@ -27,7 +27,7 @@
                     <h3>${doctorClinic.doctor.firstName} ${doctorClinic.doctor.lastName}</h3>
                     <p>${doctorClinic.doctor.specialty.specialtyName}</p>
                     <p>${doctorClinic.clinic.name} (${doctorClinic.clinic.location.locationName})</p>
-                    <p><a class="btn btn-secondary" href="<c:url value="/results/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}/1"/>" role="button">View Details</a></p>
+                    <p><a class="btn btn-secondary" href="<c:url value="/results/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}/1"/>" role="button"><spring:message code="view.details"/></a></p>
                 </div>
             </c:forEach>
         </c:if>

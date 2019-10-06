@@ -66,7 +66,7 @@
                     </div>
                 </div>
                 <div class="list-group-item">
-                    <input type="submit" value="Search">
+                    <input type="submit" value="<spring:message code="submit.search"/>">
                 </div>
                 </form:form>
             </div>
