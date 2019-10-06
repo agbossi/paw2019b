@@ -13,10 +13,10 @@
             <h2><spring:message code="clinic.added"/></h2>
         </div>
         <div>
-            ${clinic.name}
+            <c:out value="${clinic.name}"/>
         </div>
         <div>
-            ${clinic.location.locationName}
+            <c:out value="${clinic.location.locationName}"/>
         </div>
         <a class="nav-link" href="<c:url value="/admin/addClinic"/>"><spring:message code="add.another.clinic"/></a>
     </body>

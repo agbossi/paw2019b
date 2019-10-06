@@ -7,12 +7,12 @@ public class DoctorHour {
 
     boolean isScheduled;
 
-    boolean hasAppointment;
+    Appointment appointment;
 
-    public DoctorHour(Calendar date, boolean isScheduled, boolean hasAppointment) {
+    public DoctorHour(Calendar date, boolean isScheduled, Appointment appointment) {
         this.date = date;
         this.isScheduled = isScheduled;
-        this.hasAppointment = hasAppointment;
+        this.appointment = appointment;
     }
 
     public Calendar getDate() {
@@ -23,7 +23,7 @@ public class DoctorHour {
         return isScheduled;
     }
 
-    public boolean getHasAppointment() {
-        return hasAppointment;
+    public Appointment getHasAppointment() {
+        return appointment;
     }
 }

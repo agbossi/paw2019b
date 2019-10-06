@@ -94,7 +94,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    public boolean hasAppointment(DoctorClinic doctorClinic, Calendar date) {
+    public Appointment hasAppointment(DoctorClinic doctorClinic, Calendar date) {
         final List<Appointment> list = jdbcTemplate.query("select * from (appointments join (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) " +
                         "join clinics on doctorclinics.clinicid = clinics.id)" +
                         "join users on doctors.email = users.email)" +
@@ -102,9 +102,9 @@ public class AppointmentDaoImpl implements AppointmentDao {
                         ") where appointments.doctor = ? and appointments.clinic = ? and date = ?",ROW_MAPPER,
                             doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), date.getTime());
         if(list.isEmpty()){
-            return false;
+            return null;
         }
-        return true;
+        return list.get(0);
     }
 
     @Override

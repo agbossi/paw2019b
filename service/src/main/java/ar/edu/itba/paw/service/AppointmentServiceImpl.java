@@ -53,8 +53,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public boolean hasAppointment(DoctorClinic doctorClinic, Calendar date) {
-        return appointmentDao.hasAppointment(doctorClinic, date);
+    public Appointment hasAppointment(DoctorClinic doctorClinic, Calendar date) {
+        Appointment a = appointmentDao.hasAppointment(doctorClinic, date);
+        patientService.setName(a.getPatient());
+        return a;
     }
 
     @Override

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/doctor")
@@ -40,6 +41,9 @@ public class DoctorController {
     private AppointmentService appointmentService;
 
     @Autowired
+    private DoctorHourService doctorHourService;
+
+    @Autowired
     private ImageService imageService;
 
     @Autowired
@@ -51,9 +55,13 @@ public class DoctorController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
-        //List<Appointment> appointments = appointmentService.getDoctorsAppointments(doctor);
+        List<DoctorClinic> docClis = doctorClinicService.getDoctorClinicsForDoctor(doctor);
+        mav.addObject("doctorClinics", docClis);
 
-        //mav.addObject("appointments",appointments);
+
+        List<Appointment> appointments = appointmentService.getAllDoctorsAppointments(doctor);
+
+        mav.addObject("appointments",appointments);
         return mav;
     }
 
@@ -101,7 +109,7 @@ public class DoctorController {
         return mav;
     }
 
-    @RequestMapping(value = "addSchedule/{clinicid}/{license}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/addSchedule/{clinicid}/{license}", method = {RequestMethod.GET})
     public ModelAndView addDoctorShedule(@PathVariable(value = "clinicid") int clinic,
                                          @PathVariable(value = "license") String license,
                                          @ModelAttribute("scheduleForm") final ScheduleForm form){
@@ -149,5 +157,29 @@ public class DoctorController {
         final ModelAndView mav = new ModelAndView("doctor/addedSchedule");
 
         return mav;
+    }
+
+    @RequestMapping(value = "/clinics/{clinicid}/{week}", method = {RequestMethod.GET})
+    public ModelAndView doctorClinics(@PathVariable(value = "clinicid") int clinic, @PathVariable(value = "week") int week){
+
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
+
+        Clinic cli = clinicService.getClinicById(clinic);
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
+
+        List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctorClinic, week);
+
+        final ModelAndView mav = new ModelAndView("doctor/clinicPage");
+
+
+        viewModifier.addCurrentDates(mav, week);
+
+        mav.addObject("week", doctorsWeek);
+        mav.addObject("weekNum", week);
+        mav.addObject("doctorClinic", doctorClinic);
+
+        return mav;
+
     }
 }
