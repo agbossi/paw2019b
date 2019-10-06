@@ -26,7 +26,7 @@
             <input type="submit" value="<spring:message code="log.in"/>"/>
         </div>
         <div>
-            <a href="<c:url value="/signUp"/>"><spring:message code="sign.up"></a>
+            <a href="<c:url value="/signUp"/>"><spring:message code="sign.up"/></a>
         </div>
     </div>
 

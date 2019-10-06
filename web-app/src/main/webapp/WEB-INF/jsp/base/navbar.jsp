@@ -23,20 +23,16 @@
     <body>
         <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
 
-            <sec:authorize access="hasRole('ROLE_ADMIN')">
-            <h5 class="my-0 mr-md-auto font-weight-normal"><a href="<c:url value="/admin/"/>"><spring:message code="doctor.search.title"/></a></h5>
-            </sec:authorize>
-            <sec:authorize access="hasRole('ROLE_DOCTOR')">
-                <h5 class="my-0 mr-md-auto font-weight-normal"><a href="<c:url value="/doctor/"/>"><spring:message code="doctor.search.title"/></a></h5>
-            </sec:authorize>
-            <sec:authorize access="hasRole('ROLE_USER')">
-                <h5 class="my-0 mr-md-auto font-weight-normal"><a href="<c:url value="/"/>"><spring:message code="doctor.search.title"/></a></h5>
-            </sec:authorize>
-            <sec:authorize access="isAnonymous()">
-                <h5 class="my-0 mr-md-auto font-weight-normal"><a href="<c:url value="/"/>"><spring:message code="doctor.search.title"/></a></h5>
-            </sec:authorize>
+
+            <h5 class="my-0 mr-md-auto font-weight-normal">
+                <a href="<c:url value="/"/>"><spring:message code="doctor.search.title"/></a>
+                </h5>
 
             <nav class="my-2 my-md-0 mr-md-3">
+                <a href="<c:url value="/"/>"><spring:message code="english"/></a>
+                <a href="<c:url value="/"/>"><spring:message code="spanish"/></a>
+                &nbsp;
+
                 <sec:authorize access="hasRole('ROLE_ADMIN')">
                     <a class="p-2 text-dark" href="<c:url value="/admin/addDoctor"/>"><spring:message code="add.doctor"/></a>
                     <a class="p-2 text-dark" href="<c:url value="/admin/addClinic"/>"><spring:message code="add.clinic"/></a>
