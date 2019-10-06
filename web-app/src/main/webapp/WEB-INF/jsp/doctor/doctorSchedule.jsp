@@ -7,9 +7,10 @@
     <head>
         <%@ page isELIgnored="false" %>
         <jsp:include page="../base/navbar.jsp" />
+        <link href="<c:url value="/resources/css/appointments.css" />" rel="stylesheet" type="text/css" />
     </head>
     <body class="d-flex flex-column h-100">
-        <h2>Doctor Information</h2>
+        <h2><spring:message code="schedule.for"/> <c:out value="${doctorClinic.clinic.name}"/> (<c:out value="${doctorClinic.clinic.location.locationName}"/>)</h2>
         <div class="schedule">
             <table class="table doctor-schedule">
                 <tr>
@@ -44,10 +45,10 @@
                             <td class="mycell">
                                 <c:choose>
                                     <c:when test="${not day.scheduled}">
-                                        <a href="<c:url value="/doctor/addedSchedule/${doctorClinic.clinic.id}/${day.date.get(7)}-${day.date.get(11)}"/>"><spring:message code="add"/></a>
+                                        <a href="<c:url value="/doctor/addSchedule/${doctorClinic.clinic.id}/${day.date.get(7)}-${day.date.get(11)}"/>"><spring:message code="add"/></a>
                                     </c:when>
                                     <c:otherwise>
-                                        <a href="<c:url value="/doctor/removeSchedule/${doctorClinic.clinic.id}/${day.date.get(7)}-${day.date.get(11)}"/>"><spring:message code="remove"/></a>
+                                        <a class="remove" href="<c:url value="/doctor/removeSchedule/${doctorClinic.clinic.id}/${day.date.get(7)}-${day.date.get(11)}"/>"><spring:message code="remove"/></a>
 
                                     </c:otherwise>
                                 </c:choose>
