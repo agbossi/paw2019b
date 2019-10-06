@@ -144,8 +144,8 @@ public class DoctorController {
         return mav;
     }
 
-    @RequestMapping(value = "/addedSchedule/{clinicid}/{day}-{hour}", method = {RequestMethod.GET})
-    public ModelAndView addedSchedule(@PathVariable(value = "clinicid") int clinic,
+    @RequestMapping(value = "/addSchedule/{clinicId}/{day}-{hour}", method = {RequestMethod.GET})
+    public ModelAndView addedSchedule(@PathVariable(value = "clinicId") int clinic,
                                       @PathVariable(value = "day") int day,
                                       @PathVariable(value = "hour") int hour){
 

@@ -44,10 +44,10 @@
                             <td class="mycell">
                                 <c:choose>
                                     <c:when test="${not day.scheduled}">
-                                        <a href="<c:url value="doctor/addedSchedule/${doctorClinic.clinic.id}/${day.date.get(7)}-${day.date.get(11)}"/>"><spring:message code="add"/></a>
+                                        <a href="<c:url value="/doctor/addedSchedule/${doctorClinic.clinic.id}/${day.date.get(7)}-${day.date.get(11)}"/>"><spring:message code="add"/></a>
                                     </c:when>
                                     <c:otherwise>
-                                        <a href="<c:url value="doctor/removeSchedule/${doctorClinic.clinic.id}/${day.date.get(7)}-${day.date.get(11)}"/>"><spring:message code="remove"/></a>
+                                        <a href="<c:url value="/doctor/removeSchedule/${doctorClinic.clinic.id}/${day.date.get(7)}-${day.date.get(11)}"/>"><spring:message code="remove"/></a>
 
                                     </c:otherwise>
                                 </c:choose>
