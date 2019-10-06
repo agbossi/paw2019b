@@ -10,16 +10,16 @@ import java.util.List;
 public interface DoctorService {
     Doctor createDoctor(Specialty specialty,String license, String phoneNumber, String email);
 
-    public List<Doctor> getDoctors();
+    List<Doctor> getDoctors();
 
-    public List<Doctor> getDoctorByName(String firstName,String lastName);
+    List<Doctor> getDoctorByName(String firstName,String lastName);
 
-    public List<Doctor> getDoctorBySpecialty(Specialty specialty);
+    List<Doctor> getDoctorBySpecialty(Specialty specialty);
 
     //List<Doctor> getDoctorBy(Location location, Specialty specialty, String clinic);
 
-    public Doctor getDoctorByLicense(String license);
+    Doctor getDoctorByLicense(String license);
 
-    public Doctor getDoctorByEmail(String email);
+    Doctor getDoctorByEmail(String email);
 
 }

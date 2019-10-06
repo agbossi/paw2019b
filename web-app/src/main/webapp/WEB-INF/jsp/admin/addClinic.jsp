@@ -11,7 +11,7 @@
 
 </head>
 <body class="d-flex flex-column h-100">
-<h2>Clinic Information</h2>
+<h2><spring:message code="clinic.info"/> </h2>
 <div class="container">
     <c:url value="/admin/addedClinic" var="postPath"/>
     <form:form modelAttribute="clinicForm" action="${postPath}" method="post">

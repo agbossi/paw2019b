@@ -10,7 +10,7 @@
 
     </head>
     <body class="d-flex flex-column h-100">
-    <h2>Location Information</h2>
+    <h2><spring:message code="loc.info"/> </h2>
     <div class="container">
         <c:url value="/admin/addedLocation" var="postPath"/>
         <form:form modelAttribute="locationForm" action="${postPath}" method="post">
