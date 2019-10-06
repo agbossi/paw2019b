@@ -41,10 +41,6 @@ public class DoctorClinic {
         return consultPrice;
     }
 
-    public void setConsultPrice(int consultPrice) {
-        this.consultPrice = consultPrice;
-    }
-
     public List<Schedule> getSchedule() {
         return schedule;
     }
