@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
+import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
 import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
@@ -23,7 +24,7 @@ public class DoctorServiceImpl implements DoctorService {
     private DoctorDao doctorDao;
 
     @Autowired
-    private DoctorClinicDao doctorClinicDao;
+    private DoctorClinicService doctorClinicService;
 
     @Override
     public Doctor createDoctor(Specialty specialty,String license, String phoneNumber, String email) {
@@ -61,12 +62,17 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<Doctor> getDoctorsWithAvailability() {
+
         List<Doctor> doctorsWithAvailability = new ArrayList<>();
-        List<DoctorClinic> doctorsClinics = doctorClinicDao.getDoctorClinics();
-        for( DoctorClinic dc : doctorsClinics) {
-            if(dc.getSchedule() != null) {
-                if(!doctorsWithAvailability.contains(dc.getDoctor())){
-                    doctorsWithAvailability.add(dc.getDoctor());
+        List<Doctor> doctors = getDoctors();
+
+        for(Doctor doc : doctors) {
+            List<DoctorClinic> doctorsClinics = doctorClinicService.getDoctorClinicsForDoctor(doc);
+            if(doctorsClinics != null) {
+                for( DoctorClinic dc : doctorsClinics ) {
+                    if(dc.getSchedule()!=null && !(doctorsWithAvailability.contains(doc))) {
+                        doctorsWithAvailability.add(doc);
+                    }
                 }
             }
         }

@@ -55,8 +55,8 @@ public class DoctorController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
-        List<DoctorClinic> docClis = doctorClinicService.getDoctorClinicsForDoctor(doctor);
-        mav.addObject("doctorClinics", docClis);
+        List<DoctorClinic> doctorClinics = doctorClinicService.getDoctorClinicsForDoctor(doctor);
+        mav.addObject("doctorClinics", doctorClinics);
 
 
         List<Appointment> appointments = appointmentService.getAllDoctorsAppointments(doctor);

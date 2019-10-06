@@ -52,7 +52,9 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
 
     @Override
     public List<DoctorClinic> getDoctorClinicsForDoctor(Doctor doctor) {
-        return doctorClinicDao.getDoctorClinicsForDoctor(doctor);
+        List<DoctorClinic> list = doctorClinicDao.getDoctorClinicsForDoctor(doctor);
+        setScheduleAndAppointments(list);
+        return list;
     }
 
     @Override
