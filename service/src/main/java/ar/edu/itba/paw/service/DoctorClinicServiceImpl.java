@@ -49,7 +49,7 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
 
     @Override
     public List<DoctorClinic> getDoctorClinicsForDoctor(Doctor doctor) {
-        return null;
+        return doctorClinicDao.getDoctorClinicsForDoctor(doctor);
     }
 
     @Override
