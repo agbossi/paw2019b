@@ -31,7 +31,7 @@ public class PawUserDetailsService implements UserDetailsService {
 
         final Collection<? extends GrantedAuthority> authorities;
 
-        if(user.getEmail().equals("admin@test.com")){
+        if(user.getEmail().equals("admin@doctorsearch.com")){
             authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
         else if(us.isDoctor(email)){

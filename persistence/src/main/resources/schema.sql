@@ -10,20 +10,20 @@ CREATE TABLE IF NOT EXISTS users (
     firstName VARCHAR(20),
     lastName varchar(20),
     password VARCHAR(60),
-    email VARCHAR(25) primary key
+    email VARCHAR(25) PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS doctors (
     license VARCHAR(20) PRIMARY KEY,
-    specialty VARCHAR(50) REFERENCES specialties(name),
-    email VARCHAR(25) references users(email),
+    specialty VARCHAR(50) REFERENCES specialties(name) ON DELETE SET NULL,
+    email VARCHAR(25) REFERENCES users(email) ON DELETE CASCADE,
     phoneNumber VARCHAR(20)
 );
 
 CREATE TABLE IF NOT EXISTS clinics (
     id SERIAL PRIMARY KEY,
     name VARCHAR(20),
-    location VARCHAR(30) REFERENCES locations(name)
+    location VARCHAR(30) REFERENCES locations(name) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS prepaids (
@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS prepaids (
 );
 
 CREATE TABLE IF NOT EXISTS doctorclinics (
-    doctorLicense VARCHAR(20) REFERENCES doctors(license),
-    clinicid INTEGER REFERENCES clinics(id),
+    doctorLicense VARCHAR(20) REFERENCES doctors(license) ON DELETE CASCADE,
+    clinicid INTEGER REFERENCES clinics(id) ON DELETE CASCADE,
     consultPrice INTEGER,
     PRIMARY KEY(doctorLicense, clinicid)
 );
@@ -43,29 +43,29 @@ CREATE TABLE IF NOT EXISTS schedule (
     doctor VARCHAR(20),
     clinic INTEGER,
     PRIMARY KEY (day, hour, doctor),
-    FOREIGN KEY (doctor, clinic) REFERENCES doctorclinics(doctorLicense, clinicid)
+    FOREIGN KEY (doctor, clinic) REFERENCES doctorclinics(doctorLicense, clinicid) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS patients (
-    email VARCHAR(25) PRIMARY KEY REFERENCES users(email),
+    email VARCHAR(25) PRIMARY KEY REFERENCES users(email) ON DELETE CASCADE,
     id varchar(8),
     prepaid VARCHAR(20),
-    prepaidNumber varchar(20)
+    prepaidNumber varchar(20) 
 );
 
 CREATE TABLE IF NOT EXISTS appointments (
     doctor VARCHAR(20),
     clinic INTEGER,
-    patient VARCHAR(25) REFERENCES patients(email),
+    patient VARCHAR(25) REFERENCES patients(email) ON DELETE CASCADE,
     date TIMESTAMP,
     PRIMARY KEY (doctor, clinic, date),
-    FOREIGN KEY (doctor, clinic) REFERENCES doctorclinics(doctorLicense, clinicid)
+    FOREIGN KEY (doctor, clinic) REFERENCES doctorclinics(doctorLicense, clinicid) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS images (
     id SERIAL PRIMARY KEY,
-    doctor VARCHAR(20) REFERENCES doctors(license),
+    doctor VARCHAR(20) REFERENCES doctors(license) ON DELETE CASCADE,
     image bytea
 );
 
-insert into users values('admin','admin','admin','admin@test.com') on conflict do nothing;
+INSERT INTO users VALUES('admin','','admin','admin@doctorsearch.com') ON conflict do nothing;

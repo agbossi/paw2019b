@@ -107,7 +107,7 @@ public class UserController {
     public ModelAndView login(HttpServletRequest request) {
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
-        userService.changePassword(passwordEncoder.encode("admin"),"admin@test.com");
+        userService.changePassword(passwordEncoder.encode("admin"),"admin@doctorsearch.com");
 
         return new ModelAndView("login");
     }
