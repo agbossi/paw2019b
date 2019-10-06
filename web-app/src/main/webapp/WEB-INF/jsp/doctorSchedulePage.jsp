@@ -12,16 +12,21 @@
 </head>
 <body>
 <div class="doctor-information">
-    <h2><c:out value="${doctor.doctor.firstName}"/> <c:out value="${doctor.doctor.lastName}"/></h2>
+    <a href="<c:url value="/results/${doctorClinic.doctor.license}"/>">
+        <h2><c:out value="${doctorClinic.doctor.firstName}"/> <c:out value="${doctorClinic.doctor.lastName}"/></h2>
+    </a>
     <div class="doctor-profile">
         <ul class="list-group">
             <li class="list-group-item">
-                <h6><b><spring:message code="license"/></b> <c:out value="${doctor.doctor.license}"/></h6>
-                <h6><b><spring:message code="clinic"/></b>  <c:out value="${doctor.clinic.name}"/> (<c:out value="${doctor.clinic.location.locationName}"/>)</h6>
-                <h6><b><spring:message code="specialty"/></b>  <c:out value="${doctor.doctor.specialty.specialtyName}"/></h6>
-                <h6><b><spring:message code="phone.number"/></b>  <c:out value="${doctor.doctor.phoneNumber}"/></h6>
-                <h6><b><spring:message code="user.email"/></b>  <c:out value="${doctor.doctor.email}"/></h6>
-                <h6><b><spring:message code="schedule"/></b> </h6>
+                <div>
+                    <h6><b><spring:message code="clinic"/></b>  <c:out value="${doctorClinic.clinic.name}"/></h6>
+                </div>
+                <div>
+                    (<c:out value="${doctorClinic.clinic.location.locationName}"/>)
+                </div>
+                <div>
+                    <spring:message code="consult.price"/>&nbsp;<b><c:out value="${doctorClinic.consultPrice}"/></b><spring:message code="currency"/>
+                </div>
             </li>
         </ul>
     </div>
@@ -31,7 +36,7 @@
         <tr>
             <th>
                 <c:if test="${weekNum > 1}">
-                    <a href="<c:url value="/results/${doctor.clinic.id}/${doctor.doctor.license}/${weekNum - 1}"/>"> - </a>
+                    <a href="<c:url value="/results/${doctorClinic.doctor.license}/${doctorClinic.clinic.id}/${weekNum - 1}"/>">-</a>
                 </c:if>
             </th>
             <c:forEach var="d" items="${days}">
@@ -59,7 +64,7 @@
                 </c:choose>
             </c:forEach>
             <th>
-                <a href="<c:url value="/results/${doctor.clinic.id}/${doctor.doctor.license}/${weekNum + 1}"/>"> + </a>
+                <a href="<c:url value="/results/${doctorClinic.doctor.license}/${doctorClinic.clinic.id}/${weekNum + 1}"/>"> + </a>
             </th>
         </tr>
 
@@ -72,7 +77,7 @@
                     </c:if>
                     <td>
                         <c:if test="${day.scheduled && !day.hasAppointment}">
-                            <a href="<c:url value="/createApp/${doctor.clinic.id}/${doctor.doctor.license}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="available"/></a>
+                            <a href="<c:url value="/createApp/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="available"/></a>
                         </c:if>
                     </td>
                 </c:forEach>

@@ -34,11 +34,10 @@
             <c:forEach var="dClinic" items="${doctorClinics}">
                 <div>
                     <h5>
-                        <b><spring:message code="clinic"/></b>&nbsp;
                         <a href="<c:url value="/results/${doctor.license}/${dClinic.clinic.id}/1"/>"><c:out value="${dClinic.clinic.name}"/></a>
+                        <br/>(<c:out value="${dClinic.clinic.location.locationName}"/>)
                         <br/>
                     </h5>
-                    <spring:message code="consult.price"/>&nbsp;<b><c:out value="${dClinic.consultPrice}"/></b><spring:message code="currency"/>
                 </div>
                 <br/><br/>
             </c:forEach>
