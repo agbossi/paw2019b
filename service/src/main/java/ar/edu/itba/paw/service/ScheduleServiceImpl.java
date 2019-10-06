@@ -29,4 +29,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     public boolean hasSchedule(DoctorClinic doctorClinic, int day, int hour) {
         return scheduleDao.hasSchedule(doctorClinic, day, hour);
     }
+
+    @Override
+    public void deleteSchedule(int hour, int day, DoctorClinic doctorClinic) {
+        scheduleDao.deleteSchedule(hour, day, doctorClinic);
+    }
 }

@@ -63,4 +63,10 @@ public class ScheduleDaoImpl implements ScheduleDao {
         }
         return true;
     }
+
+    @Override
+    public void deleteSchedule(int hour, int day, DoctorClinic doctorClinic) {
+        Object[] args = new Object[] {hour, day, doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId()};
+        jdbcTemplate.update("delete from schedule where hour = ? and day = ? and doctor = ? and clinic = ?", args);
+    }
 }

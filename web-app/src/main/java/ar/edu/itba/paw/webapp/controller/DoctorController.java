@@ -110,16 +110,19 @@ public class DoctorController {
     }
 
     @RequestMapping(value = "/addSchedule/{clinicid}/{license}", method = {RequestMethod.GET})
-    public ModelAndView addDoctorShedule(@PathVariable(value = "clinicid") int clinic,
-                                         @PathVariable(value = "license") String license,
-                                         @ModelAttribute("scheduleForm") final ScheduleForm form){
+    public ModelAndView addDoctorSchedule(@PathVariable(value = "clinicid") int clinic,
+                                         @PathVariable(value = "license") String license){
 
         final ModelAndView mav = new ModelAndView("doctor/doctorSchedule");
         Doctor doc = doctorService.getDoctorByLicense(license);
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
         viewModifier.addDaysAdnTimes(mav);
+
+        List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctorClinic, 1);
+
         mav.addObject("doctorClinic", doctorClinic);
+        mav.addObject("schedule", doctorsWeek);
         return mav;
 
     }
@@ -140,21 +143,36 @@ public class DoctorController {
         return mav;
     }
 
-    @RequestMapping(value = "/addedSchedule/{clinicid}/{license}", method = {RequestMethod.POST})
+    @RequestMapping(value = "/addedSchedule/{clinicid}/{license}/{day}-{hour}", method = {RequestMethod.GET})
     public ModelAndView addedSchedule(@PathVariable(value = "clinicid") int clinic,
                                       @PathVariable(value = "license") String license,
-                                      @Valid @ModelAttribute("scheduleForm") final ScheduleForm form,
-                                      final BindingResult errors){
+                                      @PathVariable(value = "day") int day,
+                                      @PathVariable(value = "hour") int hour){
 
-        if(errors.hasErrors())
-            return addDoctorShedule(clinic, license, form);
         Doctor doc = doctorService.getDoctorByLicense(license);
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
 
-        scheduleService.createSchedule(form.getHour(), form.getDay(), doctorClinic);
+        scheduleService.createSchedule(hour, day, doctorClinic);
 
-        final ModelAndView mav = new ModelAndView("doctor/addedSchedule");
+        final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic + "/" + license);
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/removeSchedule/{clinicid}/{license}/{day}-{hour}", method = {RequestMethod.GET})
+    public ModelAndView removeSchedule(@PathVariable(value = "clinicid") int clinic,
+                                      @PathVariable(value = "license") String license,
+                                      @PathVariable(value = "day") int day,
+                                      @PathVariable(value = "hour") int hour){
+
+        Doctor doc = doctorService.getDoctorByLicense(license);
+        Clinic cli = clinicService.getClinicById(clinic);
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
+
+        scheduleService.deleteSchedule(hour, day, doctorClinic);
+
+        final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic + "/" + license);
 
         return mav;
     }
