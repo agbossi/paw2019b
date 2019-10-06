@@ -8,11 +8,11 @@ import java.util.List;
 public interface ClinicDao {
     Clinic createClinic(String name, Location location);
 
-    public Clinic getClinicByName(String clinicName);
+    Clinic getClinicByName(String clinicName);
 
-    public List<Clinic> getClinics();
+    List<Clinic> getClinics();
 
     Clinic getClinicById(int id);
 
-    public List<Clinic> getClinicsByLocation(String location);
+    List<Clinic> getClinicsByLocation(String location);
 }

@@ -97,7 +97,7 @@ public class UserController {
         String encodedPassword = passwordEncoder.encode(form.getPassword());
 
         User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
-        patientService.create(form.getEmail(),form.getId(),form.getPrepaid(), form.getPrepaidNumber());
+        patientService.create(form.getEmail(),form.getId(),form.getPrepaid(), form.getPrepaidNumber(), user);
 
         emailService.sendSimpleMail(form.getEmail(),messageSource.getMessage("sign.up.subject",null,locale),messageSource.getMessage("sign.up.message",null,locale));
         authWithAuthManager(request, form.getEmail(), form.getPassword());

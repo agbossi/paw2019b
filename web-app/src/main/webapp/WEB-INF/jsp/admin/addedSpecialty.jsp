@@ -12,7 +12,7 @@
             <h2><spring:message code="specialty.added"/></h2>
         </div>
         <div>
-            ${specialty.name}
+            <c:out value="${specialty.specialtyName}"/>
         </div>
         <a class="nav-link" href="<c:url value="/admin/addSpecialty"/>"><spring:message code="add.another.specialty"/></a>
     </body>

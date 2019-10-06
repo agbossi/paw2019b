@@ -18,11 +18,13 @@ public class Patient {
 
     List<Appointment> appointments;
 
-    public Patient(String email, String id, String prepaid, String prepaidNumber) {
+    public Patient(String email, String id, String prepaid, String prepaidNumber, String firstName, String lastName) {
         this.email = email;
         this.id = id;
         this.prepaid = prepaid;
         this.prepaidNumber = prepaidNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public String getId() {

@@ -63,24 +63,34 @@ public class SearchController {
         return mav;
     }
 
-    @RequestMapping(value = "/results/{clinicId}/{doctorId}/{week}", method = {RequestMethod.GET})
-    public ModelAndView doctorsPage(@PathVariable(value = "clinicId") int clinic, @PathVariable(value = "doctorId") String license, @PathVariable(value = "week") int week) {
+    @RequestMapping(value = "/results/{license}", method = {RequestMethod.GET})
+    public ModelAndView doctorsPage(@PathVariable(value = "license") String license) {
+
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+
         ModelAndView mav = new ModelAndView("doctorPage");
+        mav.addObject("doctor", doctor);
+        viewModifier.addDoctorClinicsForDoctor(mav, doctor);
 
+        return mav;
+    }
 
-        DoctorClinic doctor = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctorService.getDoctorByLicense(license), clinicService.getClinicById(clinic));
+    @RequestMapping(value = "/results/{license}/{clinicId}/{week}", method = {RequestMethod.GET})
+    public ModelAndView doctorsSchedulePage(@PathVariable(value = "license") String license,
+                                            @PathVariable(value = "clinicId") int clinic,
+                                            @PathVariable(value = "week") int week) {
 
+        ModelAndView mav = new ModelAndView("doctorSchedulePage");
+        DoctorClinic doctor = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctorService.getDoctorByLicense(license),
+                              clinicService.getClinicById(clinic));
+
+        mav.addObject("doctorClinic", doctor);
         viewModifier.addSearchInfo(mav);
-
         viewModifier.addCurrentDates(mav, week);
 
         List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctor, week);
-
-
         mav.addObject("week", doctorsWeek);
         mav.addObject("weekNum", week);
-        mav.addObject("doctor", doctor);
-
 
         return mav;
     }

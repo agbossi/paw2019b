@@ -14,5 +14,5 @@ public interface ClinicService {
 
     Clinic getClinicById(int id);
 
-    public List<Clinic> getClinicsByLocation(String location);
+    List<Clinic> getClinicsByLocation(String location);
 }

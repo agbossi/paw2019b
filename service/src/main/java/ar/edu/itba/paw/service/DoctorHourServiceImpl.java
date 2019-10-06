@@ -3,6 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.interfaces.service.DoctorHourService;
 import ar.edu.itba.paw.interfaces.dao.ScheduleDao;
+import ar.edu.itba.paw.model.Appointment;
 import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.DoctorHour;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,11 +63,11 @@ public class DoctorHourServiceImpl implements DoctorHourService {
             day.set(Calendar.MILLISECOND, 0);
             if(today.compareTo(day) < 0) {
                 boolean isSchedule = scheduleDao.hasSchedule(doctorClinic, Calendar.MONDAY + i, hour);
-                boolean isApp = appointmentDao.hasAppointment(doctorClinic, day);
+                Appointment isApp = appointmentDao.hasAppointment(doctorClinic, day);
                 DoctorHour docHour = new DoctorHour(day, isSchedule, isApp);
                 row.add(docHour);
             }else{
-                DoctorHour docHour = new DoctorHour(day, false, false);
+                DoctorHour docHour = new DoctorHour(day, false, null);
                 row.add(docHour);
             }
 

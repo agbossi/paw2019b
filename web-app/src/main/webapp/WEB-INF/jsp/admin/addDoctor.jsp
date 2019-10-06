@@ -9,7 +9,7 @@
         <jsp:include page="../base/navbar.jsp" />
     </head>
     <body class="d-flex flex-column h-100">
-        <h2>Doctor Information</h2>
+        <h2><spring:message code="doc.info"/> </h2>
         <div class="container">
             <c:url value="/admin/addedDoctor" var="postPath"/>
             <form:form modelAttribute="doctorForm" action="${postPath}" method="post">

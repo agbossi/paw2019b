@@ -13,7 +13,7 @@
             <h2><spring:message code="location.added"/></h2>
         </div>
         <div>
-            ${location.name}
+            <c:out value="${location.locationName}"/>
         </div>
         <a class="nav-link" href="<c:url value="/admin/addLocation"/>"><spring:message code="add.another.location"/></a>
     </body>

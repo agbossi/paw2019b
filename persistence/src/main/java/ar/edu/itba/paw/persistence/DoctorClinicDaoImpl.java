@@ -77,7 +77,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                 " join clinics on doctorclinics.clinicid = clinics.id)" +
                 " join users on doctors.email = users.email" +
-                "where doctorLicense = ?",ROW_MAPPER, doctor.getLicense());
+                " where doctorclinics.doctorLicense = ?",ROW_MAPPER, doctor.getLicense());
         if(list.isEmpty()) {
             return null;
         }
@@ -154,7 +154,6 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
 
         return ( list.isEmpty() ? null : list );
-
     }
 }
 
