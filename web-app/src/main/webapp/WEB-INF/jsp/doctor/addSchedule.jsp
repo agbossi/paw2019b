@@ -25,7 +25,7 @@
                                 <h3><c:out value="${doctorClinic.doctor.firstName}"/> <c:out value="${doctorClinic.doctor.lastName}"/></h3>
                                 <p><c:out value="${doctorClinic.doctor.specialty.specialtyName}"/></p>
                                 <p><c:out value="${doctorClinic.clinic.name}"/> (<c:out value="${doctorClinic.clinic.location.locationName}"/>)</p>
-                                <p><a class="btn btn-secondary" href="<c:url value="/doctor/addSchedule/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}"/>" role="button">
+                                <p><a class="btn btn-secondary" href="<c:url value="/doctor/addSchedule/${doctorClinic.clinic.id}"/>" role="button">
                                     <spring:message code="add.week.schedule"/>
                                 </a>
                                 </p>

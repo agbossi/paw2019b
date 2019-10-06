@@ -109,12 +109,13 @@ public class DoctorController {
         return mav;
     }
 
-    @RequestMapping(value = "/addSchedule/{clinicid}/{license}", method = {RequestMethod.GET})
-    public ModelAndView addDoctorSchedule(@PathVariable(value = "clinicid") int clinic,
-                                         @PathVariable(value = "license") String license){
+    @RequestMapping(value = "/addSchedule/{clinicid}", method = {RequestMethod.GET})
+    public ModelAndView addDoctorSchedule(@PathVariable(value = "clinicid") int clinic){
 
         final ModelAndView mav = new ModelAndView("doctor/doctorSchedule");
-        Doctor doc = doctorService.getDoctorByLicense(license);
+
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        Doctor doc = doctorService.getDoctorByEmail(user.getEmail());;
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
         viewModifier.addDaysAdnTimes(mav);
@@ -143,36 +144,38 @@ public class DoctorController {
         return mav;
     }
 
-    @RequestMapping(value = "/addedSchedule/{clinicid}/{license}/{day}-{hour}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/addedSchedule/{clinicid}/{day}-{hour}", method = {RequestMethod.GET})
     public ModelAndView addedSchedule(@PathVariable(value = "clinicid") int clinic,
-                                      @PathVariable(value = "license") String license,
                                       @PathVariable(value = "day") int day,
                                       @PathVariable(value = "hour") int hour){
 
-        Doctor doc = doctorService.getDoctorByLicense(license);
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        Doctor doc = doctorService.getDoctorByEmail(user.getEmail());
+
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
 
         scheduleService.createSchedule(hour, day, doctorClinic);
 
-        final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic + "/" + license);
+        final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic);
 
         return mav;
     }
 
-    @RequestMapping(value = "/removeSchedule/{clinicid}/{license}/{day}-{hour}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/removeSchedule/{clinicid}/{day}-{hour}", method = {RequestMethod.GET})
     public ModelAndView removeSchedule(@PathVariable(value = "clinicid") int clinic,
-                                      @PathVariable(value = "license") String license,
                                       @PathVariable(value = "day") int day,
                                       @PathVariable(value = "hour") int hour){
 
-        Doctor doc = doctorService.getDoctorByLicense(license);
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        Doctor doc = doctorService.getDoctorByEmail(user.getEmail());
+
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
 
         scheduleService.deleteSchedule(hour, day, doctorClinic);
 
-        final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic + "/" + license);
+        final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic);
 
         return mav;
     }
