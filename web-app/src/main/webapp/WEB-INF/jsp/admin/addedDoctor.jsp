@@ -13,19 +13,19 @@
             <h2><spring:message code="doctor.added"/></h2>
         </div>
         <div>
-            ${doctor.firstName}
+            <c:out value="${doctor.firstName}"/>
         </div>
         <div>
-            ${doctor.lastName}
+            <c:out value="${doctor.lastName}"/>
         </div>
         <div>
-            ${doctor.specialty.specialtyName}
+            <c:out value="${doctor.specialty.specialtyName}"/>
         </div>
         <div>
-            ${doctor.license}
+            <c:out value="${doctor.license}"/>
         </div>
         <div>
-            ${doctor.email}
+            <c:out value="${doctor.email}"/>
         </div>
         <a class="nav-link" href="<c:url value="/admin/addDoctor"/>"><spring:message code="add.another.doctor"/></a>
     </body>
