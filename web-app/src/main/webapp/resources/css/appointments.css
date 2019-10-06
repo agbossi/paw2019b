@@ -21,3 +21,7 @@
     text-align: center;
     vertical-align: center;
 }
+
+.remove{
+    color: darkred;
+}

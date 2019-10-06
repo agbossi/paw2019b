@@ -9,6 +9,6 @@
     </head>
     <body class="d-flex flex-column h-100">
         <h2><spring:message code="schedule.added"/></h2>
-        <a class="nav-link" href="<c:url value="/doctor/addSchedule/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}"/>"><spring:message code="add.another.schedule"/></a>
+        <a class="nav-link" href="<c:url value="/doctor/addSchedule/${doctorClinic.clinic.id}"/>"><spring:message code="add.another.schedule"/></a>
     </body>
 </html>
