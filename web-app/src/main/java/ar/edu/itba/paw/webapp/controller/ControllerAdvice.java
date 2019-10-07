@@ -17,7 +17,7 @@ public class ControllerAdvice {
 
     @Autowired
     MessageSource messageSource;
-    /*
+
     @ExceptionHandler(SQLException.class)
     public ModelAndView handleSQLException(HttpServletRequest request, Exception ex){
 
@@ -41,6 +41,4 @@ public class ControllerAdvice {
         mav.setViewName("error");
         return mav;
     }
-
-     */
 }
