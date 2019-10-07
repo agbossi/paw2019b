@@ -12,6 +12,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -122,7 +123,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     }
 
     @Override
-    public List<DoctorClinic> getFilteredDoctors(final Location location, final Specialty specialty, final int clinic) {
+    public List<DoctorClinic> getFilteredDoctors(final Location location, final Specialty specialty,
+                                                 String firstName,String lastName,Prepaid prepaid,int consultPrice) {
 
 //            DoctorQueryBuilder builder = new DoctorQueryBuilder();
 //            builder.buildQuery(location.getLocationName(), specialty.getSpecialtyName(), clinic);
@@ -147,12 +149,24 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 //                }
 //            }, ROW_MAPPER);
 
-        final List<DoctorClinic> list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinicid,name,location,consultPrice " +
-                " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
-                " join clinics on doctorclinics.clinicid = clinics.id)" +
-                " join users on doctors.email = users.email where clinicid = ? and location = ? and specialty = ?",ROW_MAPPER, clinic, location.getLocationName(), specialty.getSpecialtyName());
+        final List<DoctorClinic> list;
+        if(prepaid != null){
+             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinic.clinicid,name,location,consultPrice " +
+                    " from (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
+                    " join clinics on doctorclinics.clinicid = clinics.id)" +
+                    " join users on doctors.email = users.email)" +
+                    " join clinicPrepaids on clinicPrepaids.clinicid = clinics.id" +
+                    "where location = ? and specialty = ? and firstName = ? and lastName = ? and clinicPrepaids.prepaid = ?",ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(),(firstName != null ? firstName:true),(lastName != null ? lastName:true), prepaid.getName());
 
 
+
+        }else {
+             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinic.clinicid,name,location,consultPrice " +
+                    " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
+                    " join clinics on doctorclinics.clinicid = clinics.id)" +
+                    " join users on doctors.email = users.email" +
+                    "where location = ? and specialty = ? and firstName = ? and lastName = ? and consultPrice <= ?",ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(),(firstName != null ? firstName:true),(lastName != null ? lastName:true), consultPrice);
+        }
         return ( list.isEmpty() ? null : list );
     }
 }

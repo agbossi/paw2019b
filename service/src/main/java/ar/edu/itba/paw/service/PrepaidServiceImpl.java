@@ -17,4 +17,9 @@ public class PrepaidServiceImpl implements PrepaidService {
     public List<Prepaid> getPrepaids() {
         return prepaidDao.getPrepaids();
     }
+
+    @Override
+    public Prepaid createPrepaid(String name) {
+        return prepaidDao.createPrepaid(name);
+    }
 }

@@ -32,6 +32,8 @@
                     <a class="p-2 text-dark" href="<c:url value="/admin/addClinic"/>"><spring:message code="add.clinic"/></a>
                     <a class="p-2 text-dark" href="<c:url value="/admin/addLocation"/>"><spring:message code="add.location"/></a>
                     <a class="p-2 text-dark" href="<c:url value="/admin/addSpecialty"/>"><spring:message code="add.specialty"/></a>
+                    <a class="p-2 text-dark" href="<c:url value="/admin/addPrepaid"/>"><spring:message code="add.prepaid"/></a>
+                    <a class="p-2 text-dark" href="<c:url value="/admin/addPrepaidToClinic"/>"><spring:message code="add.prepaid.to.clinic"/></a>
                 </sec:authorize>
 
                 <sec:authorize access="hasRole('ROLE_DOCTOR')">

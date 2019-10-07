@@ -7,7 +7,6 @@
     <head>
         <%@ page isELIgnored="false" %>
         <jsp:include page="../base/navbar.jsp" />
-
     </head>
     <body class="d-flex flex-column h-100">
     <h2><spring:message code="loc.info"/> </h2>

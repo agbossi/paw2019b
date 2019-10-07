@@ -87,9 +87,14 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     }
 
     @Override
-    public List<DoctorClinic> getDoctorBy(Location location, Specialty specialty, int clinic) {
-        List<DoctorClinic> list = doctorClinicDao.getFilteredDoctors(location, specialty, clinic);
+    public List<DoctorClinic> getDoctorBy(Location location, Specialty specialty,
+                                          String firstName, String lastName,
+                                          Prepaid prepaid, int consultPrice) {
+
+        List<DoctorClinic> list = doctorClinicDao.getFilteredDoctors(location, specialty,
+                                                                     firstName, lastName, prepaid, consultPrice);
         setScheduleAndAppointments(list);
         return list;
     }
+
 }

@@ -36,9 +36,11 @@ public class ModelAndViewModifier {
         List<Location> locations = locationService.getLocations();
         List<Specialty> specialties = specialtyService.getSpecialties();
         List<Clinic> clinics = clinicService.getClinics();
+        List<Prepaid> prepaids = prepaidService.getPrepaids();
         mav.addObject("locations", locations);
         mav.addObject("specialties", specialties);
         mav.addObject("clinics",clinics );
+        mav.addObject("prepaids",prepaids);
 
         return mav;
     }

@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,12 @@ public class AdminController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    PrepaidService prepaidService;
+
+    @Autowired
+    PrepaidToClinicService prepaidToClinicService;
+    
     @RequestMapping(value = "/addDoctor", method = { RequestMethod.GET })
     public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form){
         final ModelAndView mav = new ModelAndView("admin/addDoctor");
@@ -68,6 +75,44 @@ public class AdminController {
     @RequestMapping(value = "/addSpecialty", method = {RequestMethod.GET})
     public ModelAndView addSpecialty(@ModelAttribute("specialtyForm") final SpecialtyForm form){
         final ModelAndView mav = new ModelAndView("admin/addSpecialty");
+        return mav;
+    }
+    @RequestMapping(value = "/addPrepaid",method = { RequestMethod.GET })
+    public ModelAndView addPrepaid(@ModelAttribute("prepaidForm") final PrepaidForm form){
+        final ModelAndView mav = new ModelAndView("admin/addPrepaid");
+        return mav;
+    }
+    @RequestMapping(value = "/addPrepaidToClinic",method = { RequestMethod.GET })
+    public ModelAndView addPrepaidToClinic(@ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form){
+        final ModelAndView mav = new ModelAndView("admin/addPrepaidToClinic");
+
+        viewModifier.addClinics(mav);
+        viewModifier.addPrepaids(mav);
+        return mav;
+    }
+
+    @RequestMapping(value = "/addedPrepaid",method = { RequestMethod.POST })
+    public ModelAndView addedPrepaid(@Valid @ModelAttribute("prepaidForm") final PrepaidForm form,final BindingResult errors){
+        if (errors.hasErrors())
+            return addPrepaid(form);
+
+        System.out.println(form.getName());
+        Prepaid prepaid = prepaidService.createPrepaid(form.getName());
+        final ModelAndView mav = new ModelAndView("admin/addedPrepaid");
+        mav.addObject("prepaid", prepaid);
+
+        return mav;
+    }
+    @RequestMapping(value = "/addedPrepaidToClinic",method = { RequestMethod.POST })
+    public ModelAndView addedPrepaidToClinic(@Valid @ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form,final BindingResult errors){
+        if (errors.hasErrors())
+            return addPrepaidToClinic(form);
+
+
+        PrepaidToClinic prepaidToClinic = prepaidToClinicService.addPrepaidToClinic(new Prepaid(form.getPrepaid()),clinicService.getClinicById(form.getClinic()));
+        final ModelAndView mav = new ModelAndView("admin/addedPrepaidToClinic");
+        mav.addObject("prepaidToClinic", prepaidToClinic);
+
         return mav;
     }
 

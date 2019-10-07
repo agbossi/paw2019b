@@ -1,12 +1,20 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.model.Prepaid;
+
 public class SearchForm {
 
     private String location;
 
     private String Specialty;
 
-    private int clinic;
+    private int consultPrice;
+
+    private String prepaid;
+
+    private String firstName;
+
+    private String lastName;
 
     private String from;
 
@@ -28,12 +36,36 @@ public class SearchForm {
         Specialty = specialty;
     }
 
-    public int getClinic() {
-        return clinic;
+    public int getConsultPrice() {
+        return consultPrice;
     }
 
-    public void setClinic(int clinic) {
-        this.clinic = clinic;
+    public void setConsultPrice(int consultPrice) {
+        this.consultPrice = consultPrice;
+    }
+
+    public String getPrepaid() {
+        return prepaid;
+    }
+
+    public void setPrepaid(String prepaid) {
+        this.prepaid = prepaid;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getFrom() {

@@ -50,13 +50,12 @@ public class SearchController {
             return search(form);
 
         final ModelAndView mav = new ModelAndView("results");
-        //TODO  NOT HERE
         viewModifier.addSearchInfo(mav);
 
 
         // TODO: once we implement a proper query builder fix this and search form attributes !!
         List<DoctorClinic> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
-                new Specialty(form.getSpecialty()), form.getClinic());
+                new Specialty(form.getSpecialty()), form.getFirstName(),form.getLastName(),new Prepaid(form.getPrepaid()),form.getConsultPrice());
 
         viewModifier.addFilteredDoctors(mav, filteredDoctors);
 

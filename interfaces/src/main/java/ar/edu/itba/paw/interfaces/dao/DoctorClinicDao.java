@@ -17,5 +17,6 @@ public interface DoctorClinicDao {
 
         List<DoctorClinic> getClinicsWithDoctor(String doctor);
 
-        List<DoctorClinic> getFilteredDoctors(Location location, Specialty specialty, int clinic);
+        List<DoctorClinic> getFilteredDoctors(Location location, Specialty specialty,
+                                              String firstName,String lastName,Prepaid prepaid,int consultPrice);
 }
