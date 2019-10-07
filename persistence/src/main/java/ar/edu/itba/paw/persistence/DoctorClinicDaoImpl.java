@@ -169,58 +169,6 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
             }
         },ROW_MAPPER);
 
-
-//            DoctorQueryBuilder builder = new DoctorQueryBuilder();
-//            builder.buildQuery(location.getLocationName(), specialty.getSpecialtyName(), clinic);
-//
-//            final List<DoctorClinic> list = jdbcTemplate.query(builder.getQuery(), new PreparedStatementSetter() {
-//                @Override
-//                public void setValues(PreparedStatement preparedStatement) throws SQLException {
-//                    int i=1;
-//
-//                    if(location!=null){
-//                        preparedStatement.setString(i,location.getLocationName());
-//                        i++;
-//                    }
-//                    if(specialty!=null){
-//                        preparedStatement.setString(i,specialty.getSpecialtyName());
-//                        i++;
-//                    }
-//                    if(clinic!=null){
-//                        preparedStatement.setString(i,clinic);
-//                        i++;
-//                    }
-//                }
-//            }, ROW_MAPPER);
-        final List<DoctorClinic> list;
-        if(prepaid != null){
-             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinic.clinicid,name,location,consultPrice " +
-                    " from (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
-                    " join clinics on doctorclinics.clinicid = clinics.id)" +
-                    " join users on doctors.email = users.email)" +
-                    " join clinicPrepaids on clinicPrepaids.clinicid = clinics.id" +
-                    "where location = ? and specialty = ? and firstName = ? and lastName = ? and clinicPrepaids.prepaid = ?",ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(),(firstName != null ? firstName:true),(lastName != null ? lastName:true), prepaid.getName());
-
-//        final List<DoctorClinic> list;
-//        if(prepaid != null){
-//             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
-//                    " clinic.clinicid,name,address,location,consultPrice " +
-//                    " from (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
-//                    " join clinics on doctorclinics.clinicid = clinics.id)" +
-//                    " join users on doctors.email = users.email)" +
-//                    " join clinicPrepaids on clinicPrepaids.clinicid = clinics.id" +
-//                    "where location = ? and specialty = ? and firstName = ? and lastName = ? and clinicPrepaids.prepaid = ?",ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(),(firstName != null ? firstName:true),(lastName != null ? lastName:true), prepaid.getName());
-//
-//
-//
-//        }else {
-//             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
-//                    " clinic.clinicid,name,address,location,consultPrice " +
-//                    " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
-//                    " join clinics on doctorclinics.clinicid = clinics.id)" +
-//                    " join users on doctors.email = users.email" +
-//                    "where location = ? and specialty = ? and firstName = ? and lastName = ? and consultPrice <= ?",ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(),(firstName != null ? firstName:true),(lastName != null ? lastName:true), consultPrice);
-//        }
         return ( list.isEmpty() ? null : list );
     }
 }
