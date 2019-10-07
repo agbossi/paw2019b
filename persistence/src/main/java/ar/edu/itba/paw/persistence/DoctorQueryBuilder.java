@@ -4,7 +4,7 @@ public class DoctorQueryBuilder {
 
     private String query;
 
-    public void buildQuery(String location, String specialty, String firstName, String lastName, String prepaid){
+    public void buildQuery(String location, String specialty, String firstName, String lastName, String prepaid, int consultPrice){
         StringBuilder query = new StringBuilder("select firstName, lastName, specialty, doctorLicense, phoneNumber, doctors.email," +
                 " id as clinicid, name, address, location, consultPrice " +
                 " from (((doctorclinics join doctors on doctorLicense = license) natural join (clinics join clinicPrepaids on clinicPrepaids.clinicid = clinics.id))" +
@@ -15,8 +15,10 @@ public class DoctorQueryBuilder {
         query.append( lastName!="" ? ("lastName = ? and ") : ("TRUE and ") );
         if(prepaid!=""){
             query.append("clinicPrepaids.prepaid = ?;");
-        }else{
+        }else if(consultPrice > 0){
             query.append("consultPrice <= ?;");
+        }else{
+            query.append("TRUE;");
         }
 
         this.query = query.toString();

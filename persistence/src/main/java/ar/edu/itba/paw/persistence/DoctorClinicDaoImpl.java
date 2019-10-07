@@ -137,7 +137,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                                                  final int consultPrice) {
 
         DoctorQueryBuilder builder = new DoctorQueryBuilder();
-        builder.buildQuery(location.getLocationName(),specialty.getSpecialtyName(), firstName, lastName, prepaid.getName());
+        builder.buildQuery(location.getLocationName(),specialty.getSpecialtyName(), firstName, lastName, prepaid.getName(), consultPrice);
 
         List<DoctorClinic> list = jdbcTemplate.query(builder.getQuery(), new PreparedStatementSetter() {
 
@@ -162,7 +162,9 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                 if(prepaid.getName() != ""){
                     preparedStatement.setString(i, prepaid.getName());
                 }else{
-                    preparedStatement.setInt(i, consultPrice);
+                    if(consultPrice > 0){
+                        preparedStatement.setInt(i, consultPrice);
+                    }
                 }
             }
         },ROW_MAPPER);
