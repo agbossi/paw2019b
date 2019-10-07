@@ -10,9 +10,10 @@ public class Clinic {
     private Location location;
 
 
-    public Clinic(int id, String name, Location location){
+    public Clinic(int id, String name, String address, Location location){
         this.id = id;
         this.name = name;
+        this.address = address;
         this.location = location;
     }
 
