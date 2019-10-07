@@ -63,7 +63,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public List<DoctorClinic> getDoctorClinics() {
-        final List<DoctorClinic> list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinicid,name,location,consultPrice" +
+        final List<DoctorClinic> list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
+                " clinicid,name,address,location,consultPrice" +
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                 " join clinics on doctorclinics.clinicid = clinics.id)" +
                 " join users on doctors.email = users.email",ROW_MAPPER);
@@ -76,7 +77,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     @Override
     public List<DoctorClinic> getDoctorClinicsForDoctor(Doctor doctor) {
         final List<DoctorClinic> list = jdbcTemplate.query(
-           "select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinicid,name,location,consultPrice" +
+           "select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
+                " clinicid,name,address,location,consultPrice" +
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                 " join clinics on doctorclinics.clinicid = clinics.id)" +
                 " join users on doctors.email = users.email" +
@@ -89,7 +91,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public List<DoctorClinic> getDoctorsInClinic(int clinic) {
-        final List<DoctorClinic> list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinicid,name,location,consultPrice" +
+        final List<DoctorClinic> list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
+                " clinicid,name,address,location,consultPrice" +
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                 " join clinics on doctorclinics.clinicid = clinics.id)" +
                 " join users on doctors.email = users.email where clinicid = ?",ROW_MAPPER, clinic);
@@ -101,7 +104,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public DoctorClinic getDoctorInClinic(String doctor, int clinic) {
-        final List<DoctorClinic> list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinicid,name,location,consultPrice" +
+        final List<DoctorClinic> list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
+                " clinicid,name,address,location,consultPrice" +
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                 " join clinics on doctorclinics.clinicid = clinics.id)" +
                 " join users on doctors.email = users.email where clinicid = ? and doctors.license = ?",ROW_MAPPER, clinic, doctor);
@@ -114,7 +118,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public List<DoctorClinic> getClinicsWithDoctor(String doctor) {
-        final List<DoctorClinic> list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinicid,name,location,consultPrice" +
+        final List<DoctorClinic> list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
+                " clinicid,name,address,location,consultPrice" +
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                 " join clinics on doctorclinics.clinicid = clinics.id)" +
                 " join users on doctors.email = users.email where doctors.license = ?",ROW_MAPPER, doctor);
@@ -153,7 +158,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
         final List<DoctorClinic> list;
         if(prepaid != null){
-             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinic.clinicid,name,location,consultPrice " +
+             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
+                    " clinic.clinicid,name,address,location,consultPrice " +
                     " from (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                     " join clinics on doctorclinics.clinicid = clinics.id)" +
                     " join users on doctors.email = users.email)" +
@@ -163,7 +169,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
 
         }else {
-             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinic.clinicid,name,location,consultPrice " +
+             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
+                    " clinic.clinicid,name,address,location,consultPrice " +
                     " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                     " join clinics on doctorclinics.clinicid = clinics.id)" +
                     " join users on doctors.email = users.email" +

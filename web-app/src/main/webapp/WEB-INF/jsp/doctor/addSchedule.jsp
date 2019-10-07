@@ -20,7 +20,9 @@
                 <c:otherwise>
                     <c:forEach var="doctorClinic" items="${doctorClinics}">
                         <div>
-                            <h5><c:out value="${doctorClinic.clinic.name}"/> (<c:out value="${doctorClinic.clinic.location.locationName}"/>)</h5>
+                            <h5><c:out value="${doctorClinic.clinic.name}"/></h5>
+                            <div><c:out value="${doctorClinic.clinic.address}"/></div>
+                            <div>(<c:out value="${doctorClinic.clinic.location.locationName}"/>)</div>
                             <p>
                                 <a class="btn btn-secondary" href="<c:url value="/doctor/addSchedule/${doctorClinic.clinic.id}"/>" role="button">
                                 <spring:message code="add.week.schedule"/>

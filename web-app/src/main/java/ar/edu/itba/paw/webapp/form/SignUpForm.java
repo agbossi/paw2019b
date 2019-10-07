@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
+import com.sun.istack.internal.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -30,7 +31,6 @@ public class SignUpForm {
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
     private String email;
 
-    @Pattern(regexp = "[a-zA-Z0-9]+")
     private String prepaid;
 
     @Size(max=20)

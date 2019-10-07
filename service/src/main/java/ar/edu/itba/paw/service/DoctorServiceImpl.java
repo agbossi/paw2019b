@@ -65,15 +65,16 @@ public class DoctorServiceImpl implements DoctorService {
 
         List<Doctor> doctorsWithAvailability = new ArrayList<>();
         List<Doctor> doctors = getDoctors();
-
-        for(Doctor doc : doctors) {
-            List<DoctorClinic> doctorsClinics = doctorClinicService.getDoctorClinicsForDoctor(doc);
-            if(doctorsClinics != null) {
-                for( DoctorClinic dc : doctorsClinics ) {
-                    if(dc.getSchedule()!=null && !(doctorsWithAvailability.contains(doc))) {
-                        doctorsWithAvailability.add(doc);
+            if (doctors != null) {
+                for(Doctor doc : doctors) {
+                    List<DoctorClinic> doctorsClinics = doctorClinicService.getDoctorClinicsForDoctor(doc);
+                    if(doctorsClinics != null) {
+                        for( DoctorClinic dc : doctorsClinics ) {
+                            if(dc.getSchedule()!=null && !(doctorsWithAvailability.contains(doc))) {
+                                doctorsWithAvailability.add(doc);
+                            }
+                        }
                     }
-                }
             }
         }
         return doctorsWithAvailability;

@@ -10,7 +10,9 @@
     </head>
     <body>
         <div>
-            <h6><c:out value="${doctorClinic.clinic.name}"/> (<c:out value="${doctorClinic.clinic.location.locationName}"/>)</h6>
+            <h6><c:out value="${doctorClinic.clinic.name}"/></h6>
+            <div><c:out value="${doctorClinic.clinic.address}"/></div>
+            <div>(<c:out value="${doctorClinic.clinic.location.locationName}"/>)</div>
         </div>
         <div>
             <div class="schedule">

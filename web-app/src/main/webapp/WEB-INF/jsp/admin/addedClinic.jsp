@@ -16,6 +16,9 @@
             <c:out value="${clinic.name}"/>
         </div>
         <div>
+            <c:out value="${clinic.address}"/>
+        </div>
+        <div>
             <c:out value="${clinic.location.locationName}"/>
         </div>
         <a class="nav-link" href="<c:url value="/admin/addClinic"/>"><spring:message code="add.another.clinic"/></a>

@@ -35,6 +35,7 @@
                 <div>
                     <h5>
                         <a href="<c:url value="/results/${doctor.license}/${dClinic.clinic.id}/1"/>"><c:out value="${dClinic.clinic.name}"/></a>
+                        <br/><c:out value="${dClinic.clinic.address}"/>
                         <br/>(<c:out value="${dClinic.clinic.location.locationName}"/>)
                         <br/>
                     </h5>

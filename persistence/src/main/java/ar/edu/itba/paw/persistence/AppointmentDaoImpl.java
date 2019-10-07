@@ -64,7 +64,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     @Override
     public List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic){
         final List<Appointment> list = jdbcTemplate.query("select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
-                        "clinicid, name, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+                        "clinicid, name,address, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
                         " from (appointments join users as pat on pat.email = appointments.patient) " +
                         "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
                         "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
@@ -80,7 +80,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     @Override
     public List<Appointment> getPatientsAppointments(User patient) {
         final List<Appointment> list = jdbcTemplate.query("select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
-                "clinicid, name, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+                "clinicid, name,address, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
                 " from (appointments join users as pat on pat.email = appointments.patient) " +
                 "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
                 "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
@@ -102,7 +102,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     public Appointment hasAppointment(DoctorClinic doctorClinic, Calendar date) {
         final List<Appointment> list = jdbcTemplate.query("" +
                         "select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
-                        "clinicid, name, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+                        "clinicid, name,address, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
                         " from (appointments join users as pat on pat.email = appointments.patient) " +
                         "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
                         "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
@@ -118,7 +118,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     public List<Appointment> getAllDoctorsAppointments(Doctor doctor) {
         final List<Appointment> list = jdbcTemplate.query("" +
                         "select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
-                        "clinicid, name, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+                        "clinicid, name,address, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
                         " from (appointments join users as pat on pat.email = appointments.patient) " +
                         "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
                         "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +

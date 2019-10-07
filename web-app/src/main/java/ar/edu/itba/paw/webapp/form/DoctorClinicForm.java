@@ -1,6 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Min;
 
 public class DoctorClinicForm {
 
@@ -8,7 +8,7 @@ public class DoctorClinicForm {
 
     private int clinic;
 
-    //TODO custom validation or controller validation
+    @Min(0)
     private int consultPrice;
 
     public String getDoctor() {
