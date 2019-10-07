@@ -62,4 +62,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         List<Appointment> appointments = appointmentDao.getAllDoctorsAppointments(doctor);
         return appointments;
     }
+
+    @Override
+    public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour) {
+        appointmentDao.cancelAllAppointmentsOnSchedule(doctorClinic, day, hour);
+    }
 }

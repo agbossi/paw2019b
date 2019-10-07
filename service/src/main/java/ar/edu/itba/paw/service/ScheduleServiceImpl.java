@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.interfaces.dao.ScheduleDao;
+import ar.edu.itba.paw.interfaces.service.AppointmentService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
 import ar.edu.itba.paw.model.Appointment;
 import ar.edu.itba.paw.model.DoctorClinic;
@@ -18,7 +19,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     ScheduleDao scheduleDao;
 
     @Autowired
-    AppointmentDao appointmentDao;
+    AppointmentService appointmentService;
 
     @Override
     public Schedule createSchedule(int hour, int day, DoctorClinic doctorClinic) {
@@ -38,7 +39,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public void deleteSchedule(int hour, int day, DoctorClinic doctorClinic) {
         scheduleDao.deleteSchedule(hour, day, doctorClinic);
-        appointmentDao.cancelAllAppointmentsOnSchedule(doctorClinic, day, hour);
+        appointmentService.cancelAllAppointmentsOnSchedule(doctorClinic, day, hour);
 //        List<Appointment> appointments = appointmentDao.getAllDocAppointmentsOnSchedule(doctorClinic, day, hour);
 //        for (Appointment a: appointments) {
 //            appointmentDao.cancelAppointment(a.getDoctorClinic(), a.getPatient(), a.getDate());

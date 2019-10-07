@@ -17,4 +17,6 @@ public interface AppointmentService {
     Appointment hasAppointment(DoctorClinic doctorClinic,Calendar date);
 
     List<Appointment> getAllDoctorsAppointments(Doctor doctor);
+
+    void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour);
 }
