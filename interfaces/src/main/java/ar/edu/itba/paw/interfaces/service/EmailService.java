@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.interfaces.service;
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.MessagingException;
-
 public interface EmailService {
     void sendSimpleMail(String to, String subject, String text);
 
