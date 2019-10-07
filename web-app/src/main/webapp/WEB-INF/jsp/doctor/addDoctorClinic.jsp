@@ -15,15 +15,6 @@
             <c:url value="/doctor/addedDoctorClinic" var="postPath"/>
             <form:form modelAttribute="doctorClinicForm" action="${postPath}" method="post">
                 <div>
-                    <form:label path="doctor"><spring:message code="doctor"/> </form:label>
-                    <form:select path="doctor">
-                        <c:forEach var="doctor" items="${doctors}">
-                            <form:option value="${doctor.license}"> <c:out value="${doctor.firstName}"/> <c:out value="${doctor.lastName}"/> </form:option>
-                        </c:forEach>
-                    </form:select>
-                    <form:errors path="doctor" element="p"/>
-                </div>
-                <div>
                     <form:label path="clinic"><spring:message code="clinic"/> </form:label>
                     <form:select path="clinic">
                         <c:forEach var="clinic" items="${clinics}">

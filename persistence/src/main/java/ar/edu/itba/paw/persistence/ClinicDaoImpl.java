@@ -24,7 +24,10 @@ public class ClinicDaoImpl implements ClinicDao {
         private final static RowMapper<Clinic> ROW_MAPPER = new RowMapper<Clinic>() {
         @Override
         public Clinic mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new Clinic(resultSet.getInt("id"),resultSet.getString("name"), new Location(resultSet.getString("location")));
+            return new Clinic(resultSet.getInt("id"),
+                              resultSet.getString("name"),
+                              resultSet.getString("address"),
+                              new Location(resultSet.getString("location")));
         }
     };
 
@@ -39,12 +42,13 @@ public class ClinicDaoImpl implements ClinicDao {
     }
 
     @Override
-    public Clinic createClinic(String name, Location location) {
+    public Clinic createClinic(String name, String address, Location location) {
         final Map<String, Object> args = new HashMap<>();
         args.put("name", name);
+        args.put("address", address);
         args.put("location", location.getLocationName());
         final Number id = jdbcInsert.executeAndReturnKey(args);
-        return new Clinic(id.intValue(), name, location);
+        return new Clinic(id.intValue(), name, address, location);
     }
 
     @Override

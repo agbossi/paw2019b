@@ -29,8 +29,10 @@ public class AppointmentDaoImpl implements AppointmentDao {
                             resultSet.getString("doctorLicense"),
                             resultSet.getString("phoneNumber"),
                             resultSet.getString("docEmail")),
-                            new Clinic(resultSet.getInt("clinicid"),resultSet.getString("name"),
-                                    new Location(resultSet.getString("location"))),
+                            new Clinic(resultSet.getInt("clinicid"),
+                                       resultSet.getString("name"),
+                                       resultSet.getString("address"),
+                                       new Location(resultSet.getString("location"))),
                             resultSet.getInt("consultPrice")),
                     new User(resultSet.getString("patFname"),
                             resultSet.getString("patLname"),
@@ -48,7 +50,6 @@ public class AppointmentDaoImpl implements AppointmentDao {
                 .withTableName("appointments");
     }
 
-    @Override
     public Appointment createAppointment(DoctorClinic doctorClinic, User patient, Calendar date) {
         final Map<String, Object> args = new HashMap<>();
         args.put("doctor", doctorClinic.getDoctor().getLicense());
@@ -60,9 +61,10 @@ public class AppointmentDaoImpl implements AppointmentDao {
         return new Appointment(date, doctorClinic, patient);
     }
 
+    @Override
     public List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic){
         final List<Appointment> list = jdbcTemplate.query("select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
-                        "clinicid, name, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+                        "clinicid, name,address, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
                         " from (appointments join users as pat on pat.email = appointments.patient) " +
                         "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
                         "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
@@ -78,7 +80,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     @Override
     public List<Appointment> getPatientsAppointments(User patient) {
         final List<Appointment> list = jdbcTemplate.query("select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
-                "clinicid, name, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+                "clinicid, name,address, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
                 " from (appointments join users as pat on pat.email = appointments.patient) " +
                 "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
                 "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
@@ -98,8 +100,9 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
     @Override
     public Appointment hasAppointment(DoctorClinic doctorClinic, Calendar date) {
-        final List<Appointment> list = jdbcTemplate.query("select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
-                        "clinicid, name, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+        final List<Appointment> list = jdbcTemplate.query("" +
+                        "select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
+                        "clinicid, name,address, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
                         " from (appointments join users as pat on pat.email = appointments.patient) " +
                         "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
                         "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
@@ -113,8 +116,9 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
     @Override
     public List<Appointment> getAllDoctorsAppointments(Doctor doctor) {
-        final List<Appointment> list = jdbcTemplate.query("select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
-                        "clinicid, name, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+        final List<Appointment> list = jdbcTemplate.query("" +
+                        "select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
+                        "clinicid, name,address, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
                         " from (appointments join users as pat on pat.email = appointments.patient) " +
                         "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
                         "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +

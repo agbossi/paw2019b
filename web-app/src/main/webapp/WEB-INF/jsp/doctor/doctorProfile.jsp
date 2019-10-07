@@ -20,7 +20,9 @@
                     <div class="container">
                         <c:forEach var="docClinic" items="${doctorClinics}">
                             <div>
-                                <h5><c:out value="${docClinic.clinic.name}"/> (<c:out value="${docClinic.clinic.location.locationName}"/>)&nbsp;<a href="<c:url value="/doctor/clinics/${docClinic.clinic.id}/1"/>"><spring:message code="view.clinic"/></a></h5>
+                                <a href="<c:url value="/doctor/clinics/${docClinic.clinic.id}/1"/>"><h5><c:out value="${docClinic.clinic.name}"/></h5></a>
+                                <div>(<c:out value="${docClinic.clinic.location.locationName}"/>)</div>
+                                <div>(<c:out value="${docClinic.clinic.address}"/>)</div>
                             </div>
                             </c:forEach>
                     </div>

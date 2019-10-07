@@ -4,6 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="format" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fc" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <html>
     <head>
@@ -34,7 +35,13 @@
             <c:forEach var="dClinic" items="${doctorClinics}">
                 <div>
                     <h5>
-                        <a href="<c:url value="/results/${doctor.license}/${dClinic.clinic.id}/1"/>"><c:out value="${dClinic.clinic.name}"/></a>
+                        <sec:authorize access="hasRole('ROLE_USER')">
+                            <a href="<c:url value="/results/${doctor.license}/${dClinic.clinic.id}/1"/>"><c:out value="${dClinic.clinic.name}"/></a>
+                        </sec:authorize>
+                        <sec:authorize access="isAnonymous()">
+                            <a href="<c:url value="/login"/>"><c:out value="${dClinic.clinic.name}"/></a>
+                        </sec:authorize>
+                        <br/><c:out value="${dClinic.clinic.address}"/>
                         <br/>(<c:out value="${dClinic.clinic.location.locationName}"/>)
                         <br/>
                     </h5>
