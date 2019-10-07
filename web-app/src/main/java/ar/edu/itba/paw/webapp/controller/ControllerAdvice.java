@@ -15,30 +15,30 @@ import java.sql.SQLException;
 @org.springframework.web.bind.annotation.ControllerAdvice
 public class ControllerAdvice {
 
-    @Autowired
-    MessageSource messageSource;
-
-    @ExceptionHandler(SQLException.class)
-    public ModelAndView handleSQLException(HttpServletRequest request, Exception ex){
-
-        ModelAndView mav = new ModelAndView("error");
-        mav.addObject("url", request.getRequestURL());
-        mav.addObject("message",messageSource.getMessage("database.error",null, LocaleContextHolder.getLocale()));
-        return mav;
-    }
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ModelAndView handleError404(HttpServletRequest request, Exception e)   {
-        ModelAndView mav = new ModelAndView("error");
-        mav.addObject("url", request.getRequestURL());
-        mav.addObject("message",messageSource.getMessage("page.not.found",null, LocaleContextHolder.getLocale()));
-        return mav;
-    }
-    @ExceptionHandler(Exception.class)
-    public ModelAndView handleError(HttpServletRequest request, Exception ex) {
-        ModelAndView mav = new ModelAndView();
-        mav.addObject("message", messageSource.getMessage("unexpected.error",null, LocaleContextHolder.getLocale()));
-        mav.addObject("url", request.getRequestURL());
-        mav.setViewName("error");
-        return mav;
-    }
+//    @Autowired
+//    MessageSource messageSource;
+//
+//    @ExceptionHandler(SQLException.class)
+//    public ModelAndView handleSQLException(HttpServletRequest request, Exception ex){
+//
+//        ModelAndView mav = new ModelAndView("error");
+//        mav.addObject("url", request.getRequestURL());
+//        mav.addObject("message",messageSource.getMessage("database.error",null, LocaleContextHolder.getLocale()));
+//        return mav;
+//    }
+//    @ExceptionHandler(NoHandlerFoundException.class)
+//    public ModelAndView handleError404(HttpServletRequest request, Exception e)   {
+//        ModelAndView mav = new ModelAndView("error");
+//        mav.addObject("url", request.getRequestURL());
+//        mav.addObject("message",messageSource.getMessage("page.not.found",null, LocaleContextHolder.getLocale()));
+//        return mav;
+//    }
+//    @ExceptionHandler(Exception.class)
+//    public ModelAndView handleError(HttpServletRequest request, Exception ex) {
+//        ModelAndView mav = new ModelAndView();
+//        mav.addObject("message", messageSource.getMessage("unexpected.error",null, LocaleContextHolder.getLocale()));
+//        mav.addObject("url", request.getRequestURL());
+//        mav.setViewName("error");
+//        return mav;
+//    }
 }

@@ -45,4 +45,9 @@ public class Doctor {
     public String getLastName() {
         return lastName;
     }
+
+    @Override
+    public int hashCode() {
+        return this.getLicense().hashCode();
+    }
 }

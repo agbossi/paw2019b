@@ -9,7 +9,7 @@ import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.*;
 
 @Component
 public class DoctorClinicServiceImpl implements DoctorClinicService {
@@ -87,14 +87,20 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     }
 
     @Override
-    public List<DoctorClinic> getDoctorBy(Location location, Specialty specialty,
-                                          String firstName, String lastName,
-                                          Prepaid prepaid, int consultPrice) {
+    public Set<Doctor> getDoctorBy(Location location, Specialty specialty,
+                                   String firstName, String lastName,
+                                   Prepaid prepaid, int consultPrice) {
 
-        List<DoctorClinic> list = doctorClinicDao.getFilteredDoctors(location, specialty,
-                                                                     firstName, lastName, prepaid, consultPrice);
-        setScheduleAndAppointments(list);
-        return list;
+        List<DoctorClinic> list = doctorClinicDao.getFilteredDoctors(location, specialty, firstName, lastName, prepaid, consultPrice);
+        Set<Doctor> set = new HashSet<>();
+
+        System.out.println("lista:" + list.size());
+        for(DoctorClinic doctorClinic : list){
+            set.add(doctorClinic.getDoctor());
+        }
+        System.out.println("set:" + list.size());
+
+        return set;
     }
 
 }

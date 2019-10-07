@@ -4,11 +4,20 @@ public class DoctorQueryBuilder {
 
     private String query;
 
-    public void buildQuery(String location, String specialty, String clinic){
-        StringBuilder query = new StringBuilder("select * from (doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicname = clinics.name where ");
-        query.append( location!=null ? ("location = ? and ") : ("TRUE and ") );
-        query.append( clinic!=null ? ("clinicname = ? and ") : ("TRUE and ") );
-        query.append( specialty!=null ? ("specialty = ?;") : ("TRUE;") );
+    public void buildQuery(String location, String specialty, String firstName, String lastName, String prepaid){
+        StringBuilder query = new StringBuilder("select firstName, lastName, specialty, doctorLicense, phoneNumber, doctors.email," +
+                " id as clinicid, name, address, location, consultPrice " +
+                " from (((doctorclinics natural join doctors) natural join (clinics natural join clinicPrepaids))" +
+                " join users on doctors.email = users.email) where ");
+        query.append( location!="" ? ("location = ? and ") : ("TRUE and ") );
+        query.append( specialty!="" ? ("specialty = ? and ") : ("TRUE and ") );
+        query.append( firstName!="" ? ("firstName = ? and ") : ("TRUE and ") );
+        query.append( lastName!="" ? ("lastName = ? and ") : ("TRUE and ") );
+        if(prepaid!=""){
+            query.append("clinicPrepaids.prepaid = ?;");
+        }else{
+            query.append("consultPrice <= ?;");
+        }
 
         this.query = query.toString();
     }
@@ -17,3 +26,5 @@ public class DoctorQueryBuilder {
         return query;
     }
 }
+
+

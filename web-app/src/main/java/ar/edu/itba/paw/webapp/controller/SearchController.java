@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class SearchController {
@@ -54,7 +55,7 @@ public class SearchController {
 
 
         // TODO: once we implement a proper query builder fix this and search form attributes !!
-        List<DoctorClinic> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
+        Set<Doctor> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
                 new Specialty(form.getSpecialty()), form.getFirstName(),form.getLastName(),new Prepaid(form.getPrepaid()),form.getConsultPrice());
 
         viewModifier.addFilteredDoctors(mav, filteredDoctors);
