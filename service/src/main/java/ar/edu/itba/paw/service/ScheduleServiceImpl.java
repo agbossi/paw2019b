@@ -1,7 +1,10 @@
 package ar.edu.itba.paw.service;
 
+import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.interfaces.dao.ScheduleDao;
+import ar.edu.itba.paw.interfaces.service.AppointmentService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
+import ar.edu.itba.paw.model.Appointment;
 import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +17,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
     ScheduleDao scheduleDao;
+
+    @Autowired
+    AppointmentService appointmentService;
 
     @Override
     public Schedule createSchedule(int hour, int day, DoctorClinic doctorClinic) {
@@ -28,5 +34,15 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public boolean hasSchedule(DoctorClinic doctorClinic, int day, int hour) {
         return scheduleDao.hasSchedule(doctorClinic, day, hour);
+    }
+
+    @Override
+    public void deleteSchedule(int hour, int day, DoctorClinic doctorClinic) {
+        scheduleDao.deleteSchedule(hour, day, doctorClinic);
+        appointmentService.cancelAllAppointmentsOnSchedule(doctorClinic, day, hour);
+//        List<Appointment> appointments = appointmentDao.getAllDocAppointmentsOnSchedule(doctorClinic, day, hour);
+//        for (Appointment a: appointments) {
+//            appointmentDao.cancelAppointment(a.getDoctorClinic(), a.getPatient(), a.getDate());
+//        }
     }
 }

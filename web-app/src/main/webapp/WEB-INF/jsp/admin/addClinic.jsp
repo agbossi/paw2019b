@@ -21,6 +21,11 @@
             <form:errors path="name" element="p"/>
         </div>
         <div>
+            <form:label path="address"><spring:message code="address"/> </form:label>
+            <form:input type="text" path="address"/>
+            <form:errors path="address" element="p"/>
+        </div>
+        <div>
             <form:label path="location"><spring:message code="location"/> </form:label>
             <form:select path="location">
                 <c:forEach var="location" items="${locations}">

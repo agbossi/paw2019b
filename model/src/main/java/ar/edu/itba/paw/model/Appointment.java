@@ -9,9 +9,9 @@ public class Appointment {
 
     DoctorClinic doctorClinic;
 
-    Patient patient;
+    User patient;
 
-    public Appointment(Calendar date, DoctorClinic doctorClinic, Patient patient) {
+    public Appointment(Calendar date, DoctorClinic doctorClinic, User patient) {
         this.date = date;
         this.doctorClinic = doctorClinic;
         this.patient = patient;
@@ -25,7 +25,7 @@ public class Appointment {
         return doctorClinic;
     }
 
-    public Patient getPatient() {
+    public User getPatient() {
         return patient;
     }
 }

@@ -24,7 +24,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     PatientService patientService;
 
     @Override
-    public Appointment createAppointment(DoctorClinic doctorClinic, Patient patient, Calendar date) {
+    public Appointment createAppointment(DoctorClinic doctorClinic, User patient, Calendar date) {
         Calendar today = Calendar.getInstance();
         if (today.compareTo(date) < 0){
             for (Schedule schedule: doctorClinic.getSchedule()) {
@@ -43,12 +43,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> getPatientsAppointments(Patient patient) {
+    public List<Appointment> getPatientsAppointments(User patient) {
         return appointmentDao.getPatientsAppointments(patient);
     }
 
     @Override
-    public void cancelAppointment(DoctorClinic doctorClinic, Patient patient, Calendar date) {
+    public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date) {
         appointmentDao.cancelAppointment(doctorClinic,patient,date);
     }
 
@@ -61,5 +61,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     public List<Appointment> getAllDoctorsAppointments(Doctor doctor) {
         List<Appointment> appointments = appointmentDao.getAllDoctorsAppointments(doctor);
         return appointments;
+    }
+
+    @Override
+    public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour) {
+        appointmentDao.cancelAllAppointmentsOnSchedule(doctorClinic, day, hour);
     }
 }

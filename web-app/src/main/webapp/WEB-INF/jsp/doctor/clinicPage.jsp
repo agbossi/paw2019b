@@ -10,7 +10,9 @@
     </head>
     <body>
         <div>
-            <h6><c:out value="${doctorClinic.clinic.name}"/> (<c:out value="${doctorClinic.clinic.location.locationName}"/>)</h6>
+            <h6><c:out value="${doctorClinic.clinic.name}"/></h6>
+            <div><c:out value="${doctorClinic.clinic.address}"/></div>
+            <div>(<c:out value="${doctorClinic.clinic.location.locationName}"/>)</div>
         </div>
         <div>
             <div class="schedule">
@@ -60,7 +62,7 @@
                                 <td class="mycell">
                                     <c:choose>
                                         <c:when test="${day.scheduled && empty day.hasAppointment}">
-                                            <a href="<c:url value="/createApp/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="available"/></a>
+                                            <a href="<c:url value="/doctorApp/${doctorClinic.clinic.id}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="available"/></a>
                                         </c:when>
                                         <c:when test="${day.scheduled && not empty day.hasAppointment}">
                                             <div class="info">

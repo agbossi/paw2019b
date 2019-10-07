@@ -25,7 +25,7 @@ public class PatientDaoImpl implements PatientDao {
     private final static RowMapper<Patient> ROW_MAPPER = new RowMapper<Patient>() {
 
         @Override public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return new Patient(rs.getString("patients.email"),
+            return new Patient(rs.getString("email"),
                     rs.getString("id"),
                     rs.getString("prepaid"),
                     rs.getString("prepaidNumber"),
@@ -58,7 +58,7 @@ public class PatientDaoImpl implements PatientDao {
 
     @Override
     public Patient getPatientByEmail(String email) {
-        List<Patient> patient = jdbcTemplate.query("select * from patients join users on users. email = patients.email where email = ?", ROW_MAPPER, email);
+        List<Patient> patient = jdbcTemplate.query("select * from patients natural join users where email = ?", ROW_MAPPER, email);
         if(patient.isEmpty()) {
             return null;
         }

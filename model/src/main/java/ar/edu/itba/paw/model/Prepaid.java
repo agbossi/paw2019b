@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.model;
 
 public class Prepaid {
+
     private String name;
 
     public Prepaid(String name) {

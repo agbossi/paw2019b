@@ -36,7 +36,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public void setAppointments(Patient patient) {
-        List<Appointment> appointments = appointmentDao.getPatientsAppointments(patient);
+        User user = userDao.findUserByEmail(patient.getEmail());
+        List<Appointment> appointments = appointmentDao.getPatientsAppointments(user);
         patient.setAppointments(appointments);
     }
 

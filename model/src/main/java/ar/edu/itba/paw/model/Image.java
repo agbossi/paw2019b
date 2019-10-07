@@ -9,8 +9,6 @@ public class Image {
 
     private InputStream image;
 
-    // TODO: analizar si es necesario algun constructor solo con ID
-
     public Image(long id, String license, InputStream image) {
         this.id = id;
         this.license = license;
@@ -27,5 +25,9 @@ public class Image {
 
     public InputStream getImage() {
         return image;
+    }
+
+    public void setImage(InputStream image) {
+        this.image = image;
     }
 }

@@ -6,7 +6,7 @@ import ar.edu.itba.paw.model.Location;
 import java.util.List;
 
 public interface ClinicService {
-    Clinic createClinic(String name, Location location);
+    Clinic createClinic(String name, String address, Location location);
 
     List<Clinic> getClinics();
 

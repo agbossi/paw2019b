@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -55,6 +56,11 @@ public class ImageDaoImpl implements ImageDao {
             return null;
         }
         return list.get(0);
+    }
+
+    @Override
+    public long updateProfileImage(byte[] image, String doctor) {
+        return jdbcTemplate.update("UPDATE images SET image = ? WHERE doctor = ?", image, doctor);
     }
 
 }

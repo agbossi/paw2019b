@@ -85,10 +85,15 @@
                             <br/>
                         </div>
                     </div>
-                    <div>
-                        <form:label path="consultPrice"><spring:message code="consult.price"/> </form:label>
-                        <form:input type="number" path="consultPrice"/>
-                        <form:errors path="consultPrice" element="p"/>
+                    <div class="list-group-item">
+                        <div>
+                            <form:label path="consultPrice"><spring:message code="consult.price"/> </form:label>
+                        </div>
+                        <div>
+                            <form:input type="number" path="consultPrice"/>
+                            <form:errors path="consultPrice" element="p"/>
+                            <br/>
+                        </div>
                     </div>
                 <div class="list-group-item">
                     <input type="submit" value="<spring:message code="submit.search"/>">

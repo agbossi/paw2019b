@@ -8,18 +8,18 @@
 </head>
 <body>
     <h2><spring:message code="account.header"/></h2>
-        <div>
-            <p><b><spring:message code="user.first.name"/></b></p>
-            <p>${user.firstName}</p>
-        </div>
-        <div>
-            <p><b><spring:message code="user.last.name"/></b></p>
-            <p>${user.lastName}</p>
-        </div>
-        <div>
-            <p><b><spring:message code="user.email"/></b></p>
-            <p>${user.email}</p>
-        </div>
+    <div>
+        <p><b><spring:message code="user.first.name"/></b></p>
+        <p>${user.firstName}</p>
+    </div>
+    <div>
+        <p><b><spring:message code="user.last.name"/></b></p>
+        <p>${user.lastName}</p>
+    </div>
+    <div>
+        <p><b><spring:message code="user.email"/></b></p>
+        <p>${user.email}</p>
+    </div>
 
     <c:choose>
         <c:when test="${not empty patient.prepaid}">
@@ -36,6 +36,6 @@
         <c:otherwise>
         </c:otherwise>
     </c:choose>
-    <a class="btn btn-outline-primary" href="<c:url value="/editProfile"/>"><spring:message code="edit.personal"/></a> -->
+    <a class="btn btn-outline-primary" href="<c:url value="/editProfile"/>"><spring:message code="edit.personal"/></a>
 </body>
 </html>

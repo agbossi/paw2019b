@@ -1,11 +1,14 @@
 package ar.edu.itba.paw.webapp.form;
 
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotNull;
 
 public class ClinicForm {
 
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @NotNull
     private String name;
+
+    @NotNull
+    private String address;
 
     private String location;
 
@@ -25,4 +28,11 @@ public class ClinicForm {
         this.location = location;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

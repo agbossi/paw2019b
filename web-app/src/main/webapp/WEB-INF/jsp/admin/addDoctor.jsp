@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
 
 <html>
     <head>
@@ -12,7 +13,7 @@
         <h2><spring:message code="doc.info"/> </h2>
         <div class="container">
             <c:url value="/admin/addedDoctor" var="postPath"/>
-            <form:form modelAttribute="doctorForm" action="${postPath}" method="post">
+            <form:form modelAttribute="doctorForm" action="${postPath}" method="post" enctype="multipart/form-data">
                 <div>
                     <form:label path="firstName"><spring:message code="user.first.name"/> </form:label>
                     <form:input type="text" path="firstName"/>
@@ -56,6 +57,9 @@
                     <form:label path="repeatPassword"><spring:message code="repeat.password"/> </form:label>
                     <form:input type="password" path="repeatPassword"/>
                     <form:errors path="repeatPassword" element="p"/>
+                </div>
+                <div>
+                    <spring:message code="default.picture"/> <input type="file" name="photo"/>
                 </div>
                 <div>
                     <input type="submit" value="<spring:message code="submit.add"/>">
