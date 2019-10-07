@@ -111,7 +111,7 @@ public class AppointmentController {
 
         appointmentService.cancelAppointment(docCli, patient, cal);
         emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.cancelled.subject",null,locale),messageSource.getMessage("appointment.cancelled.text",null,locale));
-        final ModelAndView mav = new ModelAndView("redirect:/doctor/");
+        final ModelAndView mav = new ModelAndView("redirect:/");
 
         return mav;
     }

@@ -28,10 +28,10 @@ public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthent
                 String role = determineTargetUrl(authentication);
 
                 if( role.equals("ROLE_ADMIN") ){
-                    getRedirectStrategy().sendRedirect(request, response, "/admin/");
+                    getRedirectStrategy().sendRedirect(request, response, "/");
                 }
                 else if( role.equals("ROLE_DOCTOR") ){
-                    getRedirectStrategy().sendRedirect(request, response, "/doctor/");
+                    getRedirectStrategy().sendRedirect(request, response, "/");
                 }
                 else {
                     // we redirect home page

@@ -49,21 +49,6 @@ public class DoctorController {
     @Autowired
     private ModelAndViewModifier viewModifier;
 
-    @RequestMapping(value = "/", method = { RequestMethod.GET })
-    public ModelAndView doctorProfile() {
-        final ModelAndView mav = new ModelAndView("doctor/doctorProfile");
-
-        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
-        List<DoctorClinic> doctorClinics = doctorClinicService.getDoctorClinicsForDoctor(doctor);
-        mav.addObject("doctorClinics", doctorClinics);
-
-
-        List<Appointment> appointments = appointmentService.getAllDoctorsAppointments(doctor);
-
-        mav.addObject("appointments",appointments);
-        return mav;
-    }
 
     @RequestMapping(value = "/editProfile", method = { RequestMethod.GET })
     public ModelAndView editProfile() {
