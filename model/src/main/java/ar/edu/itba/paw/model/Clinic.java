@@ -4,7 +4,9 @@ public class Clinic {
     private String name;
 
     private int id;
-    // TODO: this should be transformed into an address
+
+    private String address;
+
     private Location location;
 
 
@@ -28,5 +30,9 @@ public class Clinic {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getAddress() {
+        return address;
     }
 }
