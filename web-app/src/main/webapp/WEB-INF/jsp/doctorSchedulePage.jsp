@@ -76,7 +76,7 @@
                         <td><spring:message code="hour.${day.date.get(11)}"/></td>
                     </c:if>
                     <td>
-                        <c:if test="${day.scheduled && !day.hasAppointment}">
+                        <c:if test="${day.scheduled && empty day.hasAppointment}">
                             <a href="<c:url value="/createApp/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="available"/></a>
                         </c:if>
                     </td>

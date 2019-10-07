@@ -1,21 +1,18 @@
 package ar.edu.itba.paw.interfaces.service;
 
-import ar.edu.itba.paw.model.Appointment;
-import ar.edu.itba.paw.model.Doctor;
-import ar.edu.itba.paw.model.DoctorClinic;
-import ar.edu.itba.paw.model.Patient;
+import ar.edu.itba.paw.model.*;
 
 import java.util.Calendar;
 import java.util.List;
 
 public interface AppointmentService {
-    Appointment createAppointment(DoctorClinic doctorClinic, Patient patient, Calendar date);
+    Appointment createAppointment(DoctorClinic doctorClinic, User patient, Calendar date);
 
     List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic);
 
-    List<Appointment> getPatientsAppointments(Patient patient);
+    List<Appointment> getPatientsAppointments(User patient);
 
-    void cancelAppointment(DoctorClinic doctorClinic, Patient patient, Calendar date);
+    void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date);
 
     Appointment hasAppointment(DoctorClinic doctorClinic,Calendar date);
 

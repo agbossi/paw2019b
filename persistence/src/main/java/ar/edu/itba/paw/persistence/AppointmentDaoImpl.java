@@ -32,12 +32,10 @@ public class AppointmentDaoImpl implements AppointmentDao {
                             new Clinic(resultSet.getInt("clinicid"),resultSet.getString("name"),
                                     new Location(resultSet.getString("location"))),
                             resultSet.getInt("consultPrice")),
-                    new Patient(resultSet.getString("patient"),
-                            resultSet.getString("id"),
-                            resultSet.getString("prepaid"),
-                            resultSet.getString("prepaidNumber"),
-                            resultSet.getString("patFname"),
-                            resultSet.getString("patLname")
+                    new User(resultSet.getString("patFname"),
+                            resultSet.getString("patLname"),
+                            null,
+                            resultSet.getString("patient")
                             ));
         }
     };
@@ -51,7 +49,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    public Appointment createAppointment(DoctorClinic doctorClinic, Patient patient,Calendar date) {
+    public Appointment createAppointment(DoctorClinic doctorClinic, User patient, Calendar date) {
         final Map<String, Object> args = new HashMap<>();
         args.put("doctor", doctorClinic.getDoctor().getLicense());
         args.put("clinic", doctorClinic.getClinic().getId());
@@ -64,8 +62,8 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
     public List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic){
         final List<Appointment> list = jdbcTemplate.query("select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
-                        "clinicid, name, location, consultPrice, patient, pat.id as id, prepaid, prepaidNumber, pat.firstName as patFname, pat.lastName as patLname  " +
-                        " from (appointments join (patients natural join users) as pat on pat.email = appointments.patient) " +
+                        "clinicid, name, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+                        " from (appointments join users as pat on pat.email = appointments.patient) " +
                         "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
                         "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
                         "where appointments.doctor = ? and appointments.clinic = ?",ROW_MAPPER,
@@ -78,10 +76,10 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    public List<Appointment> getPatientsAppointments(Patient patient) {
+    public List<Appointment> getPatientsAppointments(User patient) {
         final List<Appointment> list = jdbcTemplate.query("select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
-                "clinicid, name, location, consultPrice, patient, pat.id as id, prepaid, prepaidNumber, pat.firstName as patFname, pat.lastName as patLname  " +
-                " from (appointments join (patients natural join users) as pat on pat.email = appointments.patient) " +
+                "clinicid, name, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+                " from (appointments join users as pat on pat.email = appointments.patient) " +
                 "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
                 "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
                 "where appointments.patient = ?",ROW_MAPPER,patient.getEmail());
@@ -92,7 +90,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    public void cancelAppointment(DoctorClinic doctorClinic, Patient patient, Calendar date){
+    public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date){
         Object[] args = new Object[] {patient.getEmail(), doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), date.getTime()};
         jdbcTemplate.update("delete from appointments where patient = ? and doctor = ? and clinic = ? and date = ?", args);
 
@@ -101,8 +99,8 @@ public class AppointmentDaoImpl implements AppointmentDao {
     @Override
     public Appointment hasAppointment(DoctorClinic doctorClinic, Calendar date) {
         final List<Appointment> list = jdbcTemplate.query("select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
-                        "clinicid, name, location, consultPrice, patient, pat.id as id, prepaid, prepaidNumber, pat.firstName as patFname, pat.lastName as patLname  " +
-                        " from (appointments join (patients natural join users) as pat on pat.email = appointments.patient) " +
+                        "clinicid, name, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+                        " from (appointments join users as pat on pat.email = appointments.patient) " +
                         "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
                         "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
                         "where appointments.doctor = ? and appointments.clinic = ? and date = ?",ROW_MAPPER,
@@ -116,8 +114,8 @@ public class AppointmentDaoImpl implements AppointmentDao {
     @Override
     public List<Appointment> getAllDoctorsAppointments(Doctor doctor) {
         final List<Appointment> list = jdbcTemplate.query("select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
-                        "clinicid, name, location, consultPrice, patient, pat.id as id, prepaid, prepaidNumber, pat.firstName as patFname, pat.lastName as patLname  " +
-                        " from (appointments join (patients natural join users) as pat on pat.email = appointments.patient) " +
+                        "clinicid, name, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+                        " from (appointments join users as pat on pat.email = appointments.patient) " +
                         "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
                         "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
                         "where appointments.doctor = ?",ROW_MAPPER,
