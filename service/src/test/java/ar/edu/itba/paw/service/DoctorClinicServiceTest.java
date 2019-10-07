@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.service;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 class DoctorClinicServiceTest {
