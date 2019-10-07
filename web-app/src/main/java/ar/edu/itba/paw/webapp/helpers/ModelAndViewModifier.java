@@ -86,7 +86,7 @@ public class ModelAndViewModifier {
         return mav;
     }
 
-    public ModelAndView addFilteredDoctors(ModelAndView mav, Set<Doctor> filteredDoctors){
+    public ModelAndView addFilteredDoctors(ModelAndView mav, List<Doctor> filteredDoctors){
         mav.addObject("doctors", filteredDoctors);
 
         return mav;

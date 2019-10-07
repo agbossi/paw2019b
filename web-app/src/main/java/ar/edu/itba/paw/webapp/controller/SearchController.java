@@ -55,7 +55,7 @@ public class SearchController {
 
 
         // TODO: once we implement a proper query builder fix this and search form attributes !!
-        Set<Doctor> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
+        List<Doctor> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
                 new Specialty(form.getSpecialty()), form.getFirstName(),form.getLastName(),new Prepaid(form.getPrepaid()),form.getConsultPrice());
 
         viewModifier.addFilteredDoctors(mav, filteredDoctors);

@@ -7,7 +7,7 @@ public class DoctorQueryBuilder {
     public void buildQuery(String location, String specialty, String firstName, String lastName, String prepaid){
         StringBuilder query = new StringBuilder("select firstName, lastName, specialty, doctorLicense, phoneNumber, doctors.email," +
                 " id as clinicid, name, address, location, consultPrice " +
-                " from (((doctorclinics natural join doctors) natural join (clinics natural join clinicPrepaids))" +
+                " from (((doctorclinics join doctors on doctorLicense = license) natural join (clinics join clinicPrepaids on clinicPrepaids.clinicid = clinics.id))" +
                 " join users on doctors.email = users.email) where ");
         query.append( location!="" ? ("location = ? and ") : ("TRUE and ") );
         query.append( specialty!="" ? ("specialty = ? and ") : ("TRUE and ") );

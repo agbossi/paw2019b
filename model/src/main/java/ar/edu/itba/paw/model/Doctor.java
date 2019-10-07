@@ -48,6 +48,14 @@ public class Doctor {
 
     @Override
     public int hashCode() {
-        return this.getLicense().hashCode();
+        return Integer.parseInt(this.getLicense());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Doctor){
+            return ((Doctor) obj).getLicense().equals(this.getLicense());
+        }
+        return false;
     }
 }
