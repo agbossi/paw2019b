@@ -78,6 +78,12 @@ public class ModelAndViewModifier {
         return mav;
     }
 
+    public ModelAndView addDoctorsWithAvailability(ModelAndView mav){
+        List<Doctor> doctors = doctorService.getDoctorsWithAvailability();
+        mav.addObject("doctors", doctors);
+        return mav;
+    }
+
     public ModelAndView addFilteredDoctors(ModelAndView mav, List<DoctorClinic> filteredDoctors){
         mav.addObject("doctorClinics", filteredDoctors);
 

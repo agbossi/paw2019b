@@ -1,5 +1,9 @@
 package ar.edu.itba.paw.webapp.form;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -15,21 +19,18 @@ public class SignUpForm {
     private String lastName;
 
     @Size(min = 8, max = 20)
-    //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String password;
 
     @Size(min = 8, max = 20)
-    //@Pattern(regexp = "[[a-zA-Z]+[0-9]{4,}]")
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String repeatPassword;
 
     @Size(min = 6, max = 25)
-    //stackOverflow
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
     private String email;
 
-
+    @Pattern(regexp = "[a-zA-Z0-9]+")
     private String prepaid;
 
     @Size(max=20)

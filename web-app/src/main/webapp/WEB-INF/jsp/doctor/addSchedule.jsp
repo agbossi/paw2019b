@@ -5,37 +5,31 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <html>
-<head>
     <head>
         <%@ page isELIgnored="false" %>
         <jsp:include page="../base/navbar.jsp" />
-
+        <link href="<c:url value="/resources/css/doctors.css" />" rel="stylesheet" type="text/css" />
     </head>
     <body class="d-flex flex-column h-100">
-        <h2>Doctor Information</h2>
-        <body class="d-flex flex-column h-100">
-        <div class="container marketing" id="doctors">
-            <div class="row">
-                <c:choose>
-                    <c:when test="${empty doctorClinics}">
-                        <spring:message code="still.no.clinic.subscription"/>&nbsp;<a href="<c:out value="/doctor/addDoctorClinic"/>"><spring:message code="here"/></a>
-                    </c:when>
-                    <c:otherwise>
-                        <c:forEach var="doctorClinic" items="${doctorClinics}">
-                                <h3><c:out value="${doctorClinic.doctor.firstName}"/> <c:out value="${doctorClinic.doctor.lastName}"/></h3>
-                                <p><c:out value="${doctorClinic.doctor.specialty.specialtyName}"/></p>
-                                <p><c:out value="${doctorClinic.clinic.name}"/> (<c:out value="${doctorClinic.clinic.location.locationName}"/>)</p>
-                                <p><a class="btn btn-secondary" href="<c:url value="/doctor/addSchedule/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}"/>" role="button">
-                                    <spring:message code="add.week.schedule"/>
+        <h2><spring:message code="w.clinic"/></h2>
+        <div class="container">
+            <c:choose>
+                <c:when test="${empty doctorClinics}">
+                    <spring:message code="still.no.clinic.subscription"/>&nbsp;<a href="<c:out value="/doctor/addDoctorClinic"/>"><spring:message code="here"/></a>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="doctorClinic" items="${doctorClinics}">
+                        <div>
+                            <h5><c:out value="${doctorClinic.clinic.name}"/> (<c:out value="${doctorClinic.clinic.location.locationName}"/>)</h5>
+                            <p>
+                                <a class="btn btn-secondary" href="<c:url value="/doctor/addSchedule/${doctorClinic.clinic.id}"/>" role="button">
+                                <spring:message code="add.week.schedule"/>
                                 </a>
-                                </p>
-                            </div>
-                        </c:forEach>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-        </div>
-        </body>
+                            </p>
+                        </div>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
         </div>
     </body>
 </html>

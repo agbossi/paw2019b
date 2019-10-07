@@ -13,6 +13,7 @@ import org.springframework.jdbc.datasource.init.DatabasePopulator;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
@@ -114,6 +115,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
+    public LocalValidatorFactoryBean getValidator() {
+        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        bean.setValidationMessageSource(messageSource());
+        return bean;
+    }
+
+    @Bean
     public MultipartResolver multipartResolver() {
         return new CommonsMultipartResolver();
     }
@@ -130,5 +138,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         localeChangeInterceptor.setParamName("lang");
         registry.addInterceptor(localeChangeInterceptor);
     }
-
+    @Bean
+    public LocaleChangeInterceptor localeInterceptor(){
+        LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+        interceptor.setParamName("lang");
+        return interceptor;
+    }
 }

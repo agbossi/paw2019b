@@ -46,8 +46,8 @@
                 </div>
                 <div>
                     <form:label path="prepaid"><spring:message code="patient.prepaid"/></form:label>
-                    <form:select type="select" path="prepaid">
-                        <form:option value=""><spring:message code="no.prepaid"/></form:option>
+                    <form:select type="select" path="prepaid" id="prepaid" onclick="handleClick(this.id)">
+                        <form:option value="" ><spring:message code="no.prepaid"/></form:option>
                         <c:forEach var="prepaid" items="${prepaids}">
                             <form:option value="${prepaid.name}"/>
                         </c:forEach>
@@ -56,7 +56,7 @@
                 </div>
                 <div>
                     <form:label path="prepaidNumber"><spring:message code="patient.prepaid.number"/> </form:label>
-                    <form:input type="text" path="prepaidNumber" placeholder="Insert prepaid number"/>
+                    <form:input type="text" path="prepaidNumber" id="prepaidNumber" placeholder="Insert prepaid number" disabled="true"/>
                     <form:errors path="prepaidNumber" element="p"/>
                 </div>
                 <div>
@@ -69,3 +69,17 @@
         </div>
     </body>
 </html>
+
+<script type="text/javascript">
+    function handleClick(clickedId)
+    {
+        if(clickedId == "prepaid") {
+            if( document.getElementById('prepaid').value == "" ) {
+                document.getElementById('prepaidNumber').disabled = true;
+            }
+            else {
+                document.getElementById('prepaidNumber').disabled = false;
+            }
+        }
+    }
+</script>
