@@ -95,26 +95,26 @@ public class AppointmentController {
                                                 @PathVariable(value = "day") int day, @PathVariable(value = "year") int year,
                                                 @PathVariable(value = "month") int month, @PathVariable(value = "time") int time,
                                                 Locale locale){
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month, day, time, 0, 0);
-        cal.set(Calendar.MILLISECOND, 0);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day, time, 0, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
 
         User patient = userService.findUserByEmail(email);
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Doctor doc = doctorService.getDoctorByEmail(user.getEmail());
-        Clinic clinic = clinicService.getClinicById(clinicId);
-        DoctorClinic docCli = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, clinic);
+        Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
 
-        appointmentService.cancelAppointment(docCli, patient, cal);
-<<<<<<< HEAD
+        Clinic clinic = clinicService.getClinicById(clinicId);
+        DoctorClinic docCli = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, clinic);
+
+        appointmentService.cancelAppointment(docCli, patient, calendar);
         emailService.sendSimpleMail(patient.getEmail(),"${appointment.cancelled.subject}","${appointment.cancelled.text}");
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor/clinics/" + clinicId +"/1");
-=======
-        emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.cancelled.subject",null,locale),messageSource.getMessage("appointment.cancelled.text",null,locale));
+        emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.cancelled.subject", null,locale),
+                                    messageSource.getMessage("appointment.cancelled.text",null,locale)
+                                    );
         final ModelAndView mav = new ModelAndView("redirect:/");
->>>>>>> 2dc41b24fa3318a36cb2c3741fcc4a34df7cf78c
 
         return mav;
     }

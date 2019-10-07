@@ -61,13 +61,15 @@ public class FrontController {
             List<Appointment> appointments = appointmentService.getAllDoctorsAppointments(doctor);
             mav.addObject("appointments",appointments);
         }
+        else{
+            /*
+             * What do I need for patients and anonymous users...
+             * */
+            viewModifier.addSearchInfo(mav);
+            // Patients are not interested in doctors that still haven't load their schedule
+            viewModifier.addDoctorsWithAvailability(mav);
+        }
 
-        /*
-         * What do I need for patients and anonymous users...
-         * */
-        viewModifier.addSearchInfo(mav);
-        // Patients are not interested in doctors that still haven't load their schedule
-        viewModifier.addDoctorsWithAvailability(mav);
 
         return mav;
     }
