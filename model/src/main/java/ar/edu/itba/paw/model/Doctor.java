@@ -45,4 +45,17 @@ public class Doctor {
     public String getLastName() {
         return lastName;
     }
+
+    @Override
+    public int hashCode() {
+        return Integer.parseInt(this.getLicense());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Doctor){
+            return ((Doctor) obj).getLicense().equals(this.getLicense());
+        }
+        return false;
+    }
 }
