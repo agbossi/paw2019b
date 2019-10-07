@@ -36,12 +36,6 @@ public class AppointmentController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    private MessageSource messageSource;
-
     @RequestMapping(value = "/createApp/{clinicId}/{doctorId}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
     public ModelAndView makeAppointment(@PathVariable(value = "clinicId") int clinicId, @PathVariable(value = "doctorId") String license,
                                         @PathVariable(value = "day") int day, @PathVariable(value = "year") int year,
@@ -58,7 +52,6 @@ public class AppointmentController {
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
 
         appointmentService.createAppointment(doctorClinic, user, cal);
-        emailService.sendSimpleMail(user.getEmail(),messageSource.getMessage("appointment.created.subject",null,locale),messageSource.getMessage("appointment.created.text",null,locale));
 
 
         final ModelAndView mav = new ModelAndView("redirect:/appointments");
@@ -108,13 +101,8 @@ public class AppointmentController {
         DoctorClinic docCli = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, clinic);
 
         appointmentService.cancelAppointment(docCli, patient, calendar);
-        emailService.sendSimpleMail(patient.getEmail(),"${appointment.cancelled.subject}","${appointment.cancelled.text}");
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor/clinics/" + clinicId +"/1");
-        emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.cancelled.subject", null,locale),
-                                    messageSource.getMessage("appointment.cancelled.text",null,locale)
-                                    );
-
         return mav;
     }
 

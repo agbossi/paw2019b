@@ -48,9 +48,6 @@ public class UserController {
     private ModelAndViewModifier modelAndViewModifier;
 
     @Autowired
-    private EmailService emailService;
-
-    @Autowired
     private MessageSource messageSource;
 
     private void authWithAuthManager(HttpServletRequest request, String email, String password) {
@@ -98,8 +95,6 @@ public class UserController {
 
         User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
         patientService.create(form.getEmail(),form.getId(),form.getPrepaid(), form.getPrepaidNumber(), user);
-
-        emailService.sendSimpleMail(form.getEmail(),messageSource.getMessage("sign.up.subject",null,locale),messageSource.getMessage("sign.up.message",null,locale));
         authWithAuthManager(request, form.getEmail(), form.getPassword());
 
         String ret = signUpSuccess(request);

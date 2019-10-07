@@ -2,10 +2,15 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
+import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+
+import java.util.Locale;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -16,8 +21,17 @@ public class UserServiceImpl implements UserService {
     @Autowired
     DoctorDao doctorDao;
 
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private MessageSource messageSource;
+
     @Override
     public User createUser(String firstName,String lastName, String password, String email) {
+        Locale locale = LocaleContextHolder.getLocale();
+        emailService.sendSimpleMail(email,messageSource.getMessage("sign.up.subject",null,locale),firstName + " " + " " + lastName + " " +messageSource.getMessage("sign.up.message",null,locale));
         return userDao.createUser(firstName,lastName,password,email);
     }
 

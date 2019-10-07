@@ -3,13 +3,17 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.interfaces.service.AppointmentService;
 import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
+import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.PatientService;
 import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 @Component
 public class AppointmentServiceImpl implements AppointmentService {
@@ -23,12 +27,20 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     PatientService patientService;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private MessageSource messageSource;
+
     @Override
     public Appointment createAppointment(DoctorClinic doctorClinic, User patient, Calendar date) {
         Calendar today = Calendar.getInstance();
         if (today.compareTo(date) < 0){
             for (Schedule schedule: doctorClinic.getSchedule()) {
                 if(date.get(Calendar.DAY_OF_WEEK) == schedule.getDay() && date.get(Calendar.HOUR_OF_DAY) == schedule.getHour()){
+                    Locale locale = LocaleContextHolder.getLocale();
+                    emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.created.subject",null,locale),messageSource.getMessage("appointment.created.text" + " " + date.toString(),null,locale));
                     return appointmentDao.createAppointment(doctorClinic,patient,date);
                 }
             }
@@ -49,6 +61,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date) {
+        Locale locale = LocaleContextHolder.getLocale();
+        emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.cancelled.subject",null,locale),messageSource.getMessage("appointment.cancelled.text" + " " + date.toString(),null,locale));
         appointmentDao.cancelAppointment(doctorClinic,patient,date);
     }
 
