@@ -20,7 +20,7 @@ public class PersonalInformationForm {
     @Pattern(regexp = "[a-zA-Z0-9]+")
     private String repeatPassword;
 
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @Pattern(regexp = "[a-zA-Z0-9]*")
     private String prepaid;
 
     @Size(min=10, max=20)

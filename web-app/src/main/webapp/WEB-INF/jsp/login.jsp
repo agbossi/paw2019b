@@ -22,6 +22,11 @@
         <div>
             <label><input name="rememberme" type="checkbox"/> <spring:message code="rememberme"/></label>
         </div>
+        <c:if test="${errorMessage != null}">
+            <div id="error">
+                <c:out value="${errorMessage}"/>
+            </div>
+        </c:if>
         <div>
             <input type="submit" value="<spring:message code="log.in"/>"/>
         </div>

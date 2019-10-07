@@ -111,6 +111,13 @@ public class UserController {
 
         return new ModelAndView("login");
     }
+    @RequestMapping(value="/login-error", method = RequestMethod.GET)
+    public ModelAndView getLogin(HttpServletRequest request,Locale locale){
+
+        ModelAndView mav = new ModelAndView("/login");
+        mav.addObject("errorMessage", messageSource.getMessage("bad.credentials",null,locale));
+        return mav;
+    }
 
     private String signUpSuccess(HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -118,7 +125,7 @@ public class UserController {
             String redirectUrl = (String) session.getAttribute("url_prior_login");
             if (redirectUrl != null) {
                 session.removeAttribute("url_prior_login");
-                if(!redirectUrl.equals("/login") && !redirectUrl.equals("/signUp")){
+                if(!redirectUrl.contains("login") && !redirectUrl.contains("signUp")){
                     return redirectUrl;
                 }
             }

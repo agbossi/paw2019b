@@ -27,15 +27,12 @@ public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthent
                 session.removeAttribute("url_prior_login");
                 String role = determineTargetUrl(authentication);
 
-                if( role.equals("ROLE_ADMIN") ){
-                    getRedirectStrategy().sendRedirect(request, response, "/");
-                }
-                else if( role.equals("ROLE_DOCTOR") ){
+                if( role.equals("ROLE_ADMIN") || role.equals("ROLE_DOCTOR")){
                     getRedirectStrategy().sendRedirect(request, response, "/");
                 }
                 else {
                     // we redirect home page
-                    if(!redirectUrl.equals("/login") && !redirectUrl.equals("/signUp")){
+                    if(!redirectUrl.contains("login") && !redirectUrl.contains("signUp")){
                         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
                     }
                     else {

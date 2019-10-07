@@ -40,7 +40,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     };
 
     @Autowired
-    public DoctorClinicDaoImpl(final DataSource ds){
+    public DoctorClinicDaoImpl(final DataSource ds) {
 
         jdbcTemplate = new JdbcTemplate(ds);
 
@@ -67,8 +67,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                 " clinicid,name,address,location,consultPrice" +
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                 " join clinics on doctorclinics.clinicid = clinics.id)" +
-                " join users on doctors.email = users.email",ROW_MAPPER);
-        if(list.isEmpty()) {
+                " join users on doctors.email = users.email", ROW_MAPPER);
+        if (list.isEmpty()) {
             return null;
         }
         return list;
@@ -77,13 +77,13 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     @Override
     public List<DoctorClinic> getDoctorClinicsForDoctor(Doctor doctor) {
         final List<DoctorClinic> list = jdbcTemplate.query(
-           "select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
-                " clinicid,name,address,location,consultPrice" +
-                " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
-                " join clinics on doctorclinics.clinicid = clinics.id)" +
-                " join users on doctors.email = users.email" +
-                " where doctorclinics.doctorLicense = ?",ROW_MAPPER, doctor.getLicense());
-        if(list.isEmpty()) {
+                "select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
+                        " clinicid,name,address,location,consultPrice" +
+                        " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
+                        " join clinics on doctorclinics.clinicid = clinics.id)" +
+                        " join users on doctors.email = users.email" +
+                        " where doctorclinics.doctorLicense = ?", ROW_MAPPER, doctor.getLicense());
+        if (list.isEmpty()) {
             return null;
         }
         return list;
@@ -95,8 +95,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                 " clinicid,name,address,location,consultPrice" +
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                 " join clinics on doctorclinics.clinicid = clinics.id)" +
-                " join users on doctors.email = users.email where clinicid = ?",ROW_MAPPER, clinic);
-        if(list.isEmpty()) {
+                " join users on doctors.email = users.email where clinicid = ?", ROW_MAPPER, clinic);
+        if (list.isEmpty()) {
             return null;
         }
         return list;
@@ -108,8 +108,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                 " clinicid,name,address,location,consultPrice" +
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                 " join clinics on doctorclinics.clinicid = clinics.id)" +
-                " join users on doctors.email = users.email where clinicid = ? and doctors.license = ?",ROW_MAPPER, clinic, doctor);
-        if(list.isEmpty()) {
+                " join users on doctors.email = users.email where clinicid = ? and doctors.license = ?", ROW_MAPPER, clinic, doctor);
+        if (list.isEmpty()) {
             return null;
         }
 
@@ -122,8 +122,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                 " clinicid,name,address,location,consultPrice" +
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                 " join clinics on doctorclinics.clinicid = clinics.id)" +
-                " join users on doctors.email = users.email where doctors.license = ?",ROW_MAPPER, doctor);
-        if(list.isEmpty()) {
+                " join users on doctors.email = users.email where doctors.license = ?", ROW_MAPPER, doctor);
+        if (list.isEmpty()) {
             return null;
         }
         return list;
@@ -131,7 +131,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public List<DoctorClinic> getFilteredDoctors(final Location location, final Specialty specialty,
-                                                 String firstName,String lastName,Prepaid prepaid,int consultPrice) {
+                                                 String firstName, String lastName, Prepaid prepaid, int consultPrice) {
 
 //            DoctorQueryBuilder builder = new DoctorQueryBuilder();
 //            builder.buildQuery(location.getLocationName(), specialty.getSpecialtyName(), clinic);
@@ -156,35 +156,34 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 //                }
 //            }, ROW_MAPPER);
         final List<DoctorClinic> list;
-        if(prepaid != null){
-             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinic.clinicid,name,location,consultPrice " +
+        if (prepaid != null) {
+            list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email,clinic.clinicid,name,location,consultPrice " +
                     " from (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                     " join clinics on doctorclinics.clinicid = clinics.id)" +
                     " join users on doctors.email = users.email)" +
                     " join clinicPrepaids on clinicPrepaids.clinicid = clinics.id" +
-                    "where location = ? and specialty = ? and firstName = ? and lastName = ? and clinicPrepaids.prepaid = ?",ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(),(firstName != null ? firstName:true),(lastName != null ? lastName:true), prepaid.getName());
-
-        final List<DoctorClinic> list;
-        if(prepaid != null){
-             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
-                    " clinic.clinicid,name,address,location,consultPrice " +
-                    " from (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
-                    " join clinics on doctorclinics.clinicid = clinics.id)" +
-                    " join users on doctors.email = users.email)" +
-                    " join clinicPrepaids on clinicPrepaids.clinicid = clinics.id" +
-                    "where location = ? and specialty = ? and firstName = ? and lastName = ? and clinicPrepaids.prepaid = ?",ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(),(firstName != null ? firstName:true),(lastName != null ? lastName:true), prepaid.getName());
-
-
-
-        }else {
-             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
-                    " clinic.clinicid,name,address,location,consultPrice " +
-                    " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
-                    " join clinics on doctorclinics.clinicid = clinics.id)" +
-                    " join users on doctors.email = users.email" +
-                    "where location = ? and specialty = ? and firstName = ? and lastName = ? and consultPrice <= ?",ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(),(firstName != null ? firstName:true),(lastName != null ? lastName:true), consultPrice);
+                    "where location = ? and specialty = ? and firstName = ? and lastName = ? and clinicPrepaids.prepaid = ?", ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(), (firstName != null ? firstName : true), (lastName != null ? lastName : true), prepaid.getName());
         }
-        return ( list.isEmpty() ? null : list );
+            if (prepaid != null) {
+                list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
+                        " clinic.clinicid,name,address,location,consultPrice " +
+                        " from (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
+                        " join clinics on doctorclinics.clinicid = clinics.id)" +
+                        " join users on doctors.email = users.email)" +
+                        " join clinicPrepaids on clinicPrepaids.clinicid = clinics.id" +
+                        "where location = ? and specialty = ? and firstName = ? and lastName = ? and clinicPrepaids.prepaid = ?", ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(), (firstName != null ? firstName : true), (lastName != null ? lastName : true), prepaid.getName());
+
+
+            } else {
+                list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
+                        " clinic.clinicid,name,address,location,consultPrice " +
+                        " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
+                        " join clinics on doctorclinics.clinicid = clinics.id)" +
+                        " join users on doctors.email = users.email" +
+                        "where location = ? and specialty = ? and firstName = ? and lastName = ? and consultPrice <= ?", ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(), (firstName != null ? firstName : true), (lastName != null ? lastName : true), consultPrice);
+            }
+            return (list.isEmpty() ? null : list);
+        }
     }
-}
+
 
