@@ -129,4 +129,27 @@ public class AppointmentDaoImpl implements AppointmentDao {
         }
         return list;
     }
+
+    @Override
+    public List<Appointment> getAllDocAppointmentsOnSchedule(DoctorClinic doctor, int day, int hour){
+        final List<Appointment> list = jdbcTemplate.query("" +
+                        "select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
+                        "clinicid, name,address, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+                        " from (appointments join users as pat on pat.email = appointments.patient) " +
+                        "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
+                        "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
+                        "where appointments.doctor = ?and appointments.clinic = ? and extract(dow from date) = ? and  extract(hour from date) = ?",ROW_MAPPER,
+                        doctor.getDoctor().getLicense(), doctor.getClinic().getId(), day - 1, hour);
+        if(list.isEmpty()){
+            return null;
+        }
+        return list;
+    }
+
+    @Override
+    public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour){
+        Object[] args = new Object[] {doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), day -1, hour};
+        jdbcTemplate.update("delete from appointments where doctor = ? and clinic = ? and extract(dow from date) = ? and  extract(hour from date) = ?", args);
+
+    }
 }

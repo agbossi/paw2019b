@@ -49,7 +49,6 @@
                                     </c:when>
                                     <c:otherwise>
                                         <a class="remove" href="<c:url value="/doctor/removeSchedule/${doctorClinic.clinic.id}/${day.date.get(7)}-${day.date.get(11)}"/>"><spring:message code="remove"/></a>
-
                                     </c:otherwise>
                                 </c:choose>
                             </td>

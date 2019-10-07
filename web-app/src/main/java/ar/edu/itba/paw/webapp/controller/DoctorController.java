@@ -105,7 +105,7 @@ public class DoctorController {
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
         viewModifier.addDaysAdnTimes(mav);
 
-        List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctorClinic, 1);
+        List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctorClinic, 2);
 
         mav.addObject("doctorClinic", doctorClinic);
         mav.addObject("schedule", doctorsWeek);

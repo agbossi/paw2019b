@@ -18,9 +18,9 @@
                         <spring:message code="a.at"/>
                     </div>
                     <div>
-                        <div><c:out value="${appointment.docClinic.clinic.name}"/></div>
-                        <div>(<c:out value="${appointment.docClinic.clinic.location.locationName}"/>)</div>
-                        <div>(<c:out value="${appointment.docClinic.clinic.address}"/>)</div>
+                        <div><c:out value="${appointment.doctorClinic.clinic.name}"/></div>
+                        <div>(<c:out value="${appointment.doctorClinic.clinic.location.locationName}"/>)</div>
+                        <div>(<c:out value="${appointment.doctorClinic.clinic.address}"/>)</div>
                     </div>
                     <a class="btn btn-outline-primary" href="<c:url value="/cancelApp/${appointment.doctorClinic.clinic.id}/${appointment.doctorClinic.doctor.license}/${appointment.date.get(1)}-${appointment.date.get(2)}-${appointment.date.get(5)}-${appointment.date.get(11)}"/>"><spring:message code="a.cancel"/></a>
                     </p>

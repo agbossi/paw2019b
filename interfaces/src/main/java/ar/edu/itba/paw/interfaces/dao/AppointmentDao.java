@@ -18,4 +18,8 @@ public interface AppointmentDao {
     Appointment hasAppointment(DoctorClinic doctorClinic,Calendar date);
 
     List<Appointment> getAllDoctorsAppointments(Doctor doctor);
+
+    List<Appointment> getAllDocAppointmentsOnSchedule(DoctorClinic doctor, int day, int hour);
+
+    void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour);
 }
