@@ -6,14 +6,13 @@ import ar.edu.itba.paw.webapp.form.DoctorClinicForm;
 import ar.edu.itba.paw.webapp.form.ScheduleForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
+import org.jboss.logging.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -57,6 +56,24 @@ public class DoctorController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
+        Image image = imageService.getProfileImage(doctor);
+
+        mav.addObject("user", user);
+        mav.addObject("doctor", doctor);
+        mav.addObject("image", image);
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/updateProfile", method = { RequestMethod.POST })
+    public ModelAndView updateProfile(@RequestParam("photo") MultipartFile photo){
+
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
+        imageService.updateProfileImage(photo, doctor);
+
+        final ModelAndView mav = new ModelAndView("/doctor/editProfile");
+
         Image image = imageService.getProfileImage(doctor);
 
         mav.addObject("user", user);

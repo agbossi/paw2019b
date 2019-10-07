@@ -8,5 +8,9 @@ public interface ImageService {
 
     long createProfileImage(MultipartFile file, Doctor doctor);
 
+    long updateProfileImage(MultipartFile file, Doctor doctor);
+
     Image getProfileImage(Doctor doctor);
+
+
 }
