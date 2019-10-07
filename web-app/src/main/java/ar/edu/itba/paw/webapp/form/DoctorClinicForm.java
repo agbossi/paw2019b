@@ -4,20 +4,10 @@ import javax.validation.constraints.Min;
 
 public class DoctorClinicForm {
 
-    private String doctor;
-
     private int clinic;
 
     @Min(0)
     private int consultPrice;
-
-    public String getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(String doctor) {
-        this.doctor = doctor;
-    }
 
     public int getClinic() {
         return clinic;

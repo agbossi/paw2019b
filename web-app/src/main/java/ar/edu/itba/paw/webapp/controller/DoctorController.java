@@ -86,8 +86,8 @@ public class DoctorController {
     public ModelAndView addSchedule(){
         final ModelAndView mav = new ModelAndView("doctor/addSchedule");
 
-        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
+        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        Doctor doctor = doctorService.getDoctorByEmail(userEmail);
 
         viewModifier.addDoctorClinicsForDoctor(mav, doctor);
 
@@ -99,10 +99,10 @@ public class DoctorController {
 
         final ModelAndView mav = new ModelAndView("doctor/doctorSchedule");
 
-        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Doctor doc = doctorService.getDoctorByEmail(user.getEmail());;
+        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        Doctor doctor = doctorService.getDoctorByEmail(userEmail);
         Clinic cli = clinicService.getClinicById(clinic);
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
         viewModifier.addDaysAdnTimes(mav);
 
         List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctorClinic, 1);
@@ -120,9 +120,12 @@ public class DoctorController {
         if(errors.hasErrors())
             return addDoctorClinic(form);
 
-        doctorClinicService.createDoctorClinic(doctorService.getDoctorByLicense(form.getDoctor()),
-                clinicService.getClinicById(form.getClinic()),
-                form.getConsultPrice());
+        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        Doctor doctor = doctorService.getDoctorByEmail(userEmail);
+
+        doctorClinicService.createDoctorClinic(doctor,
+                                               clinicService.getClinicById(form.getClinic()),
+                                               form.getConsultPrice());
 
         final ModelAndView mav = new ModelAndView("doctor/addedDoctorClinic");
 
@@ -134,11 +137,11 @@ public class DoctorController {
                                       @PathVariable(value = "day") int day,
                                       @PathVariable(value = "hour") int hour){
 
-        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Doctor doc = doctorService.getDoctorByEmail(user.getEmail());
+        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        Doctor doctor = doctorService.getDoctorByEmail(userEmail);
 
         Clinic cli = clinicService.getClinicById(clinic);
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
 
         scheduleService.createSchedule(hour, day, doctorClinic);
 
@@ -149,14 +152,14 @@ public class DoctorController {
 
     @RequestMapping(value = "/removeSchedule/{clinicid}/{day}-{hour}", method = {RequestMethod.GET})
     public ModelAndView removeSchedule(@PathVariable(value = "clinicid") int clinic,
-                                      @PathVariable(value = "day") int day,
-                                      @PathVariable(value = "hour") int hour){
+                                       @PathVariable(value = "day") int day,
+                                       @PathVariable(value = "hour") int hour){
 
-        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Doctor doc = doctorService.getDoctorByEmail(user.getEmail());
+        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        Doctor doctor = doctorService.getDoctorByEmail(userEmail);
 
         Clinic cli = clinicService.getClinicById(clinic);
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, cli);
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
 
         scheduleService.deleteSchedule(hour, day, doctorClinic);
 
@@ -168,8 +171,8 @@ public class DoctorController {
     @RequestMapping(value = "/clinics/{clinicid}/{week}", method = {RequestMethod.GET})
     public ModelAndView doctorClinics(@PathVariable(value = "clinicid") int clinic, @PathVariable(value = "week") int week){
 
-        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
+        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        Doctor doctor = doctorService.getDoctorByEmail(userEmail);
 
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
@@ -186,6 +189,5 @@ public class DoctorController {
         mav.addObject("doctorClinic", doctorClinic);
 
         return mav;
-
     }
 }
