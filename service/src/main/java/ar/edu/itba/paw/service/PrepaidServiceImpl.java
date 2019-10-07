@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.PrepaidService;
 import ar.edu.itba.paw.model.Prepaid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class PrepaidServiceImpl implements PrepaidService {
         return prepaidDao.getPrepaids();
     }
 
+    @Transactional
     @Override
     public Prepaid createPrepaid(String name) {
         return prepaidDao.createPrepaid(name);

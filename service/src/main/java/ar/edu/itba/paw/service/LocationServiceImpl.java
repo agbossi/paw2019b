@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.LocationService;
 import ar.edu.itba.paw.model.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class LocationServiceImpl implements LocationService {
     @Autowired
     private LocationDao locationDao;
 
+    @Transactional
     @Override
     public Location createLocation(String name) {
         return locationDao.createLocation(name);

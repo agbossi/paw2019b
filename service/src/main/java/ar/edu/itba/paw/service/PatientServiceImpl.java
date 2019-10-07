@@ -9,6 +9,7 @@ import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private UserDao userDao;
 
+    @Transactional
     @Override
     public Patient create(String email,String id, String prepaid, String prepaidNumber, User user) {
         return patientDao.create(email,id, prepaid, prepaidNumber, user);
@@ -33,6 +35,7 @@ public class PatientServiceImpl implements PatientService {
     public Patient getPatientByEmail(String email) {
         return patientDao.getPatientByEmail(email);
     }
+
 
     @Override
     public void setAppointments(Patient patient) {

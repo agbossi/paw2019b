@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ public class ClinicServiceImpl implements ClinicService {
     @Autowired
     private ClinicDao clinicDao;
 
+    @Transactional
     @Override
     public Clinic createClinic(String name, String address, Location location) {
         return clinicDao.createClinic(name, address, location);

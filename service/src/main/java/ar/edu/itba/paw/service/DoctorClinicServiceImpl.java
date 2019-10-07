@@ -8,6 +8,7 @@ import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
 import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
         }
     }
 
+    @Transactional
     @Override
     public DoctorClinic createDoctorClinic(Doctor doctor, Clinic clinic, int consultPrice) {
         return doctorClinicDao.createDoctorClinic(doctor, clinic, consultPrice);

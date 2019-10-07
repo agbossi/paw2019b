@@ -9,6 +9,7 @@ import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Specialty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     private DoctorClinicService doctorClinicService;
 
+    @Transactional
     @Override
     public Doctor createDoctor(Specialty specialty,String license, String phoneNumber, String email) {
         return doctorDao.createDoctor(specialty,license, phoneNumber,email);

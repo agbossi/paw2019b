@@ -9,6 +9,7 @@ import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     AppointmentService appointmentService;
 
+    @Transactional
     @Override
     public Schedule createSchedule(int hour, int day, DoctorClinic doctorClinic) {
         return scheduleDao.createSchedule(day, hour, doctorClinic);
@@ -36,6 +38,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         return scheduleDao.hasSchedule(doctorClinic, day, hour);
     }
 
+    @Transactional
     @Override
     public void deleteSchedule(int hour, int day, DoctorClinic doctorClinic) {
         scheduleDao.deleteSchedule(hour, day, doctorClinic);

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Locale;
 
@@ -28,6 +29,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MessageSource messageSource;
 
+    @Transactional
     @Override
     public User createUser(String firstName,String lastName, String password, String email) {
         Locale locale = LocaleContextHolder.getLocale();
@@ -50,6 +52,7 @@ public class UserServiceImpl implements UserService {
         return doctorDao.isDoctor(email);
     }
 
+    @Transactional
     @Override
     public void changePassword(String password, String email) {
         userDao.changePassword(password,email);

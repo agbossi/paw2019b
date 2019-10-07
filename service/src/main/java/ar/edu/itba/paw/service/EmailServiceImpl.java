@@ -25,48 +25,4 @@ public class EmailServiceImpl implements EmailService {
         message.setText(text);
         emailSender.send(message);
     }
-
-
-    //guardar el test
-
-
-    //for emails with images
-    @Override
-    public void sendMessageWithAttachment(String to, String subject, String text, String classPath) {
-        MimeMessage message = emailSender.createMimeMessage();
-
-        //ver si el encoding ya esta en config
-        try{
-        MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
-
-        helper.setTo(to);
-        helper.setSubject(subject);
-        helper.setText(text);
-
-        //FileSystemResource file = new FileSystemResource(new File(classPath));
-        //helper.addAttachment("mailPage", file);
-        helper.addAttachment(classPath,new ClassPathResource(classPath)); }catch (Exception e){
-            //do something
-        }
-
-        emailSender.send(message);
-    }
-    @Override
-    public void sendFormatedMessage(String to,String subject,String content,String resourcePath) {
-        MimeMessage message = emailSender.createMimeMessage();
-
-        try {
-        //ver si el encoding ya esta en config
-        MimeMessageHelper helper = new MimeMessageHelper(message, true,"UTF-8");
-
-        helper.setTo(to);
-        helper.setSubject(subject);
-
-        helper.setText("<html><body><p>" + content + "</p><img src='cid:resource'></body></html>", true);
-        helper.addInline("resource", new ClassPathResource(resourcePath)); } catch (Exception e){
-            //do the same thing
-        }
-
-        emailSender.send(message);
-    }
 }

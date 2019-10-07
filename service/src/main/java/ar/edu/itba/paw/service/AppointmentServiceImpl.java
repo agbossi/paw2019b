@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.List;
@@ -33,6 +34,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private MessageSource messageSource;
 
+    @Transactional
     @Override
     public Appointment createAppointment(DoctorClinic doctorClinic, User patient, Calendar date) {
         Calendar today = Calendar.getInstance();
@@ -59,6 +61,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentDao.getPatientsAppointments(patient);
     }
 
+    @Transactional
     @Override
     public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date) {
         Locale locale = LocaleContextHolder.getLocale();
@@ -77,6 +80,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointments;
     }
 
+    @Transactional
     @Override
     public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour) {
         appointmentDao.cancelAllAppointmentsOnSchedule(doctorClinic, day, hour);
