@@ -16,8 +16,8 @@ public class ClinicServiceImpl implements ClinicService {
     private ClinicDao clinicDao;
 
     @Override
-    public Clinic createClinic(String name, Location location) {
-        return clinicDao.createClinic(name, location);
+    public Clinic createClinic(String name, String address, Location location) {
+        return clinicDao.createClinic(name, address, location);
     }
 
     @Override

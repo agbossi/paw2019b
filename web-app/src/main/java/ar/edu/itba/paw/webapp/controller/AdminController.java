@@ -156,7 +156,7 @@ public class AdminController {
         if(errors.hasErrors())
             return addClinic(form);
 
-        final Clinic clinic = clinicService.createClinic(form.getName(), new Location(form.getLocation()));
+        final Clinic clinic = clinicService.createClinic(form.getName(), form.getAddress(), new Location(form.getLocation()));
 
         final ModelAndView mav = new ModelAndView("admin/addedClinic");
         mav.addObject("clinic", clinic);

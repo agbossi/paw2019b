@@ -31,7 +31,9 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                     resultSet.getString("doctorLicense"),
                     resultSet.getString("phoneNumber"),
                     resultSet.getString("email")),
-                    new Clinic(resultSet.getInt("clinicid"),resultSet.getString("name"),
+                    new Clinic(resultSet.getInt("clinicid"),
+                            resultSet.getString("name"),
+                            resultSet.getString("address"),
                             new Location(resultSet.getString("location"))),
                     resultSet.getInt("consultPrice"));
         }

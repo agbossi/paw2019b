@@ -28,6 +28,7 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
         public PrepaidToClinic mapRow(ResultSet resultSet, int i) throws SQLException {
             return new PrepaidToClinic(new Clinic(resultSet.getInt("clinicid"),
                                 resultSet.getString("clinicName"),
+                                resultSet.getString("address"),
                                 new Location(resultSet.getString("location"))),
                     new Prepaid(resultSet.getString("prepaidName")));
         }
