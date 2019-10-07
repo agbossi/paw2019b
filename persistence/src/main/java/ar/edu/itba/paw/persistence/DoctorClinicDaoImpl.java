@@ -4,11 +4,13 @@ import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
 import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -131,7 +133,42 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public List<DoctorClinic> getFilteredDoctors(final Location location, final Specialty specialty,
-                                                 String firstName, String lastName, Prepaid prepaid, int consultPrice) {
+                                                final String firstName, final String lastName, final Prepaid prepaid,
+                                                 final int consultPrice) {
+
+        DoctorQueryBuilder builder = new DoctorQueryBuilder();
+        builder.buildQuery(location.getLocationName(),specialty.getSpecialtyName(), firstName, lastName, prepaid.getName(), consultPrice);
+
+        List<DoctorClinic> list = jdbcTemplate.query(builder.getQuery(), new PreparedStatementSetter() {
+
+            public void setValues(PreparedStatement preparedStatement) throws SQLException {
+                int i =1;
+                if (location.getLocationName() != ""){
+                    preparedStatement.setString(i, location.getLocationName());
+                    i++;
+                }
+                if(specialty.getSpecialtyName() != ""){
+                    preparedStatement.setString(i, specialty.getSpecialtyName());
+                    i++;
+                }
+                if(firstName != ""){
+                    preparedStatement.setString(i, firstName);
+                    i++;
+                }
+                if(lastName != ""){
+                    preparedStatement.setString(i, lastName);
+                    i++;
+                }
+                if(prepaid.getName() != ""){
+                    preparedStatement.setString(i, prepaid.getName());
+                }else{
+                    if(consultPrice > 0){
+                        preparedStatement.setInt(i, consultPrice);
+                    }
+                }
+            }
+        },ROW_MAPPER);
+
 
 //            DoctorQueryBuilder builder = new DoctorQueryBuilder();
 //            builder.buildQuery(location.getLocationName(), specialty.getSpecialtyName(), clinic);
@@ -173,17 +210,27 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                         " join clinicPrepaids on clinicPrepaids.clinicid = clinics.id" +
                         "where location = ? and specialty = ? and firstName = ? and lastName = ? and clinicPrepaids.prepaid = ?", ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(), (firstName != null ? firstName : true), (lastName != null ? lastName : true), prepaid.getName());
 
-
-            } else {
-                list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
-                        " clinic.clinicid,name,address,location,consultPrice " +
-                        " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
-                        " join clinics on doctorclinics.clinicid = clinics.id)" +
-                        " join users on doctors.email = users.email" +
-                        "where location = ? and specialty = ? and firstName = ? and lastName = ? and consultPrice <= ?", ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(), (firstName != null ? firstName : true), (lastName != null ? lastName : true), consultPrice);
-            }
-            return (list.isEmpty() ? null : list);
-        }
+//        final List<DoctorClinic> list;
+//        if(prepaid != null){
+//             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
+//                    " clinic.clinicid,name,address,location,consultPrice " +
+//                    " from (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
+//                    " join clinics on doctorclinics.clinicid = clinics.id)" +
+//                    " join users on doctors.email = users.email)" +
+//                    " join clinicPrepaids on clinicPrepaids.clinicid = clinics.id" +
+//                    "where location = ? and specialty = ? and firstName = ? and lastName = ? and clinicPrepaids.prepaid = ?",ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(),(firstName != null ? firstName:true),(lastName != null ? lastName:true), prepaid.getName());
+//
+//
+//
+//        }else {
+//             list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
+//                    " clinic.clinicid,name,address,location,consultPrice " +
+//                    " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
+//                    " join clinics on doctorclinics.clinicid = clinics.id)" +
+//                    " join users on doctors.email = users.email" +
+//                    "where location = ? and specialty = ? and firstName = ? and lastName = ? and consultPrice <= ?",ROW_MAPPER, location.getLocationName(), specialty.getSpecialtyName(),(firstName != null ? firstName:true),(lastName != null ? lastName:true), consultPrice);
+//        }
+        return ( list.isEmpty() ? null : list );
     }
 
 

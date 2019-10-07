@@ -29,6 +29,7 @@
                     </div>
                     <div>
                         <form:select path="location">
+                            <form:option value=""><spring:message code="none"/></form:option>
                             <c:forEach var="location" items="${locations}">
                                 <form:option value="${location.locationName}"/>
                             </c:forEach>
@@ -43,6 +44,7 @@
                     </div>
                     <div>
                         <form:select path="specialty">
+                            <form:option value=""><spring:message code="none"/></form:option>
                             <c:forEach var="specialty" items="${specialties}">
                                 <form:option value="${specialty.specialtyName}"/>
                             </c:forEach>
@@ -57,6 +59,7 @@
                         </div>
                         <div>
                             <form:select path="prepaid">
+                                <form:option value=""><spring:message code="none"/></form:option>
                                 <c:forEach var="prepaid" items="${prepaids}">
                                     <form:option value="${prepaid.name}"/>
                                 </c:forEach>
