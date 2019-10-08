@@ -3,7 +3,9 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.DoctorClinicForm;
+import ar.edu.itba.paw.webapp.form.EditDoctorProfileForm;
 import ar.edu.itba.paw.webapp.form.ScheduleForm;
+import ar.edu.itba.paw.webapp.helpers.ControllerHelper;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import org.jboss.logging.Param;
@@ -65,12 +67,42 @@ public class DoctorController {
         return mav;
     }
 
-    @RequestMapping(value = "/updateProfile", method = { RequestMethod.POST })
-    public ModelAndView updateProfile(@RequestParam("photo") MultipartFile photo){
+    @RequestMapping(value = "/editProfileForm", method = { RequestMethod.GET })
+    public ModelAndView updateProfile(@ModelAttribute("editProfileForm") final EditDoctorProfileForm form){
+
+        final ModelAndView mav = new ModelAndView("/doctor/editProfileForm");
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
-        imageService.updateProfileImage(photo, doctor);
+        Image image = imageService.getProfileImage(doctor);
+
+        mav.addObject("user", user);
+        mav.addObject("doctor", doctor);
+        mav.addObject("image", image);
+
+        return mav;
+    }
+
+
+
+    @RequestMapping(value = "/editProfileFormPost", method = { RequestMethod.POST })
+    public ModelAndView updateProfile(@ModelAttribute("editProfileForm") final EditDoctorProfileForm form,
+                                      final BindingResult errors,
+                                      @RequestParam("photo") MultipartFile photo){
+
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
+
+        if(errors.hasErrors()) {
+            return updateProfile(form);
+        }
+
+        long result = ControllerHelper.updateUserInformation(form.getFirstName(), form.getLastName(), form.getEmail(),
+                                                form.getOldPassword(), form.getNewPassword(), form.getRepeatNewPassword());
+        result = ControllerHelper.updateDoctorInformation(form.getLicense(), form.getSpecialty(), form.getPhoneNumber());
+        result = ControllerHelper.updateProfilePicture(photo);
+
+        // TODO: if any of these results fails what do we do???
 
         final ModelAndView mav = new ModelAndView("/doctor/editProfile");
 
