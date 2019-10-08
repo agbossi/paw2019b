@@ -33,3 +33,15 @@
     height: 50px;
 }
 
+.schedule-header-container {
+    display: flex;
+}
+
+.edit-div {
+    text-align: right;
+    flex-grow: 1;
+}
+
+.remove{
+    color: darkred;
+}

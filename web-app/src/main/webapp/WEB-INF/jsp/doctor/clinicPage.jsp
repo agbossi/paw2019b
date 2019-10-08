@@ -7,12 +7,12 @@
         <%@ page isELIgnored="false" %>
         <jsp:include page="../base/navbar.jsp" />
         <link href="<c:url value="/resources/css/clinicPage.css" />" rel="stylesheet" type="text/css" />
-        <link href="<c:url value="/resources/css/appointments.css" />" rel="stylesheet" type="text/css" />
     </head>
     <body>
         <div class="schedule-container">
-            <div>
-                <div><c:out value="${doctorClinic.clinic.name}"/> - <c:out value="${doctorClinic.clinic.address}"/> (<c:out value="${doctorClinic.clinic.location.locationName}"/>)</div>
+            <div class="schedule-header-container">
+                <div class="info-div"><c:out value="${doctorClinic.clinic.name}"/> - <c:out value="${doctorClinic.clinic.address}"/> (<c:out value="${doctorClinic.clinic.location.locationName}"/>)</div>
+                <div class="edit-div"><a href="<c:url value="/doctor/addSchedule/${doctorClinic.clinic.id}"/>"><spring:message code="add.week.schedule"/></a></div>
             </div>
             <div>
                 <div class="schedule">
