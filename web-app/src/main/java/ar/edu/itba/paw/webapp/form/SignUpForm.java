@@ -1,11 +1,5 @@
 package ar.edu.itba.paw.webapp.form;
 
-import com.sun.istack.internal.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
-
-import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 

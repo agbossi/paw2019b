@@ -42,7 +42,6 @@
                         </div>
 
                         <br/><br/><br/>
-
                         <div>
                             <input type="submit" value="<spring:message code="submit.save.changes"/>">
                         </div>

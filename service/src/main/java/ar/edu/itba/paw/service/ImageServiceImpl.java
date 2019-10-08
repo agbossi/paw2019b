@@ -4,7 +4,6 @@ import ar.edu.itba.paw.interfaces.dao.ImageDao;
 import ar.edu.itba.paw.interfaces.service.ImageService;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Image;
-import com.sun.org.apache.xpath.internal.operations.Mult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

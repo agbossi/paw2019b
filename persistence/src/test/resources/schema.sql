@@ -30,6 +30,11 @@ CREATE TABLE IF NOT EXISTS prepaids (
     name VARCHAR(30) PRIMARY KEY
 );
 
+CREATE TABLE IF NOT EXISTS clinicPrepaids(
+    clinicid INTEGER REFERENCES clinics(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    prepaid VARCHAR(30) REFERENCES prepaids ON UPDATE CASCADE ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS doctorclinics (
     doctorLicense VARCHAR(20) REFERENCES doctors(license) ON UPDATE CASCADE ON DELETE CASCADE,
     clinicid INTEGER REFERENCES clinics(id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -63,9 +68,9 @@ CREATE TABLE IF NOT EXISTS appointments (
 );
 
 CREATE TABLE IF NOT EXISTS images (
-    id SERIAL PRIMARY KEY,
+    id IDENTITY PRIMARY KEY,
     doctor VARCHAR(20) REFERENCES doctors(license) ON UPDATE CASCADE ON DELETE CASCADE,
-    image bytea
+    image binary
 );
 
-INSERT INTO users VALUES('admin','','admin','admin@test.com') ON conflict do nothing;
+INSERT INTO users VALUES('admin','','admin','admin@test.com');
