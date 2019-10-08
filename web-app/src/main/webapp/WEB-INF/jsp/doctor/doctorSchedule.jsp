@@ -52,11 +52,13 @@
                                 </c:if>
                                 <td class="schedule-cell">
                                     <c:choose>
-                                        <c:when test="${not day.scheduled}">
+                                        <c:when test="${not day.scheduled && not day.clinic}">
                                             <a href="<c:url value="/doctor/addSchedule/${doctorClinic.clinic.id}/${day.date.get(7)}-${day.date.get(11)}"/>"><spring:message code="add"/></a>
                                         </c:when>
-                                        <c:otherwise>
+                                        <c:when test="${day.scheduled && day.clinic}">
                                             <a class="remove" href="<c:url value="/doctor/removeSchedule/${doctorClinic.clinic.id}/${day.date.get(7)}-${day.date.get(11)}"/>"><spring:message code="remove"/></a>
+                                        </c:when>
+                                        <c:otherwise>
                                         </c:otherwise>
                                     </c:choose>
                                 </td>

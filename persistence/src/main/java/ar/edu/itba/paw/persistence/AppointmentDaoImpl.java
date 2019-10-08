@@ -82,7 +82,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
         final List<Appointment> list = jdbcTemplate.query("select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
                 "clinicid, name,address, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
                 " from (appointments join users as pat on pat.email = appointments.patient) " +
-                "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
+                "join (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicid = clinics.id) " +
                 "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
                 "where appointments.patient = ?",ROW_MAPPER,patient.getEmail());
         if(list.isEmpty()){

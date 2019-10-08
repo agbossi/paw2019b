@@ -62,12 +62,13 @@ public class DoctorHourServiceImpl implements DoctorHourService {
             day.set(Calendar.SECOND, 0);
             day.set(Calendar.MILLISECOND, 0);
             if(today.compareTo(day) < 0) {
+                boolean isClinic = scheduleService.doctorHasSchedule(doctorClinic.getDoctor(), Calendar.MONDAY + i, hour);
                 boolean isSchedule = scheduleService.doctorHasScheduleInClinic(doctorClinic, Calendar.MONDAY + i, hour);
                 Appointment isApp = appointmentService.hasAppointment(doctorClinic, day);
-                DoctorHour docHour = new DoctorHour(day, isSchedule, isApp);
+                DoctorHour docHour = new DoctorHour(day, isSchedule,isClinic,  isApp);
                 row.add(docHour);
             }else{
-                DoctorHour docHour = new DoctorHour(day, false, null);
+                DoctorHour docHour = new DoctorHour(day, false, false, null);
                 row.add(docHour);
             }
 
