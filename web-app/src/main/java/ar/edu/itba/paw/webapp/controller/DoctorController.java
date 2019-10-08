@@ -42,6 +42,9 @@ public class DoctorController {
     private AppointmentService appointmentService;
 
     @Autowired
+    private SpecialtyService specialtyService;
+
+    @Autowired
     private DoctorHourService doctorHourService;
 
     @Autowired
@@ -79,9 +82,12 @@ public class DoctorController {
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
         Image image = imageService.getProfileImage(doctor);
 
+        List<Specialty> specialties = specialtyService.getSpecialties();
+
         mav.addObject("user", user);
         mav.addObject("doctor", doctor);
         mav.addObject("image", image);
+        mav.addObject("specialties", specialties);
 
         return mav;
     }
@@ -118,30 +124,12 @@ public class DoctorController {
         return mav;
     }
 
-    @RequestMapping(value = "/uploadPicture", method = { RequestMethod.GET })
-    public ModelAndView uploadPicture() {
-        final ModelAndView mav = new ModelAndView("doctor/uploadPicture");
-        return mav;
-    }
-
     @RequestMapping(value = "/addDoctorClinic", method = { RequestMethod.GET })
     public ModelAndView addDoctorClinic(@ModelAttribute("doctorClinicForm") final DoctorClinicForm form){
         final ModelAndView mav = new ModelAndView("doctor/addDoctorClinic");
 
         viewModifier.addClinics(mav);
         viewModifier.addDoctors(mav);
-
-        return mav;
-    }
-
-    @RequestMapping(value ="/addSchedule", method = { RequestMethod.GET })
-    public ModelAndView addSchedule(){
-        final ModelAndView mav = new ModelAndView("doctor/addSchedule");
-
-        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        Doctor doctor = doctorService.getDoctorByEmail(userEmail);
-
-        viewModifier.addDoctorClinicsForDoctor(mav, doctor);
 
         return mav;
     }
@@ -177,11 +165,12 @@ public class DoctorController {
             return addDoctorClinic(form);
 
 
-        doctorClinicService.createDoctorClinic(doctor,
+        DoctorClinic doctorClinic = doctorClinicService.createDoctorClinic(doctor,
                                                clinicService.getClinicById(form.getClinic()),
                                                form.getConsultPrice());
 
         final ModelAndView mav = new ModelAndView("doctor/addedDoctorClinic");
+        mav.addObject("doctorClinic",doctorClinic );
 
         return mav;
     }

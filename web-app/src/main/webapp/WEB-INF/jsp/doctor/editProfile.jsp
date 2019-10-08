@@ -7,27 +7,27 @@
     <head>
         <%@ page isELIgnored="false" %>
         <jsp:include page="../base/navbar.jsp" />
-        <link href="<c:url value="/resources/css/doctorimage.css" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value="/resources/css/doctor.css" />" rel="stylesheet" type="text/css" />
     </head>
-    <body>
-            <div class="container mycont">
-                <div class="row">
-                    <div class="col-6">
-                        <h2><spring:message code="account.header"/></h2>
+    <body class="doctor-profile-body">
+            <div class="profile-container">
+                    <div class="profile-user-container">
                         <div>
                             <h5><b><spring:message code="user.first.name"/></b></h5>
-                            <h6><c:out value="${user.firstName}"/>  </h6>
+                            <h5 class="field-div"><c:out value="${user.firstName}"/>  </h5>
                         </div>
                         <div>
                             <h5><b><spring:message code="user.last.name"/></b></h5>
-                            <h6><c:out value="${user.lastName}"/></h6>
+                            <h5 class="field-div"><c:out value="${user.lastName}"/></h5>
                         </div>
                         <div>
                             <h5><b><spring:message code="user.email"/></b></h5>
-                            <h6><c:out value="${user.email}"/></h6>
+                            <h5 class="field-div"><c:out value="${user.email}"/></h5>
                         </div>
                         <div>
                             <h5><b><spring:message code="profile.picture"/></b></h5>
+                        </div>
+                        <div>
                             <svg class="rounded-circle"
                                  width="140" height="140"
                                  xmlns="http://www.w3.org/2000/svg"
@@ -38,26 +38,23 @@
                             </svg>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <h2><spring:message code="doctor.header"/></h2>
+                    <div class="doctor-user-container">
                         <div>
                             <h5><b><spring:message code="doctor.license"/></b></h5>
-                            <h6><c:out value="${doctor.license}"/></h6>
+                            <h5 class="field-div"><c:out value="${doctor.license}"/></h5>
                         </div>
                         <div>
                             <h5><b><spring:message code="doctor.specialty"/></b></h5>
-                            <h6><c:out value="${doctor.specialty.specialtyName}"/></h6>
+                            <h5 class="field-div"><c:out value="${doctor.specialty.specialtyName}"/></h5>
                         </div>
                         <div>
                             <h5><b><spring:message code="doctor.phone.number"/></b></h5>
-                            <h6><c:out value="${doctor.phoneNumber}"/></h6>
+                            <h5 class="field-div"><c:out value="${doctor.phoneNumber}"/></h5>
                         </div>
                     </div>
                 </div>
-                <br/><br/>
-                <div>
-                    <a href="/doctor/editProfileForm"><spring:message code="edit"/></a>
-                </div>
+            <div class="edit-profile button">
+                <a href="/doctor/editProfileForm"><spring:message code="edit"/></a>
             </div>
     </body>
 </html>
