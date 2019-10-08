@@ -1,0 +1,12 @@
+.edit-doctor-profile-container {
+    grid-template-columns: 1fr !important;
+}
+
+.profile-save-options {
+    margin: auto;
+    width: 400px;
+}
+
+.profile-save-changes {
+    margin-left: 1em;
+}
