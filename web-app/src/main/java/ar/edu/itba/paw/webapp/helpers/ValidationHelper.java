@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 @Component
@@ -104,7 +105,13 @@ public class ValidationHelper {
         }
     }
     public boolean scheduleValidate(DoctorClinic doctorClinic, int day, int hour){
-        return scheduleService.hasSchedule(doctorClinic,day,hour);
+        List<DoctorClinic> clinics = doctorClinicService.getDoctorClinicsForDoctor(doctorClinic.getDoctor());
+        for(DoctorClinic dc : clinics){
+            if(scheduleService.hasSchedule(doctorClinic,day,hour)){
+                return false;
+            }
+        }
+        return true;
     }
     public boolean appointmentValidate(DoctorClinic doctorClinic, Calendar date){
         return appointmentService.hasAppointment(doctorClinic,date) != null;

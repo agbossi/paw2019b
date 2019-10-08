@@ -3,6 +3,8 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.DoctorClinicForm;
+import ar.edu.itba.paw.webapp.form.EditDoctorProfileForm;
+import ar.edu.itba.paw.webapp.helpers.ControllerHelper;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
@@ -195,7 +197,7 @@ public class DoctorController {
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
 
-        if(!validator.scheduleValidate(doctorClinic,day,hour)){
+        if(validator.scheduleValidate(doctorClinic,day,hour)){
             scheduleService.createSchedule(hour, day, doctorClinic);
         }
 
@@ -215,7 +217,7 @@ public class DoctorController {
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
 
-        if(validator.scheduleValidate(doctorClinic,day,hour)){
+        if(!validator.scheduleValidate(doctorClinic,day,hour)){
             scheduleService.deleteSchedule(hour, day, doctorClinic);
         }
 
