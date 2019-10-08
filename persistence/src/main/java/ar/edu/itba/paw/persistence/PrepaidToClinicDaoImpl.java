@@ -28,10 +28,10 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
         @Override
         public PrepaidToClinic mapRow(ResultSet resultSet, int i) throws SQLException {
             return new PrepaidToClinic(new Clinic(resultSet.getInt("clinicid"),
-                                resultSet.getString("clinicName"),
+                                resultSet.getString("name"),
                                 resultSet.getString("address"),
                                 new Location(resultSet.getString("location"))),
-                    new Prepaid(resultSet.getString("prepaidName")));
+                    new Prepaid(resultSet.getString("prepaid")));
         }
     };
 
@@ -47,7 +47,7 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     @Override
     public PrepaidToClinic addPrepaidToClinic(Prepaid prepaid, Clinic clinic) {
         final Map<String, Object> args = new HashMap<>();
-        args.put("prepaidName", prepaid.getName());
+        args.put("prepaid", prepaid.getName());
         args.put("clinicid", clinic.getId());
         int result;
 
@@ -58,7 +58,7 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
 
     @Override
     public boolean clinicHasPrepaid(String prepaid, int clinic) {
-        List<PrepaidToClinic> list = jdbcTemplate.query("select * from clinicPrepaids where prepaid = ? and clinicid = ?",ROW_MAPPER,prepaid,clinic);
+        List<PrepaidToClinic> list = jdbcTemplate.query("select location,prepaid,clinicPrepaids.clinicid,address,name from clinicPrepaids join clinics on clinics.id = clinicPrepaids.clinicid where prepaid = ? and clinicid = ?",ROW_MAPPER,prepaid,clinic);
         return !list.isEmpty();
     }
 }

@@ -53,10 +53,14 @@ public class LocationDaoImpl implements LocationDao {
 
     @Override
     public Location getLocationByName(String locationName) {
-        Location location = jdbcTemplate.queryForObject("select * from locations where name = ?", Location.class, locationName);
-        List<Clinic> clinics = clinicDao.getClinicsByLocation(locationName);
-        location.setClinicsInLocation(clinics);
-        return location;
+        List<Location> list = jdbcTemplate.query("select * from locations where name = ?", ROW_MAPPER, locationName);
+        if(!list.isEmpty()){
+            List<Clinic> clinics = clinicDao.getClinicsByLocation(locationName);
+            Location location = list.get(0);
+            location.setClinicsInLocation(clinics);
+            return location;
+        }
+        return null;
     }
 
     @Override

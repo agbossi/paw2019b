@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/doctor")
@@ -134,13 +135,15 @@ public class DoctorController {
 
     @RequestMapping(value = "/addedDoctorClinic", method = { RequestMethod.POST })
     public ModelAndView addedDoctorClinic(@Valid @ModelAttribute("doctorClinicForm") final DoctorClinicForm form,
-                                          final BindingResult errors){
-
-        if(errors.hasErrors())
-            return addDoctorClinic(form);
+                                          final BindingResult errors, Locale locale){
 
         String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
         Doctor doctor = doctorService.getDoctorByEmail(userEmail);
+
+        validator.doctorClinicValidate(doctor.getLicense(),form.getClinic(),errors,locale);
+        if(errors.hasErrors())
+            return addDoctorClinic(form);
+
 
         doctorClinicService.createDoctorClinic(doctor,
                                                clinicService.getClinicById(form.getClinic()),

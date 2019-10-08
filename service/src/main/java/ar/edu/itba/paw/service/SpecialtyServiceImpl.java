@@ -25,4 +25,9 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     public List<Specialty> getSpecialties(){
         return specialtyDao.getSpecialties();
     }
+
+    @Override
+    public Specialty getSpecialtyByName(String specialtyName) {
+        return specialtyDao.getSpecialtyByName(specialtyName);
+    }
 }

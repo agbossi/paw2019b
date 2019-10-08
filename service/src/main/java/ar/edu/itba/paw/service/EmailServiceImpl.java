@@ -6,6 +6,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import javax.mail.internet.MimeMessage;
 
@@ -17,6 +18,7 @@ public class EmailServiceImpl implements EmailService {
 
 
     //for text or html
+    @Async
     @Override
     public void sendSimpleMail(String to, String subject, String text) {
         SimpleMailMessage message = new SimpleMailMessage();

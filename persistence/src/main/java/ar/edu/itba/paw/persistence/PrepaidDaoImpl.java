@@ -47,7 +47,11 @@ public class PrepaidDaoImpl implements PrepaidDao {
 
     @Override
     public Prepaid getPrepaidByName(String PrepaidName) {
-        return jdbcTemplate.queryForObject("SELECT * FROM prepaids WHERE name = ?", Prepaid.class, PrepaidName);
+        List<Prepaid> list = jdbcTemplate.query("SELECT * FROM prepaids WHERE name = ?", ROW_MAPPER, PrepaidName);
+        if(!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
     }
 
     @Override
