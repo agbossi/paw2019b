@@ -131,18 +131,6 @@ public class DoctorController {
         return mav;
     }
 
-    @RequestMapping(value ="/addSchedule", method = { RequestMethod.GET })
-    public ModelAndView addSchedule(){
-        final ModelAndView mav = new ModelAndView("doctor/addSchedule");
-
-        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        Doctor doctor = doctorService.getDoctorByEmail(userEmail);
-
-        viewModifier.addDoctorClinicsForDoctor(mav, doctor);
-
-        return mav;
-    }
-
     @RequestMapping(value = "/addSchedule/{clinicid}", method = {RequestMethod.GET})
     public ModelAndView addDoctorSchedule(@PathVariable(value = "clinicid") int clinic){
 
