@@ -16,6 +16,8 @@ public interface DoctorClinicService {
 
     List<DoctorClinic> getDoctorsFromClinic(Clinic clinic);
 
+    DoctorClinic getDoctorInClinic(String doctor, int clinic);
+
     DoctorClinic getDoctorClinicFromDoctorAndClinic(Doctor doctor, Clinic clinic);
 
     List<Doctor> getDoctorBy(Location location, Specialty specialty,

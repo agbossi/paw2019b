@@ -44,6 +44,9 @@ public class ValidationHelper {
     @Autowired
     AppointmentService appointmentService;
 
+    @Autowired
+    DoctorClinicService doctorClinicService;
+
     public void validateSpecialty(String name,BindingResult errors,Locale locale){
         if(specialtyService.getSpecialtyByName(name) != null){
             FieldError specialtyExists = new FieldError("form","name",messageSource.getMessage("specialty.already.exists",null,locale));
@@ -105,5 +108,11 @@ public class ValidationHelper {
     }
     public boolean appointmentValidate(DoctorClinic doctorClinic, Calendar date){
         return appointmentService.hasAppointment(doctorClinic,date) != null;
+    }
+    public void doctorClinicValidate(String license,int clinic,BindingResult errors,Locale locale){
+        if(doctorClinicService.getDoctorInClinic(license,clinic) != null){
+            FieldError doctorExistsError = new FieldError("form","clinic",messageSource.getMessage("doctor.already.in.clinic",null,locale));
+            errors.addError(doctorExistsError);
+        }
     }
 }

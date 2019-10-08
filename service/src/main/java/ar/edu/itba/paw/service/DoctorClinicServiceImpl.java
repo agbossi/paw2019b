@@ -71,6 +71,11 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     }
 
     @Override
+    public DoctorClinic getDoctorInClinic(String doctor, int clinic) {
+        return doctorClinicDao.getDoctorInClinic(doctor,clinic);
+    }
+
+    @Override
     public DoctorClinic getDoctorClinicFromDoctorAndClinic(Doctor doctor, Clinic clinic) {
         DoctorClinic doctorClinic = doctorClinicDao.getDoctorInClinic(doctor.getLicense(), clinic.getId());
         if(doctorClinic != null) {
