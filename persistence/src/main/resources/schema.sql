@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS schedule (
 CREATE TABLE IF NOT EXISTS patients (
     email VARCHAR(25) PRIMARY KEY REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE,
     id varchar(8),
-    prepaid VARCHAR(20),
+    prepaid VARCHAR(20) REFERENCES prepaids(name),
     prepaidNumber varchar(20) 
 );
 
