@@ -1,11 +1,12 @@
 package ar.edu.itba.paw.webapp.helpers;
+import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public class UserContextHelper {
-
     public static String getLoggedUserEmail(SecurityContext context) {
 
         // principal refers to currently authenticated user
