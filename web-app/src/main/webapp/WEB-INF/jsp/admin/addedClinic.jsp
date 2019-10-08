@@ -6,21 +6,27 @@
     <head>
         <%@ page isELIgnored="false" %>
         <jsp:include page="../base/navbar.jsp" />
-
+        <link href="<c:url value="/resources/css/adminAdded.css" />" rel="stylesheet" type="text/css" />
     </head>
-    <body class="d-flex flex-column h-100">
-        <div>
-            <h2><spring:message code="clinic.added"/></h2>
+    <body class="added-body">
+        <div class="added-container">
+            <div>
+                <p><h5><spring:message code="doctor.added.to.clinic"/></h5></p>
+                <p><b><spring:message code="clinic"/></b></p>
+                <p><c:out value="${clinic.name}"/></p>
+                <p><b><spring:message code="address"/></b></p>
+                <p><c:out value="${clinic.address}"/></p>
+                <p><b><spring:message code="location"/></b></p>
+                <p><c:out value="${clinic.location.locationName}"/></p>
+            </div>
+            <div>
+                <a class="nav-link" href="<c:url value="/admin/addClinic"/>"><spring:message code="add.another.clinic"/></a>
+            </div>
+            <div>
+                <a class="nav-link" href="<c:url value="/"/>"><spring:message code="go.back.home"/></a>
+            </div>
         </div>
-        <div>
-            <c:out value="${clinic.name}"/>
-        </div>
-        <div>
-            <c:out value="${clinic.address}"/>
-        </div>
-        <div>
-            <c:out value="${clinic.location.locationName}"/>
-        </div>
-        <a class="nav-link" href="<c:url value="/admin/addClinic"/>"><spring:message code="add.another.clinic"/></a>
     </body>
 </html>
+
+

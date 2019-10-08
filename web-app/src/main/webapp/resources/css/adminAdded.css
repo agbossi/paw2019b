@@ -1,0 +1,14 @@
+.added-body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.added-container {
+    padding: 2em;
+    text-align: center;
+}
+
+.added-container > div{
+    margin-bottom: 2em;
+}

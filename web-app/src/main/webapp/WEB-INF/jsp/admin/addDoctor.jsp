@@ -7,8 +7,8 @@
 <html>
     <head>
         <%@ page isELIgnored="false" %>
-        <link href="<c:url value="/resources/css/admin.css" />" rel="stylesheet" type="text/css" />
         <jsp:include page="../base/navbar.jsp" />
+        <link href="<c:url value="/resources/css/admin.css" />" rel="stylesheet" type="text/css" />
     </head>
     <body class="d-flex flex-column h-100">
         <div class="add-doctor-container-container">

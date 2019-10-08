@@ -4,17 +4,26 @@
 
 
 <html>
-<head>
-    <%@ page isELIgnored="false" %>
-    <jsp:include page="../base/navbar.jsp" />
-</head>
-<body class="d-flex flex-column h-100">
-<div>
-    <h2><spring:message code="prepaid.added"/></h2>
-</div>
-<div>
-    <c:out value="${prepaid.name}"/>
-</div>
-<a class="nav-link" href="<c:url value="/admin/addPrepaid"/>"><spring:message code="add.another.prepaid"/></a>
-</body>
+    <head>
+        <%@ page isELIgnored="false" %>
+        <jsp:include page="../base/navbar.jsp" />
+        <link href="<c:url value="/resources/css/adminAdded.css" />" rel="stylesheet" type="text/css" />
+    </head>
+    <body class="added-body">
+    <div class="added-container">
+        <div>
+            <p><h5><spring:message code="prepaid.added"/></h5></p>
+            <p><b><spring:message code="prepaid"/></b></p>
+            <p><c:out value="${prepaid.name}"/></p>
+        </div>
+        <div>
+            <a class="nav-link" href="<c:url value="/admin/addPrepaid"/>"><spring:message code="add.another.prepaid"/></a>
+        </div>
+        <div>
+            <a class="nav-link" href="<c:url value="/"/>"><spring:message code="go.back.home"/></a>
+        </div>
+    </div>
+    </body>
 </html>
+
+

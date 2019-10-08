@@ -25,7 +25,7 @@ public class SignUpForm {
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
     private String email;
 
-    @Pattern(regexp = "[a-zA-Z0-9]*")
+    @Pattern(regexp = "[a-zA-Z0-9 ]*")
     private String prepaid;
 
     @Size(max=20)

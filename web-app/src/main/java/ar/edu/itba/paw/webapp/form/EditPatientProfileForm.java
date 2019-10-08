@@ -37,7 +37,7 @@ public class EditPatientProfileForm {
     @Pattern(regexp = "[0-9]+")
     private String id;
 
-    @Pattern(regexp = "[a-zA-Z0-9]*")
+    @Pattern(regexp = "[a-zA-Z0-9 ]*")
     private String prepaid;
 
     @Size(max=20)

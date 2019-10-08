@@ -4,7 +4,7 @@ import javax.validation.constraints.Pattern;
 
 public class PrepaidForm {
 
-    @Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]*")
     private String name;
 
     public String getName() {

@@ -25,12 +25,17 @@
     border-style: solid;
     border-width: 1px;
     border-color: #ccc;
-    background-color: lightsteelblue;
+    background-color: #F0F8FF;
     padding: 1em;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
+.admin-index-option {
+    color: #86C5D8;
+}
+
 
 /*
 * CSS for addDoctor.jsp

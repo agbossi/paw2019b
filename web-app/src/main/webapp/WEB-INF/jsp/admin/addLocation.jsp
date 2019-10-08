@@ -7,21 +7,35 @@
     <head>
         <%@ page isELIgnored="false" %>
         <jsp:include page="../base/navbar.jsp" />
+        <link href="<c:url value="/resources/css/admin.css" />" rel="stylesheet" type="text/css" />
     </head>
+
     <body class="d-flex flex-column h-100">
-    <h2><spring:message code="loc.info"/> </h2>
-    <div class="container">
-        <c:url value="/admin/addedLocation" var="postPath"/>
-        <form:form modelAttribute="locationForm" action="${postPath}" method="post">
-            <div>
-                <form:label path="name"><spring:message code="name"/> </form:label>
-                <form:input type="text" path="name"/>
-                <form:errors path="name" element="p"/>
+        <div class="add-doctor-container-container">
+            <h2 class="doctor-form-title"><spring:message code="loc.info"/> </h2>
+            <div class="add-doctor-container">
+                <c:url value="/admin/addedLocation" var="postPath"/>
+                <form:form modelAttribute="locationForm" action="${postPath}" method="post">
+                    <div class="add-doctor-form-container">
+                        <div>
+                            <div>
+                                <div class="label-div">
+                                    <form:label path="name"><spring:message code="name"/> </form:label>
+                                </div>
+                                <div class="input-div">
+                                    <form:input type="text" path="name"/>
+                                </div>
+                            </div>
+                            <form:errors class="errors" path="name" element="p"/>
+                        </div>
+                        <div class="add-doctor-add-button">
+                            <input class="submit-add" type="submit" value="<spring:message code="submit.add"/>">
+                        </div>
+                    </div>
+                </form:form>
             </div>
-            <div>
-                <input type="submit" value="<spring:message code="submit.add"/>">
-            </div>
-        </form:form>
-    </div>
+        </div>
     </body>
 </html>
+
+
