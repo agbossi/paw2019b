@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.helpers;
 
 import ar.edu.itba.paw.interfaces.service.*;
+import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -104,17 +105,11 @@ public class ValidationHelper {
             errors.addError(licenseExistsError);
         }
     }
-    public boolean scheduleValidate(DoctorClinic doctorClinic, int day, int hour){
-        List<DoctorClinic> clinics = doctorClinicService.getDoctorClinicsForDoctor(doctorClinic.getDoctor());
-        for(DoctorClinic dc : clinics){
-            if(scheduleService.hasSchedule(doctorClinic,day,hour)){
-                return false;
-            }
-        }
-        return true;
+    public boolean scheduleValidate(Doctor doctor, int day, int hour){
+        return scheduleService.doctorHasSchedule(doctor,day,hour);
     }
-    public boolean appointmentValidate(DoctorClinic doctorClinic, Calendar date){
-        return appointmentService.hasAppointment(doctorClinic,date) != null;
+    public boolean appointmentValidate(String doctorLicense,String patientEmail,Calendar date){
+        return appointmentService.hasAppointment(doctorLicense,patientEmail,date);
     }
     public void doctorClinicValidate(String license,int clinic,BindingResult errors,Locale locale){
         if(doctorClinicService.getDoctorInClinic(license,clinic) != null){

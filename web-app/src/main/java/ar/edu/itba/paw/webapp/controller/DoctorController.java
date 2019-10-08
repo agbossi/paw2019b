@@ -197,7 +197,7 @@ public class DoctorController {
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
 
-        if(validator.scheduleValidate(doctorClinic,day,hour)){
+        if(!validator.scheduleValidate(doctorClinic.getDoctor(),day,hour)){
             scheduleService.createSchedule(hour, day, doctorClinic);
         }
 
@@ -217,7 +217,7 @@ public class DoctorController {
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
 
-        if(!validator.scheduleValidate(doctorClinic,day,hour)){
+        if(!validator.scheduleValidate(doctorClinic.getDoctor(),day,hour)){
             scheduleService.deleteSchedule(hour, day, doctorClinic);
         }
 

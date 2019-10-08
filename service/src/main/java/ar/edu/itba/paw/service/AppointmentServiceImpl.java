@@ -85,6 +85,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public boolean hasAppointment(String doctorLicense, String patientEmail, Calendar date) {
+        return appointmentDao.hasAppointment(doctorLicense,patientEmail,date);
+    }
+
+    @Override
     public List<Appointment> getAllDoctorsAppointments(Doctor doctor) {
         List<Appointment> appointments = appointmentDao.getAllDoctorsAppointments(doctor);
         return appointments;

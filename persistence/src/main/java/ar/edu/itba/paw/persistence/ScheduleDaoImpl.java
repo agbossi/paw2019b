@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.ScheduleDao;
+import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +59,14 @@ public class ScheduleDaoImpl implements ScheduleDao {
     }
 
     @Override
-    public boolean hasSchedule(DoctorClinic doctorClinic, int day, int hour) {
+    public boolean doctorHasScheduleInClinic(DoctorClinic doctorClinic, int day, int hour) {
         final List<Schedule> list = jdbcTemplate.query( "select * from schedule where doctor = ? and clinic =? and day = ? and hour = ?", ROW_MAPPER, doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), day, hour);
+
+        return (list.isEmpty() ? false : true );
+    }
+    @Override
+    public boolean doctorHasSchedule(Doctor doctor, int day, int hour) {
+        final List<Schedule> list = jdbcTemplate.query( "select * from schedule where doctor = ? and day = ? and hour = ?", ROW_MAPPER, doctor.getLicense(),day, hour);
 
         return (list.isEmpty() ? false : true );
     }

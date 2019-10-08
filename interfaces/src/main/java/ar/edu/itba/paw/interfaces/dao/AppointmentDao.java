@@ -19,6 +19,8 @@ public interface AppointmentDao {
 
     List<Appointment> getAllDoctorsAppointments(Doctor doctor);
 
+    boolean hasAppointment(String doctorLicense,String patientEmail,Calendar date);
+
     List<Appointment> getAllDocAppointmentsOnSchedule(DoctorClinic doctor, int day, int hour);
 
     void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour);

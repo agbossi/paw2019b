@@ -58,7 +58,7 @@ public class AppointmentController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
 
-        if(!validator.appointmentValidate(doctorClinic,cal)){
+        if(!validator.appointmentValidate(doc.getLicense(),user.getEmail(),cal)){
             appointmentService.createAppointment(doctorClinic, user, cal);
         }
 
@@ -83,7 +83,7 @@ public class AppointmentController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
 
-        if(validator.appointmentValidate(doctorClinic,cal)){
+        if(validator.appointmentValidate(doc.getLicense(),user.getEmail(),cal)){
             appointmentService.cancelAppointment(doctorClinic, user, cal,false);
         }
 
@@ -101,15 +101,15 @@ public class AppointmentController {
         calendar.set(year, month, day, time, 0, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
-        User patient = userService.findUserByEmail(email);
+
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
-
+        User patient = userService.findUserByEmail(email);
         Clinic clinic = clinicService.getClinicById(clinicId);
         DoctorClinic docCli = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, clinic);
 
-        if(validator.appointmentValidate(docCli,calendar)){
+        if(validator.appointmentValidate(doctor.getLicense(),patient.getEmail(),calendar)){
             appointmentService.cancelAppointment(docCli, patient, calendar,true);
         }
 
@@ -131,7 +131,7 @@ public class AppointmentController {
         Clinic clinic = clinicService.getClinicById(clinicId);
         DoctorClinic docCli = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, clinic);
 
-        if(!validator.appointmentValidate(docCli,cal)){
+        if(!validator.appointmentValidate(doc.getLicense(),user.getEmail(),cal)){
             appointmentService.createAppointment(docCli, user, cal);
         }
 

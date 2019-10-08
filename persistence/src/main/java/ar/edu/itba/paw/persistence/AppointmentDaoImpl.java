@@ -131,6 +131,19 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
+    public boolean hasAppointment(String doctorLicense, String patientEmail, Calendar date) {
+        final List<Appointment> list = jdbcTemplate.query("" +
+                        "select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +
+                        "clinicid, name,address, location, consultPrice, patient, pat.firstName as patFname, pat.lastName as patLname  " +
+                        " from (appointments join users as pat on pat.email = appointments.patient) " +
+                        "join (((doctorclinics natural join doctors) join clinics on doctorclinics.clinicid = clinics.id) " +
+                        "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
+                        "where appointments.doctor = ? and date = ? and pat.email = ?",ROW_MAPPER,
+                doctorLicense, date.getTime(),patientEmail);
+        return !list.isEmpty();
+    }
+
+    @Override
     public List<Appointment> getAllDocAppointmentsOnSchedule(DoctorClinic doctor, int day, int hour){
         final List<Appointment> list = jdbcTemplate.query("" +
                         "select date, docli.firstName as docFname, docli.lastName as docLname, docli.specialty as specialty, doctorLicense, phoneNumber, docli.email as docEmail, " +

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
+import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Schedule;
 
@@ -10,8 +11,9 @@ public interface ScheduleService {
 
     List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic);
 
-    boolean hasSchedule(DoctorClinic doctorClinic, int day, int hour);
+    boolean doctorHasScheduleInClinic(DoctorClinic doctorClinic, int day, int hour);
 
     void deleteSchedule(int hour, int day, DoctorClinic doctorClinic);
 
+    public boolean doctorHasSchedule(Doctor doctor, int day, int hour);
 }

@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS appointments (
     clinic INTEGER,
     patient VARCHAR(25) REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE,
     date TIMESTAMP,
-    PRIMARY KEY (doctor, clinic, date),
+    PRIMARY KEY (doctor, patient, date),
     FOREIGN KEY (doctor, clinic) REFERENCES doctorclinics(doctorLicense, clinicid) ON UPDATE CASCADE ON DELETE CASCADE
 );
 

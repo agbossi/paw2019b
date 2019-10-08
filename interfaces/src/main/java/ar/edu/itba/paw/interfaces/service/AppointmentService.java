@@ -16,6 +16,8 @@ public interface AppointmentService {
 
     Appointment hasAppointment(DoctorClinic doctorClinic,Calendar date);
 
+    boolean hasAppointment(String doctorLicense,String patientEmail,Calendar date);
+
     List<Appointment> getAllDoctorsAppointments(Doctor doctor);
 
     void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour);
