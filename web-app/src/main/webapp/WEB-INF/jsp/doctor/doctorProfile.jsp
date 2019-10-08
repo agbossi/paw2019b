@@ -18,15 +18,17 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                        <h2 class="doctor-index-clinic-header"><spring:message code="your.clinics"/></h2>
-                        <div class="doctor-index-clinic-container">
-                            <c:forEach var="docClinic" items="${doctorClinics}">
-                                <div class="clinic-card">
-                                    <a href="<c:url value="/doctor/clinics/${docClinic.clinic.id}/1"/>"><h5><c:out value="${docClinic.clinic.name}"/></h5></a>
-                                    <p><c:out value="${docClinic.clinic.location.locationName}"/></p>
-                                    <p>(<c:out value="${docClinic.clinic.address}"/>)</p>
-                                </div>
-                            </c:forEach>
+                        <div class="doctor-clinics-container">
+                            <h2 class="doctor-index-clinic-header"><spring:message code="your.clinics"/></h2>
+                            <div class="doctor-index-clinic-container">
+                                <c:forEach var="docClinic" items="${doctorClinics}">
+                                    <div class="clinic-card">
+                                        <a href="<c:url value="/doctor/clinics/${docClinic.clinic.id}/1"/>"><h5><c:out value="${docClinic.clinic.name}"/></h5></a>
+                                        <p><c:out value="${docClinic.clinic.location.locationName}"/></p>
+                                        <p>(<c:out value="${docClinic.clinic.address}"/>)</p>
+                                    </div>
+                                </c:forEach>
+                            </div>
                         </div>
                     </c:otherwise>
                 </c:choose>

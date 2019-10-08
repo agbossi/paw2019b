@@ -23,3 +23,7 @@
 .doctor-index-clinic-header {
     justify-self: center;
 }
+
+.doctor-clinics-container {
+    padding: 2em;
+}
