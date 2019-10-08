@@ -8,11 +8,11 @@ public class EditDoctorProfileForm {
     // User information
 
     @Size(min = 1, max = 20)
-    @Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-Z ]+")
     private String firstName;
 
     @Size(min = 1, max = 20)
-    @Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-Z ]+")
     private String lastName;
 
     @Size(min = 6, max = 25)
@@ -20,15 +20,15 @@ public class EditDoctorProfileForm {
     private String email;
 
     @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+")
     private String oldPassword;
 
     @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+")
     private String newPassword;
 
     @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+")
     private String repeatNewPassword;
 
     // Doctor information

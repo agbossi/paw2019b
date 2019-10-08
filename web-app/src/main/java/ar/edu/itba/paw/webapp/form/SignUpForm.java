@@ -6,19 +6,19 @@ import javax.validation.constraints.Size;
 public class SignUpForm {
 
     @Size(min = 1, max = 20)
-    @Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-Z ]+")
     private String firstName;
 
     @Size(min = 1, max = 20)
-    @Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-Z ]+")
     private String lastName;
 
     @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+")
     private String password;
 
     @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+")
     private String repeatPassword;
 
     @Size(min = 6, max = 25)
@@ -29,7 +29,7 @@ public class SignUpForm {
     private String prepaid;
 
     @Size(max=20)
-    @Pattern(regexp = "[0-9]*")
+    @Pattern(regexp = "[0-9 ]*")
     private String prepaidNumber;
 
     @Size(min = 8,max = 8)

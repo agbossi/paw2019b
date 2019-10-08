@@ -6,11 +6,11 @@ import javax.validation.constraints.Pattern;
 public class ClinicForm {
 
     @NotNull
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+")
     private String name;
 
     @NotNull
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+")
     private String address;
 
     private String location;

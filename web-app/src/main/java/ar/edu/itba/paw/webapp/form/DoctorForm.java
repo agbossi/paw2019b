@@ -5,27 +5,27 @@ import javax.validation.constraints.Size;
 
 public class DoctorForm {
 
-    @Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-Z ]+")
     private String firstName;
 
-    @Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-Z ]+")
     private String lastName;
 
-    @Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-Z ]+")
     private String specialty;
 
     @Pattern(regexp = "[0-9]+")
     private String license;
 
-    @Pattern(regexp = "[0-9]+")
+    @Pattern(regexp = "[0-9 ]+")
     private String phoneNumber;
 
     @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+")
     private String password;
 
     @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+")
     private String repeatPassword;
 
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")

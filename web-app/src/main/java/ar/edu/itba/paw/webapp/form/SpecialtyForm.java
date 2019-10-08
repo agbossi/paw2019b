@@ -4,7 +4,7 @@ import javax.validation.constraints.Pattern;
 
 public class SpecialtyForm {
 
-    @Pattern(regexp = "[a-zA-Z]+")
+    @Pattern(regexp = "[a-zA-Z ]+")
     private String name;
 
     public String getName() {
