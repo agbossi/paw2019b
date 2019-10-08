@@ -1,7 +1,75 @@
 .clinic-form-title {
-    padding: 1em !important;
+    padding: 2.5em !important;
 }
 
 .add-clinic-container {
     padding: 4em !important;
 }
+
+.doctor-profile-body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.profile-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-gap: 1em;
+    height: 100vh;
+    overflow: hidden;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 1em;
+}
+
+.profile-user-container > div {
+    grid-column: 1;
+    padding: 1em 1em 1em 3em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.doctor-user-container > div {
+    grid-column: 2;
+    padding: 1em 1em 1em 3em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.field-div {
+    padding-left: 2em;
+}
+
+.edit-profile {
+    align-self: center;
+    border-style: solid;
+    height: 70px;
+    width: 100px;
+    text-align: center;
+    padding-top: 1em;
+    margin: 3em;
+}
+
+/*
+* Doctor clinic added
+*/
+
+.doctor-clinic-added-body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.doctor-clinic-added-container {
+    padding: 2em;
+    text-align: center;
+}
+
+.doctor-clinic-added-container > div{
+    margin-bottom: 2em;
+}
+

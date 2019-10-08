@@ -7,6 +7,7 @@
     padding: 4em;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 1em;
+    grid-row-gap: 4em;
 }
 
 .clinic-card {
@@ -26,4 +27,8 @@
 
 .doctor-clinics-container {
     padding: 2em;
+}
+
+.new-doctor-header {
+    margin: 3em;
 }

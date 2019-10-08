@@ -12,7 +12,7 @@
         <div class="doctor-index-container">
                 <c:choose>
                     <c:when test="${empty doctorClinics}">
-                        <div>
+                        <div class="new-doctor-header">
                             <spring:message code="still.no.clinic.subscription"/>&nbsp;
                             <a href="<c:url value="/doctor/addDoctorClinic"/>"><spring:message code="here"/></a>
                         </div>

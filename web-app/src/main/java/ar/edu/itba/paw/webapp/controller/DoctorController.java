@@ -42,6 +42,9 @@ public class DoctorController {
     private AppointmentService appointmentService;
 
     @Autowired
+    private SpecialtyService specialtyService;
+
+    @Autowired
     private DoctorHourService doctorHourService;
 
     @Autowired
@@ -76,9 +79,12 @@ public class DoctorController {
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
         Image image = imageService.getProfileImage(doctor);
 
+        List<Specialty> specialties = specialtyService.getSpecialties();
+
         mav.addObject("user", user);
         mav.addObject("doctor", doctor);
         mav.addObject("image", image);
+        mav.addObject("specialties", specialties);
 
         return mav;
     }
@@ -112,12 +118,6 @@ public class DoctorController {
         mav.addObject("doctor", doctor);
         mav.addObject("image", image);
 
-        return mav;
-    }
-
-    @RequestMapping(value = "/uploadPicture", method = { RequestMethod.GET })
-    public ModelAndView uploadPicture() {
-        final ModelAndView mav = new ModelAndView("doctor/uploadPicture");
         return mav;
     }
 
@@ -160,11 +160,12 @@ public class DoctorController {
         String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
         Doctor doctor = doctorService.getDoctorByEmail(userEmail);
 
-        doctorClinicService.createDoctorClinic(doctor,
+        DoctorClinic doctorClinic = doctorClinicService.createDoctorClinic(doctor,
                                                clinicService.getClinicById(form.getClinic()),
                                                form.getConsultPrice());
 
         final ModelAndView mav = new ModelAndView("doctor/addedDoctorClinic");
+        mav.addObject("doctorClinic",doctorClinic );
 
         return mav;
     }
