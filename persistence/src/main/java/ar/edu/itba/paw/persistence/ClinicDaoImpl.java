@@ -82,4 +82,11 @@ public class ClinicDaoImpl implements ClinicDao {
         }
         return list;
     }
+
+    @Override
+    public boolean clinicExists(String name, String address, String location) {
+        final List<Clinic> list = jdbcTemplate.query("select * from clinics where name = ? and address = ? and location = ?",ROW_MAPPER,name,address,location);
+
+        return !list.isEmpty();
+    }
 }

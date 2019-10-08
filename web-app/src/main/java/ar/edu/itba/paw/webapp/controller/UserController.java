@@ -4,8 +4,10 @@ import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.PatientService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.auth.SignUpAuthentication;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
+import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,26 +44,18 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    protected AuthenticationManager authenticationManager;
+    private ModelAndViewModifier modelAndViewModifier;
 
     @Autowired
-    private ModelAndViewModifier modelAndViewModifier;
+    private SignUpAuthentication signUpAuthentication;
 
     @Autowired
     private MessageSource messageSource;
 
-    private void authWithAuthManager(HttpServletRequest request, String email, String password) {
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(email, password);
+    @Autowired
+    private ValidationHelper validator;
 
-        // generate session if one doesn't exist
-        request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
 
-        authToken.setDetails(new WebAuthenticationDetails(request));
-        Authentication authentication = authenticationManager.authenticate(authToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    //TODO change form error messages
     @RequestMapping(value = "/signUp", method = { RequestMethod.GET })
     public ModelAndView signUp(@ModelAttribute("signUpForm") final SignUpForm form,HttpServletRequest request,HttpServletResponse response) {
 
@@ -77,15 +71,7 @@ public class UserController {
     @RequestMapping(value = "/signUp",method = { RequestMethod.POST })
     public ModelAndView signUpValidation(@Valid @ModelAttribute("signUpForm") final SignUpForm form, final BindingResult errors, HttpServletRequest request, HttpServletResponse response, Locale locale) {
 
-        if(!form.getPassword().equals(form.getRepeatPassword())){
-            FieldError passwordNotMatchingError = new FieldError("form","repeatPassword",messageSource.getMessage("user.password.not.matching",null,locale));
-            errors.addError(passwordNotMatchingError);
-        }
-
-        if (userService.userExists(form.getEmail())) {
-            FieldError ssoError = new FieldError("form", "email",messageSource.getMessage("user.exist.error.message",null,locale));
-            errors.addError(ssoError);
-        }
+        validator.signUpValidate(form.getPassword(),form.getRepeatPassword(),form.getEmail(),errors,locale);
 
         if(errors.hasErrors()){
             return signUp(form,request,response);
@@ -95,12 +81,11 @@ public class UserController {
 
         User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
         patientService.create(form.getEmail(),form.getId(),form.getPrepaid(), form.getPrepaidNumber(), user);
-        authWithAuthManager(request, form.getEmail(), form.getPassword());
+        signUpAuthentication.authWithAuthManager(request, form.getEmail(), form.getPassword());
 
-        String ret = signUpSuccess(request);
+        String ret = signUpAuthentication.signUpSuccess(request);
 
-        final ModelAndView mav = new ModelAndView("redirect:"+ret);
-        return mav;
+        return new ModelAndView("redirect:"+ret);
     }
 
     @RequestMapping(value = "/login", method = { RequestMethod.GET })
@@ -117,19 +102,5 @@ public class UserController {
         ModelAndView mav = new ModelAndView("/login");
         mav.addObject("errorMessage", messageSource.getMessage("bad.credentials",null,locale));
         return mav;
-    }
-
-    private String signUpSuccess(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        if (session != null) {
-            String redirectUrl = (String) session.getAttribute("url_prior_login");
-            if (redirectUrl != null) {
-                session.removeAttribute("url_prior_login");
-                if(!redirectUrl.contains("login") && !redirectUrl.contains("signUp")){
-                    return redirectUrl;
-                }
-            }
-        }
-        return "/";
     }
 }

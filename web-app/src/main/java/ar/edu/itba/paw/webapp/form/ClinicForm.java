@@ -1,13 +1,16 @@
 package ar.edu.itba.paw.webapp.form;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 public class ClinicForm {
 
     @NotNull
+    @Pattern(regexp = "[a-zA-Z0-9]+")
     private String name;
 
     @NotNull
+    @Pattern(regexp = "[a-zA-Z0-9]+")
     private String address;
 
     private String location;

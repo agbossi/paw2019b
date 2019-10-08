@@ -7,5 +7,7 @@ import java.util.List;
 public interface PrepaidService {
     List<Prepaid> getPrepaids();
 
+    Prepaid getPrepaidByName(String PrepaidName);
+
     Prepaid createPrepaid(String name);
 }

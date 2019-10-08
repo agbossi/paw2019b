@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -53,5 +54,11 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
         result = jdbcInsert.execute(args);
 
         return new PrepaidToClinic(clinic,prepaid);
+    }
+
+    @Override
+    public boolean clinicHasPrepaid(String prepaid, int clinic) {
+        List<PrepaidToClinic> list = jdbcTemplate.query("select * from clinicPrepaids where prepaid = ? and clinicid = ?",ROW_MAPPER,prepaid,clinic);
+        return !list.isEmpty();
     }
 }

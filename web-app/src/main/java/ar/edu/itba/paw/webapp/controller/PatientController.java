@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.PersonalInformationForm;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
+import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,9 @@ public class PatientController {
 
     @Autowired
     private ClinicService clinicService;
+
+    @Autowired
+    private ValidationHelper validator;
 
     private void setFormInformation(PersonalInformationForm form, User user, Patient patient) {
         form.setFirstName(user.getFirstName());

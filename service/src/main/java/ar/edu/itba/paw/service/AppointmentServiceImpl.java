@@ -66,15 +66,21 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Transactional
     @Override
-    public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date) {
+    public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date,boolean cancelledByDoctor) {
         Locale locale = LocaleContextHolder.getLocale();
         String dateString = dateString(date);
-        emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.cancelled.subject",null,locale),messageSource.getMessage("appointment.cancelled.text" + " " + dateString,null,locale));
+        if(cancelledByDoctor){
+            emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.cancelled.subject",null,locale),messageSource.getMessage("appointment.cancelled.by.doctor.text" + " " + dateString,null,locale));
+        }else {
+            emailService.sendSimpleMail(doctorClinic.getDoctor().getEmail(),
+                    messageSource.getMessage("appointment.cancelled.subject",null,locale),
+                    messageSource.getMessage("appointment.cancelled.by.patient.text" + " " + patient.getFirstName() + " "+ patient.getLastName() + " " + dateString,null,locale));
+        }
         appointmentDao.cancelAppointment(doctorClinic,patient,date);
     }
 
     @Override
-    public Appointment hasAppointment(DoctorClinic doctorClinic, Calendar date) {
+    public boolean hasAppointment(DoctorClinic doctorClinic, Calendar date) {
         return appointmentDao.hasAppointment(doctorClinic, date);
     }
 

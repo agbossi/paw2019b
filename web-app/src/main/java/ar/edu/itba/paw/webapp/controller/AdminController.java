@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
+import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Locale;
 
 @Controller
 @RequestMapping("/admin")
@@ -39,16 +41,19 @@ public class AdminController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    PrepaidService prepaidService;
+    private PrepaidService prepaidService;
 
     @Autowired
-    PrepaidToClinicService prepaidToClinicService;
+    private PrepaidToClinicService prepaidToClinicService;
 
     @Autowired
-    ImageService imageService;
+    private ImageService imageService;
+
+    @Autowired
+    private ValidationHelper validator;
     
     @RequestMapping(value = "/addDoctor", method = { RequestMethod.GET })
     public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form){
@@ -94,11 +99,14 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/addedPrepaid",method = { RequestMethod.POST })
-    public ModelAndView addedPrepaid(@Valid @ModelAttribute("prepaidForm") final PrepaidForm form,final BindingResult errors){
+    public ModelAndView addedPrepaid(@Valid @ModelAttribute("prepaidForm") final PrepaidForm form,final BindingResult errors,Locale locale){
+
+        validator.prepaidValidate(form.getName(),errors,locale);
+
         if (errors.hasErrors())
             return addPrepaid(form);
 
-        System.out.println(form.getName());
+
         Prepaid prepaid = prepaidService.createPrepaid(form.getName());
         final ModelAndView mav = new ModelAndView("admin/addedPrepaid");
         mav.addObject("prepaid", prepaid);
@@ -106,10 +114,12 @@ public class AdminController {
         return mav;
     }
     @RequestMapping(value = "/addedPrepaidToClinic",method = { RequestMethod.POST })
-    public ModelAndView addedPrepaidToClinic(@Valid @ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form,final BindingResult errors){
+    public ModelAndView addedPrepaidToClinic(@Valid @ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form,final BindingResult errors,Locale locale){
+
+        validator.prepaidToClinicValidate(form.getPrepaid(),form.getClinic(),errors,locale);
+
         if (errors.hasErrors())
             return addPrepaidToClinic(form);
-
 
         PrepaidToClinic prepaidToClinic = prepaidToClinicService.addPrepaidToClinic(new Prepaid(form.getPrepaid()),clinicService.getClinicById(form.getClinic()));
         final ModelAndView mav = new ModelAndView("admin/addedPrepaidToClinic");
@@ -120,20 +130,11 @@ public class AdminController {
 
     @RequestMapping(value = "/addedDoctor", method = { RequestMethod.POST })
     public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors,
-                                    @RequestParam("photo") MultipartFile photo) {
+                                    @RequestParam("photo") MultipartFile photo, Locale locale) {
 
-        //TODO this is like user controller /signup
-        if (!form.getPassword().equals(form.getRepeatPassword())) {
-            FieldError passwordNotMatchingError = new FieldError("form", "repeatPassword", "fields password and repeat password do not match");
-            errors.addError(passwordNotMatchingError);
-        }
 
-        if (userService.userExists(form.getEmail())) {
-            //TODO change message for language variable
-            FieldError ssoError = new FieldError("form", "email", "That email is already registered");
-            errors.addError(ssoError);
-        }
-
+        validator.signUpValidate(form.getPassword(),form.getRepeatPassword(),form.getEmail(),errors,locale);
+        validator.licenseValidate(form.getLicense(),errors,locale);
 
         if (errors.hasErrors())
             return addDoctor(form);
@@ -156,7 +157,9 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/addedClinic", method = { RequestMethod.POST })
-    public ModelAndView addedClinic(@Valid @ModelAttribute("clinicForm") final ClinicForm form, final BindingResult errors){
+    public ModelAndView addedClinic(@Valid @ModelAttribute("clinicForm") final ClinicForm form, final BindingResult errors,Locale locale){
+
+        validator.clinicValidate(form.getName(),form.getAddress(),form.getLocation(),errors,locale);
 
         if(errors.hasErrors())
             return addClinic(form);
@@ -170,7 +173,9 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/addedLocation", method = { RequestMethod.POST })
-    public ModelAndView addedLocation(@Valid @ModelAttribute("locationForm") final LocationForm form, final BindingResult errors){
+    public ModelAndView addedLocation(@Valid @ModelAttribute("locationForm") final LocationForm form, final BindingResult errors,Locale locale){
+
+        validator.validateLocation(form.getName(),errors,locale);
 
         if(errors.hasErrors())
             return addLocation(form);
@@ -184,7 +189,9 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/addedSpecialty", method = { RequestMethod.POST })
-    public ModelAndView addedSpecialty(@Valid @ModelAttribute("specialtyForm") final SpecialtyForm form, final BindingResult errors){
+    public ModelAndView addedSpecialty(@Valid @ModelAttribute("specialtyForm") final SpecialtyForm form, final BindingResult errors,Locale locale){
+
+        validator.validateSpecialty(form.getName(),errors,locale);
 
         if(errors.hasErrors())
             return addSpecialty(form);

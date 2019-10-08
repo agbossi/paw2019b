@@ -9,4 +9,6 @@ public interface SpecialtyService {
     Specialty createSpecialty(String name);
 
     List<Specialty> getSpecialties();
+
+    Specialty getSpecialtyByName(String SpecialtyName);
 }

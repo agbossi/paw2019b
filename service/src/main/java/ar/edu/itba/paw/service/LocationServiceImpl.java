@@ -25,4 +25,9 @@ public class LocationServiceImpl implements LocationService {
     public List<Location> getLocations() {
         return locationDao.getLocations();
     }
+
+    @Override
+    public Location getLocationByName(String locationName) {
+        return locationDao.getLocationByName(locationName);
+    }
 }

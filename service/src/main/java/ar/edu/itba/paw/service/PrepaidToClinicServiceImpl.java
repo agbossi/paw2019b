@@ -20,4 +20,9 @@ public class PrepaidToClinicServiceImpl implements PrepaidToClinicService {
     public PrepaidToClinic addPrepaidToClinic(Prepaid prepaid, Clinic clinic) {
         return prepaidToClinicDao.addPrepaidToClinic(prepaid,clinic);
     }
+
+    @Override
+    public boolean clinicHasPrepaid(String prepaid, int clinic) {
+        return prepaidToClinicDao.clinicHasPrepaid(prepaid,clinic);
+    }
 }

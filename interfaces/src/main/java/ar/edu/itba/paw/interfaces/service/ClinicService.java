@@ -15,4 +15,6 @@ public interface ClinicService {
     Clinic getClinicById(int id);
 
     List<Clinic> getClinicsByLocation(String location);
+
+    boolean clinicExists(String name,String address,String location);
 }

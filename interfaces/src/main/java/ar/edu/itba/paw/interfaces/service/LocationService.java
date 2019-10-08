@@ -9,4 +9,6 @@ public interface LocationService {
     Location createLocation(String name);
 
     List<Location> getLocations();
+
+    Location getLocationByName(String locationName);
 }

@@ -3,10 +3,9 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.DoctorClinicForm;
-import ar.edu.itba.paw.webapp.form.ScheduleForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
-import org.jboss.logging.Param;
+import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -47,6 +46,9 @@ public class DoctorController {
 
     @Autowired
     private ModelAndViewModifier viewModifier;
+
+    @Autowired
+    private ValidationHelper validator;
 
 
     @RequestMapping(value = "/editProfile", method = { RequestMethod.GET })
@@ -160,7 +162,9 @@ public class DoctorController {
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
 
-        scheduleService.createSchedule(hour, day, doctorClinic);
+        if(!validator.scheduleValidate(doctorClinic,day,hour)){
+            scheduleService.createSchedule(hour, day, doctorClinic);
+        }
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic);
 
@@ -178,7 +182,9 @@ public class DoctorController {
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
 
-        scheduleService.deleteSchedule(hour, day, doctorClinic);
+        if(validator.scheduleValidate(doctorClinic,day,hour)){
+            scheduleService.deleteSchedule(hour, day, doctorClinic);
+        }
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic);
 

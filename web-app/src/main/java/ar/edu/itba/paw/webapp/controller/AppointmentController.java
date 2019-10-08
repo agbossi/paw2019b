@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
+import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,6 +37,12 @@ public class AppointmentController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ValidationHelper validator;
+
+    private static final boolean CANCELLED_BY_DOCTOR = true;
+    private static final boolean CANCELLED_BY_PATIENT = false;
+
     @RequestMapping(value = "/createApp/{clinicId}/{doctorId}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
     public ModelAndView makeAppointment(@PathVariable(value = "clinicId") int clinicId, @PathVariable(value = "doctorId") String license,
                                         @PathVariable(value = "day") int day, @PathVariable(value = "year") int year,
@@ -51,8 +58,9 @@ public class AppointmentController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
 
-        appointmentService.createAppointment(doctorClinic, user, cal);
-
+        if(!validator.appointmentValidate(doctorClinic,cal)){
+            appointmentService.createAppointment(doctorClinic, user, cal);
+        }
 
         final ModelAndView mav = new ModelAndView("redirect:/appointments");
 
@@ -75,8 +83,9 @@ public class AppointmentController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
 
-
-        appointmentService.cancelAppointment(doctorClinic, user, cal);
+        if(validator.appointmentValidate(doctorClinic,cal)){
+            appointmentService.cancelAppointment(doctorClinic, user, cal,false);
+        }
 
         final ModelAndView mav = new ModelAndView("redirect:/appointments");
 
@@ -100,7 +109,9 @@ public class AppointmentController {
         Clinic clinic = clinicService.getClinicById(clinicId);
         DoctorClinic docCli = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, clinic);
 
-        appointmentService.cancelAppointment(docCli, patient, calendar);
+        if(validator.appointmentValidate(docCli,calendar)){
+            appointmentService.cancelAppointment(docCli, patient, calendar,true);
+        }
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor/clinics/" + clinicId +"/1");
         return mav;
@@ -115,13 +126,15 @@ public class AppointmentController {
         cal.set(year, month, day, time, 0, 0);
         cal.set(Calendar.MILLISECOND, 0);
 
-
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doc = doctorService.getDoctorByEmail(user.getEmail());
         Clinic clinic = clinicService.getClinicById(clinicId);
         DoctorClinic docCli = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, clinic);
 
-        appointmentService.createAppointment(docCli, user, cal);
+        if(!validator.appointmentValidate(docCli,cal)){
+            appointmentService.createAppointment(docCli, user, cal);
+        }
+
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor/clinics/" + clinicId +"/1");
         return mav;

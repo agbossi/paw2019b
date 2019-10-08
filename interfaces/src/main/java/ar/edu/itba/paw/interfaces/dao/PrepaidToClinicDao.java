@@ -6,4 +6,6 @@ import ar.edu.itba.paw.model.PrepaidToClinic;
 
 public interface PrepaidToClinicDao {
     PrepaidToClinic addPrepaidToClinic(Prepaid prepaid, Clinic clinic);
+
+    boolean clinicHasPrepaid(String prepaid,int clinic);
 }

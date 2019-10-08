@@ -12,9 +12,9 @@ public interface AppointmentService {
 
     List<Appointment> getPatientsAppointments(User patient);
 
-    void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date);
+    void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date,boolean cancelledByDoctor);
 
-    Appointment hasAppointment(DoctorClinic doctorClinic,Calendar date);
+    boolean hasAppointment(DoctorClinic doctorClinic,Calendar date);
 
     List<Appointment> getAllDoctorsAppointments(Doctor doctor);
 
