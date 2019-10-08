@@ -8,7 +8,7 @@
 <head>
     <%@ page isELIgnored="false" %>
     <jsp:include page="../base/navbar.jsp" />
-    <link href="<c:url value="/resources/css/doctorimage.css" />" rel="stylesheet" type="text/css" />
+
 </head>
 <body>
     <c:url value="/doctor/editProfileFormPost" var="postPath"/>

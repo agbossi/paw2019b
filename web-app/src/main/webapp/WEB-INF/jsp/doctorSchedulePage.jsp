@@ -8,7 +8,7 @@
 <head>
     <%@ page isELIgnored="false" %>
     <jsp:include page="base/navbar.jsp" />
-    <link href="<c:url value="/resources/css/doctorDetails.css" />" rel="stylesheet" type="text/css" />
+    <link href="<c:url value="/resources/css/clinicPage.css" />" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div class="doctor-information">

@@ -1,0 +1,97 @@
+/*
+* CSS for admin.jsp
+*/
+
+.admin-body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.admin-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 1em;
+    height: 100vh;
+    overflow: hidden;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 1em;
+}
+
+.admin-container > div {
+    border-radius: 2em;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ccc;
+    background-color: lightsteelblue;
+    padding: 1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*
+* CSS for addDoctor.jsp
+*/
+
+.add-doctor-container-container {
+    padding: 0em 1em 1em 1em;
+    margin: 0 auto;
+}
+
+.doctor-form-title {
+    text-align: center;
+}
+
+.add-doctor-container {
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    margin: 0 auto;
+}
+
+.add-doctor-form-container {
+    max-width: 1080px;
+    margin: 0 auto;
+    background-color: lightsteelblue;
+    padding: 1em;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1em;
+    grid-column-gap: 4em;
+}
+
+.add-doctor-form-container > div > div {
+    display: flex;
+}
+
+
+.add-doctor-add-button {
+    grid-column: span 2;
+    text-align: center;
+}
+
+.submit-add {
+    width: 100vh;
+    padding: 5px;
+}
+
+.photo-input-tag {
+    width: 205px;
+}
+
+.select-input-div {
+    padding: 5px;
+    width: 205px;
+}
+
+.input-div {
+    text-align: right;
+    flex-grow: 1;
+}
+
+.errors {
+    color: #a00;
+}
