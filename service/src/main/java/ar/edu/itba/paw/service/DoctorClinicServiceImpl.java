@@ -93,14 +93,11 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
         if(list != null) {
             List<Doctor> set = new ArrayList<>();
 
-            System.out.println("lista:" + list.size());
-
             for (DoctorClinic doctorClinic : list) {
                 if (!set.contains(doctorClinic.getDoctor())) {
                     set.add(doctorClinic.getDoctor());
                 }
             }
-            System.out.println("set:" + list.size());
 
             return set;
         }
