@@ -47,7 +47,11 @@ public class SpecialtyDaoImpl implements SpecialtyDao{
 
     @Override
     public Specialty getSpecialtyByName(String SpecialtyName) {
-        return jdbcTemplate.queryForObject("SELECT * FROM specialties WHERE name = ?", Specialty.class, SpecialtyName);
+        List<Specialty> list = jdbcTemplate.query("SELECT * FROM specialties WHERE name = ?", ROW_MAPPER, SpecialtyName);
+        if(!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
     }
 
     @Override
