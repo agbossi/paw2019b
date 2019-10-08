@@ -15,7 +15,7 @@ public interface AppointmentDao {
 
     void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date);
 
-    boolean hasAppointment(DoctorClinic doctorClinic,Calendar date);
+    Appointment hasAppointment(DoctorClinic doctorClinic,Calendar date);
 
     List<Appointment> getAllDoctorsAppointments(Doctor doctor);
 

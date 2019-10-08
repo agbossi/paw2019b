@@ -97,12 +97,13 @@ public class ValidationHelper {
     public void licenseValidate(String license,BindingResult errors,Locale locale){
         if(doctorService.getDoctorByLicense(license) != null){
             FieldError licenseExistsError = new FieldError("form","license",messageSource.getMessage("doctor.license.already.exists",null,locale));
+            errors.addError(licenseExistsError);
         }
     }
     public boolean scheduleValidate(DoctorClinic doctorClinic, int day, int hour){
         return scheduleService.hasSchedule(doctorClinic,day,hour);
     }
     public boolean appointmentValidate(DoctorClinic doctorClinic, Calendar date){
-        return appointmentService.hasAppointment(doctorClinic,date);
+        return appointmentService.hasAppointment(doctorClinic,date) != null;
     }
 }
