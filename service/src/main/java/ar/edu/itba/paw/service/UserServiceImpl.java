@@ -2,6 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.interfaces.dao.UserDao;
+import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.interfaces.service.EmailService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.User;
@@ -20,7 +21,7 @@ public class UserServiceImpl implements UserService {
     UserDao userDao;
 
     @Autowired
-    DoctorDao doctorDao;
+    DoctorService doctorService;
 
 
     @Autowired
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isDoctor(String email) {
-        return doctorDao.isDoctor(email);
+        return doctorService.isDoctor(email);
     }
 
     @Transactional

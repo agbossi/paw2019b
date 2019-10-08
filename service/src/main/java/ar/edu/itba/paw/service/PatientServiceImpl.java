@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.interfaces.dao.PatientDao;
+import ar.edu.itba.paw.interfaces.service.AppointmentService;
 import ar.edu.itba.paw.interfaces.service.PatientService;
-import ar.edu.itba.paw.interfaces.dao.UserDao;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Appointment;
 import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.User;
@@ -20,10 +20,10 @@ public class PatientServiceImpl implements PatientService {
     private PatientDao patientDao;
 
     @Autowired
-    private AppointmentDao appointmentDao;
+    private AppointmentService appointmentService;
 
     @Autowired
-    private UserDao userDao;
+    private UserService userService;
 
     @Transactional
     @Override
@@ -39,8 +39,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public void setAppointments(Patient patient) {
-        User user = userDao.findUserByEmail(patient.getEmail());
-        List<Appointment> appointments = appointmentDao.getPatientsAppointments(user);
+        User user = userService.findUserByEmail(patient.getEmail());
+        List<Appointment> appointments = appointmentService.getPatientsAppointments(user);
         patient.setAppointments(appointments);
     }
 

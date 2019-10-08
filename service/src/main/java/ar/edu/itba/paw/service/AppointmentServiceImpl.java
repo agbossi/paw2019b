@@ -12,7 +12,10 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,7 +45,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             for (Schedule schedule: doctorClinic.getSchedule()) {
                 if(date.get(Calendar.DAY_OF_WEEK) == schedule.getDay() && date.get(Calendar.HOUR_OF_DAY) == schedule.getHour()){
                     Locale locale = LocaleContextHolder.getLocale();
-                    emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.created.subject",null,locale),messageSource.getMessage("appointment.created.text" + " " + date.toString(),null,locale));
+                    emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.created.subject",null,locale),messageSource.getMessage("appointment.created.text",null,locale)  + " " + date.toString());
                     return appointmentDao.createAppointment(doctorClinic,patient,date);
                 }
             }
@@ -65,7 +68,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date) {
         Locale locale = LocaleContextHolder.getLocale();
-        emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.cancelled.subject",null,locale),messageSource.getMessage("appointment.cancelled.text" + " " + date.toString(),null,locale));
+        String dateString = dateString(date);
+        emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.cancelled.subject",null,locale),messageSource.getMessage("appointment.cancelled.text" + " " + dateString,null,locale));
         appointmentDao.cancelAppointment(doctorClinic,patient,date);
     }
 
@@ -84,5 +88,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour) {
         appointmentDao.cancelAllAppointmentsOnSchedule(doctorClinic, day, hour);
+    }
+
+    private String dateString(Calendar calendar){
+        Date date = calendar.getTime();
+        DateFormat dateFormat = new SimpleDateFormat("EEEE yyyy-mm-dd hh:mm:ss");
+        return dateFormat.format(date);
     }
 }

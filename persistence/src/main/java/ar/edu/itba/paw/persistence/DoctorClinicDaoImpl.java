@@ -133,43 +133,45 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public List<DoctorClinic> getFilteredDoctors(final Location location, final Specialty specialty,
-                                                final String firstName, final String lastName, final Prepaid prepaid,
+                                                 final String firstName, final String lastName, final Prepaid prepaid,
                                                  final int consultPrice) {
 
         DoctorQueryBuilder builder = new DoctorQueryBuilder();
-        builder.buildQuery(location.getLocationName(),specialty.getSpecialtyName(), firstName, lastName, prepaid.getName(), consultPrice);
+        builder.buildQuery(location.getLocationName(), specialty.getSpecialtyName(), firstName, lastName, prepaid.getName(), consultPrice);
 
         List<DoctorClinic> list = jdbcTemplate.query(builder.getQuery(), new PreparedStatementSetter() {
 
             public void setValues(PreparedStatement preparedStatement) throws SQLException {
-                int i =1;
-                if (location.getLocationName() != ""){
+                int i = 1;
+                if (location.getLocationName() != "") {
                     preparedStatement.setString(i, location.getLocationName());
                     i++;
                 }
-                if(specialty.getSpecialtyName() != ""){
+                if (specialty.getSpecialtyName() != "") {
                     preparedStatement.setString(i, specialty.getSpecialtyName());
                     i++;
                 }
-                if(firstName != ""){
+                if (firstName != "") {
                     preparedStatement.setString(i, firstName);
                     i++;
                 }
-                if(lastName != ""){
+                if (lastName != "") {
                     preparedStatement.setString(i, lastName);
                     i++;
                 }
-                if(prepaid.getName() != ""){
+                if (prepaid.getName() != "") {
                     preparedStatement.setString(i, prepaid.getName());
-                }else{
-                    if(consultPrice > 0){
+                } else {
+                    if (consultPrice > 0) {
                         preparedStatement.setInt(i, consultPrice);
                     }
                 }
             }
-        },ROW_MAPPER);
+        }, ROW_MAPPER);
 
-        return ( list.isEmpty() ? null : list );
+        return (list.isEmpty() ? null : list);
     }
+
+}
 
 

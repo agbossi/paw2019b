@@ -1,10 +1,9 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
-import ar.edu.itba.paw.interfaces.dao.DoctorDao;
-import ar.edu.itba.paw.interfaces.dao.ScheduleDao;
+import ar.edu.itba.paw.interfaces.service.AppointmentService;
 import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
+import ar.edu.itba.paw.interfaces.service.ScheduleService;
 import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,19 +18,16 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     DoctorClinicDao doctorClinicDao;
 
     @Autowired
-    ScheduleDao scheduleDao;
+    ScheduleService scheduleService;
 
     @Autowired
-    DoctorDao doctorDao;
-
-    @Autowired
-    AppointmentDao appointmentDao;
+    AppointmentService appointmentService;
 
     private void setScheduleAndAppointments(List<DoctorClinic> list) {
         if(list != null) {
             for (DoctorClinic doctorClinic: list) {
-                List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
-                List<Appointment> appointments = appointmentDao.getDoctorsAppointments(doctorClinic);
+                List<Schedule> schedules = scheduleService.getDoctorClinicSchedule(doctorClinic);
+                List<Appointment> appointments = appointmentService.getDoctorsAppointments(doctorClinic);
 
                 doctorClinic.setSchedule(schedules);
                 doctorClinic.setAppointments(appointments);
@@ -61,7 +57,7 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
 
     @Override
     public void setSchedule(DoctorClinic doctorClinic, int day, int hour) {
-        Schedule schedule = scheduleDao.createSchedule(day, hour, doctorClinic);
+        Schedule schedule = scheduleService.createSchedule(day, hour, doctorClinic);
         List<Schedule> list = doctorClinic.getSchedule();
         list.add(schedule);
         doctorClinic.setSchedule(list);
@@ -78,8 +74,8 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     public DoctorClinic getDoctorClinicFromDoctorAndClinic(Doctor doctor, Clinic clinic) {
         DoctorClinic doctorClinic = doctorClinicDao.getDoctorInClinic(doctor.getLicense(), clinic.getId());
         if(doctorClinic != null) {
-            List<Schedule> schedules = scheduleDao.getDoctorClinicSchedule(doctorClinic);
-            List<Appointment> appointments = appointmentDao.getDoctorsAppointments(doctorClinic);
+            List<Schedule> schedules = scheduleService.getDoctorClinicSchedule(doctorClinic);
+            List<Appointment> appointments = appointmentService.getDoctorsAppointments(doctorClinic);
 
             doctorClinic.setSchedule(schedules);
             doctorClinic.setAppointments(appointments);

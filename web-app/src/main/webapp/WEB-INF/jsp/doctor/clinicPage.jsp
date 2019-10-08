@@ -20,7 +20,7 @@
                     <tr>
                         <th class="mycell">
                             <c:if test="${weekNum > 1}">
-                                <a href="<c:url value="/results/${doctorClinic.clinic.id}/${doctorClinic.doctor.license}/${weekNum - 1}"/>"> - </a>
+                                <a href="<c:url value="/doctor/clinics/${doctorClinic.clinic.id}/${weekNum - 1}"/>"> - </a>
                             </c:if>
                         </th>
                         <c:forEach var="d" items="${days}">
@@ -48,7 +48,7 @@
                             </c:choose>
                         </c:forEach>
                         <th class="mycell">
-                            <a href="<c:url value="/results/${doctor.clinic.id}/${doctor.doctor.license}/${weekNum + 1}"/>"> + </a>
+                            <a href="<c:url value="/doctor/clinics/${doctorClinic.clinic.id}/${weekNum + 1}"/>"> + </a>
                         </th>
                     </tr>
 

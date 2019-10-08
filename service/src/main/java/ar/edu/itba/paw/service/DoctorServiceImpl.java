@@ -82,4 +82,8 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorsWithAvailability;
     }
 
+    @Override
+    public boolean isDoctor(String email) {
+        return doctorDao.isDoctor(email);
+    }
 }
