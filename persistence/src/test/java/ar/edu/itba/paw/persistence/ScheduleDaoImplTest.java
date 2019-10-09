@@ -75,8 +75,8 @@ public class ScheduleDaoImplTest {
 
     @Test
     public void testHasSchedule(){
-        boolean bool1 = scheduleDao.hasSchedule(doctorClinic, day, hour);
-        boolean bool2 = scheduleDao.hasSchedule(doctorClinic, day2, hour2);
+        boolean bool1 = scheduleDao.doctorHasSchedule(doctorClinic.getDoctor(), day, hour);
+        boolean bool2 = scheduleDao.doctorHasSchedule(doctorClinic.getDoctor(), day2, hour2);
 
         Assert.assertTrue(bool1);
         Assert.assertFalse(bool2);
