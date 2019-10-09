@@ -100,3 +100,14 @@
 .errors {
     color: #a00;
 }
+
+.log-in-errors {
+    color: #a00;
+}
+
+.log-in-form-container {
+    grid-template-columns: 1fr !important;
+}
+
+.log-in-submit {
+}

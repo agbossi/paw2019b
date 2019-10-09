@@ -17,9 +17,7 @@
     <body>
         <div class="search-bar">
             <div class="list-group list-group-flush">
-
                 <c:url value="/results" var="postPath"/>
-                
                 <%--@elvariable id="searchForm" type="java"--%>
                 <form:form modelAttribute="searchForm" action="${postPath}" method="post">
 

@@ -10,3 +10,7 @@
 .profile-save-changes {
     margin-left: 1em;
 }
+
+.errors {
+    color: #a00;
+}

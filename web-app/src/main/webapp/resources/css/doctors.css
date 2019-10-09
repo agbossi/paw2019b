@@ -5,6 +5,18 @@
 }
 
 .single-doctor {
-    margin-right: -10px;
-    margin-bottom: 20px !important;
+    text-align: center;
+}
+
+.doctor-picture {
+    height: 150px;
+    width: 150px;
+    border-style: solid;
+    border-radius: 0.5em;
+    margin: 0.5em;
+}
+
+.doctor-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }

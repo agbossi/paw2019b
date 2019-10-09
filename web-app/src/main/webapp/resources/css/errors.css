@@ -1,0 +1,17 @@
+.error-body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.error-container {
+    padding: 5em;
+}
+
+.something-wrong {
+    color: #aa0000;
+}
+
+.problem {
+
+}

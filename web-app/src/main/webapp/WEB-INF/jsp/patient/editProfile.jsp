@@ -100,8 +100,15 @@
                                         <form:label path="prepaid"><spring:message code="prepaid"/> </form:label>
                                     </div>
                                     <div class="input-div">
-                                        <form:select class="select-input-div" path="prepaid">
-                                            <form:option value="${patient.prepaid.name}"/>
+                                        <form:select class="select-input-div" path="prepaid" id="prepaid" onclick="handleClick(this.id)">
+                                            <c:choose>
+                                                <c:when test="${not empty patient.prepaid}">
+                                                    <form:option value="${patient.prepaid.name}"/>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <form:option value=""><spring:message code="no.prepaid"/></form:option>
+                                                </c:otherwise>
+                                            </c:choose>
                                             <c:forEach var="prepaid" items="${prepaids}">
                                                 <c:if test="${ prepaid.name != patient.prepaid.name }">
                                                     <form:option value="${prepaid.name}"/>
@@ -118,7 +125,7 @@
                                         <form:label path="prepaidNumber"><spring:message code="patient.prepaid.number"/> </form:label>
                                     </div>
                                     <div class="input-div">
-                                        <form:input type="text" path="prepaidNumber" placeholder="${patient.patientNumber}"/>
+                                        <form:input type="text" disabled="false" id="prepaidNumber" path="prepaidNumber" placeholder="${patient.patientNumber}"/>
                                     </div>
                                 </div>
                                 <form:errors class="errors" path="prepaidNumber" element="p"/>
@@ -135,5 +142,24 @@
     </form:form>
     </body>
 </html>
+
+<script type="text/javascript">
+    function handleClick(clickedId)
+    {
+        if(clickedId == "prepaid") {
+            if( document.getElementById('prepaid').value == "" ) {
+                document.getElementById('prepaidNumber').disabled = true;
+            }
+            else {
+                document.getElementById('prepaidNumber').disabled = false;
+            }
+        }
+        else if(clickedId == "prepaidId") {
+            if( document.getElementById('prepaid').value != "" ) {
+                document.getElementById('prepaidNumber').disabled = false;
+            }
+        }
+    }
+</script>
 
 

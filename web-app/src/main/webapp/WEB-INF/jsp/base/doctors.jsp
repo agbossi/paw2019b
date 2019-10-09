@@ -11,21 +11,13 @@
     </head>
     <body class="d-flex flex-column h-100">
         <div class="container marketing " id="doctors">
-            <div class="row">
+            <div class="doctor-row">
                 <c:if test="${!empty doctors}">
                     <c:forEach var="doctor" items="${doctors}">
-                        <div class="col-lg-4 single-doctor">
-                            <svg class="rounded-circle"
-                                 width="140" height="140"
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 preserveAspectRatio="xMidYMid slice"
-                                 focusable="false" role="img" aria-label="Placeholder: 140x140">
-                                <rect width="100%" height="100%" fill="#777"></rect>
-                                <image width="100%" height="100%" xlink:href="<c:url value="/images/${doctor.license}"/>" clip-path="url(#circleView)" />
-                            </svg>
-                            <h3>${doctor.firstName} ${doctor.lastName}</h3>
+                        <div class="single-doctor">
+                            <img class="doctor-picture" src="<c:url value="/images/${doctor.license}"/>"/>
+                            <h3><a class="text-dark" href="<c:url value="/results/${doctor.license}"/>"><c:out value="${doctor.firstName}"/> <c:out value=" ${doctor.lastName}"/></a></h3>
                             <p>${doctor.specialty.specialtyName}</p>
-                            <p><a class="btn btn-secondary" href="<c:url value="/results/${doctor.license}"/>" role="button"><spring:message code="view.details"/></a></p>
                         </div>
                     </c:forEach>
                 </c:if>
