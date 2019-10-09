@@ -70,11 +70,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         Locale locale = LocaleContextHolder.getLocale();
         String dateString = dateString(date);
         if(cancelledByDoctor){
-            emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.cancelled.subject",null,locale),messageSource.getMessage("appointment.cancelled.by.doctor.text" + " " + dateString,null,locale));
+            emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.cancelled.subject",null,locale),messageSource.getMessage("appointment.cancelled.by.doctor.text",null,locale) + " " + dateString);
         }else {
             emailService.sendSimpleMail(doctorClinic.getDoctor().getEmail(),
                     messageSource.getMessage("appointment.cancelled.subject",null,locale),
-                    messageSource.getMessage("appointment.cancelled.by.patient.text" + " " + patient.getFirstName() + " "+ patient.getLastName() + " " + dateString,null,locale));
+                    messageSource.getMessage("appointment.cancelled.by.patient.text" + " " + patient.getFirstName() + " "+ patient.getLastName(),null,locale) + " " + dateString);
         }
         appointmentDao.cancelAppointment(doctorClinic,patient,date);
     }
