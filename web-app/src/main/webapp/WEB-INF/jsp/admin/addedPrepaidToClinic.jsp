@@ -22,7 +22,7 @@
                 <a class="nav-link" href="<c:url value="/admin/addPrepaidToClinic"/>"><spring:message code="add.another.prepaid.to.clinic"/></a>
             </div>
             <div>
-                <a class="nav-link" href="<c:url value="/"/>"><spring:message code="go.back.home"/></a>
+                <a class="nav-link" href="<c:url value="/admin/prepaidClinics"/>"><spring:message code="go.back.to.list"/></a>
             </div>
         </div>
     </body>

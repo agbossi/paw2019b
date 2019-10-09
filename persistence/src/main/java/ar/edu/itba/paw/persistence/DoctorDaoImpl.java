@@ -60,12 +60,8 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getDoctors() {
-        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName " +
+        return jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName " +
                 "from doctors join users on doctors.email = users.email",ROW_MAPPER);
-        if(list.isEmpty()){
-            return null;
-        }
-        return list;
     }
 
 

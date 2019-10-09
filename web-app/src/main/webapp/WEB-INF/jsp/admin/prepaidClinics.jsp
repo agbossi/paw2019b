@@ -18,7 +18,7 @@
 <div class="admin-info-container">
     <c:forEach var="prepaidClinic" items="${prepaidClinics}">
         <div>
-            <h6><c:out value="${prepaidClinic.prepaid.name}"/>, <c:out value="${prepaidClinic.clinic.name}"/></h6>
+            <h6><c:out value="${prepaidClinic.clinic.name}"/>, <c:out value="${prepaidClinic.prepaid.name}"/></h6>
             <h6>
                 <a href="<c:url value="/admin/delete/${prepaidClinic.prepaid.name}/${prepaidClinic.clinic.id}"/>">
                     <b class="delete-element">
