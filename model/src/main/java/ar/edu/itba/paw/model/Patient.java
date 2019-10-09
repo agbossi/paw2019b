@@ -67,4 +67,12 @@ public class Patient {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Patient){
+            return ((Patient) obj).getEmail().equals(this.getEmail());
+        }
+        return false;
+    }
 }

@@ -26,4 +26,13 @@ public class PrepaidToClinic {
     public void setPrepaid(Prepaid prepaid) {
         this.prepaid = prepaid;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof PrepaidToClinic){
+            return ((PrepaidToClinic) obj).getClinic().equals(this.getClinic())
+                    && ((PrepaidToClinic) obj).getPrepaid().getName().equals(this.getPrepaid().getName());
+        }
+        return false;
+    }
 }
