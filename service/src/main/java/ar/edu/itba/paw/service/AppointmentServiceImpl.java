@@ -53,7 +53,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return null;
     }
-    
+
     @Override
     public List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic) {
         return appointmentDao.getDoctorsAppointments(doctorClinic);
