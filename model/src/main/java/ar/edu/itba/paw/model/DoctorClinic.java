@@ -56,4 +56,12 @@ public class DoctorClinic {
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof DoctorClinic){
+            return ((DoctorClinic) obj).getDoctor().equals(this.getDoctor()) && ((DoctorClinic) obj).getClinic().equals(this.getClinic());
+        }
+        return false;
+    }
 }

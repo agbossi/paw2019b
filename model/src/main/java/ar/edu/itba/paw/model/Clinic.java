@@ -36,4 +36,12 @@ public class Clinic {
     public String getAddress() {
         return address;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Clinic){
+            return ((Clinic) obj).getId() == this.getId();
+        }
+        return false;
+    }
 }

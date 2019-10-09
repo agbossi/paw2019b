@@ -31,4 +31,12 @@ public class User {
     public String getEmail() {
         return email;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof User){
+            return ((Doctor) obj).getEmail().equals(this.getEmail());
+        }
+        return false;
+    }
 }

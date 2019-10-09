@@ -26,4 +26,12 @@ public class Schedule {
     public void setHour(int hour) {
         this.hour = hour;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Schedule){
+            return ((Schedule) obj).getDay() == this.getDay() && ((Schedule) obj).getHour() == this.getHour();
+        }
+        return false;
+    }
 }
