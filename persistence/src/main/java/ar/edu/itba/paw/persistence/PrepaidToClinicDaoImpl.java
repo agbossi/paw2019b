@@ -47,9 +47,8 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     @Override
     public List<PrepaidToClinic> getPrepaidToClinics() {
         List<PrepaidToClinic> list = jdbcTemplate.query(
-                "select clinicPrepaids.clinicid, clinics.name, clinics.address, clinics.location, prepaids.name from " +
-                "(clinicPrepaids join clinics on clinicPrepaids.clinicid = clinics.id) join " +
-                "prepaids clinicPrepaids.prepaid on prepaids.name ", ROW_MAPPER);
+                "select clinicPrepaids.clinicid, clinics.name, clinics.address, clinics.location, clinicPrepaids.prepaid from " +
+                "(clinicPrepaids join clinics on clinicPrepaids.clinicid = clinics.id)", ROW_MAPPER);
         if (list.isEmpty()) {
             return null;
         }
