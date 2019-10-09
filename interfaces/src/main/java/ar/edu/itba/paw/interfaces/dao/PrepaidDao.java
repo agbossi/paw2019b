@@ -11,4 +11,6 @@ public interface PrepaidDao {
     Prepaid getPrepaidByName(String PrepaidName);
 
     List<Prepaid> getPrepaids();
+
+    long deletePrepaid(String name);
 }

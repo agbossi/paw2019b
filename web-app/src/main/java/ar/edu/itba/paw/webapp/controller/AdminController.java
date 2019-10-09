@@ -54,6 +54,13 @@ public class AdminController {
 
     @Autowired
     private ValidationHelper validator;
+
+    @RequestMapping(value = "/doctors", method = { RequestMethod.GET })
+    public ModelAndView doctors(){
+        final ModelAndView mav = new ModelAndView("admin/doctors");
+        viewModifier.addDoctors(mav);
+        return mav;
+    }
     
     @RequestMapping(value = "/addDoctor", method = { RequestMethod.GET })
     public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form){
@@ -64,94 +71,24 @@ public class AdminController {
         return mav;
     }
 
+    @RequestMapping(value = "/deleteDoctor/{license}", method = { RequestMethod.GET })
+    public ModelAndView deleteDoctor(@PathVariable(value = "license") String license){
+        doctorService.deleteDoctor(license);
+        return doctors();
+    }
+
+    @RequestMapping(value = "/clinics", method = { RequestMethod.GET })
+    public ModelAndView clinics(){
+        final ModelAndView mav = new ModelAndView("admin/clinics");
+        viewModifier.addClinics(mav);
+
+        return mav;
+    }
+
     @RequestMapping(value = "/addClinic", method = { RequestMethod.GET })
     public ModelAndView addClinic(@ModelAttribute("clinicForm") final ClinicForm form){
         final ModelAndView mav = new ModelAndView("admin/addClinic");
-
         viewModifier.addLocations(mav);
-
-        return mav;
-    }
-
-    @RequestMapping(value = "/addLocation", method = { RequestMethod.GET })
-    public ModelAndView addLocation(@ModelAttribute("locationForm") final LocationForm form){
-        final ModelAndView mav = new ModelAndView("admin/addLocation");
-        return mav;
-    }
-
-    @RequestMapping(value = "/addSpecialty", method = {RequestMethod.GET})
-    public ModelAndView addSpecialty(@ModelAttribute("specialtyForm") final SpecialtyForm form){
-        final ModelAndView mav = new ModelAndView("admin/addSpecialty");
-        return mav;
-    }
-    @RequestMapping(value = "/addPrepaid",method = { RequestMethod.GET })
-    public ModelAndView addPrepaid(@ModelAttribute("prepaidForm") final PrepaidForm form){
-        final ModelAndView mav = new ModelAndView("admin/addPrepaid");
-        return mav;
-    }
-    @RequestMapping(value = "/addPrepaidToClinic",method = { RequestMethod.GET })
-    public ModelAndView addPrepaidToClinic(@ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form){
-        final ModelAndView mav = new ModelAndView("admin/addPrepaidToClinic");
-
-        viewModifier.addClinics(mav);
-        viewModifier.addPrepaids(mav);
-        return mav;
-    }
-
-    @RequestMapping(value = "/addedPrepaid",method = { RequestMethod.POST })
-    public ModelAndView addedPrepaid(@Valid @ModelAttribute("prepaidForm") final PrepaidForm form,final BindingResult errors,Locale locale){
-
-        validator.prepaidValidate(form.getName(),errors,locale);
-
-        if (errors.hasErrors())
-            return addPrepaid(form);
-
-
-        Prepaid prepaid = prepaidService.createPrepaid(form.getName());
-        final ModelAndView mav = new ModelAndView("admin/addedPrepaid");
-        mav.addObject("prepaid", prepaid);
-
-        return mav;
-    }
-    @RequestMapping(value = "/addedPrepaidToClinic",method = { RequestMethod.POST })
-    public ModelAndView addedPrepaidToClinic(@Valid @ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form,final BindingResult errors,Locale locale){
-
-        validator.prepaidToClinicValidate(form.getPrepaid(),form.getClinic(),errors,locale);
-
-        if (errors.hasErrors())
-            return addPrepaidToClinic(form);
-
-        PrepaidToClinic prepaidToClinic = prepaidToClinicService.addPrepaidToClinic(new Prepaid(form.getPrepaid()),clinicService.getClinicById(form.getClinic()));
-        final ModelAndView mav = new ModelAndView("admin/addedPrepaidToClinic");
-        mav.addObject("prepaidToClinic", prepaidToClinic);
-
-        return mav;
-    }
-
-    @RequestMapping(value = "/addedDoctor", method = { RequestMethod.POST })
-    public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors,
-                                    @RequestParam("photo") MultipartFile photo, Locale locale) {
-
-
-        validator.signUpValidate(form.getPassword(),form.getRepeatPassword(),form.getEmail(),errors,locale);
-        validator.licenseValidate(form.getLicense(),errors,locale);
-
-        if (errors.hasErrors())
-            return addDoctor(form);
-
-        String encodedPassword = passwordEncoder.encode(form.getPassword());
-        userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
-        Doctor doctor = doctorService.createDoctor(new Specialty(form.getSpecialty()),
-                                            form.getLicense(),
-                                            form.getPhoneNumber(),
-                                            form.getEmail()
-                                            );
-        long image = imageService.createProfileImage(photo, doctor);
-
-
-        final ModelAndView mav = new ModelAndView("admin/addedDoctor");
-        mav.addObject("doctor", doctor);
-        mav.addObject("imageId", image);
 
         return mav;
     }
@@ -172,6 +109,25 @@ public class AdminController {
         return mav;
     }
 
+    @RequestMapping(value = "/locations", method = { RequestMethod.GET })
+    public ModelAndView locations(){
+        final ModelAndView mav = new ModelAndView("admin/locations");
+        viewModifier.addLocations(mav);
+        return mav;
+    }
+
+    @RequestMapping(value = "/addLocation", method = { RequestMethod.GET })
+    public ModelAndView addLocation(@ModelAttribute("locationForm") final LocationForm form){
+        final ModelAndView mav = new ModelAndView("admin/addLocation");
+        return mav;
+    }
+
+    @RequestMapping(value = "/deleteLocation/{locationName}", method = { RequestMethod.GET })
+    public ModelAndView deleteLocation(@PathVariable(value = "locationName") String name){
+        locationService.deleteLocation(name);
+        return locations();
+    }
+
     @RequestMapping(value = "/addedLocation", method = { RequestMethod.POST })
     public ModelAndView addedLocation(@Valid @ModelAttribute("locationForm") final LocationForm form, final BindingResult errors,Locale locale){
 
@@ -188,6 +144,25 @@ public class AdminController {
         return mav;
     }
 
+    @RequestMapping(value = "/specialties", method = {RequestMethod.GET})
+    public ModelAndView specialties(){
+        final ModelAndView mav = new ModelAndView("admin/specialties");
+        viewModifier.addSpecialties(mav);
+        return mav;
+    }
+
+    @RequestMapping(value = "/addSpecialty", method = {RequestMethod.GET})
+    public ModelAndView addSpecialty(@ModelAttribute("specialtyForm") final SpecialtyForm form){
+        final ModelAndView mav = new ModelAndView("admin/addSpecialty");
+        return mav;
+    }
+
+    @RequestMapping(value = "/deleteSpecialty/{specialtyName}", method = { RequestMethod.GET })
+    public ModelAndView deleteSpecialty(@PathVariable(value = "specialtyName") String name){
+        specialtyService.deleteSpecialty(name);
+        return specialties();
+    }
+
     @RequestMapping(value = "/addedSpecialty", method = { RequestMethod.POST })
     public ModelAndView addedSpecialty(@Valid @ModelAttribute("specialtyForm") final SpecialtyForm form, final BindingResult errors,Locale locale){
 
@@ -200,6 +175,81 @@ public class AdminController {
 
         final ModelAndView mav = new ModelAndView("admin/addedSpecialty");
         mav.addObject("specialty", specialty);
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/prepaids",method = { RequestMethod.GET })
+    public ModelAndView prepaids(){
+        final ModelAndView mav = new ModelAndView("admin/prepaids");
+        viewModifier.addPrepaids(mav);
+        return mav;
+    }
+
+    @RequestMapping(value = "/addPrepaid",method = { RequestMethod.GET })
+    public ModelAndView addPrepaid(@ModelAttribute("prepaidForm") final PrepaidForm form){
+        final ModelAndView mav = new ModelAndView("admin/addPrepaid");
+        return mav;
+    }
+
+    @RequestMapping(value = "/deletePrepaid/{prepaidName}", method = { RequestMethod.GET })
+    public ModelAndView deletePrepaid(@PathVariable(value = "prepaidName") String name){
+        prepaidService.deletePrepaid(name);
+        return prepaids();
+    }
+
+    @RequestMapping(value = "/addedPrepaid",method = { RequestMethod.POST })
+    public ModelAndView addedPrepaid(@Valid @ModelAttribute("prepaidForm") final PrepaidForm form,final BindingResult errors,Locale locale){
+
+        validator.prepaidValidate(form.getName(),errors,locale);
+
+        if (errors.hasErrors())
+            return addPrepaid(form);
+
+
+        Prepaid prepaid = prepaidService.createPrepaid(form.getName());
+        final ModelAndView mav = new ModelAndView("admin/addedPrepaid");
+        mav.addObject("prepaid", prepaid);
+
+        return mav;
+    }
+
+    @RequestMapping(value = "/prepaidClinics", method = { RequestMethod.GET })
+    public ModelAndView prepaidClinics() {
+        final ModelAndView mav = new ModelAndView("/admin/prepaidClinics");
+        viewModifier.addPrepaidClinics(mav);
+        return mav;
+    }
+
+    @RequestMapping(value = "/deletePrepaidClinics/delete/{prepaid}/{clinicId}", method = { RequestMethod.GET })
+    public ModelAndView deletePrepaidClinic(@PathVariable(value = "prepaid") String prepaid,
+                                            @PathVariable(value = "clinicId") int clinicId) {
+        prepaidToClinicService.deletePrepaidFromClinic(prepaid, clinicId);
+        final ModelAndView mav = new ModelAndView("/admin/prepaidClinics");
+        viewModifier.addPrepaidClinics(mav);
+        return mav;
+    }
+
+    @RequestMapping(value = "/addPrepaidToClinic",method = { RequestMethod.GET })
+    public ModelAndView addPrepaidToClinic(@ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form){
+        final ModelAndView mav = new ModelAndView("admin/addPrepaidToClinic");
+
+        viewModifier.addClinics(mav);
+        viewModifier.addPrepaids(mav);
+        return mav;
+    }
+
+    @RequestMapping(value = "/addedPrepaidToClinic",method = { RequestMethod.POST })
+    public ModelAndView addedPrepaidToClinic(@Valid @ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form,final BindingResult errors,Locale locale){
+
+        validator.prepaidToClinicValidate(form.getPrepaid(),form.getClinic(),errors,locale);
+
+        if (errors.hasErrors())
+            return addPrepaidToClinic(form);
+
+        PrepaidToClinic prepaidToClinic = prepaidToClinicService.addPrepaidToClinic(new Prepaid(form.getPrepaid()),clinicService.getClinicById(form.getClinic()));
+        final ModelAndView mav = new ModelAndView("admin/addedPrepaidToClinic");
+        mav.addObject("prepaidToClinic", prepaidToClinic);
 
         return mav;
     }

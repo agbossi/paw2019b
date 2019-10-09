@@ -19,7 +19,7 @@
                 <a class="nav-link" href="<c:url value="/admin/addSpecialty"/>"><spring:message code="add.another.specialty"/></a>
             </div>
             <div>
-                <a class="nav-link" href="<c:url value="/"/>"><spring:message code="go.back.home"/></a>
+                <a class="nav-link" href="<c:url value="/admin/specialties"/>"><spring:message code="go.back.to.list"/></a>
             </div>
         </div>
     </body>

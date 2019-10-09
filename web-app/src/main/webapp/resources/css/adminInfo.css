@@ -1,0 +1,38 @@
+.admin-info-body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    padding: 1em;
+}
+
+.admin-info-header {
+    margin-botton: 2em !important;
+}
+
+.admin-info-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(14, 1fr);
+    grid-gap: 0.5em;
+    height: 100vh;
+    overflow: auto;
+    paddign: 1em;
+    column-gap: 2em;
+}
+
+.admin-info-container > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 1em;
+    border-style: solid;
+    border-radius: 0.4em;
+    border-color: #ccc;
+    background-color: #F0F8FF;
+    color: #86C5D8;
+}
+
+.delete-element {
+    color: #aa0000;
+    text-align: right;
+    flex-grow: 1;
+}

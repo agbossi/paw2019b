@@ -14,7 +14,7 @@ import java.sql.SQLException;
 
 @org.springframework.web.bind.annotation.ControllerAdvice
 public class ControllerAdvice {
-
+/*
     @Autowired
     MessageSource messageSource;
 
@@ -40,5 +40,5 @@ public class ControllerAdvice {
         mav.addObject("url", request.getRequestURL());
         mav.setViewName("error");
         return mav;
-    }
+    }*/
 }

@@ -11,7 +11,7 @@
     <body class="added-body">
         <div class="added-container">
             <div>
-                <p><h5><spring:message code="doctor.added.to.clinic"/></h5></p>
+                <p><h5><spring:message code="clinic.added"/></h5></p>
                 <p><b><spring:message code="clinic"/></b></p>
                 <p><c:out value="${clinic.name}"/></p>
                 <p><b><spring:message code="address"/></b></p>
@@ -23,7 +23,7 @@
                 <a class="nav-link" href="<c:url value="/admin/addClinic"/>"><spring:message code="add.another.clinic"/></a>
             </div>
             <div>
-                <a class="nav-link" href="<c:url value="/"/>"><spring:message code="go.back.home"/></a>
+                <a class="nav-link" href="<c:url value="/admin/clinics"/>"><spring:message code="go.back.to.list"/></a>
             </div>
         </div>
     </body>

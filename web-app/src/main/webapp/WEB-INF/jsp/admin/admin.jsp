@@ -11,36 +11,36 @@
             <div class="admin-container">
                 <div>
                     <h2>
-                        <a class="p-2 admin-index-option" href="<c:url value="/admin/addDoctor"/>"><spring:message code="doctor.index"/></a>
+                        <a class="p-2 admin-index-option" href="<c:url value="/admin/doctors"/>"><spring:message code="doctor.index"/></a>
                     </h2>
                 </div>
                 <div>
                     <h2>
-                        <a class="p-2 admin-index-option" href="<c:url value="/admin/addClinic"/>"><spring:message code="clinic.index"/></a>
-                    </h2>
-
-                </div>
-                <div>
-                    <h2>
-                        <a class="p-2 admin-index-option" href="<c:url value="/admin/addLocation"/>"><spring:message code="location.index"/></a>
+                        <a class="p-2 admin-index-option" href="<c:url value="/admin/clinics"/>"><spring:message code="clinic.index"/></a>
                     </h2>
 
                 </div>
                 <div>
                     <h2>
-                        <a class="p-2 admin-index-option" href="<c:url value="/admin/addSpecialty"/>"><spring:message code="specialty.index"/></a>
+                        <a class="p-2 admin-index-option" href="<c:url value="/admin/locations"/>"><spring:message code="location.index"/></a>
                     </h2>
 
                 </div>
                 <div>
                     <h2>
-                        <a class="p-2 admin-index-option" href="<c:url value="/admin/addPrepaid"/>"><spring:message code="prepaid.index"/></a>
+                        <a class="p-2 admin-index-option" href="<c:url value="/admin/specialties"/>"><spring:message code="specialty.index"/></a>
                     </h2>
 
                 </div>
                 <div>
                     <h2>
-                        <a class="p-2 admin-index-option" href="<c:url value="/admin/addPrepaidToClinic"/>"><spring:message code="prepaid.to.clinic.index"/></a>
+                        <a class="p-2 admin-index-option" href="<c:url value="/admin/prepaids"/>"><spring:message code="prepaid.index"/></a>
+                    </h2>
+
+                </div>
+                <div>
+                    <h2>
+                        <a class="p-2 admin-index-option" href="<c:url value="/admin/prepaidClinics"/>"><spring:message code="prepaid.to.clinic.index"/></a>
                     </h2>
                 </div>
             </div>

@@ -10,4 +10,6 @@ public interface LocationDao {
     Location getLocationByName(String locationName);
 
     List<Location> getLocations();
+
+    long deleteLocation(String name);
 }

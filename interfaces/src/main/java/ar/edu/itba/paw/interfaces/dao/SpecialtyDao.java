@@ -10,4 +10,6 @@ public interface SpecialtyDao {
     Specialty getSpecialtyByName(String SpecialtyName);
 
     List<Specialty> getSpecialties();
+
+    long deleteSpecialty(String name);
 }

@@ -10,4 +10,6 @@ public interface PrepaidService {
     Prepaid getPrepaidByName(String PrepaidName);
 
     Prepaid createPrepaid(String name);
+
+    long deletePrepaid(String name);
 }

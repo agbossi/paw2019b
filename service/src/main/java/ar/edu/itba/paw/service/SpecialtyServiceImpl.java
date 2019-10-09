@@ -30,4 +30,9 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     public Specialty getSpecialtyByName(String specialtyName) {
         return specialtyDao.getSpecialtyByName(specialtyName);
     }
+
+    @Override
+    public long deleteSpecialty(String name) {
+        return specialtyDao.deleteSpecialty(name);
+    }
 }

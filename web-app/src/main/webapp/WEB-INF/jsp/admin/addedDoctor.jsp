@@ -36,7 +36,7 @@
             <a class="nav-link" href="<c:url value="/admin/addDoctor"/>"><spring:message code="add.another.doctor"/></a>
         </div>
         <div>
-            <a class="nav-link" href="<c:url value="/"/>"><spring:message code="go.back.home"/></a>
+            <a class="nav-link" href="<c:url value="/admin/doctors"/>"><spring:message code="go.back.to.list"/></a>
         </div>
     </div>
     </body>

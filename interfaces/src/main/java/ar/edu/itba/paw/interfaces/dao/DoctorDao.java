@@ -23,4 +23,6 @@ public interface DoctorDao {
     boolean isDoctor(String email);
 
     Doctor getDoctorByEmail(String email);
+
+    long deleteDoctor(String license);
 }

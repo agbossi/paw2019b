@@ -45,6 +45,18 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     }
 
     @Override
+    public List<PrepaidToClinic> getPrepaidToClinics() {
+        List<PrepaidToClinic> list = jdbcTemplate.query(
+                "select clinicPrepaids.clinicid, clinics.name, clinics.address, clinics.location, prepaids.name from " +
+                "(clinicPrepaids join clinics on clinicPrepaids.clinicid = clinics.id) join " +
+                "prepaids clinicPrepaids.prepaid on prepaids.name ", ROW_MAPPER);
+        if (list.isEmpty()) {
+            return null;
+        }
+        return list;
+    }
+
+    @Override
     public PrepaidToClinic addPrepaidToClinic(Prepaid prepaid, Clinic clinic) {
         final Map<String, Object> args = new HashMap<>();
         args.put("prepaid", prepaid.getName());
@@ -60,5 +72,11 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     public boolean clinicHasPrepaid(String prepaid, int clinic) {
         List<PrepaidToClinic> list = jdbcTemplate.query("select location,prepaid,clinicPrepaids.clinicid,address,name from clinicPrepaids join clinics on clinics.id = clinicPrepaids.clinicid where prepaid = ? and clinicid = ?",ROW_MAPPER,prepaid,clinic);
         return !list.isEmpty();
+    }
+
+    @Override
+    public long deletePrepaidFromClinic(String prepaid, int clinic) {
+        String deleteQuery = "DELETE FROM clinicPrepaids WHERE prepaid = ? AND clinicid = ?";
+        return jdbcTemplate.update(deleteQuery, prepaid, clinic);
     }
 }

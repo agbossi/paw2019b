@@ -11,4 +11,6 @@ public interface LocationService {
     List<Location> getLocations();
 
     Location getLocationByName(String locationName);
+
+    long deleteLocation(String name);
 }

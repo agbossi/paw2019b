@@ -58,4 +58,10 @@ public class PrepaidDaoImpl implements PrepaidDao {
     public List<Prepaid> getPrepaids() {
         return jdbcTemplate.query("SELECT * FROM prepaids", ROW_MAPPER);
     }
+
+    @Override
+    public long deletePrepaid(String name) {
+        String deleteQuery = "DELETE FROM prepaids WHERE name = ?";
+        return jdbcTemplate.update(deleteQuery, name);
+    }
 }

@@ -86,4 +86,9 @@ public class DoctorServiceImpl implements DoctorService {
     public boolean isDoctor(String email) {
         return doctorDao.isDoctor(email);
     }
+
+    @Override
+    public long deleteDoctor(String license) {
+        return doctorDao.deleteDoctor(license);
+    }
 }

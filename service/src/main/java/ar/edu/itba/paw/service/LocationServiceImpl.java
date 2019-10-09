@@ -30,4 +30,9 @@ public class LocationServiceImpl implements LocationService {
     public Location getLocationByName(String locationName) {
         return locationDao.getLocationByName(locationName);
     }
+
+    @Override
+    public long deleteLocation(String name) {
+        return locationDao.deleteLocation(name);
+    }
 }

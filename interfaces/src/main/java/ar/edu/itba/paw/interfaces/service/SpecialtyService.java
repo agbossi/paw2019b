@@ -11,4 +11,6 @@ public interface SpecialtyService {
     List<Specialty> getSpecialties();
 
     Specialty getSpecialtyByName(String SpecialtyName);
+
+    long deleteSpecialty(String name);
 }

@@ -116,6 +116,12 @@ public class DoctorDaoImpl implements DoctorDao {
         return list.get(0);
     }
 
+    @Override
+    public long deleteDoctor(String license) {
+        String deleteQuery = "DELETE FROM doctors WHERE license = license";
+        return jdbcTemplate.update(deleteQuery, license);
+    }
+
 
     @Override
     public List<Doctor> getFilteredDoctors(final Location location, final Specialty specialty, final String clinic) {

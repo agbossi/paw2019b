@@ -58,4 +58,10 @@ public class SpecialtyDaoImpl implements SpecialtyDao{
     public List<Specialty> getSpecialties() {
         return jdbcTemplate.query("SELECT * FROM specialties", ROW_MAPPER);
     }
+
+    @Override
+    public long deleteSpecialty(String name) {
+        String deleteQuery = "DELETE FROM specialties WHERE name = ?";
+        return jdbcTemplate.update(deleteQuery, name);
+    }
 }
