@@ -69,7 +69,7 @@
                                             <form:label path="password"/>
                                         </div>
                                         <div class="input-div">
-                                            <h6><form:input path="password"/></h6>
+                                            <h6><form:input type="password" path="password"/></h6>
                                         </div>
                                     </div>
                                     <form:errors path="password" element="p"/>
@@ -81,7 +81,7 @@
                                             <form:label path="repeatPassword"/>
                                         </div>
                                         <div class="input-div">
-                                            <h6><form:input path="repeatPassword"/></h6>
+                                            <h6><form:input type="password" path="repeatPassword"/></h6>
                                         </div>
                                     </div>
                                     <form:errors path="repeatPassword" element="p"/>

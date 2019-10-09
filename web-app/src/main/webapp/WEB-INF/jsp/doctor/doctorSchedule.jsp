@@ -14,7 +14,7 @@
     <div class="schedule-container">
         <div class="schedule-header-container">
             <div>
-                <a href="<c:url value="/doctor/clinics/${docClinic.clinic.id}/1"/>"> <c:out value="${doctorClinic.clinic.name}"/> - <c:out value="${doctorClinic.clinic.address}"/> (<c:out value="${doctorClinic.clinic.location.locationName}"/>)
+                <a href="<c:url value="/doctor/clinics/${doctorClinic.clinic.id}/1"/>"> <c:out value="${doctorClinic.clinic.name}"/> - <c:out value="${doctorClinic.clinic.address}"/> (<c:out value="${doctorClinic.clinic.location.locationName}"/>)
                 </a>
             </div>
         </div>
