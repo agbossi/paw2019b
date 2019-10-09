@@ -6,46 +6,134 @@
     <head>
         <%@ page isELIgnored="false" %>
         <jsp:include page="../base/navbar.jsp" />
+        <link href="<c:url value="/resources/css/admin.css" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value="/resources/css/editDoctorProfile.css" />" rel="stylesheet" type="text/css" />
     </head>
     <body>
-        <a class="btn btn-outline-primary" href="<c:url value="/profile"/>"><spring:message code="profile.message"/></a>
+    <c:url value="/editProfile" var="postPath"/>
+    <form:form modelAttribute="form" action="${postPath}" method="post">
         <div class="container">
-            <c:url value="/editProfile" var="postPath"/>
-            <form:form modelAttribute="form" action="${postPath}" method="post">
-                <div>
-                    <form:label path="firstName"><spring:message code="user.first.name"/></form:label>
-                    <form:input type="text" path="firstName"/>
-                    <form:errors path="firstName" element="p"/>
+            <div class="row">
+                <div class="col-6">
+                    <div class="add-doctor-container-container">
+                        <h2><spring:message code="account.header"/></h2>
+                        <div class="add-doctor-form-container edit-doctor-profile-container">
+                            <div>
+                                <div>
+                                    <div class="label-div">
+                                        <form:label path="firstName"><spring:message code="user.first.name"/> </form:label>
+                                    </div>
+                                    <div class="input-div">
+                                        <h6><form:input path="firstName" placeholder="${user.firstName}"/></h6>
+                                    </div>
+                                </div>
+                                <form:errors path="firstName" element="p"/>
+                            </div>
+                            <div>
+                                <div>
+                                    <div class="label-div">
+                                        <form:label path="lastName"><spring:message code="user.last.name"/> </form:label>
+                                    </div>
+                                    <div class="input-div">
+                                        <h6><form:input path="lastName" placeholder="${user.lastName}"/></h6>
+                                    </div>
+                                </div>
+                                <form:errors path="lastName" element="p"/>
+                            </div>
+                            <div>
+                                <div>
+                                    <div class="label-div">
+                                        <form:label path="id"><spring:message code="user.id"/> </form:label>
+                                    </div>
+                                    <div class="input-div">
+                                        <h6><form:input path="id" placeholder="${user.id}"/></h6>
+                                    </div>
+                                </div>
+                                <form:errors path="id" element="p"/>
+                            </div>
+                            <div>
+                                <div>
+                                    <div class="label-div">
+                                        <form:label path="oldPassword"><spring:message code="old.password"/></form:label>
+                                        <form:label path="oldPassword"/>
+                                    </div>
+                                    <div class="input-div">
+                                        <h6><form:input path="oldPassword"/></h6>
+                                    </div>
+                                </div>
+                                <form:errors path="oldPassword" element="p"/>
+                            </div>
+                            <div>
+                                <div>
+                                    <div class="label-div">
+                                        <form:label path="newPassword"><spring:message code="password"/></form:label>
+                                        <form:label path="newPassword"/>
+                                    </div>
+                                    <div class="input-div">
+                                        <h6><form:input path="newPassword"/></h6>
+                                    </div>
+                                </div>
+                                <form:errors path="newPassword" element="p"/>
+                            </div>
+                            <div>
+                                <div>
+                                    <div class="label-div">
+                                        <form:label path="repeatPassword"><spring:message code="repeat.password"/></form:label>
+                                        <form:label path="repeatPassword"/>
+                                    </div>
+                                    <div class="input-div">
+                                        <h6><form:input path="repeatPassword"/></h6>
+                                    </div>
+                                </div>
+                                <form:errors path="repeatPassword" element="p"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <form:label path="lastName"><spring:message code="user.last.name"/> </form:label>
-                    <form:input type="text" path="lastName"/>
-                    <form:errors path="lastName" element="p"/>
+                <div class="col-6">
+                    <div class="add-doctor-container-container">
+                        <h2><spring:message code="patient.header"/></h2>
+                        <div class="add-doctor-form-container edit-doctor-profile-container">
+                            <div>
+                                <div>
+                                    <div class="label-div">
+                                        <form:label path="prepaid"><spring:message code="prepaid"/> </form:label>
+                                    </div>
+                                    <div class="input-div">
+                                        <form:select class="select-input-div" path="prepaid">
+                                            <form:option value="${patient.prepaid.name}"/>
+                                            <c:forEach var="prepaid" items="${prepaids}">
+                                                <c:if test="${ prepaid.name != patient.prepaid.name }">
+                                                    <form:option value="${prepaid.name}"/>
+                                                </c:if>
+                                            </c:forEach>
+                                        </form:select>
+                                    </div>
+                                </div>
+                                <form:errors class="errors" path="prepaid" element="p"/>
+                            </div>
+                            <div>
+                                <div>
+                                    <div class="label-div">
+                                        <form:label path="prepaidNumber"><spring:message code="patient.prepaid.number"/> </form:label>
+                                    </div>
+                                    <div class="input-div">
+                                        <form:input type="text" path="prepaidNumber" placeholder="${patient.patientNumber}"/>
+                                    </div>
+                                </div>
+                                <form:errors class="errors" path="prepaidNumber" element="p"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <form:label path="password"><spring:message code="change.password"/> </form:label>
-                    <form:input type="password" path="password" placeholder="********"/>
-                    <form:errors path="password" element="p"/></div>
-                </div>
-                <div>
-                    <form:label path="repeatPassword"><spring:message code="repeat.password"/> </form:label>
-                    <form:input type="password" path="repeatPassword"/>
-                    <form:errors path="repeatPassword" element="p"/>
-                </div>
-                <div>
-                    <form:label path="prepaid"><spring:message code="patient.prepaid"/></form:label>
-                    <form:input type="text" path="prepaid" placeholder="Choose a prepaid"/>
-                    <form:errors path="prepaid" element="p"/>
-                </div>
-                <div>
-                    <form:label path="prepaidNumber"><spring:message code="patient.prepaid.number"/> </form:label>
-                    <form:input type="text" path="prepaidNumber" placeholder="Insert prepaid number"/>
-                    <form:errors path="prepaidNumber" element="p"/>
-                </div>
-                </div>
-                <input type="submit" value="<spring:message code="submit.update.patient.info"/>">
-                </div>
-            </form:form>
+            </div>
+            <br/><br/>
+            <div class="profile-save-options">
+                <a href="/profile"><spring:message code="a.cancel"/></a> <input class="profile-save-changes" type="submit" value="<spring:message code="submit.save.changes"/>">
+            </div>
         </div>
+    </form:form>
     </body>
 </html>
+
+

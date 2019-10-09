@@ -4,31 +4,35 @@ import javax.validation.constraints.Size;
 
 public class PersonalInformationForm {
 
-    @Size(min = 1, max = 20)
-    @Pattern(regexp = "[a-zA-Z ]+")
+    @Size(max = 20)
+    @Pattern(regexp = "[a-zA-Z ]*")
     private String firstName;
 
-    @Size(min = 1, max = 20)
-    @Pattern(regexp = "[a-zA-Z ]+")
+    @Size(max = 20)
+    @Pattern(regexp = "[a-zA-Z ]*")
     private String lastName;
 
-    @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]+")
-    private String password;
+    @Size(max = 20)
+    @Pattern(regexp = "[a-zA-Z0-9 ]*")
+    private String oldPassword;
 
-    @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]+")
+    @Size(max = 20)
+    @Pattern(regexp = "[a-zA-Z0-9 ]*")
+    private String newPassword;
+
+    @Size(max = 20)
+    @Pattern(regexp = "[a-zA-Z0-9 ]*")
     private String repeatPassword;
 
     @Pattern(regexp = "[a-zA-Z0-9 ]*")
     private String prepaid;
 
-    @Size(min=10, max=20)
+    @Size(max = 20)
     @Pattern(regexp = "[0-9 ]*")
     private String prepaidNumber;
 
-    @Size(min = 8,max = 8)
-    @Pattern(regexp = "[0-9]+")
+    @Size(max = 8)
+    @Pattern(regexp = "[0-9]*")
     private String id;
 
 
@@ -48,12 +52,24 @@ public class PersonalInformationForm {
         this.lastName = lastName;
     }
 
-    public String getPassword() {
-        return password;
+    public String getNewPassword() {
+        return newPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setNewPassword(String password) {
+        this.newPassword = password;
+    }
+
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getRepeatPassword() {

@@ -24,7 +24,7 @@
                             <div>
                                 <div>
                                     <div class="label-div">
-                                        <form:label path="lastName"><spring:message code="user.first.name"/> </form:label>
+                                        <form:label path="firstName"><spring:message code="user.first.name"/> </form:label>
                                     </div>
                                     <div class="input-div">
                                         <h6><form:input path="firstName" placeholder="${user.firstName}"/></h6>

@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.PersonalInformationForm;
+import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class PatientController {
     @Autowired
     private ValidationHelper validator;
 
+    @Autowired
+    private ModelAndViewModifier viewModifier;
+
     private void setFormInformation(PersonalInformationForm form, User user, Patient patient) {
         form.setFirstName(user.getFirstName());
         form.setLastName(user.getLastName());
@@ -67,18 +71,23 @@ public class PatientController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
-
         setFormInformation(form, user, patient);
 
         final ModelAndView mav = new ModelAndView("patient/editProfile");
+
+        viewModifier.addPrepaids(mav);
+
         return mav;
     }
 
     @RequestMapping(value = "/editProfile", method = { RequestMethod.POST })
     public ModelAndView editedProfile(@Valid @ModelAttribute("form") final PersonalInformationForm form,
                                       final BindingResult errors) {
+        if(errors.hasErrors()){
+            return editProfile(form);
+        }
 
-        return editProfile(form);
+        return profile();
     }
 
     @RequestMapping(value = "/appointments", method = { RequestMethod.GET })

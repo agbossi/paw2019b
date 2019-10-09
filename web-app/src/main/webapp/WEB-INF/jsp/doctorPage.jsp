@@ -10,45 +10,39 @@
     <head>
         <%@ page isELIgnored="false" %>
         <jsp:include page="base/navbar.jsp" />
-        <link href="<c:url value="/resources/css/clinicPage.css" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value="/resources/css/indexDoctorResult.css" />" rel="stylesheet" type="text/css" />
     </head>
-    <body>
+    <body class="d-flex flex-column h-100">
         <div class="doctor-information">
-            <h2><c:out value="${doctor.firstName}"/> <c:out value="${doctor.lastName}"/></h2>
+            <h4><b><c:out value="${doctor.firstName}"/> <c:out value="${doctor.lastName}"/></b></h4>
             <div class="doctor-profile">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <h6><b><spring:message code="license"/></b> <c:out value="${doctor.license}"/></h6>
-                        <h6><b><spring:message code="specialty"/></b>  <c:out value="${doctor.specialty.specialtyName}"/></h6>
-                        <h6><b><spring:message code="phone.number"/></b>  <c:out value="${doctor.phoneNumber}"/></h6>
-                        <h6><b><spring:message code="user.email"/></b>  <c:out value="${doctor.email}"/></h6>
-                    </li>
-                </ul>
+                <h6><b><spring:message code="license"/></b> <c:out value="${doctor.license}"/></h6>
+                <h6><b><spring:message code="specialty"/></b>  <c:out value="${doctor.specialty.specialtyName}"/></h6>
+                <h6><b><spring:message code="phone.number"/></b>  <c:out value="${doctor.phoneNumber}"/></h6>
+                <h6><b><spring:message code="user.email"/></b>  <c:out value="${doctor.email}"/></h6>
             </div>
         </div>
-        <div class="doctor-clinics">
-            <br/>
-            <spring:message code="check.doctor.clinic.schedule"/>
-            <br/>
-            <br/>
-            <br/>
-            <c:forEach var="dClinic" items="${doctorClinics}">
-                <div>
-                    <h5>
-                        <sec:authorize access="hasRole('ROLE_USER')">
-                            <a href="<c:url value="/results/${doctor.license}/${dClinic.clinic.id}/1"/>"><c:out value="${dClinic.clinic.name}"/></a>
-                        </sec:authorize>
-                        <sec:authorize access="isAnonymous()">
-                            <a href="<c:url value="/login"/>"><c:out value="${dClinic.clinic.name}"/></a>
-                        </sec:authorize>
-                        <br/><c:out value="${dClinic.clinic.address}"/>
-                        <br/>(<c:out value="${dClinic.clinic.location.locationName}"/>)
-                        <br/>
-                    </h5>
+            <div class="doctor-index-container">
+                <div class="doctor-clinics-container">
+                    <h6 class="doctor-index-clinic-header"><spring:message code="check.doctor.clinic.schedule"/></h6>
+                    <div class="doctor-index-clinic-container">
+                        <c:forEach var="dClinic" items="${doctorClinics}">
+                            <div class="clinic-card">
+                                <sec:authorize access="hasRole('ROLE_USER')">
+                                    <a href="<c:url value="/results/${doctor.license}/${dClinic.clinic.id}/1"/>"><c:out value="${dClinic.clinic.name}"/></a>
+                                </sec:authorize>
+                                <sec:authorize access="isAnonymous()">
+                                    <a href="<c:url value="/login"/>"><c:out value="${dClinic.clinic.name}"/></a>
+                                </sec:authorize>
+                                <p><c:out value="${dClinic.clinic.location.locationName}"/></p>
+                                <p>(<c:out value="${dClinic.clinic.address}"/>)</p>
+                            </div>
+                        </c:forEach>
+                    </div>
                 </div>
-                <br/><br/>
-            </c:forEach>
-        </div>
+            </div>
     </body>
 </html>
+
+
 

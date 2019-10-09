@@ -5,37 +5,47 @@
 <head>
     <%@ page isELIgnored="false" %>
     <jsp:include page="../base/navbar.jsp" />
+    <link href="<c:url value="/resources/css/listAppointments.css" />" rel="stylesheet" type="text/css" />
 </head>
-<body>
-    <h2><spring:message code="account.header"/></h2>
-    <div>
-        <p><b><spring:message code="user.first.name"/></b></p>
-        <p>${user.firstName}</p>
-    </div>
-    <div>
-        <p><b><spring:message code="user.last.name"/></b></p>
-        <p>${user.lastName}</p>
-    </div>
-    <div>
-        <p><b><spring:message code="user.email"/></b></p>
-        <p>${user.email}</p>
-    </div>
-
-    <c:choose>
-        <c:when test="${not empty patient.prepaid}">
-            <h2><spring:message code="patient.header"/></h2>
-            <div>
-                <p><b><spring:message code="patient.prepaid"/></b></p>
-                <p>${patient.prepaid}</p>
+    <body class="list-items-body">
+    <div class="list-container">
+        <div class="header-info">
+            <div class="header-block">
+                <h5><spring:message code="account.header"/></h5>
             </div>
-            <div>
-                <p><b><spring:message code="patient.prepaid.number"/></b></p>
-                <p>${patient.prepaidNumber}</p>
+        </div>
+        <div class="listed-items">
+            <div class="item-card personal-item-card">
+                <p><b><spring:message code="user.first.name"/></b></p>
+                <p>${user.firstName}</p>
             </div>
-        </c:when>
-        <c:otherwise>
-        </c:otherwise>
-    </c:choose>
-    <a class="btn btn-outline-primary" href="<c:url value="/editProfile"/>"><spring:message code="edit.personal"/></a>
-</body>
+            <div class="item-card personal-item-card">
+                <p><b><spring:message code="user.last.name"/></b></p>
+                <p>${user.lastName}</p>
+            </div>
+            <div class="item-card personal-item-card">
+                <p><b><spring:message code="user.email"/></b></p>
+                <p>${user.email}</p>
+            </div>
+        </div>
+        <c:choose>
+            <c:when test="${not empty patient.prepaid}">
+                <div class="item-card">
+                    <p><b><spring:message code="patient.prepaid"/></b></p>
+                    <p>${patient.prepaid}</p>
+                </div>
+                <div class="item-card">
+                    <p><b><spring:message code="patient.prepaid.number"/></b></p>
+                    <p>${patient.prepaidNumber}</p>
+                </div>
+            </c:when>
+            <c:otherwise>
+            </c:otherwise>
+        </c:choose>
+        <div>
+            <a class="edit-patient btn btn-outline-primary" href="<c:url value="/editProfile"/>"><spring:message code="edit.personal"/></a>
+        </div>
+    </div>
+    </body>
 </html>
+

@@ -1,0 +1,64 @@
+.list-items-body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.list-container {
+
+}
+
+.header-info {
+    margin: 1em 0em 3em 1em;
+    align-self: center;
+}
+
+.header-block {
+    width: 370px;
+    margin-left: 1em;
+    padding: 0.75em;
+    border-style: solid;
+    border-radius: 0.5em;
+    background-color: #CAE9F5;
+    border-color: #86C5D8;
+    text-align: center;
+}
+
+.listed-items {
+    display: grid;
+    margin: 0 auto;
+    grid-template-columns: 1fr;
+    grid-row-gap: 0.5em;
+}
+
+.item-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.appointment-information {
+    width: 500px;
+    padding: 0.5em;
+    margin-left: 3em;
+    margin-top: 1em;
+}
+
+.cancel-appointment-button {
+    margin: 4.5em 4em 4em 4em;
+    flex-grow: 1;
+    text-align: right;
+}
+
+.cancel-button {
+    color: #ff002b;
+    border-color: #ff002b;
+}
+
+.personal-item-card {
+    width: 400px;
+    margin-left: 2em;
+}
+
+.edit-patient {
+    margin: 2em;
+}
