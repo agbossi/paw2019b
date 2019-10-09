@@ -12,9 +12,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+@Transactional
 @Sql("classpath:schema.sql")
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfig.class)
@@ -26,7 +31,14 @@ public class UserDaoTest {
 
     private static final String password = "password";
 
-    private static final String email = "test@email.com";
+    private static final String email = "user@mail.com";
+
+    private static final String firstName2 = "patFirstName";
+
+    private static final String lastName2 = "patLastName";
+
+    private static final String email2 = "patient@mail.com";
+
 
     @Autowired
     private DataSource ds;
@@ -39,12 +51,28 @@ public class UserDaoTest {
     @Before
     public void setUp() {
         jdbcTemplate = new JdbcTemplate(ds);
-        JdbcTestUtils.deleteFromTables(jdbcTemplate, "users");
     }
 
     @Test
     public void testCreate() {
         User user = userDao.createUser(firstName, lastName, password, email);
-        Assert.assertNotNull(user);
+
+        assertNotNull(user);
+        assertEquals(firstName, user.getFirstName());
+        assertEquals(lastName, user.getLastName());
+        assertEquals(password, user.getPassword());
+        assertEquals(8, JdbcTestUtils.countRowsInTable(jdbcTemplate,"users"));
+
+    }
+
+    @Test
+    public void testFindUserByEmail(){
+        User user = userDao.findUserByEmail(email2);
+
+        assertNotNull(user);
+        assertEquals(email2, user.getEmail());
+        assertEquals(lastName2, user.getLastName());
+        assertEquals(firstName2, user.getFirstName());
+
     }
 }

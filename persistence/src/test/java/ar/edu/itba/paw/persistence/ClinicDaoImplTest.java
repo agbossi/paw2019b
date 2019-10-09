@@ -31,11 +31,11 @@ public class ClinicDaoImplTest {
 
     private static final int id = 1;
 
-    private static final String name2 = "clinic2";
+    private static final String name2 = "clinic3";
 
     private static final String address = "address";
 
-    private static final String address2 = "address2";
+    private static final String address2 = "address3";
 
     private static final Location location = new Location("location");
 
@@ -62,7 +62,7 @@ public class ClinicDaoImplTest {
         assertEquals(address2, clinic.getAddress());
         assertEquals(location.getLocationName(), clinic.getLocation().getLocationName());
 
-        assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "clinics"));
+        assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "clinics"));
 
     }
 
@@ -89,7 +89,7 @@ public class ClinicDaoImplTest {
         List<Clinic> clinics = clinicDao.getClinics();
 
         assertNotNull(clinics);
-        assertEquals(1,clinics.size());
+        assertEquals(2,clinics.size());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class ClinicDaoImplTest {
         List<Clinic> clinics = clinicDao.getClinicsByLocation(location.getLocationName());
 
         assertNotNull(clinics);
-        assertEquals(1, clinics.size());
+        assertEquals(2, clinics.size());
     }
 
     @Test
