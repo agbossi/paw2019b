@@ -63,13 +63,13 @@ public class ModelAndViewModifier {
 
     public ModelAndView addSpecialties(ModelAndView mav){
         List<Specialty> specialties = specialtyService.getSpecialties();
-        mav.addObject("specialties", specialties);
         Collections.sort(specialties, new Comparator<Specialty>() {
             @Override
             public int compare(Specialty s1, Specialty s2) {
                 return s1.getSpecialtyName().toLowerCase().compareTo(s2.getSpecialtyName().toLowerCase());
             }
         });
+        mav.addObject("specialties", specialties);
         return mav;
     }
 
@@ -93,7 +93,6 @@ public class ModelAndViewModifier {
 
     public ModelAndView addDoctors(ModelAndView mav){
         List<Doctor> doctors = doctorService.getDoctors();
-        mav.addObject("doctors", doctors);
         Collections.sort(doctors, new Comparator<Doctor>() {
             @Override
             public int compare(Doctor d1, Doctor d2) {
@@ -107,6 +106,7 @@ public class ModelAndViewModifier {
                 return comparison;
             }
         });
+        mav.addObject("doctors", doctors);
         return mav;
     }
 
@@ -123,19 +123,18 @@ public class ModelAndViewModifier {
     }
     public ModelAndView addPrepaids(ModelAndView mav){
         List<Prepaid> prepaids = prepaidService.getPrepaids();
-        mav.addObject("prepaids", prepaids);
         Collections.sort(prepaids, new Comparator<Prepaid>() {
             @Override
             public int compare(Prepaid p1, Prepaid p2) {
                 return p1.getName().toLowerCase().compareTo(p2.getName().toLowerCase());
             }
         });
+        mav.addObject("prepaids", prepaids);
         return mav;
     }
 
     public ModelAndView addPrepaidClinics(ModelAndView mav){
         List<PrepaidToClinic> prepaidClinics = prepaidToClinicService.getPrepaidToClinics();
-        mav.addObject("prepaidClinics", prepaidClinics);
         Collections.sort(prepaidClinics, new Comparator<PrepaidToClinic>() {
             @Override
             public int compare(PrepaidToClinic p1, PrepaidToClinic p2) {
@@ -146,6 +145,7 @@ public class ModelAndViewModifier {
                 return comparison;
             }
         });
+        mav.addObject("prepaidClinics", prepaidClinics);
         return mav;
     }
 
