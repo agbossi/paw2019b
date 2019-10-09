@@ -77,6 +77,34 @@ public class AdminController {
         return doctors();
     }
 
+    @RequestMapping(value = "/addedDoctor", method = { RequestMethod.POST })
+    public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors,
+                                    @RequestParam("photo") MultipartFile photo, Locale locale) {
+
+
+        validator.signUpValidate(form.getPassword(),form.getRepeatPassword(),form.getEmail(),errors,locale);
+        validator.licenseValidate(form.getLicense(),errors,locale);
+
+        if (errors.hasErrors())
+            return addDoctor(form);
+
+        String encodedPassword = passwordEncoder.encode(form.getPassword());
+        userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
+        Doctor doctor = doctorService.createDoctor(new Specialty(form.getSpecialty()),
+                form.getLicense(),
+                form.getPhoneNumber(),
+                form.getEmail()
+        );
+        long image = imageService.createProfileImage(photo, doctor);
+
+
+        final ModelAndView mav = new ModelAndView("admin/addedDoctor");
+        mav.addObject("doctor", doctor);
+        mav.addObject("imageId", image);
+
+        return mav;
+    }
+
     @RequestMapping(value = "/clinics", method = { RequestMethod.GET })
     public ModelAndView clinics(){
         final ModelAndView mav = new ModelAndView("admin/clinics");
