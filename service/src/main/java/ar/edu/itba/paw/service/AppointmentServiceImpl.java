@@ -45,7 +45,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             for (Schedule schedule: doctorClinic.getSchedule()) {
                 if(date.get(Calendar.DAY_OF_WEEK) == schedule.getDay() && date.get(Calendar.HOUR_OF_DAY) == schedule.getHour()){
                     Locale locale = LocaleContextHolder.getLocale();
-                    emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.created.subject",null,locale),messageSource.getMessage("appointment.created.text",null,locale)  + " " + date.toString());
+                    emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.created.subject",null,locale),messageSource.getMessage("appointment.created.text",null,locale)  + " " + dateString(date));
                     return appointmentDao.createAppointment(doctorClinic,patient,date);
                 }
             }
@@ -53,7 +53,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return null;
     }
-
+    
     @Override
     public List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic) {
         return appointmentDao.getDoctorsAppointments(doctorClinic);
