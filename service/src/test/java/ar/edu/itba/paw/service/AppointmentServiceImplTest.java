@@ -10,13 +10,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AppointmentServiceImplTest {
@@ -48,19 +47,32 @@ public class AppointmentServiceImplTest {
     @Mock
     private EmailService mockEmailService;
 
+    @Mock
+    private MessageSource messageSource;
+
 
     @Test
     public void testCreate(){
         //Set Up
         cal.add(Calendar.YEAR, 3);
         Date date = cal.getTime();
+        Locale locale = LocaleContextHolder.getLocale();
         DateFormat dateFormat = new SimpleDateFormat("EEEE yyyy-mm-dd hh:mm:ss");
         List<Schedule> s = new ArrayList<>();
         s.add(new Schedule(cal.get(Calendar.DAY_OF_WEEK), cal.get(Calendar.HOUR)));
         doctorClinic2.setSchedule(s);
+        Mockito.when(messageSource.getMessage("appointment.created.subject",null, locale))
+                .thenReturn("Appointment confirmed");
+        Mockito.when(messageSource.getMessage("appointment.created.text",null, locale))
+                .thenReturn("Your appointment is confirmed");
+
+        Mockito.doThrow(new Exception()).when(mockEmailService).sendSimpleMail(user2.getEmail(), messageSource.getMessage("appointment.created.subject",
+                null,locale), messageSource.getMessage("appointment.created.text",null,locale)
+                + " "+ dateFormat.format(date));
         Mockito.when(mockDao.createAppointment(Mockito.eq(doctorClinic2),Mockito.eq(user2), Mockito.eq(cal)))
-        .thenReturn(new Appointment(cal, doctorClinic2, user2));
-        Mockito.doNothing().when(mockEmailService).sendSimpleMail(user2.getEmail(), "Appointment confirmed", "Your appointment is confirmed " + dateFormat.format(date));
+                .thenReturn(new Appointment(cal, doctorClinic2, user2));
+
+
 
         //Execute
         Appointment appointment = appointmentService.createAppointment(doctorClinic2, user2, cal);
