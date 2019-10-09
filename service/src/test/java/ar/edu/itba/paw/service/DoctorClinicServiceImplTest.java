@@ -77,7 +77,6 @@ public class DoctorClinicServiceImplTest {
         doctorClinic.setSchedule(new ArrayList<Schedule>());
         Mockito.when(scheduleService.createSchedule(Mockito.eq(day), Mockito.eq(hour),Mockito.eq(doctorClinic)))
                 .thenReturn(new Schedule(day, hour));
-       // Mockito.when(appointmentService.getDoctorsAppointments(Mockito.eq(doctorClinic)));
 
         //Execute
         doctorClinicService.setSchedule(doctorClinic, day, hour);
