@@ -7,10 +7,14 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Appointment;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
+import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.SearchForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -22,6 +26,8 @@ import java.util.List;
 
 @Controller
 public class FrontController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private ModelAndViewModifier viewModifier;
@@ -72,5 +78,13 @@ public class FrontController {
 
 
         return mav;
+    }
+
+    @ModelAttribute
+    public User loggedUser(){
+        final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        final User user = userService.findUserByEmail((String) auth.getName());
+        LOGGER.debug("Logged user is {}", user);
+        return user;
     }
 }
