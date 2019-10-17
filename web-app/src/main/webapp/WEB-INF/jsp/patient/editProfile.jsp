@@ -11,7 +11,7 @@
     </head>
     <body>
     <c:url value="/editProfile" var="postPath"/>
-    <form:form modelAttribute="form" action="${postPath}" method="post">
+    <form:form modelAttribute="personalInformationForm" action="${postPath}" method="post">
         <div class="container">
             <div class="row">
                 <div class="col-6">

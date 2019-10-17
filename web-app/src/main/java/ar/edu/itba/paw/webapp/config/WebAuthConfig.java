@@ -25,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 @PropertySource("classpath:authKey.properties")
 @ComponentScan("ar.edu.itba.paw.webapp.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
+    public static final BCryptPasswordEncoder B_CRYPT_PASSWORD_ENCODER = new BCryptPasswordEncoder();
     @Autowired
     private PawUserDetailsService userDetailsService;
 
@@ -69,7 +70,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+        return B_CRYPT_PASSWORD_ENCODER;
     }
 
     @Bean

@@ -8,6 +8,7 @@ import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Locale;
 
 @Controller
 public class PatientController {
@@ -37,6 +39,9 @@ public class PatientController {
 
     @Autowired
     private ClinicService clinicService;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     private ValidationHelper validator;
@@ -67,7 +72,7 @@ public class PatientController {
     }
 
     @RequestMapping(value = "/editProfile", method = { RequestMethod.GET })
-    public ModelAndView editProfile(@ModelAttribute("form") final PersonalInformationForm form) {
+    public ModelAndView editProfile(@ModelAttribute("personalInformationForm") final PersonalInformationForm form) {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
@@ -81,12 +86,23 @@ public class PatientController {
     }
 
     @RequestMapping(value = "/editProfile", method = { RequestMethod.POST })
-    public ModelAndView editedProfile(@Valid @ModelAttribute("form") final PersonalInformationForm form,
-                                      final BindingResult errors) {
+    public ModelAndView editedProfile(@Valid @ModelAttribute("personalInformationForm") final PersonalInformationForm form,
+                                      final BindingResult errors, Locale locale) {
+
+        System.out.println("valor de contraseña vieja: " + form.getOldPassword() + " " + form.getOldPassword().equals(""));
+        System.out.println("valor de contraseña nueva: " + form.getNewPassword() + " " + form.getNewPassword().equals(""));
+        System.out.println("valor de confirmar contraseña: " + form.getPrepaidNumber() + " " + form.getPrepaidNumber().equals(""));
+        System.out.println("valor de nombre: " + form.getFirstName());
+        System.out.println("valor de id: " + form.getId() + " " + form.getId().equals(""));
+
+
+        validator.passwordEditValidate(form.getOldPassword(),form.getNewPassword(),form.getRepeatPassword(),errors,locale);
+
+
         if(errors.hasErrors()){
             return editProfile(form);
         }
-
+        //TODO updating goes here
         return profile();
     }
 

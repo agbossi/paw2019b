@@ -42,9 +42,9 @@
                 </c:otherwise>
             </c:choose>
         </div>
-<%--        <div>--%>
-<%--            <a class="edit-patient btn btn-outline-primary" href="<c:url value="/editProfile"/>"><spring:message code="edit.personal"/></a>--%>
-<%--        </div>--%>
+        <div>
+            <a class="edit-patient btn btn-outline-primary" href="<c:url value="/editProfile"/>"><spring:message code="edit.personal"/></a>
+        </div>
     </div>
     </body>
 </html>
