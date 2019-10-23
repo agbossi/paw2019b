@@ -7,12 +7,14 @@ import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.SearchForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
+import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
@@ -38,17 +40,30 @@ public class SearchController {
     @RequestMapping(value = "/search", method = {RequestMethod.GET})
     public ModelAndView search(@ModelAttribute("searchForm") final SearchForm form) {
 
-        final ModelAndView mav = new ModelAndView("search");
+        final ModelAndView mav = new ModelAndView("base/searchBar");
         viewModifier.addSearchInfo(mav);
 
         return mav;
     }
 
+    @RequestMapping(value = "/results", method = {RequestMethod.GET})
+    public ModelAndView backToResults(@ModelAttribute("searchForm") final SearchForm form,HttpServletRequest request){
+        UserContextHelper.loadUserQuery(form,request);
+        final ModelAndView mav = new ModelAndView("base/searchBar");
+        viewModifier.addSearchInfo(mav);
+        return mav;
+    }
+
+    //de aca puedo ir a registrarse, login, un results/id o get
     @RequestMapping(value = "/results", method = {RequestMethod.POST})
-    public ModelAndView results(@Valid @ModelAttribute("searchForm") final SearchForm form, final BindingResult errors) {
+    public ModelAndView results(@Valid @ModelAttribute("searchForm") final SearchForm form, final BindingResult errors, HttpServletRequest request) {
 
         if (errors.hasErrors())
             return search(form);
+
+        //ver que es el attr que no se usa
+        //saving form data in case someone does login or registration after query
+        UserContextHelper.saveUserQuery(form,request);
 
         final ModelAndView mav = new ModelAndView("results");
         viewModifier.addSearchInfo(mav);

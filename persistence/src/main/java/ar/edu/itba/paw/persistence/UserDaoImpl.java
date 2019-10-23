@@ -65,4 +65,21 @@ public class UserDaoImpl implements UserDao {
     public void changePassword(String password,String email){
         jdbcTemplate.update("update users set password = ? where email = ?",password,email);
     }
+
+    @Override
+    public void updateUser(String email, Map<String, String> args) {
+        if(args.containsKey("password")) {
+            jdbcTemplate.update("update users set firstName = ?, lastName = ?, password = ? where email = ?",
+                    args.get("firstName"),
+                    args.get("lastName"),
+                    args.get("password"),
+                    email);
+        }
+        else {
+            jdbcTemplate.update("update users set firstName = ?, lastName = ? where email = ?",
+                    args.get("firstName"),
+                    args.get("lastName"),
+                    email);
+        }
+    }
 }

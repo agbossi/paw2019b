@@ -53,8 +53,8 @@
                         </div>
                     </div>
                 </div>
-<%--            <div class="edit-profile button">--%>
-<%--                <a href="/doctor/editProfileForm"><spring:message code="edit"/></a>--%>
-<%--            </div>--%>
+            <div class="edit-profile button">
+                <a href="<c:url value="/doctor/editProfileForm"/>"><spring:message code="edit"/></a>
+            </div>
     </body>
 </html>

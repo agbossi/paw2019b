@@ -16,7 +16,7 @@ public class Patient {
 
     private String id;
 
-    List<Appointment> appointments;
+    private List<Appointment> appointments;
 
     public Patient(String email, String id, String prepaid, String prepaidNumber, String firstName, String lastName) {
         this.email = email;

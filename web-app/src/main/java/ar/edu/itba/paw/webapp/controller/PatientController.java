@@ -8,6 +8,7 @@ import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Locale;
 
 @Controller
 public class PatientController {
@@ -39,6 +41,9 @@ public class PatientController {
     private ClinicService clinicService;
 
     @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
     private ValidationHelper validator;
 
     @Autowired
@@ -47,10 +52,9 @@ public class PatientController {
     private void setFormInformation(PersonalInformationForm form, User user, Patient patient) {
         form.setFirstName(user.getFirstName());
         form.setLastName(user.getLastName());
-        if(patient != null) {
-            form.setPrepaid(patient.getPrepaid());
-            form.setPrepaidNumber(patient.getPrepaidNumber());
-        }
+        form.setId(patient.getId());
+        form.setPrepaid(patient.getPrepaid());
+        form.setPrepaidNumber(patient.getPrepaidNumber());
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET })
@@ -67,7 +71,7 @@ public class PatientController {
     }
 
     @RequestMapping(value = "/editProfile", method = { RequestMethod.GET })
-    public ModelAndView editProfile(@ModelAttribute("form") final PersonalInformationForm form) {
+    public ModelAndView editProfile(@ModelAttribute("personalInformationForm") final PersonalInformationForm form) {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
@@ -75,17 +79,31 @@ public class PatientController {
 
         final ModelAndView mav = new ModelAndView("patient/editProfile");
 
+        mav.addObject("user", user);
+        mav.addObject("patient", patient);
         viewModifier.addPrepaids(mav);
 
         return mav;
     }
 
     @RequestMapping(value = "/editProfile", method = { RequestMethod.POST })
-    public ModelAndView editedProfile(@Valid @ModelAttribute("form") final PersonalInformationForm form,
-                                      final BindingResult errors) {
+    public ModelAndView editedProfile(@Valid @ModelAttribute("personalInformationForm") final PersonalInformationForm form,
+                                      final BindingResult errors, Locale locale) {
+
+        validator.passwordValidate(form.getNewPassword(),form.getRepeatPassword(),errors,locale);
+        
         if(errors.hasErrors()){
             return editProfile(form);
         }
+
+        String password = null;
+        if(!form.getNewPassword().equals("")){
+            password = passwordEncoder.encode(form.getNewPassword());
+        }
+
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        userService.updateUser(user.getEmail(),password,form.getFirstName(),form.getLastName());
+        patientService.updatePatient(user.getEmail(),form.getPrepaid(),form.getPrepaidNumber(),form.getId());
 
         return profile();
     }

@@ -27,24 +27,26 @@
                 <p><b><spring:message code="user.email"/></b></p>
                 <p>${user.email}</p>
             </div>
-            <c:choose>
-                <c:when test="${not empty patient.prepaid}">
-                    <div class="item-card personal-item-card">
-                        <p><b><spring:message code="patient.prepaid"/></b></p>
-                        <p>${patient.prepaid}</p>
-                    </div>
-                    <div class="item-card personal-item-card">
-                        <p><b><spring:message code="patient.prepaid.number"/></b></p>
-                        <p>${patient.prepaidNumber}</p>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                </c:otherwise>
-            </c:choose>
+            <div class="item-card personal-item-card">
+                <p><b><spring:message code="user.id"/></b></p>
+                <p>${patient.id}</p>
+            </div>
+            <c:if test="${not empty patient.prepaid}">
+                <div class="item-card personal-item-card">
+                    <p><b><spring:message code="patient.prepaid"/></b></p>
+                    <p>${patient.prepaid}</p>
+                </div>
+            </c:if>
+            <c:if test="${not empty patient.prepaidNumber}">
+                <div class="item-card personal-item-card">
+                    <p><b><spring:message code="patient.prepaid.number"/></b></p>
+                    <p>${patient.prepaidNumber}</p>
+                </div>
+            </c:if>
         </div>
-<%--        <div>--%>
-<%--            <a class="edit-patient btn btn-outline-primary" href="<c:url value="/editProfile"/>"><spring:message code="edit.personal"/></a>--%>
-<%--        </div>--%>
+        <div>
+            <a class="edit-patient btn btn-outline-primary" href="<c:url value="/editProfile"/>"><spring:message code="edit.personal"/></a>
+        </div>
     </div>
     </body>
 </html>

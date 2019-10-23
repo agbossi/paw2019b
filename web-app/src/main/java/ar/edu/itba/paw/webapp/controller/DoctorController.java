@@ -4,12 +4,13 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.DoctorClinicForm;
 import ar.edu.itba.paw.webapp.form.EditDoctorProfileForm;
-import ar.edu.itba.paw.webapp.helpers.ControllerHelper;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -54,7 +55,20 @@ public class DoctorController {
     private ModelAndViewModifier viewModifier;
 
     @Autowired
+    MessageSource messageSource;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
     private ValidationHelper validator;
+
+    private void setEditFormInformation(EditDoctorProfileForm form, User user, Doctor doctor) {
+        form.setFirstName(user.getFirstName());
+        form.setLastName(user.getLastName());
+        form.setSpecialty(doctor.getSpecialty().getSpecialtyName());
+        form.setPhoneNumber(doctor.getPhoneNumber());
+    }
 
 
     @RequestMapping(value = "/editProfile", method = { RequestMethod.GET })
@@ -74,7 +88,7 @@ public class DoctorController {
     }
 
     @RequestMapping(value = "/editProfileForm", method = { RequestMethod.GET })
-    public ModelAndView updateProfile(@ModelAttribute("editProfileForm") final EditDoctorProfileForm form){
+    public ModelAndView updateProfile(@ModelAttribute("editProfileForm") final EditDoctorProfileForm form,boolean photoError,Locale locale){
 
         final ModelAndView mav = new ModelAndView("/doctor/editProfileForm");
 
@@ -82,12 +96,17 @@ public class DoctorController {
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
         Image image = imageService.getProfileImage(doctor);
 
+        setEditFormInformation(form, user, doctor);
+
         List<Specialty> specialties = specialtyService.getSpecialties();
 
         mav.addObject("user", user);
         mav.addObject("doctor", doctor);
         mav.addObject("image", image);
         mav.addObject("specialties", specialties);
+        if(photoError){
+            mav.addObject("errorMessage", messageSource.getMessage("doctor.photo.not.valid",null,locale));
+        }
 
         return mav;
     }
@@ -95,33 +114,32 @@ public class DoctorController {
 
 
     @RequestMapping(value = "/editProfileFormPost", method = { RequestMethod.POST })
-    public ModelAndView updateProfile(@ModelAttribute("editProfileForm") final EditDoctorProfileForm form,
+    public ModelAndView updateProfile(@Valid @ModelAttribute("editProfileForm") final EditDoctorProfileForm form,
                                       final BindingResult errors,
-                                      @RequestParam("photo") MultipartFile photo){
+                                      @RequestParam("photo") MultipartFile photo,Locale locale){
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
 
-        if(errors.hasErrors()) {
-            return updateProfile(form);
+
+        validator.passwordValidate(form.getNewPassword(),form.getRepeatPassword(),errors,locale);
+        boolean photoError = validator.photoValidate(photo);
+
+        //TODO test this
+        if(errors.hasErrors() || photoError) {
+            return updateProfile(form,photoError,locale);
         }
 
-        long result = ControllerHelper.updateUserInformation(form.getFirstName(), form.getLastName(), form.getEmail(),
-                                                form.getOldPassword(), form.getNewPassword(), form.getRepeatNewPassword());
-        result = ControllerHelper.updateDoctorInformation(form.getLicense(), form.getSpecialty(), form.getPhoneNumber());
-        result = ControllerHelper.updateProfilePicture(photo);
+        String password = null;
+        if(!form.getNewPassword().equals("")){
+            password = passwordEncoder.encode(form.getNewPassword());
+        }
 
-        // TODO: if any of these results fails what do we do???
+        userService.updateUser(user.getEmail(),password,form.getFirstName(),form.getLastName());
+        doctorService.updateDoctor(doctor.getLicense(),form.getPhoneNumber(),form.getSpecialty());
+        imageService.updateProfileImage(photo,doctor);
 
-        final ModelAndView mav = new ModelAndView("/doctor/editProfile");
-
-        Image image = imageService.getProfileImage(doctor);
-
-        mav.addObject("user", user);
-        mav.addObject("doctor", doctor);
-        mav.addObject("image", image);
-
-        return mav;
+        return editProfile();
     }
 
     @RequestMapping(value = "/addDoctorClinic", method = { RequestMethod.GET })

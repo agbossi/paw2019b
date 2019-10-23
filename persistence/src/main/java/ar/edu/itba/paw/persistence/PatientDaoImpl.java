@@ -64,4 +64,17 @@ public class PatientDaoImpl implements PatientDao {
         }
         return patient.get(0);
     }
+
+    @Override
+    public void updatePatient(String email, Map<String, String> args) {
+        if(args.containsKey("id")) {
+            jdbcTemplate.update("update patients set id = ? where email = ?", args.get("id"), email);
+        }
+        if(args.containsKey("prepaid")) {
+            jdbcTemplate.update("update patients set prepaid = ? where email = ?", args.get("prepaid"), email);
+        }
+        if(args.containsKey("prepaidNumber")) {
+            jdbcTemplate.update("update patients set prepaidNumber = ? where email = ?", args.get("prepaidNumber"), email);
+        }
+    }
 }

@@ -7,6 +7,7 @@ import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -55,6 +56,9 @@ public class AdminController {
     @Autowired
     private ValidationHelper validator;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @RequestMapping(value = "/doctors", method = { RequestMethod.GET })
     public ModelAndView doctors(){
         final ModelAndView mav = new ModelAndView("admin/doctors");
@@ -63,10 +67,14 @@ public class AdminController {
     }
     
     @RequestMapping(value = "/addDoctor", method = { RequestMethod.GET })
-    public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form){
+    public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form,boolean photoError,Locale locale){
         final ModelAndView mav = new ModelAndView("admin/addDoctor");
 
         viewModifier.addSearchInfo(mav);
+        if(photoError){
+            mav.addObject("errorMessage", messageSource.getMessage("doctor.photo.not.valid",null,locale));
+
+        }
 
         return mav;
     }
@@ -84,9 +92,10 @@ public class AdminController {
 
         validator.signUpValidate(form.getPassword(),form.getRepeatPassword(),form.getEmail(),errors,locale);
         validator.licenseValidate(form.getLicense(),errors,locale);
+        boolean photoError = validator.photoValidate(photo);
 
-        if (errors.hasErrors())
-            return addDoctor(form);
+        if (errors.hasErrors() || photoError)
+            return addDoctor(form,photoError,locale);
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
         userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());

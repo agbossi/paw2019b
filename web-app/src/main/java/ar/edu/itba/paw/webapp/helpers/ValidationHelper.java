@@ -3,11 +3,15 @@ package ar.edu.itba.paw.webapp.helpers;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
+import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Calendar;
 import java.util.List;
@@ -49,6 +53,11 @@ public class ValidationHelper {
     @Autowired
     DoctorClinicService doctorClinicService;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    final static int MIN_SIZE = 8;
+
     public void validateSpecialty(String name,BindingResult errors,Locale locale){
         if(specialtyService.getSpecialtyByName(name) != null){
             FieldError specialtyExists = new FieldError("form","name",messageSource.getMessage("specialty.already.exists",null,locale));
@@ -88,17 +97,19 @@ public class ValidationHelper {
 
         passwordValidate(password,repeatPassword,errors,locale);
 
-        if (userService.userExists(email)) {
-            FieldError ssoError = new FieldError("form", "email",messageSource.getMessage("user.exist.error.message",null,locale));
-            errors.addError(ssoError);
-        }
+        emailValidate(email,errors,locale);
     }
     public void passwordValidate(final String password,final String repeatPassword,final BindingResult errors,Locale locale){
+        if(!password.equals("") && password.length() < MIN_SIZE){
+            FieldError passwordNotMatchingError = new FieldError("form","newPassword",messageSource.getMessage("user.password.too.short",null,locale));
+            errors.addError(passwordNotMatchingError);
+        }
         if(!password.equals(repeatPassword)){
             FieldError passwordNotMatchingError = new FieldError("form","repeatPassword",messageSource.getMessage("user.password.not.matching",null,locale));
             errors.addError(passwordNotMatchingError);
         }
     }
+
     public void licenseValidate(String license,BindingResult errors,Locale locale){
         if(doctorService.getDoctorByLicense(license) != null){
             FieldError licenseExistsError = new FieldError("form","license",messageSource.getMessage("doctor.license.already.exists",null,locale));
@@ -116,5 +127,19 @@ public class ValidationHelper {
             FieldError doctorExistsError = new FieldError("form","clinic",messageSource.getMessage("doctor.already.in.clinic",null,locale));
             errors.addError(doctorExistsError);
         }
+    }
+    public void emailValidate(String email,BindingResult errors,Locale locale){
+        if (userService.userExists(email)) {
+            FieldError ssoError = new FieldError("form", "email",messageSource.getMessage("user.exist.error.message",null,locale));
+            errors.addError(ssoError);
+        }
+    }
+
+    public boolean photoValidate(MultipartFile photo) {
+        if(!photo.isEmpty()){
+            String contentType = photo.getContentType();
+            return !(contentType.equals("image/jpeg") || contentType.equals("image/png") || contentType.equals("image/jpg"));
+        }
+        return false;
     }
 }

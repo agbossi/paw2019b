@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Specialty;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DoctorDao {
     Doctor createDoctor(Specialty specialty,String license, String phoneNumber,String email);
@@ -16,8 +17,6 @@ public interface DoctorDao {
 
     List<Doctor> getDoctorBySpecialty(Specialty specialty);
 
-    List<Doctor> getFilteredDoctors(Location location, Specialty specialty, String clinic);
-
     Doctor getDoctorByLicense(String license);
 
     boolean isDoctor(String email);
@@ -25,4 +24,6 @@ public interface DoctorDao {
     Doctor getDoctorByEmail(String email);
 
     long deleteDoctor(String license);
+
+    void updateDoctor(String license, Map<String, String> args);
 }

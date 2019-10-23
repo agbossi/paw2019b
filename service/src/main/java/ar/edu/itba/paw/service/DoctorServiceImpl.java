@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class DoctorServiceImpl implements DoctorService {
@@ -87,8 +89,18 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorDao.isDoctor(email);
     }
 
+    @Transactional
     @Override
     public long deleteDoctor(String license) {
         return doctorDao.deleteDoctor(license);
+    }
+
+    @Transactional
+    @Override
+    public void updateDoctor(String license, String phoneNumber, String specialty) {
+        Map<String,String> args = new HashMap<>();
+        args.put("phoneNumber",phoneNumber);
+        args.put("specialty",specialty);
+        doctorDao.updateDoctor(license,args);
     }
 }

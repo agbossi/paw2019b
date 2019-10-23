@@ -12,7 +12,9 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -57,6 +59,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changePassword(String password, String email) {
         userDao.changePassword(password,email);
+    }
+
+    @Transactional
+    @Override
+    public void updateUser(String email, String newPassword, String firstName, String lastName) {
+        Map<String,String> args = new HashMap<>();
+        if(newPassword != null){
+            args.put("password",newPassword);
+        }
+        if(!firstName.equals("")){
+            args.put("firstName",firstName);
+        }
+        if(!lastName.equals("")){
+            args.put("lastName",lastName);
+        }
+        userDao.updateUser(email,args);
     }
 
 }
