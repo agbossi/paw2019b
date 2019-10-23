@@ -7,37 +7,25 @@ public class EditDoctorProfileForm {
 
     // User information
 
-    @Size(min = 1, max = 20)
+    @Size(max = 20)
     @Pattern(regexp = "[a-zA-Z ]+")
     private String firstName;
 
-    @Size(min = 1, max = 20)
+    @Size(max = 20)
     @Pattern(regexp = "[a-zA-Z ]+")
     private String lastName;
 
-    @Size(min = 6, max = 25)
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
-    private String email;
-
-    @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]+")
-    private String oldPassword;
-
-    @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]+")
+    @Size(max = 20)
+    @Pattern(regexp = "[a-zA-Z0-9 ]*")
     private String newPassword;
 
-    @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]+")
-    private String repeatNewPassword;
+    @Size(max = 20)
+    @Pattern(regexp = "[a-zA-Z0-9 ]*")
+    private String repeatPassword;
 
     // Doctor information
 
-    @Pattern(regexp = "[a-zA-Z]+")
     private String specialty;
-
-    @Pattern(regexp = "[0-9]+")
-    private String license;
 
     @Pattern(regexp = "[0-9]+")
     private String phoneNumber;
@@ -58,22 +46,6 @@ public class EditDoctorProfileForm {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
     public String getNewPassword() {
         return newPassword;
     }
@@ -82,20 +54,12 @@ public class EditDoctorProfileForm {
         this.newPassword = newPassword;
     }
 
-    public String getRepeatNewPassword() {
-        return repeatNewPassword;
+    public String getRepeatPassword() {
+        return repeatPassword;
     }
 
-    public void setRepeatNewPassword(String repeatNewPassword) {
-        this.repeatNewPassword = repeatNewPassword;
-    }
-
-    public String getLicense() {
-        return license;
-    }
-
-    public void setLicense(String license) {
-        this.license = license;
+    public void setRepeatPassword(String repeatNewPassword) {
+        this.repeatPassword = repeatNewPassword;
     }
 
     public String getSpecialty() {

@@ -27,7 +27,7 @@
                                         <h6><form:input path="firstName" placeholder="${user.firstName}"/></h6>
                                     </div>
                                 </div>
-                                <form:errors path="firstName" element="p"/>
+                                <form:errors class="errors" path="firstName" element="p"/>
                             </div>
                             <div>
                                 <div>
@@ -38,7 +38,7 @@
                                         <h6><form:input path="lastName" placeholder="${user.lastName}"/></h6>
                                     </div>
                                 </div>
-                                <form:errors path="lastName" element="p"/>
+                                <form:errors class="errors" path="lastName" element="p"/>
                             </div>
                             <div>
                                 <div>
@@ -46,22 +46,10 @@
                                         <form:label path="id"><spring:message code="user.id"/> </form:label>
                                     </div>
                                     <div class="input-div">
-                                        <h6><form:input path="id" placeholder="${user.id}"/></h6>
+                                        <h6><form:input path="id" placeholder="${patient.id}"/></h6>
                                     </div>
                                 </div>
-                                <form:errors path="id" element="p"/>
-                            </div>
-                            <div>
-                                <div>
-                                    <div class="label-div">
-                                        <form:label path="oldPassword"><spring:message code="old.password"/></form:label>
-                                        <form:label path="oldPassword"/>
-                                    </div>
-                                    <div class="input-div">
-                                        <h6><form:input path="oldPassword"/></h6>
-                                    </div>
-                                </div>
-                                <form:errors path="oldPassword" element="p"/>
+                                <form:errors class="errors" path="id" element="p"/>
                             </div>
                             <div>
                                 <div>
@@ -70,10 +58,10 @@
                                         <form:label path="newPassword"/>
                                     </div>
                                     <div class="input-div">
-                                        <h6><form:input path="newPassword"/></h6>
+                                        <h6><form:input path="newPassword" type="password"/></h6>
                                     </div>
                                 </div>
-                                <form:errors path="newPassword" element="p"/>
+                                <form:errors class="errors" path="newPassword" element="p"/>
                             </div>
                             <div>
                                 <div>
@@ -82,10 +70,10 @@
                                         <form:label path="repeatPassword"/>
                                     </div>
                                     <div class="input-div">
-                                        <h6><form:input path="repeatPassword"/></h6>
+                                        <h6><form:input path="repeatPassword" type="password"/></h6>
                                     </div>
                                 </div>
-                                <form:errors path="repeatPassword" element="p"/>
+                                <form:errors class="errors" path="repeatPassword" element="p"/>
                             </div>
                         </div>
                     </div>
@@ -103,17 +91,21 @@
                                         <form:select class="select-input-div" path="prepaid" id="prepaid" onclick="handleClick(this.id)">
                                             <c:choose>
                                                 <c:when test="${not empty patient.prepaid}">
-                                                    <form:option value="${patient.prepaid.name}"/>
+                                                    <form:option value="${patient.prepaid}"/>
+                                                    <form:option value=""><spring:message code="no.prepaid"/></form:option>
+                                                    <c:forEach var="prepaid" items="${prepaids}">
+                                                        <c:if test="${ prepaid.name != patient.prepaid }">
+                                                            <form:option value="${prepaid.name}"/>
+                                                        </c:if>
+                                                    </c:forEach>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <form:option value=""><spring:message code="no.prepaid"/></form:option>
+                                                    <c:forEach var="prepaid" items="${prepaids}">
+                                                        <form:option value="${prepaid.name}"/>
+                                                    </c:forEach>
                                                 </c:otherwise>
                                             </c:choose>
-                                            <c:forEach var="prepaid" items="${prepaids}">
-                                                <c:if test="${ prepaid.name != patient.prepaid.name }">
-                                                    <form:option value="${prepaid.name}"/>
-                                                </c:if>
-                                            </c:forEach>
                                         </form:select>
                                     </div>
                                 </div>
@@ -125,7 +117,7 @@
                                         <form:label path="prepaidNumber"><spring:message code="patient.prepaid.number"/> </form:label>
                                     </div>
                                     <div class="input-div">
-                                        <form:input type="text" disabled="false" id="prepaidNumber" path="prepaidNumber" placeholder="${patient.patientNumber}"/>
+                                        <form:input type="text" disabled="false" id="prepaidNumber" path="prepaidNumber"/>
                                     </div>
                                 </div>
                                 <form:errors class="errors" path="prepaidNumber" element="p"/>
@@ -136,7 +128,7 @@
             </div>
             <br/><br/>
             <div class="profile-save-options">
-                <a href="/profile"><spring:message code="a.cancel"/></a> <input class="profile-save-changes" type="submit" value="<spring:message code="submit.save.changes"/>">
+                <a href="<c:url value="/profile"/>"><spring:message code="a.cancel"/></a> <input class="profile-save-changes" type="submit" value="<spring:message code="submit.save.changes"/>">
             </div>
         </div>
     </form:form>
@@ -149,6 +141,7 @@
         if(clickedId == "prepaid") {
             if( document.getElementById('prepaid').value == "" ) {
                 document.getElementById('prepaidNumber').disabled = true;
+                document.getElementById('prepaidNumber').value = "";
             }
             else {
                 document.getElementById('prepaidNumber').disabled = false;

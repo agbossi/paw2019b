@@ -79,9 +79,6 @@ public class UserController {
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
 
-        System.out.println("LALALALLALALLALALA:  " + form.getPassword());
-        System.out.println("LALALALLALALLALALA:  " + encodedPassword);
-
 
         User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
         patientService.create(form.getEmail(),form.getId(),form.getPrepaid(), form.getPrepaidNumber(), user);
@@ -96,6 +93,7 @@ public class UserController {
     public ModelAndView login(HttpServletRequest request) {
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
+
         userService.changePassword(passwordEncoder.encode("admin"),"admin@doctorsearch.com");
 
         return new ModelAndView("login");

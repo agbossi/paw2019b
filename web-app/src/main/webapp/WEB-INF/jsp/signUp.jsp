@@ -24,10 +24,10 @@
                                             <form:label path="firstName"><spring:message code="user.first.name"/> </form:label>
                                         </div>
                                         <div class="input-div">
-                                            <h6><form:input path="firstName" placeholder="${user.firstName}"/></h6>
+                                            <h6><form:input path="firstName"/></h6>
                                         </div>
                                     </div>
-                                    <form:errors path="firstName" element="p"/>
+                                    <form:errors class="errors" path="firstName" element="p"/>
                                 </div>
                                 <div>
                                     <div>
@@ -35,10 +35,10 @@
                                             <form:label path="lastName"><spring:message code="user.last.name"/> </form:label>
                                         </div>
                                         <div class="input-div">
-                                            <h6><form:input path="lastName" placeholder="${user.lastName}"/></h6>
+                                            <h6><form:input path="lastName"/></h6>
                                         </div>
                                     </div>
-                                    <form:errors path="lastName" element="p"/>
+                                    <form:errors class="errors" path="lastName" element="p"/>
                                 </div>
                                 <div>
                                     <div>
@@ -46,10 +46,10 @@
                                             <form:label path="email"><spring:message code="user.email"/> </form:label>
                                         </div>
                                         <div class="input-div">
-                                            <h6><form:input path="email" placeholder="${user.email}"/></h6>
+                                            <h6><form:input path="email"/></h6>
                                         </div>
                                     </div>
-                                    <form:errors path="email" element="p"/>
+                                    <form:errors class="errors" path="email" element="p"/>
                                 </div>
                                 <div>
                                     <div>
@@ -57,10 +57,10 @@
                                             <form:label path="id"><spring:message code="user.id"/> </form:label>
                                         </div>
                                         <div class="input-div">
-                                            <h6><form:input path="id" placeholder="${user.id}"/></h6>
+                                            <h6><form:input path="id"/></h6>
                                         </div>
                                     </div>
-                                    <form:errors path="id" element="p"/>
+                                    <form:errors class="errors" path="id" element="p"/>
                                 </div>
                                 <div>
                                     <div>
@@ -72,7 +72,7 @@
                                             <h6><form:input type="password" path="password"/></h6>
                                         </div>
                                     </div>
-                                    <form:errors path="password" element="p"/>
+                                    <form:errors class="errors" path="password" element="p"/>
                                 </div>
                                 <div>
                                     <div>
@@ -84,7 +84,7 @@
                                             <h6><form:input type="password" path="repeatPassword"/></h6>
                                         </div>
                                     </div>
-                                    <form:errors path="repeatPassword" element="p"/>
+                                    <form:errors class="errors" path="repeatPassword" element="p"/>
                                 </div>
                             </div>
                         </div>
@@ -99,18 +99,9 @@
                                         </div>
                                         <div class="input-div">
                                             <form:select class="select-input-div" path="prepaid" id="prepaid" onclick="handleClick(this.id)">
-                                                <c:choose>
-                                                    <c:when test="${not empty patient.prepaid}">
-                                                        <form:option value="${patient.prepaid.name}"/>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <form:option value=""><spring:message code="no.prepaid"/></form:option>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                <form:option value=""><spring:message code="no.prepaid"/></form:option>
                                                 <c:forEach var="prepaid" items="${prepaids}">
-                                                    <c:if test="${ prepaid.name != patient.prepaid.name }">
-                                                        <form:option value="${prepaid.name}"/>
-                                                    </c:if>
+                                                    <form:option value="${prepaid.name}"/>
                                                 </c:forEach>
                                             </form:select>
                                         </div>
@@ -123,7 +114,7 @@
                                             <form:label path="prepaidNumber"><spring:message code="patient.prepaid.number"/> </form:label>
                                         </div>
                                         <div class="input-div">
-                                            <form:input type="text" disabled="true" id="prepaidNumber" path="prepaidNumber" placeholder="${patient.patientNumber}"/>
+                                            <form:input type="text" disabled="true" id="prepaidNumber" path="prepaidNumber"/>
                                         </div>
                                     </div>
                                     <form:errors class="errors" path="prepaidNumber" element="p"/>

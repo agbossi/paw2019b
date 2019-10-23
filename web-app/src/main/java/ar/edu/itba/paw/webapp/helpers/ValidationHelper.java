@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Calendar;
 import java.util.List;
@@ -55,6 +56,8 @@ public class ValidationHelper {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    final static int MIN_SIZE = 8;
+
     public void validateSpecialty(String name,BindingResult errors,Locale locale){
         if(specialtyService.getSpecialtyByName(name) != null){
             FieldError specialtyExists = new FieldError("form","name",messageSource.getMessage("specialty.already.exists",null,locale));
@@ -97,17 +100,16 @@ public class ValidationHelper {
         emailValidate(email,errors,locale);
     }
     public void passwordValidate(final String password,final String repeatPassword,final BindingResult errors,Locale locale){
+        if(!password.equals("") && password.length() < MIN_SIZE){
+            FieldError passwordNotMatchingError = new FieldError("form","newPassword",messageSource.getMessage("user.password.too.short",null,locale));
+            errors.addError(passwordNotMatchingError);
+        }
         if(!password.equals(repeatPassword)){
             FieldError passwordNotMatchingError = new FieldError("form","repeatPassword",messageSource.getMessage("user.password.not.matching",null,locale));
             errors.addError(passwordNotMatchingError);
         }
     }
-    public void oldPasswordValidate(String formPassword,String dbPassword,BindingResult errors,Locale locale){
-        if(!passwordEncoder.matches(formPassword, dbPassword)){
-            FieldError passwordNotCorrectError = new FieldError("form","oldPassword",messageSource.getMessage("user.password.not.correct",null,locale));
-            errors.addError(passwordNotCorrectError);
-        }
-    }
+
     public void licenseValidate(String license,BindingResult errors,Locale locale){
         if(doctorService.getDoctorByLicense(license) != null){
             FieldError licenseExistsError = new FieldError("form","license",messageSource.getMessage("doctor.license.already.exists",null,locale));
@@ -133,23 +135,11 @@ public class ValidationHelper {
         }
     }
 
-    public void passwordEditValidate(String oldPassword, String newPassword, String repeatPassword, BindingResult errors, Locale locale) {
-        if(!oldPassword.equals("")){
-            User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-            String dbPassword = user.getPassword();
-            System.out.println(oldPassword);
-            System.out.println(dbPassword);
-            oldPasswordValidate(oldPassword,dbPassword,errors,locale);
-            if(newPassword.equals("")){
-                FieldError passwordMissingError = new FieldError("form","newPassword",messageSource.getMessage("user.password.missing",null,locale));
-                errors.addError(passwordMissingError);
-            }
-            passwordValidate(newPassword,repeatPassword,errors,locale);
-        }else {
-            if(!newPassword.equals("") || !repeatPassword.equals("")){
-                FieldError passwordNotVerifiedError = new FieldError("form","oldPassword",messageSource.getMessage("user.password.not.validated",null,locale));
-                errors.addError(passwordNotVerifiedError);
-            }
+    public boolean photoValidate(MultipartFile photo) {
+        if(!photo.isEmpty()){
+            String contentType = photo.getContentType();
+            return !(contentType.equals("image/jpeg") || contentType.equals("image/png") || contentType.equals("image/jpg"));
         }
+        return false;
     }
 }

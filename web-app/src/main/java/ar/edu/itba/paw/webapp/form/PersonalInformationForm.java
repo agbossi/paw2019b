@@ -5,16 +5,12 @@ import javax.validation.constraints.Size;
 public class PersonalInformationForm {
 
     @Size(max = 20)
-    @Pattern(regexp = "[a-zA-Z ]*")
+    @Pattern(regexp = "[a-zA-Z ]+")
     private String firstName;
 
     @Size(max = 20)
-    @Pattern(regexp = "[a-zA-Z ]*")
+    @Pattern(regexp = "[a-zA-Z ]+")
     private String lastName;
-
-    @Size(max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]*")
-    private String oldPassword;
 
     @Size(max = 20)
     @Pattern(regexp = "[a-zA-Z0-9 ]*")
@@ -24,15 +20,14 @@ public class PersonalInformationForm {
     @Pattern(regexp = "[a-zA-Z0-9 ]*")
     private String repeatPassword;
 
-    @Pattern(regexp = "[a-zA-Z0-9 ]*")
     private String prepaid;
 
     @Size(max = 20)
     @Pattern(regexp = "[0-9 ]*")
     private String prepaidNumber;
 
-    @Size(max = 8)
-    @Pattern(regexp = "[0-9]*")
+    @Size(min = 8,max = 8)
+    @Pattern(regexp = "[0-9]+")
     private String id;
 
 
@@ -58,14 +53,6 @@ public class PersonalInformationForm {
 
     public void setNewPassword(String password) {
         this.newPassword = password;
-    }
-
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
     }
 
     public void setId(String id) {

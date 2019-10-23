@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class PatientServiceImpl implements PatientService {
@@ -42,6 +44,22 @@ public class PatientServiceImpl implements PatientService {
         User user = userService.findUserByEmail(patient.getEmail());
         List<Appointment> appointments = appointmentService.getPatientsAppointments(user);
         patient.setAppointments(appointments);
+    }
+
+    @Transactional
+    @Override
+    public void updatePatient(String email, String prepaid, String prepaidNumber, String id) {
+        Map<String,String> args = new HashMap<>();
+        if(prepaid.equals("")){
+            args.put("prepaid",prepaid);
+        }
+        if(prepaidNumber.equals("")){
+            args.put("prepaidNumber",prepaidNumber);
+        }
+        if(!id.equals("")){
+            args.put("id",id);
+        }
+        patientDao.updatePatient(email,args);
     }
 
 }

@@ -27,4 +27,6 @@ public interface DoctorService {
     boolean isDoctor(String email);
 
     long deleteDoctor(String license);
+
+    void updateDoctor(String license, String phoneNumber, String specialty);
 }

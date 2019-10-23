@@ -30,7 +30,7 @@
                                         <h6><form:input path="firstName" placeholder="${user.firstName}"/></h6>
                                     </div>
                                 </div>
-                                <form:errors path="firstName" element="p"/>
+                                <form:errors class="errors" path="firstName" element="p"/>
                             </div>
                             <div>
                                 <div>
@@ -41,20 +41,19 @@
                                         <h6><form:input path="lastName" placeholder="${user.lastName}"/></h6>
                                     </div>
                                 </div>
-                                <form:errors path="lastName" element="p"/>
+                                <form:errors class="errors" path="lastName" element="p"/>
                             </div>
                             <div>
                                 <div>
-                                    <div class="label-div">
-                                        <form:label path="email"><spring:message code="user.email"/> </form:label>
-                                    </div>
-                                    <div class="input-div">
-                                        <h6><form:input path="email" placeholder="${user.email}"/></h6>
-                                    </div>
+                                    <svg class="rounded-circle"
+                                         width="140" height="140"
+                                         xmlns="http://www.w3.org/2000/svg"
+                                         preserveAspectRatio="xMidYMid slice"
+                                         focusable="false" role="img" aria-label="Placeholder: 140x140">
+                                        <rect width="100%" height="100%" fill="#777"></rect>
+                                        <image width="100%" height="100%" xlink:href="<c:url value="/images/${doctor.license}"/>" clip-path="url(#circleView)" />
+                                    </svg>
                                 </div>
-                                <form:errors path="email" element="p"/>
-                            </div>
-                            <div>
                                 <div>
                                     <div class="label-div">
                                         <label path="email"><spring:message code="profile.picture"/></label>
@@ -63,18 +62,11 @@
                                         <input type="file" name="photo" class="photo-input-tag"/>
                                     </div>
                                 </div>
-                            </div>
-                            <div>
-                                <div>
-                                    <div class="label-div">
-                                        <form:label path="oldPassword"><spring:message code="old.password"/></form:label>
-                                        <form:label path="oldPassword"/>
+                                <c:if test="${errorMessage != null}">
+                                    <div id="error">
+                                        <b><c:out value="${errorMessage}"/></b>
                                     </div>
-                                    <div class="input-div">
-                                        <h6><form:input path="oldPassword"/></h6>
-                                    </div>
-                                </div>
-                                <form:errors path="oldPassword" element="p"/>
+                                </c:if>
                             </div>
                             <div>
                                 <div>
@@ -83,22 +75,22 @@
                                         <form:label path="newPassword"/>
                                     </div>
                                     <div class="input-div">
-                                        <h6><form:input path="newPassword"/></h6>
+                                        <h6><form:input path="newPassword" type="password"/></h6>
                                     </div>
                                 </div>
-                                <form:errors path="newPassword" element="p"/>
+                                <form:errors class="errors" path="newPassword" element="p"/>
                             </div>
                             <div>
                                 <div>
                                     <div class="label-div">
-                                        <form:label path="repeatNewPassword"><spring:message code="repeat.password"/></form:label>
-                                        <form:label path="repeatNewPassword"/>
+                                        <form:label path="repeatPassword"><spring:message code="repeat.password"/></form:label>
+                                        <form:label path="repeatPassword"/>
                                     </div>
                                     <div class="input-div">
-                                        <h6><form:input path="repeatNewPassword"/></h6>
+                                        <h6><form:input path="repeatPassword" type="password"/></h6>
                                     </div>
                                 </div>
-                                <form:errors path="repeatNewPassword" element="p"/>
+                                <form:errors class="errors" path="repeatPassword" element="p"/>
                             </div>
                         </div>
                     </div>
@@ -128,21 +120,10 @@
                             <div>
                                 <div>
                                     <div class="label-div">
-                                        <form:label path="license"><spring:message code="license"/> </form:label>
-                                    </div>
-                                    <div class="input-div">
-                                        <form:input type="text" path="license" placeholder="${doctor.license}"/>
-                                    </div>
-                                </div>
-                                <form:errors class="errors" path="license" element="p"/>
-                            </div>
-                            <div>
-                                <div>
-                                    <div class="label-div">
                                         <form:label path="phoneNumber"><spring:message code="phone.number"/> </form:label>
                                     </div>
                                     <div class="input-div">
-                                        <form:input type="text" path="phoneNumber" placeholder="${doctor.phoneNumber}"/>
+                                        <form:input path="phoneNumber" placeholder="${doctor.phoneNumber}"/>
                                     </div>
                                 </div>
                                 <form:errors class="errors" path="phoneNumber" element="p"/>
@@ -153,7 +134,7 @@
             </div>
             <br/><br/>
             <div class="profile-save-options">
-                <a href="/doctor/editProfile"><spring:message code="a.cancel"/></a> <input class="profile-save-changes" type="submit" value="<spring:message code="submit.save.changes"/>">
+                <a href="<c:url value="/doctor/editProfile"/>"><spring:message code="a.cancel"/></a> <input class="profile-save-changes" type="submit" value="<spring:message code="submit.save.changes"/>">
             </div>
         </div>
     </form:form>

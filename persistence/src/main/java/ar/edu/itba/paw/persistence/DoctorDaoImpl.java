@@ -118,10 +118,11 @@ public class DoctorDaoImpl implements DoctorDao {
         return jdbcTemplate.update(deleteQuery, license);
     }
 
-
     @Override
-    public List<Doctor> getFilteredDoctors(final Location location, final Specialty specialty, final String clinic) {
-
-        return null;
+    public void updateDoctor(String license, Map<String, String> args) {
+            jdbcTemplate.update("update doctors set phoneNumber = ?, specialty = ? where license = ?",
+                    args.get("phoneNumber"),
+                    args.get("specialty"),
+                    license);
     }
 }

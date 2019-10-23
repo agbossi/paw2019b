@@ -52,10 +52,9 @@ public class PatientController {
     private void setFormInformation(PersonalInformationForm form, User user, Patient patient) {
         form.setFirstName(user.getFirstName());
         form.setLastName(user.getLastName());
-        if(patient != null) {
-            form.setPrepaid(patient.getPrepaid());
-            form.setPrepaidNumber(patient.getPrepaidNumber());
-        }
+        form.setId(patient.getId());
+        form.setPrepaid(patient.getPrepaid());
+        form.setPrepaidNumber(patient.getPrepaidNumber());
     }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET })
@@ -80,6 +79,8 @@ public class PatientController {
 
         final ModelAndView mav = new ModelAndView("patient/editProfile");
 
+        mav.addObject("user", user);
+        mav.addObject("patient", patient);
         viewModifier.addPrepaids(mav);
 
         return mav;
@@ -89,20 +90,21 @@ public class PatientController {
     public ModelAndView editedProfile(@Valid @ModelAttribute("personalInformationForm") final PersonalInformationForm form,
                                       final BindingResult errors, Locale locale) {
 
-        System.out.println("valor de contraseña vieja: " + form.getOldPassword() + " " + form.getOldPassword().equals(""));
-        System.out.println("valor de contraseña nueva: " + form.getNewPassword() + " " + form.getNewPassword().equals(""));
-        System.out.println("valor de confirmar contraseña: " + form.getPrepaidNumber() + " " + form.getPrepaidNumber().equals(""));
-        System.out.println("valor de nombre: " + form.getFirstName());
-        System.out.println("valor de id: " + form.getId() + " " + form.getId().equals(""));
-
-
-        validator.passwordEditValidate(form.getOldPassword(),form.getNewPassword(),form.getRepeatPassword(),errors,locale);
-
-
+        validator.passwordValidate(form.getNewPassword(),form.getRepeatPassword(),errors,locale);
+        
         if(errors.hasErrors()){
             return editProfile(form);
         }
-        //TODO updating goes here
+
+        String password = null;
+        if(!form.getNewPassword().equals("")){
+            password = passwordEncoder.encode(form.getNewPassword());
+        }
+
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        userService.updateUser(user.getEmail(),password,form.getFirstName(),form.getLastName());
+        patientService.updatePatient(user.getEmail(),form.getPrepaid(),form.getPrepaidNumber(),form.getId());
+
         return profile();
     }
 
