@@ -44,7 +44,7 @@
                         <spring:message code="no.appointments"/>
                     </div>
                     <div>
-                        <a href="/"><spring:message code="go.back.home"/></a>
+                        <a href=<c:url value="/"/>><spring:message code="go.back.home"/></a>
                     </div>
                 </c:otherwise>
             </c:choose>
