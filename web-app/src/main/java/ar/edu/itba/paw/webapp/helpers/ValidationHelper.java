@@ -135,6 +135,7 @@ public class ValidationHelper {
         }
     }
 
+    //TODO validar peso del archivo
     public boolean photoValidate(MultipartFile photo) {
         if(!photo.isEmpty()){
             String contentType = photo.getContentType();

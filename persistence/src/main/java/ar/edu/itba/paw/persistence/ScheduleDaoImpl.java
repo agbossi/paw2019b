@@ -10,6 +10,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +22,7 @@ import java.util.Map;
 
 @Repository
 public class ScheduleDaoImpl implements ScheduleDao {
-    private JdbcTemplate jdbcTemplate;
+   /* private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Schedule> ROW_MAPPER = new RowMapper<Schedule>() {
@@ -68,12 +71,66 @@ public class ScheduleDaoImpl implements ScheduleDao {
     public boolean doctorHasSchedule(Doctor doctor, int day, int hour) {
         final List<Schedule> list = jdbcTemplate.query( "select * from schedule where doctor = ? and day = ? and hour = ?", ROW_MAPPER, doctor.getLicense(),day, hour);
 
-        return (list.isEmpty() ? false : true );
+        return (!list.isEmpty());
     }
 
     @Override
     public void deleteSchedule(int hour, int day, DoctorClinic doctorClinic) {
         Object[] args = new Object[] {hour, day, doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId()};
         jdbcTemplate.update("delete from schedule where hour = ? and day = ? and doctor = ? and clinic = ?", args);
+    }
+        */
+    //Hibernate
+
+    @PersistenceContext
+    EntityManager entityManager;
+
+    @Override
+    public Schedule createSchedule(int day, int hour, DoctorClinic doctorClinic){
+        Schedule schedule = new Schedule(day,hour,doctorClinic);
+        entityManager.persist(schedule);
+        return schedule;
+    }
+
+    @Override
+    public List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic){
+        final TypedQuery<Schedule> query = entityManager.createQuery("from Schedule as schedule where schedule.doctor := doctor " +
+                "and schedule.clinic := clinic",Schedule.class);
+
+        query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
+        query.setParameter("clinic",doctorClinic.getClinic().getId());
+
+        final List<Schedule> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    }
+
+    @Override
+    public boolean doctorHasScheduleInClinic(DoctorClinic doctorClinic, int day, int hour){
+        List<Schedule> schedules = this.getDoctorClinicSchedule(doctorClinic);
+        return schedules.contains(new Schedule(day,hour,doctorClinic));
+    }
+
+    @Override
+    public boolean doctorHasSchedule(Doctor doctor, int day, int hour) {
+        final TypedQuery<Schedule> query = entityManager.createQuery("from Schedule as schedule " +
+                "where schedule.doctor := doctor and schedule.day := day and schedule.hour := hour",Schedule.class);
+
+        query.setParameter("doctor",doctor);
+        query.setParameter("day",day);
+        query.setParameter("hour",hour);
+        List<Schedule> schedules = query.getResultList();
+        return !schedules.isEmpty();
+    }
+
+    @Override
+    public void deleteSchedule(int hour, int day, DoctorClinic doctorClinic){
+        final TypedQuery<Schedule> query = entityManager.createQuery("delete from Schedule as schedule " +
+                "where schedule.day =: day and schedule.hour =: hour " +
+                "and schedule.doctor =: doctor and schedule.clinic =: clinic",Schedule.class);
+        query.setParameter("day",day);
+        query.setParameter("hour",hour);
+        query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
+        query.setParameter("clinic",doctorClinic.getClinic().getId());
+        query.executeUpdate();
     }
 }

@@ -4,9 +4,11 @@ import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
 import ar.edu.itba.paw.interfaces.service.DoctorService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Specialty;
+import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,10 +31,13 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     private DoctorClinicService doctorClinicService;
 
+    @Autowired
+    UserService userService;
+
     @Transactional
     @Override
-    public Doctor createDoctor(Specialty specialty,String license, String phoneNumber, String email) {
-        return doctorDao.createDoctor(specialty,license, phoneNumber,email);
+    public Doctor createDoctor(Specialty specialty, String license, String phoneNumber, User user) {
+        return doctorDao.createDoctor(specialty,license, phoneNumber,user);
     }
 
     @Override

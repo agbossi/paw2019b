@@ -8,6 +8,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +21,8 @@ import java.util.Map;
 
 @Component
 public class UserDaoImpl implements UserDao {
-    private JdbcTemplate jdbcTemplate;
+
+    /* private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<User> ROW_MAPPER = new RowMapper<User>() {
@@ -61,6 +65,7 @@ public class UserDaoImpl implements UserDao {
         return list.get(0);
     }
 
+    //esta es necesaria?
     @Override
     public void changePassword(String password,String email){
         jdbcTemplate.update("update users set password = ? where email = ?",password,email);
@@ -81,5 +86,31 @@ public class UserDaoImpl implements UserDao {
                     args.get("lastName"),
                     email);
         }
+    } */
+
+    //Hibernate
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    public User createUser(String firstName,String lastName, String password, String email){
+        final User user = new User(firstName,lastName,password,email);
+        entityManager.persist(user);
+        return user;
+    }
+
+    @Override
+    public User findUserByEmail(String email){
+        return entityManager.find(User.class,email);
+    }
+
+    @Override
+    public void updateUser(String email, Map<String, String> args){
+        final TypedQuery<User> query = entityManager.createQuery("update User user set user.firstName =: firstName, user.lastName =: lastName where user.email =: email", User.class);
+        query.setParameter("email",email);
+        query.setParameter("firstName",args.get("firstName"));
+        query.setParameter("lastName",args.get("lastName"));
+        query.executeUpdate();
     }
 }

@@ -1,15 +1,31 @@
 package ar.edu.itba.paw.model;
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "clinicPrepaids")
 public class PrepaidToClinic {
 
+    //igual que en doctor clinic. son ManyToOne? los joinColumns estan bien puestos?
+    //necesito especificar pk si todo es pk?
+
+    @ManyToOne
+    @JoinColumn(name = "id")
     private Clinic clinic;
 
+    @ManyToOne
+    @JoinColumn(name = "name")
     private Prepaid prepaid;
 
     public PrepaidToClinic(Clinic clinic, Prepaid prepaid) {
         this.clinic = clinic;
         this.prepaid = prepaid;
     }
+
+    public PrepaidToClinic(){}
 
     public Clinic getClinic() {
         return clinic;

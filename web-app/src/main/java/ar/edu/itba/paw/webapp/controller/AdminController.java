@@ -96,11 +96,11 @@ public class AdminController {
             return addDoctor(form,photoError,locale);
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
-        userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
+       User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
         Doctor doctor = doctorService.createDoctor(new Specialty(form.getSpecialty()),
                 form.getLicense(),
                 form.getPhoneNumber(),
-                form.getEmail()
+                user
         );
         long image = imageService.createProfileImage(photo, doctor);
 

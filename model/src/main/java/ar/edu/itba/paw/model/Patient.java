@@ -1,30 +1,40 @@
 package ar.edu.itba.paw.model;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "patients")
 public class Patient {
+    //ver que es el param cascade de la anotation
+    @OneToOne
+    @JoinColumn(name = "email")
+    @MapsId //esto funca?
+    private User user;
 
-    private String firstName;
-
-    private String lastName;
-
-    private String email;
-
+    //poner los nullable = false donde corresponda
+    @Column
     private String prepaid;
 
+    @Column
     private String prepaidNumber;
 
+    //hay que hacer to string?
+    @Column
     private String id;
 
+    @OneToMany(mappedBy = "patient")
+    //no se aca si se puede poner join column. ver como mapear con composite key
     private List<Appointment> appointments;
 
-    public Patient(String email, String id, String prepaid, String prepaidNumber, String firstName, String lastName) {
-        this.email = email;
+    public Patient(String id, String prepaid, String prepaidNumber,User user) {
+        this.user = user;
         this.id = id;
         this.prepaid = prepaid;
         this.prepaidNumber = prepaidNumber;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    }
+
+    public Patient(){
     }
 
     public String getId() {
@@ -41,7 +51,7 @@ public class Patient {
 
 
     public String getEmail() {
-        return email;
+        return user.getEmail();
     }
 
     public List<Appointment> getAppointments() {
@@ -53,19 +63,31 @@ public class Patient {
     }
 
     public String getFirstName() {
-        return firstName;
+        return user.getFirstName();
     }
 
     public String getLastName() {
-        return lastName;
+        return user.getLastName();
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.user.setFirstName(firstName);
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.user.setLastName(lastName);
+    }
+
+    public void setPrepaid(String prepaid) {
+        this.prepaid = prepaid;
+    }
+
+    public void setPrepaidNumber(String prepaidNumber) {
+        this.prepaidNumber = prepaidNumber;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

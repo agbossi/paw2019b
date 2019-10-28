@@ -29,8 +29,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Transactional
     @Override
-    public Patient create(String email,String id, String prepaid, String prepaidNumber, User user) {
-        return patientDao.create(email,id, prepaid, prepaidNumber, user);
+    public Patient create(String id, String prepaid, String prepaidNumber, User user) {
+        return patientDao.create(id, prepaid, prepaidNumber, user);
     }
 
     @Override

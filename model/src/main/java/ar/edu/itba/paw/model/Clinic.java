@@ -1,12 +1,23 @@
 package ar.edu.itba.paw.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "clinics")
 public class Clinic {
+
+    @Column
     private String name;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
+    @Column
     private String address;
 
+    @ManyToOne
+    @JoinColumn(name = "name")
     private Location location;
 
 
@@ -15,6 +26,10 @@ public class Clinic {
         this.name = name;
         this.address = address;
         this.location = location;
+    }
+
+    public Clinic(){
+
     }
 
     public String getName() {
@@ -35,6 +50,18 @@ public class Clinic {
 
     public String getAddress() {
         return address;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     @Override

@@ -3,13 +3,14 @@ package ar.edu.itba.paw.model;
 import java.util.Calendar;
 
 public class DoctorHour {
-    Calendar date;
 
-    boolean isScheduled;
+    private Calendar date;
 
-    boolean isClinic;
+    private boolean isScheduled;
 
-    Appointment appointment;
+    private boolean isClinic;
+
+    private Appointment appointment;
 
     public DoctorHour(Calendar date, boolean isScheduled, boolean isClinic, Appointment appointment) {
         this.date = date;

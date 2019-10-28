@@ -1,12 +1,24 @@
 package ar.edu.itba.paw.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "users")
 public class User {
+    //TODO buscar como es mappedBy email
+    @Column
     private String firstName;
 
+    @Column
     private String lastName;
 
+    @Column
     private String password;
 
+    @Id
     private String email;
 
     public User(String firstName,String lastName,String password,String email) {
@@ -30,6 +42,14 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override

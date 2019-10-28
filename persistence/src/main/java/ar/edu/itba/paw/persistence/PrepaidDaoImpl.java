@@ -8,6 +8,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +20,7 @@ import java.util.Map;
 
 @Repository
 public class PrepaidDaoImpl implements PrepaidDao {
-    private JdbcTemplate jdbcTemplate;
+  /*  private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Prepaid> ROW_MAPPER = new RowMapper<Prepaid>() {
@@ -63,5 +66,35 @@ public class PrepaidDaoImpl implements PrepaidDao {
     public long deletePrepaid(String name) {
         String deleteQuery = "DELETE FROM prepaids WHERE name = ?";
         return jdbcTemplate.update(deleteQuery, name);
+    } */
+    //Hibernate
+
+    @PersistenceContext
+    EntityManager entityManager;
+
+    @Override
+    public Prepaid createPrepaid(String name){
+        Prepaid prepaid = new Prepaid(name);
+        entityManager.persist(prepaid);
+        return prepaid;
+    }
+
+    @Override
+    public Prepaid getPrepaidByName(String prepaidName){
+        return entityManager.find(Prepaid.class,prepaidName);
+    }
+
+    @Override
+    public List<Prepaid> getPrepaids(){
+        TypedQuery<Prepaid> query = entityManager.createQuery("from Prepaid as prepaid",Prepaid.class);
+        List<Prepaid> prepaids = query.getResultList();
+        return prepaids;
+    }
+
+    @Override
+    public long deletePrepaid(String name){
+        TypedQuery<Prepaid> query = entityManager.createQuery("delete from Prepaid as prepaid where prepaid.name =: name",Prepaid.class);
+        query.setParameter("name",name);
+        return query.executeUpdate();
     }
 }

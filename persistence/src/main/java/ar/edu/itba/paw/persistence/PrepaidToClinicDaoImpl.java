@@ -11,6 +11,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +24,7 @@ import java.util.Map;
 @Component
 public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
 
-    private JdbcTemplate jdbcTemplate;
+   /* private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<PrepaidToClinic> ROW_MAPPER = new RowMapper<PrepaidToClinic>() {
@@ -73,5 +76,43 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     public long deletePrepaidFromClinic(String prepaid, int clinic) {
         String deleteQuery = "DELETE FROM clinicPrepaids WHERE prepaid = ? AND clinicid = ?";
         return jdbcTemplate.update(deleteQuery, prepaid, clinic);
+    } */
+
+    //Hibernate
+    @PersistenceContext
+    EntityManager entityManager;
+
+    @Override
+    public List<PrepaidToClinic> getPrepaidToClinics(){
+        //en el join es p.clinic o p.id?
+        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p inner join p.clinic",PrepaidToClinic.class);
+        List<PrepaidToClinic> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    }
+
+    @Override
+    public PrepaidToClinic addPrepaidToClinic(Prepaid prepaid, Clinic clinic){
+        PrepaidToClinic prepaidToClinic = new PrepaidToClinic(clinic, prepaid);
+        entityManager.persist(prepaidToClinic);
+        return prepaidToClinic;
+    }
+
+    @Override
+    public boolean clinicHasPrepaid(String prepaid, int clinic){
+        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p inner join p.clinic" +
+                "where p.clinic := clinic and p.prepaid := prepaid",PrepaidToClinic.class);
+        query.setParameter("clinic",clinic);
+        query.setParameter("prepaid",prepaid);
+        List<PrepaidToClinic> list = query.getResultList();
+        return !list.isEmpty();
+    }
+
+    @Override
+    public long deletePrepaidFromClinic(String prepaid, int clinic) {
+        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("delete from PrepaidToClinic as p " +
+                "where p.prepaid =: prepaid and p.clinic =: clinic",PrepaidToClinic.class);
+        query.setParameter("clinic",clinic);
+        query.setParameter("prepaid",prepaid);
+        return query.executeUpdate();
     }
 }
