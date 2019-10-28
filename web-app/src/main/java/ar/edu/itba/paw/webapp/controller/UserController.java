@@ -68,7 +68,7 @@ public class UserController {
 
 
         User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
-        patientService.create(form.getEmail(),form.getId(),form.getPrepaid(), form.getPrepaidNumber(), user);
+        patientService.create(form.getId(),form.getPrepaid(), form.getPrepaidNumber(), user);
         signUpAuthentication.authWithAuthManager(request, form.getEmail(), form.getPassword());
 
         String ret = signUpAuthentication.signUpSuccess(request);

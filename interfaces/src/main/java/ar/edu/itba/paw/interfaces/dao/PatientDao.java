@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface PatientDao {
-    Patient create(String email, String id, String prepaid, String prepaidNumber, User user);
+    Patient create(String id, String prepaid, String prepaidNumber, User user);
 
     Patient getPatientByEmail(String email);
 

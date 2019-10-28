@@ -1,27 +1,34 @@
 package ar.edu.itba.paw.model;
 
+import javax.persistence.*;
 
+@Entity
+@Table(name = "doctors")
 public class Doctor {
 
-    private String firstName;
+    @OneToOne
+    @JoinColumn(name = "email")
+    private User user;
 
-    private String lastName;
-
+    @OneToOne
+    @JoinColumn(name = "specialty")
     private Specialty specialty;
 
+    @Id
     private String license;
 
+    @Column
     private String phoneNumber;
 
-    private String email;
-
-    public Doctor(String firstName,String lastName ,Specialty specialty,String license, String phoneNumber, String email){
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public Doctor(Specialty specialty,String license, String phoneNumber, User user){
+        this.user = user;
         this.specialty = specialty;
         this.license = license;
         this.phoneNumber = phoneNumber;
-        this.email = email;
+    }
+
+    public Doctor(){
+
     }
 
     public Specialty getSpecialty() {
@@ -36,14 +43,28 @@ public class Doctor {
         return phoneNumber;
     }
 
-    public String getEmail() {return email;}
+    public String getEmail() {return user.getEmail();}
 
     public String getFirstName() {
-        return firstName;
+        return user.getFirstName();
     }
 
     public String getLastName() {
-        return lastName;
+        return user.getLastName();
+    }
+
+    public String getPassword(){return user.getPassword();}
+
+    public void setSpecialty(Specialty specialty) {
+        this.specialty = specialty;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     @Override

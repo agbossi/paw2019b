@@ -1,15 +1,12 @@
 package ar.edu.itba.paw.interfaces.dao;
 
-import ar.edu.itba.paw.model.Clinic;
-import ar.edu.itba.paw.model.Doctor;
-import ar.edu.itba.paw.model.Location;
-import ar.edu.itba.paw.model.Specialty;
+import ar.edu.itba.paw.model.*;
 
 import java.util.List;
 import java.util.Map;
 
 public interface DoctorDao {
-    Doctor createDoctor(Specialty specialty,String license, String phoneNumber,String email);
+    Doctor createDoctor(Specialty specialty, String license, String phoneNumber, User user);
 
     List<Doctor> getDoctors();
 
@@ -23,7 +20,7 @@ public interface DoctorDao {
 
     Doctor getDoctorByEmail(String email);
 
-    long deleteDoctor(String license);
+    int deleteDoctor(String license);
 
     void updateDoctor(String license, Map<String, String> args);
 }
