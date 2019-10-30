@@ -17,6 +17,10 @@ import java.util.Collection;
 @Component
 public class PawUserDetailsService implements UserDetailsService {
 
+    private static final String adminRole  = "ROLE_ADMIN";
+    private static final String doctorRole = "ROLE_DOCTOR";
+    private static final String userRole   = "ROLE_USER";
+
     @Autowired
     private UserService us;
 
@@ -31,13 +35,13 @@ public class PawUserDetailsService implements UserDetailsService {
 
         final Collection<? extends GrantedAuthority> authorities;
 
-        if(user.getEmail().equals("admin@doctorsearch.com")){
-            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        if(us.isAdmin(email)){
+            authorities = Arrays.asList(new SimpleGrantedAuthority(adminRole));
         }
         else if(us.isDoctor(email)){
-            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_DOCTOR"));
-        }else {
-            authorities = Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+            authorities = Arrays.asList(new SimpleGrantedAuthority(doctorRole));
+        }else{
+            authorities = Arrays.asList(new SimpleGrantedAuthority(userRole));
         }
 
         return new org.springframework.security.core.userdetails.User(email, user.getPassword(), authorities);

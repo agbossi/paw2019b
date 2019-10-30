@@ -11,6 +11,8 @@ public interface UserService {
 
     boolean isDoctor(String email);
 
+    boolean isAdmin(String email);
+
     void changePassword(String password,String email);
 
     void updateUser(String email, String newPassword, String firstName, String lastName);
