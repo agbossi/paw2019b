@@ -94,8 +94,6 @@ public class UserController {
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
 
-        userService.changePassword(passwordEncoder.encode("admin"),"admin@doctorsearch.com");
-
         return new ModelAndView("login");
     }
     @RequestMapping(value="/login-error", method = RequestMethod.GET)
