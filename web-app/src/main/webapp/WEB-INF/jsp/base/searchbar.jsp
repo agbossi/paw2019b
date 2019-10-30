@@ -57,9 +57,14 @@
                         </div>
                         <div>
                             <form:select class="search-element" path="prepaid">
+                                <c:if test="${not empty patientPrepaid}">
+                                    <form:option value="${patientPrepaid}"/>
+                                </c:if>
                                 <form:option value=""><spring:message code="none"/></form:option>
                                 <c:forEach var="prepaid" items="${prepaids}">
-                                    <form:option value="${prepaid.name}"/>
+                                    <c:if test="${patientPrepaid != prepaid.name}">
+                                        <form:option value="${prepaid.name}"/>
+                                    </c:if>
                                 </c:forEach>
                             </form:select>
                             <form:errors path="prepaid" element="p"/>

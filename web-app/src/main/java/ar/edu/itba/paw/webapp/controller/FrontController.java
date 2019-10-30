@@ -1,12 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.service.AppointmentService;
-import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
-import ar.edu.itba.paw.interfaces.service.DoctorService;
-import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.Appointment;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
+import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.SearchForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
@@ -42,6 +40,9 @@ public class FrontController {
     private UserService userService;
 
     @Autowired
+    private PatientService patientService;
+
+    @Autowired
     private AppointmentService appointmentService;
 
     // Index shows different jsp depending on user role.
@@ -71,6 +72,10 @@ public class FrontController {
             /*
              * What do I need for patients and anonymous users...
              * */
+            Patient patient = patientService.getPatientByEmail(userEmail);
+            if(patient != null) {
+                mav.addObject("patientPrepaid", patient.getPrepaid());
+            }
             viewModifier.addSearchInfo(mav);
             // Patients are not interested in doctors that still haven't load their schedule
             viewModifier.addDoctorsWithAvailability(mav);

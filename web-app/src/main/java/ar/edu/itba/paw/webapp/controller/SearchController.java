@@ -1,14 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
-import ar.edu.itba.paw.interfaces.service.ClinicService;
-import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
-import ar.edu.itba.paw.interfaces.service.DoctorHourService;
-import ar.edu.itba.paw.interfaces.service.DoctorService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.SearchForm;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +30,9 @@ public class SearchController {
     private DoctorService doctorService;
 
     @Autowired
+    private PatientService patientService;
+
+    @Autowired
     private ModelAndViewModifier viewModifier;
 
     @Autowired
@@ -41,6 +42,12 @@ public class SearchController {
     public ModelAndView search(@ModelAttribute("searchForm") final SearchForm form) {
 
         final ModelAndView mav = new ModelAndView("base/searchBar");
+
+        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        Patient patient = patientService.getPatientByEmail(userEmail);
+        if(patient != null) {
+            mav.addObject("patientPrepaid", patient.getPrepaid());
+        }
         viewModifier.addSearchInfo(mav);
 
         return mav;
@@ -50,6 +57,12 @@ public class SearchController {
     public ModelAndView backToResults(@ModelAttribute("searchForm") final SearchForm form,HttpServletRequest request){
         UserContextHelper.loadUserQuery(form,request);
         final ModelAndView mav = new ModelAndView("base/searchBar");
+
+        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        Patient patient = patientService.getPatientByEmail(userEmail);
+        if(patient != null) {
+            mav.addObject("patientPrepaid", patient.getPrepaid());
+        }
         viewModifier.addSearchInfo(mav);
         return mav;
     }
@@ -66,6 +79,8 @@ public class SearchController {
         UserContextHelper.saveUserQuery(form,request);
 
         final ModelAndView mav = new ModelAndView("results");
+
+        mav.addObject("patientPrepaid", form.getPrepaid());
         viewModifier.addSearchInfo(mav);
 
 
@@ -100,6 +115,11 @@ public class SearchController {
                               clinicService.getClinicById(clinic));
 
         mav.addObject("doctorClinic", doctor);
+        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        Patient patient = patientService.getPatientByEmail(userEmail);
+        if(patient != null) {
+            mav.addObject("patientPrepaid", patient.getPrepaid());
+        }
         viewModifier.addSearchInfo(mav);
         viewModifier.addCurrentDates(mav, week);
 
