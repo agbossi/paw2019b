@@ -13,70 +13,63 @@ import java.util.Collection;
 
 public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
+    private static final String adminRole  = "ROLE_ADMIN";
+    private static final String doctorRole = "ROLE_DOCTOR";
+
+    private static final String targetURL   = "URL_PRIOR_LOGIN";
+    private static final String defaultURL   = "/";
+    private static final String login   = "login";
+    private static final String signUp   = "signUp";
+
+
     public PawUrlAuthenticationSuccessHandler(String defaultTargetUrl) {
         setDefaultTargetUrl(defaultTargetUrl);
     }
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
+    public void onAuthenticationSuccess(HttpServletRequest request,
+                                        HttpServletResponse response,
+                                        Authentication authentication) throws ServletException, IOException {
+
         HttpSession session = request.getSession();
         if (session != null) {
-            String redirectUrl = (String) session.getAttribute("url_prior_login");
+
+            String redirectUrl = (String) session.getAttribute(targetURL);
+
             if (redirectUrl != null) {
                 // we do not forget to clean this attribute from session
-                session.removeAttribute("url_prior_login");
-                String role = determineTargetUrl(authentication);
+                session.removeAttribute(targetURL);
 
-                if( role.equals("ROLE_ADMIN") || role.equals("ROLE_DOCTOR")){
-                    getRedirectStrategy().sendRedirect(request, response, "/");
-                }
-                else {
+                String role = determineRole(authentication);
+
+                if (role.equals(adminRole) || role.equals(doctorRole)) {
+                    getRedirectStrategy().sendRedirect(request, response, defaultURL);
+                } else {
                     // we redirect home page
-                    if(!redirectUrl.contains("login") && !redirectUrl.contains("signUp")){
+                    if (!redirectUrl.contains(login) && !redirectUrl.contains(signUp)) {
                         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
-                    }
-                    else {
+                    } else {
                         super.onAuthenticationSuccess(request, response, authentication);
                     }
                 }
-            } else {
-                super.onAuthenticationSuccess(request, response, authentication);
             }
-        } else {
             super.onAuthenticationSuccess(request, response, authentication);
         }
     }
 
-    protected String determineTargetUrl(Authentication authentication) {
-        boolean isUser = false;
-        boolean isAdmin = false;
-        boolean isDoctor = false;
-
+    protected String determineRole(Authentication authentication) {
         Collection<? extends GrantedAuthority> authorities
                 = authentication.getAuthorities();
-        label:
-        for (GrantedAuthority grantedAuthority : authorities) {
-            switch (grantedAuthority.getAuthority()) {
-                case "ROLE_ADMIN":
-                    isAdmin = true;
-                    break label;
-                case "ROLE_DOCTOR":
-                    isDoctor = true;
-                    break label;
-                case "ROLE_USER":
-                    isUser = true;
-                    break label;
-            }
-        }
 
-        if (isUser) {
-            return "ROLE_USER";
-        } else if (isAdmin) {
-            return "ROLE_ADMIN";
-        }  else if(isDoctor){
-            return "ROLE_DOCTOR";
+        if (!authorities.isEmpty()) {
+            for (GrantedAuthority grantedAuthority : authorities) {
+                return grantedAuthority.getAuthority();
+                // we just need the first. A user does not have +1 roles
+                // That was the way we did it before, we keep that logic.
+            }
         } else {
             throw new IllegalStateException();
         }
+        return null;
     }
 }
