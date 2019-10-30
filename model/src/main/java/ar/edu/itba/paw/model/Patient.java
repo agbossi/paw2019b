@@ -6,25 +6,26 @@ import java.util.List;
 @Entity
 @Table(name = "patients")
 public class Patient {
-    //ver que es el param cascade de la anotation
+
+    //TODO ver que es el param cascade de la anotation
+
     @OneToOne
     @JoinColumn(name = "email")
-    @MapsId //esto funca?
+    @MapsId
     private User user;
 
-    //poner los nullable = false donde corresponda
-    @Column
+    //TODO poner los nullable = false donde corresponda
+
+    @Column(name = "prepaid")
     private String prepaid;
 
-    @Column
+    @Column(name = "prepaidNumber")
     private String prepaidNumber;
 
-    //hay que hacer to string?
-    @Column
+    @Column(name = "id")
     private String id;
 
     @OneToMany(mappedBy = "patient")
-    //no se aca si se puede poner join column. ver como mapear con composite key
     private List<Appointment> appointments;
 
     public Patient(String id, String prepaid, String prepaidNumber,User user) {

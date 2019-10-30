@@ -1,23 +1,21 @@
 package ar.edu.itba.paw.model;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
+import javax.persistence.*;
+//TODO que poner si toda la clase es id
 @Entity
 @Table(name = "clinicPrepaids")
+
 public class PrepaidToClinic {
 
     //igual que en doctor clinic. son ManyToOne? los joinColumns estan bien puestos?
-    //necesito especificar pk si todo es pk?
+    //todo: necesito especificar pk si es pk toda la entidad?
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "clinicid",referencedColumnName = "id")
     private Clinic clinic;
 
     @ManyToOne
-    @JoinColumn(name = "name")
+    @JoinColumn(name = "prepaid",referencedColumnName = "name")
     private Prepaid prepaid;
 
     public PrepaidToClinic(Clinic clinic, Prepaid prepaid) {

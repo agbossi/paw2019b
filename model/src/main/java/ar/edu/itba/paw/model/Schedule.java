@@ -12,17 +12,15 @@ public class Schedule {
     @EmbeddedId
     private ScheduleKey scheduleKey;
 
-
-    //TODO los name y referenced estan bien?
     //TODO doctor clinic y la key repiten campos?
     @ManyToOne
     @JoinColumns({
             @JoinColumn(
                     name = "doctor",
-                    referencedColumnName = "license"),
+                    referencedColumnName = "doctorLicense"),
             @JoinColumn(
                     name = "clinic",
-                    referencedColumnName = "id")
+                    referencedColumnName = "clinicid")
     })
     private DoctorClinic doctorClinic;
 

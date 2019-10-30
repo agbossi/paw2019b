@@ -22,14 +22,12 @@ public class DoctorClinic {
     private DoctorClinicKey doctorClinicKey;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "clinicid")
     private Clinic clinic;
 
-    @Column
+    @Column(name = "consultPrice")
     private int consultPrice;
-
-    //TODO doctor clinic tiene referencia a schedule aca pero no en tabla? y schedule al reves
-    //TODO mapped by?
+    
     @OneToMany(mappedBy = "doctorClinic")
     private List<Schedule> schedule;
 
@@ -45,6 +43,10 @@ public class DoctorClinic {
 
     public DoctorClinic(){
 
+    }
+
+    public DoctorClinicKey getDoctorClinicKey() {
+        return doctorClinicKey;
     }
 
     public Doctor getDoctor() {

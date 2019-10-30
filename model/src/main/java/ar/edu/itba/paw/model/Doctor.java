@@ -17,7 +17,7 @@ public class Doctor {
     @Id
     private String license;
 
-    @Column
+    @Column(name = "phoneNumber")
     private String phoneNumber;
 
     public Doctor(Specialty specialty,String license, String phoneNumber, User user){

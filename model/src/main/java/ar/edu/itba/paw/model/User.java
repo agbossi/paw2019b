@@ -8,14 +8,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "users")
 public class User {
-    //TODO buscar como es mappedBy email
-    @Column
+
+    @Column(name = "firstName")
     private String firstName;
 
-    @Column
+    @Column(name = "lastName")
     private String lastName;
 
-    @Column
+    @Column(name = "password")
     private String password;
 
     @Id
