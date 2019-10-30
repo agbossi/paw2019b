@@ -168,11 +168,11 @@ public class DoctorDaoImpl implements DoctorDao {
         final List<Doctor> list = query.getResultList();
         return list.isEmpty() ? null : list;
     }
-
+    //TODO se accede a campo name de specialty asi o o paso el objeto specialty?
     @Override
     public List<Doctor> getDoctorBySpecialty(Specialty specialty){
         final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor inner join doctor.user " +
-                "where doctor.specialty := specialty",Doctor.class);
+                "where doctor.specialty.name := specialty",Doctor.class);
 
         query.setParameter("specialty",specialty.getSpecialtyName());
         final List<Doctor> list = query.getResultList();

@@ -3,21 +3,18 @@ package ar.edu.itba.paw.model;
 import keys.ScheduleKey;
 
 import javax.persistence.*;
-import java.util.List;
+
 
 @Entity
 @Table(name = "schedule")
 public class Schedule {
 
-
-    private int day;
-
     @EmbeddedId
     private ScheduleKey scheduleKey;
 
-    private int hour;
 
-    //los name y referenced estan bien?
+    //TODO los name y referenced estan bien?
+    //TODO doctor clinic y la key repiten campos?
     @ManyToOne
     @JoinColumns({
             @JoinColumn(
@@ -29,25 +26,27 @@ public class Schedule {
     })
     private DoctorClinic doctorClinic;
 
-    //el doctor clinic lo agregue. TODO: buscar donde se usa el constructor
     public Schedule(int day, int hour,DoctorClinic doctorClinic) {
-        this.day = day;
-        this.hour = hour;
+        this.scheduleKey = new ScheduleKey(day,hour,doctorClinic.getDoctor().getLicense());
         this.doctorClinic = doctorClinic;
     }
 
     public Schedule(){}
 
     public int getDay() {
-        return day;
+        return getScheduleKey().getDay();
     }
 
     public void setDay(int day) {
-        this.day = day;
+        this.getScheduleKey().setDay(day);
     }
 
     public int getHour() {
-        return hour;
+        return getScheduleKey().getHour();
+    }
+
+    public ScheduleKey getScheduleKey() {
+        return scheduleKey;
     }
 
     public DoctorClinic getDoctorClinic() {
@@ -59,7 +58,7 @@ public class Schedule {
     }
 
     public void setHour(int hour) {
-        this.hour = hour;
+        this.getScheduleKey().setHour(hour);
     }
 
     @Override

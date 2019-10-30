@@ -8,6 +8,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -61,6 +64,36 @@ public class ImageDaoImpl implements ImageDao {
     @Override
     public long updateProfileImage(byte[] image, String doctor) {
         return jdbcTemplate.update("UPDATE images SET image = ? WHERE doctor = ?", image, doctor);
+    }
+
+    //Hibernate
+
+    @PersistenceContext
+    EntityManager entityManager;
+
+    @Override
+    public long createProfileImage(byte[] image, String doctor) {
+        Image image = new Image();
+        image.setImage(image);
+        image.setLicense(doctor);
+        entityManager.persist(image);
+        //TODO mismo problema que clinic
+    }
+
+    @Override
+    public Image getProfileImage(String doctor){
+        TypedQuery<Image> query = entityManager.createQuery("from Image as image where image.license := doctor",Image.class);
+        query.setParameter("doctor",doctor);
+        List<Image> list = query.getResultList();
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    @Override
+    public long updateProfileImage(byte[] image, String doctor){
+        TypedQuery<Image> query = entityManager.createQuery("update Image as im set im.image =: image where im.license =: doctor ",Image.class);
+        query.setParameter("image",image);
+        query.setParameter("doctor",doctor);
+        return query.executeUpdate();
     }
 
 }

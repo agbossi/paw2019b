@@ -30,6 +30,14 @@ public class DoctorClinicKey implements Serializable {
         return clinicId;
     }
 
+    public void setDoctorLicense(String doctorLicense) {
+        this.doctorLicense = doctorLicense;
+    }
+
+    public void setClinicId(int clinicId) {
+        this.clinicId = clinicId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

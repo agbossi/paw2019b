@@ -10,10 +10,10 @@ import java.util.Date;
 @Table(name = "appointments")
 public class Appointment {
 
-    //poner lo que va en bd en la clase key esto va como transient o no se rompe por estar en la key?
+    //TODO poner lo que va en bd en la clase key esto va como transient o no se rompe por estar en la key?
     private Calendar date;
 
-    //no estoy nada seguro de los name
+    //TODO no estoy nada seguro de los name
     //la key con doctor clinic choca?
     @ManyToOne
     @JoinColumns({
@@ -27,6 +27,7 @@ public class Appointment {
     private DoctorClinic doctorClinic;
 
     //tengo que inicializar esto en el constructor y poner datos aca?
+    //TODO agregar lo que sea que devuelve date.getTime()
     @EmbeddedId
     private AppointmentKey appointmentKey;
 
@@ -38,7 +39,9 @@ public class Appointment {
         this.date = date;
         this.doctorClinic = doctorClinic;
         this.patient = patient;
+        this.appointmentKey = new AppointmentKey(doctorClinic.getDoctor().getLicense(),doctorClinic.getClinic().getId(),date.getTime());
     }
+
     public Appointment(){
     }
 

@@ -38,12 +38,12 @@ public class ClinicServiceImpl implements ClinicService {
     }
 
     @Override
-    public List<Clinic> getClinicsByLocation(String location) {
+    public List<Clinic> getClinicsByLocation(Location location) {
         return clinicDao.getClinicsByLocation(location);
     }
 
     @Override
-    public boolean clinicExists(String name, String address, String location) {
+    public boolean clinicExists(String name, String address, Location location) {
         return clinicDao.clinicExists(name,address,location);
     }
 }

@@ -2,6 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
 import ar.edu.itba.paw.model.*;
+import keys.DoctorClinicKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
@@ -9,6 +10,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -118,6 +122,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
         return list.get(0);
     }
 
+    //no esta repetido este?
     @Override
     public List<DoctorClinic> getClinicsWithDoctor(String doctor) {
         final List<DoctorClinic> list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
@@ -130,7 +135,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
         }
         return list;
     }
-
+    //TODO dudas de como hacer esto
     @Override
     public List<DoctorClinic> getFilteredDoctors(final Location location, final Specialty specialty,
                                                  final String firstName, final String lastName, final Prepaid prepaid,
@@ -170,6 +175,48 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
         }, ROW_MAPPER);
 
         return (list.isEmpty() ? null : list);
+    }
+
+    //Hibernate
+
+    @PersistenceContext
+    EntityManager entityManager;
+
+    @Override
+    public DoctorClinic createDoctorClinic(Doctor doctor, Clinic clinic, int consultPrice){
+        DoctorClinic doctorClinic = new DoctorClinic(doctor,clinic,consultPrice);
+        entityManager.persist(doctorClinic);
+        return doctorClinic;
+    }
+
+    @Override
+    public List<DoctorClinic> getDoctorClinics(){
+        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc",DoctorClinic.class);
+        List<DoctorClinic> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    }
+
+    @Override
+    public List<DoctorClinic> getDoctorClinicsForDoctor(Doctor doctor) {
+        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc inner join dc.doctor as dcDoc inner join dcDoc.clinics as dcDocCli"  +
+                                         "inner join dcDocCli.users where dcDocCli.doctor.license := doctorLicense",DoctorClinic.class);
+        query.setParameter("doctorLicense",doctor.getLicense());
+        List<DoctorClinic> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    }
+
+    @Override
+    public List<DoctorClinic> getDoctorsInClinic(int clinic){
+        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc inner join dc.doctor as dcDoc inner join dcDoc.clinics as dcDocCli"  +
+                "inner join dcDocCli.users where dcDocCli.clinic.id := id",DoctorClinic.class);
+        query.setParameter("id",clinic);
+        List<DoctorClinic> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    }
+
+    @Override
+    public DoctorClinic getDoctorInClinic(String doctor, int clinic){
+        return entityManager.find(DoctorClinic.class,new DoctorClinicKey(doctor,clinic));
     }
 
 }

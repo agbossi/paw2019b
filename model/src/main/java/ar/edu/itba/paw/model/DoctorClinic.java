@@ -11,13 +11,13 @@ import java.util.List;
 @Table(name = "doctorClinics")
 public class DoctorClinic {
 
-    //estos dos no se si son oneToOne o ManyToOne
+    //TODO estos dos no se si son oneToOne o ManyToOne
     //esto va asi o los annotations dentro de la pk?
     @ManyToOne
     @JoinColumn(name = "license")
     private Doctor doctor;
 
-    //igual que en appointment, esto repite?
+    //TODO igual que en appointment, esto repite?
     @EmbeddedId
     private DoctorClinicKey doctorClinicKey;
 
@@ -28,7 +28,8 @@ public class DoctorClinic {
     @Column
     private int consultPrice;
 
-    //doctor clinic tiene referencia a schedule aca pero no en tabla? y schedule al reves
+    //TODO doctor clinic tiene referencia a schedule aca pero no en tabla? y schedule al reves
+    //TODO mapped by?
     @OneToMany(mappedBy = "doctorClinic")
     private List<Schedule> schedule;
 
@@ -38,6 +39,7 @@ public class DoctorClinic {
     public DoctorClinic(Doctor doctor, Clinic clinic, int consultPrice){
         this.doctor = doctor;
         this.clinic = clinic;
+        this.doctorClinicKey = new DoctorClinicKey(doctor.getLicense(),clinic.getId());
         this.consultPrice = consultPrice;
     }
 

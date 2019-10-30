@@ -109,8 +109,9 @@ public class LocationDaoImpl implements LocationDao {
     @Override
     public List<Location> getLocations(){
         TypedQuery<Location> query = entityManager.createQuery("from Location as location",Location.class);
-        List<Location> locations = query.getResultList();
-        return locations;
+        List<Location> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+        ;
     }
 
     @Override

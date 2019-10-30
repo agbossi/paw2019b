@@ -40,9 +40,6 @@ public class DoctorController {
     private ScheduleService scheduleService;
 
     @Autowired
-    private AppointmentService appointmentService;
-
-    @Autowired
     private SpecialtyService specialtyService;
 
     @Autowired
