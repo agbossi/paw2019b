@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.helpers;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
+import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -40,7 +41,7 @@ public class ValidationHelper {
     }
 
     public void clinicValidate(String name,String address,String location,BindingResult errors,Locale locale){
-        if(clinicService.clinicExists(name,address,location)){
+        if(clinicService.clinicExists(name,address,new Location(location))){
             FieldError clinicExists = new FieldError("form","location",messageSource.getMessage("clinic.already.exists",null,locale));
             errors.addError(clinicExists);
         }

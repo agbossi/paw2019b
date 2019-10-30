@@ -8,6 +8,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -150,4 +153,23 @@ public class AppointmentDaoImpl implements AppointmentDao {
         Object[] args = new Object[] {doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), day -1, hour};
         jdbcTemplate.update("delete from appointments where doctor = ? and clinic = ? and extract(dow from date) = ? and  extract(hour from date) = ?", args);
     }
+
+    //Hibernate
+
+    @PersistenceContext
+    EntityManager entityManager;
+
+    @Override
+    public Appointment createAppointment(DoctorClinic doctorClinic, User patient, Calendar date){
+        Appointment appointment = new Appointment(date,doctorClinic,patient);
+        entityManager.persist(appointment);
+        return appointment;
+    }
+
+    @Override
+    public List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic){
+
+    }
+
+
 }

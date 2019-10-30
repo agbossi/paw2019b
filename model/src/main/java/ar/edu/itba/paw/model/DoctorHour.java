@@ -1,7 +1,7 @@
 package ar.edu.itba.paw.model;
 
 import java.util.Calendar;
-
+//TODO Hibernate
 public class DoctorHour {
 
     private Calendar date;

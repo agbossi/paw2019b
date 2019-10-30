@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 @Embeddable
@@ -15,21 +16,20 @@ public class AppointmentKey implements Serializable {
     @Column(name = "clinic")
     private int clinicId;
 
-    //esto como seria para el tipo de dato?
     @Column(name = "date")
-    private Calendar date;
+    private Date date;
 
     public AppointmentKey(){
 
     }
 
-    public AppointmentKey(String doctor,int clinic,Calendar date){
+    public AppointmentKey(String doctor,int clinic,Date date){
         this.doctorLicense = doctor;
         this.clinicId = clinic;
         this.date = date;
     }
 
-    public Calendar getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -39,6 +39,18 @@ public class AppointmentKey implements Serializable {
 
     public int getClinic() {
         return clinicId;
+    }
+
+    public void setDoctorLicense(String doctorLicense) {
+        this.doctorLicense = doctorLicense;
+    }
+
+    public void setClinicId(int clinicId) {
+        this.clinicId = clinicId;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     @Override

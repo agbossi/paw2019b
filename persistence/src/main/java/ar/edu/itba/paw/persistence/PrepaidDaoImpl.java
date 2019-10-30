@@ -92,8 +92,9 @@ public class PrepaidDaoImpl implements PrepaidDao {
     @Override
     public List<Prepaid> getPrepaids(){
         TypedQuery<Prepaid> query = entityManager.createQuery("from Prepaid as prepaid",Prepaid.class);
-        List<Prepaid> prepaids = query.getResultList();
-        return prepaids;
+        List<Prepaid> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+        ;
     }
 
     @Override
