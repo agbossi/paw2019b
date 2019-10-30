@@ -13,21 +13,19 @@ public class Appointment {
     //TODO poner lo que va en bd en la clase key esto va como transient o no se rompe por estar en la key?
     private Calendar date;
 
-    //TODO no estoy nada seguro de los name
-    //la key con doctor clinic choca?
+
+    //TODO la key con doctor clinic choca?
     @ManyToOne
     @JoinColumns({
             @JoinColumn(
                     name = "doctor",
-                    referencedColumnName = "doctor"),
+                    referencedColumnName = "doctorLicense"),
             @JoinColumn(
                     name = "clinic",
-                    referencedColumnName = "clinic")
+                    referencedColumnName = "clinicid")
     })
     private DoctorClinic doctorClinic;
 
-    //tengo que inicializar esto en el constructor y poner datos aca?
-    //TODO agregar lo que sea que devuelve date.getTime()
     @EmbeddedId
     private AppointmentKey appointmentKey;
 
@@ -67,5 +65,9 @@ public class Appointment {
 
     public void setPatient(User patient) {
         this.patient = patient;
+    }
+
+    public AppointmentKey getAppointmentKey() {
+        return appointmentKey;
     }
 }

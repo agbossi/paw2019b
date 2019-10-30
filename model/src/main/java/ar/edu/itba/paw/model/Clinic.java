@@ -13,7 +13,7 @@ public class Clinic {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
-    @Column
+    @Column(name = "address")
     private String address;
 
     @ManyToOne

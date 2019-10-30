@@ -12,10 +12,10 @@ public class Image {
     private long id;
 
     @OneToOne
-    @JoinColumn(name = "license")
+    @JoinColumn(name = "doctor")
     private String license;
 
-    //esto no se como
+    @Column(name = "image")
     private InputStream image;
 
     public Image(long id, String license, InputStream image) {
