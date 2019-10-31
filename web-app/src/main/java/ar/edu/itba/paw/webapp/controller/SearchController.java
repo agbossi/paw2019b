@@ -41,7 +41,7 @@ public class SearchController {
     @RequestMapping(value = "/search", method = {RequestMethod.GET})
     public ModelAndView search(@ModelAttribute("searchForm") final SearchForm form) {
 
-        final ModelAndView mav = new ModelAndView("base/searchBar");
+        final ModelAndView mav = new ModelAndView("index");
 
         String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
         Patient patient = patientService.getPatientByEmail(userEmail);
@@ -54,9 +54,11 @@ public class SearchController {
     }
 
     @RequestMapping(value = "/results", method = {RequestMethod.GET})
-    public ModelAndView backToResults(@ModelAttribute("searchForm") final SearchForm form,HttpServletRequest request){
-        UserContextHelper.loadUserQuery(form,request);
-        final ModelAndView mav = new ModelAndView("base/searchBar");
+    public ModelAndView backToResults(@ModelAttribute("searchForm") final SearchForm form, HttpServletRequest request){
+
+        //UserContextHelper.loadUserQuery(form,request);
+
+        final ModelAndView mav = new ModelAndView("index");
 
         String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
         Patient patient = patientService.getPatientByEmail(userEmail);
@@ -67,7 +69,6 @@ public class SearchController {
         return mav;
     }
 
-    //de aca puedo ir a registrarse, login, un results/id o get
     @RequestMapping(value = "/results", method = {RequestMethod.POST})
     public ModelAndView results(@Valid @ModelAttribute("searchForm") final SearchForm form, final BindingResult errors, HttpServletRequest request) {
 
@@ -76,15 +77,13 @@ public class SearchController {
 
         //ver que es el attr que no se usa
         //saving form data in case someone does login or registration after query
-        UserContextHelper.saveUserQuery(form,request);
+        //UserContextHelper.saveUserQuery(form,request);
 
         final ModelAndView mav = new ModelAndView("results");
 
         mav.addObject("patientPrepaid", form.getPrepaid());
         viewModifier.addSearchInfo(mav);
 
-
-        // TODO: once we implement a proper query builder fix this and search form attributes !!
         List<Doctor> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
                 new Specialty(form.getSpecialty()), form.getFirstName(),form.getLastName(),new Prepaid(form.getPrepaid()),form.getConsultPrice());
 

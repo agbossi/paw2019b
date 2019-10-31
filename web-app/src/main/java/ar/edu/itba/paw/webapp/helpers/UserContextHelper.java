@@ -39,22 +39,27 @@ public class UserContextHelper {
     }
 
     public static void loadUserQuery(SearchForm form,HttpServletRequest request){
-        HttpSession session = request.getSession();
+        if(request!=null) {
+            HttpSession session = request.getSession();
 
-        form.setFirstName((String)session.getAttribute("firstName"));
-        form.setLastName((String)session.getAttribute("lastName"));
-        form.setConsultPrice((int)session.getAttribute("consultPrice"));
-        form.setLocation((String)session.getAttribute("location"));
-        form.setPrepaid((String)session.getAttribute("prepaid"));
-        form.setSpecialty((String)session.getAttribute("specialty"));
+            if(session != null) {
+                if(form != null) {
+                    form.setFirstName((String)session.getAttribute("firstName"));
+                    form.setLastName((String)session.getAttribute("lastName"));
+                    form.setConsultPrice((int)session.getAttribute("consultPrice"));
+                    form.setLocation((String)session.getAttribute("location"));
+                    form.setPrepaid((String)session.getAttribute("prepaid"));
+                    form.setSpecialty((String)session.getAttribute("specialty"));
+                }
 
-        session.removeAttribute("firstName");
-        session.removeAttribute("lastName");
-        session.removeAttribute("consultPrice");
-        session.removeAttribute("location");
-        session.removeAttribute("prepaid");
-        session.removeAttribute("specialty");
-
+                session.removeAttribute("firstName");
+                session.removeAttribute("lastName");
+                session.removeAttribute("consultPrice");
+                session.removeAttribute("location");
+                session.removeAttribute("prepaid");
+                session.removeAttribute("specialty");
+            }
+        }
     }
 
 }
