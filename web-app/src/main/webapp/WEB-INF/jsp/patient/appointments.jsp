@@ -42,8 +42,7 @@
                 <c:otherwise>
                     <div class="header-info">
                         <spring:message code="no.appointments"/>
-                    </div>
-                    <div>
+                        <br/>
                         <a href=<c:url value="/"/>><spring:message code="go.back.home"/></a>
                     </div>
                 </c:otherwise>
