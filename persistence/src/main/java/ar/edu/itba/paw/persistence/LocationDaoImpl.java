@@ -111,12 +111,11 @@ public class LocationDaoImpl implements LocationDao {
         TypedQuery<Location> query = entityManager.createQuery("from Location as location",Location.class);
         List<Location> list = query.getResultList();
         return list.isEmpty() ? null : list;
-        ;
     }
 
     @Override
     public long deleteLocation(String name){
-        TypedQuery<Location> query = entityManager.createQuery("delete from Location as location where location.name =: name",Location.class);
+        TypedQuery<Location> query = entityManager.createQuery("delete from Location as location where location.name = :name",Location.class);
         query.setParameter("name",name);
         return query.executeUpdate();
     }

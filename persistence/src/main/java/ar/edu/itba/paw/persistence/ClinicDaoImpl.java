@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Repository
 public class ClinicDaoImpl implements ClinicDao {
-    private JdbcTemplate jdbcTemplate;
+    /*private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
         private final static RowMapper<Clinic> ROW_MAPPER = new RowMapper<Clinic>() {
@@ -91,7 +91,7 @@ public class ClinicDaoImpl implements ClinicDao {
         final List<Clinic> list = jdbcTemplate.query("select * from clinics where name = ? and address = ? and location = ?",ROW_MAPPER,name,address,location);
 
         return !list.isEmpty();
-    }
+    } */
 
     //Hibernate
 
@@ -106,11 +106,12 @@ public class ClinicDaoImpl implements ClinicDao {
         clinic.setAddress(address);
         entityManager.persist(clinic);
         //tengo que hacer un get a bd? TODO ver como identificamos id en clinicas para buscar por este
+        return null;
     }
 
     @Override
     public Clinic getClinicByName(String clinicName){
-        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic where clinic.name := name",Clinic.class);
+        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic where clinic.name = :name",Clinic.class);
         query.setParameter("name",clinicName);
         List<Clinic> list = query.getResultList();
         return list.isEmpty() ? null : list.get(0);
@@ -125,13 +126,12 @@ public class ClinicDaoImpl implements ClinicDao {
 
     @Override
     public Clinic getClinicById(int id) {
-
+        return null;
     }
 
-    //se puede hacer un = objetos? (location)
     @Override
     public List<Clinic> getClinicsByLocation(Location location){
-        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic where clinic.location.name := location",Clinic.class);
+        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic where clinic.location.name = :location",Clinic.class);
         query.setParameter("location",location.getLocationName());
         List<Clinic> list = query.getResultList();
         return list.isEmpty() ? null : list;
@@ -139,7 +139,7 @@ public class ClinicDaoImpl implements ClinicDao {
     @Override
     public boolean clinicExists(String name, String address, Location location){
         TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic" +
-                " where clinic.location.name := location and clinic.name := name and clinic.address := address",Clinic.class);
+                " where clinic.location.name = :location and clinic.name = :name and clinic.address = :address",Clinic.class);
         query.setParameter("location",location.getLocationName());
         query.setParameter("name",name);
         query.setParameter("address",address);
