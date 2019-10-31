@@ -8,11 +8,6 @@
         <%@ page isELIgnored="false" %>
         <link href="<c:url value="/resources/css/searchbar.css" />" rel="stylesheet" type="text/css" />
         <jsp:include page="navbar.jsp" />
-        <script>
-            function clinicByLocation() {
-
-            }
-        </script>
     </head>
     <body>
         <div class="search-bar">
@@ -26,7 +21,7 @@
                         <form:label path="location"><spring:message code="location"/></form:label>
                     </div>
                     <div>
-                        <form:select path="location">
+                        <form:select class="search-element" path="location">
                             <form:option value=""><spring:message code="none"/></form:option>
                             <c:forEach var="location" items="${locations}">
                                 <form:option value="${location.locationName}"/>
@@ -41,7 +36,7 @@
                         <form:label path="specialty"><spring:message code="specialty"/></form:label>
                     </div>
                     <div>
-                        <form:select path="specialty">
+                        <form:select class="search-element" path="specialty">
                             <form:option value=""><spring:message code="none"/></form:option>
                             <c:forEach var="specialty" items="${specialties}">
                                 <form:option value="${specialty.specialtyName}"/>
@@ -56,10 +51,15 @@
                             <form:label path="prepaid"><spring:message code="prepaid"/></form:label>
                         </div>
                         <div>
-                            <form:select path="prepaid">
+                            <form:select class="search-element" path="prepaid">
+                                <c:if test="${not empty patientPrepaid}">
+                                    <form:option value="${patientPrepaid}"/>
+                                </c:if>
                                 <form:option value=""><spring:message code="none"/></form:option>
                                 <c:forEach var="prepaid" items="${prepaids}">
-                                    <form:option value="${prepaid.name}"/>
+                                    <c:if test="${patientPrepaid != prepaid.name}">
+                                        <form:option value="${prepaid.name}"/>
+                                    </c:if>
                                 </c:forEach>
                             </form:select>
                             <form:errors path="prepaid" element="p"/>
@@ -71,7 +71,7 @@
                             <form:label path="firstName"><spring:message code="user.first.name"/></form:label>
                         </div>
                         <div>
-                            <form:input type="text" path="firstName"/>
+                            <form:input class="search-element" type="text" path="firstName"/>
                             <form:errors path="firstName" element="p"/>
                             <br/>
                         </div>
@@ -81,7 +81,7 @@
                             <form:label path="lastName"><spring:message code="user.last.name"/></form:label>
                         </div>
                         <div>
-                            <form:input type="text" path="lastName"/>
+                            <form:input class="search-element" type="text" path="lastName"/>
                             <form:errors path="lastName" element="p"/>
                             <br/>
                         </div>
@@ -91,16 +91,28 @@
                             <form:label path="consultPrice"><spring:message code="consult.price"/> </form:label>
                         </div>
                         <div>
-                            <form:input type="number" path="consultPrice"/>
+                            <form:input class="search-element" type="number" path="consultPrice" minlength="1" required="true" value="0"/>
                             <form:errors path="consultPrice" element="p"/>
                             <br/>
                         </div>
                     </div>
                 <div class="list-group-item">
-                    <input type="submit" value="<spring:message code="submit.search"/>">
+                    <input type="submit" class="search-element" value="<spring:message code="submit.search"/>">
                 </div>
                 </form:form>
             </div>
         </div>
     </body>
 </html>
+
+<script type="text/javascript">
+    numInputs = document.querySelectorAll('input[type=number]');
+
+    numInputs.forEach(function (input) {
+        input.addEventListener('change', function (e) {
+            if (e.target.value == '') {
+                e.target.value = 0
+            }
+        })
+    })
+</script>
