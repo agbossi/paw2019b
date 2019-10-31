@@ -152,18 +152,18 @@ public class DoctorDaoImpl implements DoctorDao {
     @Override
     public List<Doctor> getDoctorByName(String firstName,String lastName) {
         final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor inner join doctor.user " +
-                "where doctor.firstName := firstName and doctor.lastName := lastName",Doctor.class);
+                "where doctor.user.firstName = :firstName and doctor.user.lastName = :lastName",Doctor.class);
 
         query.setParameter("firstName",firstName);
         query.setParameter("lastName", lastName);
         final List<Doctor> list = query.getResultList();
         return list.isEmpty() ? null : list;
     }
-    //TODO se accede a campo name de specialty asi o o paso el objeto specialty?
+
     @Override
     public List<Doctor> getDoctorBySpecialty(Specialty specialty){
         final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor inner join doctor.user " +
-                "where doctor.specialty.name := specialty",Doctor.class);
+                "where doctor.specialty.name = :specialty",Doctor.class);
 
         query.setParameter("specialty",specialty.getSpecialtyName());
         final List<Doctor> list = query.getResultList();
@@ -173,7 +173,7 @@ public class DoctorDaoImpl implements DoctorDao {
     @Override
     public boolean isDoctor(String email) {
         final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor inner join doctor.user " +
-                "where doctor.email := email",Doctor.class);
+                "where doctor.user.email = :email",Doctor.class);
 
         query.setParameter("email",email);
         final List<Doctor> list = query.getResultList();
@@ -183,7 +183,7 @@ public class DoctorDaoImpl implements DoctorDao {
     @Override
     public Doctor getDoctorByEmail(String email){
         final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor inner join doctor.user " +
-                "where doctor.email := email",Doctor.class);
+                "where doctor.user.email = :email",Doctor.class);
 
         query.setParameter("email",email);
         final List<Doctor> list = query.getResultList();
@@ -197,14 +197,14 @@ public class DoctorDaoImpl implements DoctorDao {
         query3.setParameter("license", license);
         int count3 = query3.executeUpdate(); */
 
-        final TypedQuery<Doctor> query = entityManager.createQuery("delete from Doctor as doctor where doctor.license =: license",Doctor.class);
+        final TypedQuery<Doctor> query = entityManager.createQuery("delete from Doctor as doctor where doctor.license = :license",Doctor.class);
         query.setParameter("license",license);
         return query.executeUpdate();
     }
 
     @Override
     public void updateDoctor(String license, Map<String, String> args){
-        final TypedQuery<Doctor> query = entityManager.createQuery("update Doctor doctor set doctor.phoneNumber =: phoneNumber, doctor.specialty =: specialty where doctor.license =: license", Doctor.class);
+        final TypedQuery<Doctor> query = entityManager.createQuery("update Doctor doctor set doctor.phoneNumber = :phoneNumber, doctor.specialty = :specialty where doctor.license = :license", Doctor.class);
         query.setParameter("license",license);
         query.setParameter("specialty",args.get("specialty"));
         query.setParameter("phoneNumber",args.get("phoneNumber"));

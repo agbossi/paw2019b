@@ -94,12 +94,11 @@ public class PrepaidDaoImpl implements PrepaidDao {
         TypedQuery<Prepaid> query = entityManager.createQuery("from Prepaid as prepaid",Prepaid.class);
         List<Prepaid> list = query.getResultList();
         return list.isEmpty() ? null : list;
-        ;
     }
 
     @Override
     public long deletePrepaid(String name){
-        TypedQuery<Prepaid> query = entityManager.createQuery("delete from Prepaid as prepaid where prepaid.name =: name",Prepaid.class);
+        TypedQuery<Prepaid> query = entityManager.createQuery("delete from Prepaid as prepaid where prepaid.name = :name",Prepaid.class);
         query.setParameter("name",name);
         return query.executeUpdate();
     }

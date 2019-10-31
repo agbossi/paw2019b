@@ -13,6 +13,7 @@ public class Schedule {
     private ScheduleKey scheduleKey;
 
     //TODO doctor clinic y la key repiten campos?
+    //segun no alvaro deberia funcionar, por las dudas no meterse en key si hay referencia en el obj
     @ManyToOne
     @JoinColumns({
             @JoinColumn(

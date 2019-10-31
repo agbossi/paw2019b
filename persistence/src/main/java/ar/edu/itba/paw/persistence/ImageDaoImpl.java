@@ -21,7 +21,7 @@ import java.util.Map;
 @Repository
 public class ImageDaoImpl implements ImageDao {
 
-    private JdbcTemplate jdbcTemplate;
+   /* private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Image> ROW_MAPPER = new RowMapper<Image>() {
@@ -64,7 +64,7 @@ public class ImageDaoImpl implements ImageDao {
     public long updateProfileImage(byte[] image, String doctor) {
         return jdbcTemplate.update("UPDATE images SET image = ? WHERE doctor = ?", image, doctor);
     }
-
+        */
     //Hibernate
 
     @PersistenceContext
@@ -72,16 +72,18 @@ public class ImageDaoImpl implements ImageDao {
 
     @Override
     public long createProfileImage(byte[] image, String doctor) {
-        Image image = new Image();
-        image.setImage(image);
-        image.setLicense(doctor);
-        entityManager.persist(image);
+        Image im = new Image();
+        //TODO conflicto de tipos
+       // im.setImage(image);
+        //im.setLicense(doctor);
+        //entityManager.persist(image);
         //TODO mismo problema que clinic
+        return 0;
     }
 
     @Override
     public Image getProfileImage(String doctor){
-        TypedQuery<Image> query = entityManager.createQuery("from Image as image where image.license := doctor",Image.class);
+        TypedQuery<Image> query = entityManager.createQuery("from Image as image where image.license = :doctor",Image.class);
         query.setParameter("doctor",doctor);
         List<Image> list = query.getResultList();
         return list.isEmpty() ? null : list.get(0);
@@ -89,7 +91,7 @@ public class ImageDaoImpl implements ImageDao {
 
     @Override
     public long updateProfileImage(byte[] image, String doctor){
-        TypedQuery<Image> query = entityManager.createQuery("update Image as im set im.image =: image where im.license =: doctor ",Image.class);
+        TypedQuery<Image> query = entityManager.createQuery("update Image as im set im.image = :image where im.license = :doctor ",Image.class);
         query.setParameter("image",image);
         query.setParameter("doctor",doctor);
         return query.executeUpdate();

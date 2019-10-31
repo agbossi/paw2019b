@@ -98,7 +98,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao{
 
     @Override
     public long deleteSpecialty(String name) {
-        final TypedQuery<Specialty> query = entityManager.createQuery("delete from Specialty as specialty where specialty.name =: name",Specialty.class);
+        final TypedQuery<Specialty> query = entityManager.createQuery("delete from Specialty as specialty where specialty.name = :name",Specialty.class);
         query.setParameter("name",name);
         return query.executeUpdate();
     }

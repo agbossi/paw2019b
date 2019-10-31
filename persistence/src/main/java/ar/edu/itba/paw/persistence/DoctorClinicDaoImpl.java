@@ -24,7 +24,7 @@ import java.util.Map;
 @Repository
 public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
-    private JdbcTemplate jdbcTemplate;
+/*    private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<DoctorClinic> ROW_MAPPER = new RowMapper<DoctorClinic>() {
@@ -167,8 +167,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
             }
         }, ROW_MAPPER);
 
-        return list;
-    }
+        return (list.isEmpty() ? null : list);
+    } */
 
     //Hibernate
 
@@ -191,8 +191,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public List<DoctorClinic> getDoctorClinicsForDoctor(Doctor doctor) {
-        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc inner join dc.doctor as dcDoc inner join dcDoc.clinics as dcDocCli"  +
-                                         "inner join dcDocCli.users where dcDocCli.doctor.license := doctorLicense",DoctorClinic.class);
+        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc inner join dc.doctor as dcDoc inner join dc.clinic as dcDocCli"  +
+                                         "inner join dcDoc.user where dc.doctor.license = :doctorLicense",DoctorClinic.class);
         query.setParameter("doctorLicense",doctor.getLicense());
         List<DoctorClinic> list = query.getResultList();
         return list.isEmpty() ? null : list;
@@ -200,8 +200,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public List<DoctorClinic> getDoctorsInClinic(int clinic){
-        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc inner join dc.doctor as dcDoc inner join dcDoc.clinics as dcDocCli"  +
-                "inner join dcDocCli.users where dcDocCli.clinic.id := id",DoctorClinic.class);
+        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc inner join dc.doctor as dcDoc inner join dc.clinic as dcDocCli"  +
+                "inner join dcDoc.user where dc.clinic.id = :id",DoctorClinic.class);
         query.setParameter("id",clinic);
         List<DoctorClinic> list = query.getResultList();
         return list.isEmpty() ? null : list;
@@ -210,6 +210,20 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     @Override
     public DoctorClinic getDoctorInClinic(String doctor, int clinic){
         return entityManager.find(DoctorClinic.class,new DoctorClinicKey(doctor,clinic));
+    }
+
+    //solo para que no explote la clase
+    @Override
+    public List<DoctorClinic> getClinicsWithDoctor(String doctor){
+        Doctor d = entityManager.find(Doctor.class,doctor);
+        return getDoctorClinicsForDoctor(d);
+    }
+
+    @Override
+    public List<DoctorClinic> getFilteredDoctors(final Location location, final Specialty specialty,
+                                                 final String firstName, final String lastName, final Prepaid prepaid,
+                                                 final int consultPrice){
+        return null;
     }
 
 }

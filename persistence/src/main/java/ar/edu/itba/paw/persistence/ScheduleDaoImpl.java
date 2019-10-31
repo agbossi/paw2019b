@@ -93,8 +93,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
     @Override
     public List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic){
-        final TypedQuery<Schedule> query = entityManager.createQuery("from Schedule as schedule where schedule.doctor := doctor " +
-                "and schedule.clinic := clinic",Schedule.class);
+        final TypedQuery<Schedule> query = entityManager.createQuery("from Schedule as schedule where schedule.doctorClinic.doctor = :doctor " +
+                "and schedule.doctorClinic.clinic = :clinic",Schedule.class);
 
         query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
         query.setParameter("clinic",doctorClinic.getClinic().getId());
@@ -112,7 +112,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
     @Override
     public boolean doctorHasSchedule(Doctor doctor, int day, int hour) {
         final TypedQuery<Schedule> query = entityManager.createQuery("from Schedule as schedule " +
-                "where schedule.doctor := doctor and schedule.day := day and schedule.hour := hour",Schedule.class);
+                "where schedule.doctorClinic.doctor = :doctor and schedule.scheduleKey.day = :day and schedule.scheduleKey.hour = :hour",Schedule.class);
 
         query.setParameter("doctor",doctor);
         query.setParameter("day",day);
@@ -124,8 +124,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
     @Override
     public void deleteSchedule(int hour, int day, DoctorClinic doctorClinic){
         final TypedQuery<Schedule> query = entityManager.createQuery("delete from Schedule as schedule " +
-                "where schedule.day =: day and schedule.hour =: hour " +
-                "and schedule.doctor =: doctor and schedule.clinic =: clinic",Schedule.class);
+                "where schedule.scheduleKey.day =: day and schedule.scheduleKey.hour =: hour " +
+                "and schedule.doctorClinic.doctor =: doctor and schedule.doctorClinic.clinic =: clinic",Schedule.class);
         query.setParameter("day",day);
         query.setParameter("hour",hour);
         query.setParameter("doctor",doctorClinic.getDoctor().getLicense());

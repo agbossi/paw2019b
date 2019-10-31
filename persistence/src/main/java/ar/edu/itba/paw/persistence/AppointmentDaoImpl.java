@@ -18,7 +18,7 @@ import java.util.*;
 
 @Repository
 public class AppointmentDaoImpl implements AppointmentDao {
-
+    /*
     private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
@@ -152,7 +152,8 @@ public class AppointmentDaoImpl implements AppointmentDao {
     public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour){
         Object[] args = new Object[] {doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), day -1, hour};
         jdbcTemplate.update("delete from appointments where doctor = ? and clinic = ? and extract(dow from date) = ? and  extract(hour from date) = ?", args);
-    }
+
+    } */
 
     //Hibernate
 
@@ -166,8 +167,53 @@ public class AppointmentDaoImpl implements AppointmentDao {
         return appointment;
     }
 
+   //TODO ver que esta query hace lo que tiene que hacer
     @Override
     public List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic){
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap inner join ap.patient as pat inner join ap.doctorClinic as docCli inner join docCli.doctor as doc inner join docCli.clinic as cli" +
+                " where ap.doctorClinic.doctor = :doctor and ap.doctorClinic.clinic = :clinic",Appointment.class);
+        query.setParameter("doctor",doctorClinic.getDoctor());
+        query.setParameter("clinic",doctorClinic.getClinic());
+        List<Appointment> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    }
+
+    @Override
+    public List<Appointment> getPatientsAppointments(User patient){
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap inner join ap.patient as pat inner join ap.doctorClinic as docCli inner join docCli.doctor as doc inner join docCli.clinic as cli" +
+                " where pat.email = :email",Appointment.class);
+        query.setParameter("email",patient.getEmail());
+        List<Appointment> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    }
+
+    @Override
+    public List<Appointment> getAllDocAppointmentsOnSchedule(DoctorClinic doctor, int day, int hour){
+        return null;
+    }
+
+    @Override
+    public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date){
+
+    }
+
+    @Override
+    public Appointment hasAppointment(DoctorClinic doctorClinic, Calendar date){
+        return null;
+    }
+
+    @Override
+    public List<Appointment> getAllDoctorsAppointments(Doctor doctor){
+        return null;
+    }
+
+    @Override
+    public boolean hasAppointment(String doctorLicense, String patientEmail, Calendar date){
+        return false;
+    }
+
+    @Override
+    public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour){
 
     }
 

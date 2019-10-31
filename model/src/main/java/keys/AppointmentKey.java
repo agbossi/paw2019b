@@ -10,13 +10,13 @@ import java.util.Objects;
 @Embeddable
 public class AppointmentKey implements Serializable {
 
-    @Column(name = "doctor")
+    @Column
     private String doctorLicense;
 
-    @Column(name = "clinic")
+    @Column
     private int clinicId;
 
-    @Column(name = "date")
+    @Column
     private Date date;
 
     public AppointmentKey(){

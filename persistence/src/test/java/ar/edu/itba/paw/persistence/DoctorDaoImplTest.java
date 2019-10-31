@@ -56,7 +56,7 @@ public class DoctorDaoImplTest {
 
     @Test
     public void testCreate(){
-        Doctor doctor = doctorDao.createDoctor(specialty,license,phone,docUser.getEmail());
+        Doctor doctor = doctorDao.createDoctor(specialty,license,phone,docUser);
 
         assertNotNull(doctor);
         assertEquals(docUser.getEmail(), doctor.getEmail());

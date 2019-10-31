@@ -8,10 +8,10 @@ import java.util.Objects;
 @Embeddable
 public class DoctorClinicKey implements Serializable {
 
-    @Column(name = "doctorLicense")
+    @Column
     private String doctorLicense;
 
-    @Column(name = "clinicid")
+    @Column
     private int clinicId;
 
     public DoctorClinicKey(String doctorLicense, int clinicId) {

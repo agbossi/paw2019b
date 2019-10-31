@@ -99,8 +99,7 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
 
     @Override
     public boolean clinicHasPrepaid(String prepaid, int clinic){
-        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p inner join p.clinic" +
-                "where p.clinic := clinic and p.prepaid := prepaid",PrepaidToClinic.class);
+        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p inner join p.clinic as pc where pc.id = :clinic and p.prepaid = :prepaid",PrepaidToClinic.class);
         query.setParameter("clinic",clinic);
         query.setParameter("prepaid",prepaid);
         List<PrepaidToClinic> list = query.getResultList();
