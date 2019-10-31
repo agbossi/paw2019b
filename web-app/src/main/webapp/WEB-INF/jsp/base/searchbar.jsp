@@ -8,11 +8,6 @@
         <%@ page isELIgnored="false" %>
         <link href="<c:url value="/resources/css/searchbar.css" />" rel="stylesheet" type="text/css" />
         <jsp:include page="navbar.jsp" />
-        <script>
-            function clinicByLocation() {
-
-            }
-        </script>
     </head>
     <body>
         <div class="search-bar">
@@ -96,7 +91,7 @@
                             <form:label path="consultPrice"><spring:message code="consult.price"/> </form:label>
                         </div>
                         <div>
-                            <form:input class="search-element" type="number" path="consultPrice"/>
+                            <form:input class="search-element" type="number" path="consultPrice" minlength="1" required="true" value="0"/>
                             <form:errors path="consultPrice" element="p"/>
                             <br/>
                         </div>
@@ -109,3 +104,15 @@
         </div>
     </body>
 </html>
+
+<script type="text/javascript">
+    numInputs = document.querySelectorAll('input[type=number]');
+
+    numInputs.forEach(function (input) {
+        input.addEventListener('change', function (e) {
+            if (e.target.value == '') {
+                e.target.value = 0
+            }
+        })
+    })
+</script>
