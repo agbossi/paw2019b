@@ -2,7 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.model.Doctor;
-import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Specialty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -67,22 +66,14 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getDoctorByName(String firstName,String lastName) {
-        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName " +
+        return jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName " +
                 "from doctors join users on doctors.email = users.email where firstName = ? and lastName = ?",ROW_MAPPER,firstName,lastName);
-        if(list.isEmpty()){
-            return null;
-        }
-        return list;
     }
 
     @Override
     public List<Doctor> getDoctorBySpecialty(Specialty specialty) {
-        final List<Doctor> list = jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName " +
+        return jdbcTemplate.query("select specialty,license,phoneNumber,doctors.email,firstName,lastName " +
                                "from doctors join users on doctors.email = users.email where specialty = ?",ROW_MAPPER,specialty.getSpecialtyName());
-        if(list.isEmpty()){
-            return null;
-        }
-        return list;
     }
 
     @Override

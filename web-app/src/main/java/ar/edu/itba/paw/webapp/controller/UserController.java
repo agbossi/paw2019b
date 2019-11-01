@@ -32,7 +32,7 @@ public class UserController {
     private PatientService patientService;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;]
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private SignUpAuthentication signUpAuthentication;

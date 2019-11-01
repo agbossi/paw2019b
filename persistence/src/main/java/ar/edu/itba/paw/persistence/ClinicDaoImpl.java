@@ -53,11 +53,7 @@ public class ClinicDaoImpl implements ClinicDao {
 
     @Override
     public Clinic getClinicByName(String clinicName) {
-        final List<Clinic> list = jdbcTemplate.query("select * from clinics where name = ?",ROW_MAPPER,clinicName);
-        if(list.isEmpty()) {
-            return null;
-        }
-        return list.get(0);
+        return jdbcTemplate.query("select * from clinics where name = ?",ROW_MAPPER,clinicName);
     }
 
     @Override
@@ -76,17 +72,12 @@ public class ClinicDaoImpl implements ClinicDao {
 
     @Override
     public List<Clinic> getClinicsByLocation(String location) {
-        final List<Clinic> list = jdbcTemplate.query("select * from clinics where location = ?",ROW_MAPPER,location);
-        if(list.isEmpty()) {
-            return null;
-        }
-        return list;
+        return jdbcTemplate.query("select * from clinics where location = ?",ROW_MAPPER,location);
     }
 
     @Override
     public boolean clinicExists(String name, String address, String location) {
         final List<Clinic> list = jdbcTemplate.query("select * from clinics where name = ? and address = ? and location = ?",ROW_MAPPER,name,address,location);
-
         return !list.isEmpty();
     }
 }
