@@ -29,17 +29,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private DoctorService doctorService;
 
-    @Autowired
-    private EmailService emailService;
-
-    @Autowired
-    private MessageSource messageSource;
-
     @Transactional
     @Override
     public User createUser(String firstName,String lastName, String password, String email) {
         Locale locale = LocaleContextHolder.getLocale();
-        emailService.sendSimpleMail(email,messageSource.getMessage("sign.up.subject",null,locale),firstName + " " + " " + lastName + " " +messageSource.getMessage("sign.up.message",null,locale));
         return userDao.createUser(firstName,lastName,password,email);
     }
 

@@ -79,8 +79,6 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-        System.out.println(rememberMeKey);
         return new PawUrlAuthenticationSuccessHandler("/");
     }
 
