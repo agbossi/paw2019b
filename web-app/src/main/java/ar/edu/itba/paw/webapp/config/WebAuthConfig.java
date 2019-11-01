@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.config;
 import ar.edu.itba.paw.webapp.auth.PawUrlAuthenticationSuccessHandler;
 import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,12 +23,15 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableWebSecurity
-@PropertySource("classpath:authKey.properties")
+@PropertySource(value = "classpath:authKey.properties")
 @ComponentScan("ar.edu.itba.paw.webapp.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public static final BCryptPasswordEncoder B_CRYPT_PASSWORD_ENCODER = new BCryptPasswordEncoder();
     @Autowired
     private PawUserDetailsService userDetailsService;
+
+    @Value("${key}")
+    private String rememberMeKey;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -54,7 +58,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                     .successHandler(myAuthenticationSuccessHandler())
                 .and().rememberMe()
                     .rememberMeParameter("rememberme")
-                    .userDetailsService(userDetailsService).key("${key}")
+                    .userDetailsService(userDetailsService).key(rememberMeKey)
                     .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
                 .and().logout()
                     .logoutUrl("/logout")
