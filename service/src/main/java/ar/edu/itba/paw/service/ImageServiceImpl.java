@@ -15,7 +15,7 @@ import java.io.IOException;
 public class ImageServiceImpl implements ImageService {
 
     @Autowired
-    ImageDao imageDao;
+    private ImageDao imageDao;
 
     @Transactional
     @Override

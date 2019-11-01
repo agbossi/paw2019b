@@ -15,7 +15,7 @@ import java.util.List;
 public class PrepaidToClinicServiceImpl implements PrepaidToClinicService {
 
     @Autowired
-    PrepaidToClinicDao prepaidToClinicDao;
+    private PrepaidToClinicDao prepaidToClinicDao;
 
     @Override
     public List<PrepaidToClinic> getPrepaidToClinics() {

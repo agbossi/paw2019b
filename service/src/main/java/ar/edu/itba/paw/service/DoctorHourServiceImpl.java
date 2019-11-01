@@ -17,10 +17,10 @@ import java.util.List;
 public class DoctorHourServiceImpl implements DoctorHourService {
 
     @Autowired
-    AppointmentService appointmentService;
+    private AppointmentService appointmentService;
 
     @Autowired
-    ScheduleService scheduleService;
+    private ScheduleService scheduleService;
 
 
     @Override

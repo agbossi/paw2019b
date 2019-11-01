@@ -68,7 +68,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date,boolean cancelledByDoctor) {
         Locale locale = LocaleContextHolder.getLocale();
-        String dateString = dateString(date);
         if(cancelledByDoctor){
             emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.cancelled.subject",null,locale),messageSource.getMessage("appointment.cancelled.by.doctor.text",null,locale)  + " " + dateString(date));
         }else {
