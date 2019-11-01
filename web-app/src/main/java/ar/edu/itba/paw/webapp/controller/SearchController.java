@@ -3,8 +3,8 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.SearchForm;
-import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
+import ar.edu.itba.paw.webapp.helpers.ViewModifierHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class SearchController {
@@ -33,9 +32,6 @@ public class SearchController {
     private PatientService patientService;
 
     @Autowired
-    private ModelAndViewModifier viewModifier;
-
-    @Autowired
     private DoctorHourService doctorHourService;
 
     @RequestMapping(value = "/search", method = {RequestMethod.GET})
@@ -48,7 +44,7 @@ public class SearchController {
         if(patient != null) {
             mav.addObject("patientPrepaid", patient.getPrepaid());
         }
-        viewModifier.addSearchInfo(mav);
+        ViewModifierHelper.addSearchInfo(mav);
 
         return mav;
     }
@@ -63,7 +59,7 @@ public class SearchController {
         if(patient != null) {
             mav.addObject("patientPrepaid", patient.getPrepaid());
         }
-        viewModifier.addSearchInfo(mav);
+        ViewModifierHelper.addSearchInfo(mav);
         return mav;
     }
 
@@ -76,12 +72,12 @@ public class SearchController {
         final ModelAndView mav = new ModelAndView("results");
 
         mav.addObject("patientPrepaid", form.getPrepaid());
-        viewModifier.addSearchInfo(mav);
+        ViewModifierHelper.addSearchInfo(mav);
 
         List<Doctor> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
                 new Specialty(form.getSpecialty()), form.getFirstName(),form.getLastName(),new Prepaid(form.getPrepaid()),form.getConsultPrice());
 
-        viewModifier.addFilteredDoctors(mav, filteredDoctors);
+        ViewModifierHelper.addFilteredDoctors(mav, filteredDoctors);
 
         return mav;
     }
@@ -93,7 +89,7 @@ public class SearchController {
 
         ModelAndView mav = new ModelAndView("doctorPage");
         mav.addObject("doctor", doctor);
-        viewModifier.addDoctorClinicsForDoctor(mav, doctor);
+        ViewModifierHelper.addDoctorClinicsForDoctor(mav, doctor);
 
         return mav;
     }
@@ -113,8 +109,8 @@ public class SearchController {
         if(patient != null) {
             mav.addObject("patientPrepaid", patient.getPrepaid());
         }
-        viewModifier.addSearchInfo(mav);
-        viewModifier.addCurrentDates(mav, week);
+        ViewModifierHelper.addSearchInfo(mav);
+        ViewModifierHelper.addCurrentDates(mav, week);
 
         List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctor, week);
         mav.addObject("week", doctorsWeek);

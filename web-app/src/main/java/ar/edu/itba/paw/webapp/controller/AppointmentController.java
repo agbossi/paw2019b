@@ -5,7 +5,6 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,16 +31,10 @@ public class AppointmentController {
     private ClinicService clinicService;
 
     @Autowired
-    private PatientService patientService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
     private ValidationHelper validator;
-
-    private static final boolean CANCELLED_BY_DOCTOR = true;
-    private static final boolean CANCELLED_BY_PATIENT = false;
 
     @RequestMapping(value = "/createApp/{clinicId}/{doctorId}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
     public ModelAndView makeAppointment(@PathVariable(value = "clinicId") int clinicId, @PathVariable(value = "doctorId") String license,

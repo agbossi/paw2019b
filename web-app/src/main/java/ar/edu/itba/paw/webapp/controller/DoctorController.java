@@ -4,9 +4,9 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.DoctorClinicForm;
 import ar.edu.itba.paw.webapp.form.EditDoctorProfileForm;
-import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
+import ar.edu.itba.paw.webapp.helpers.ViewModifierHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,9 +40,6 @@ public class DoctorController {
     private ScheduleService scheduleService;
 
     @Autowired
-    private AppointmentService appointmentService;
-
-    @Autowired
     private SpecialtyService specialtyService;
 
     @Autowired
@@ -50,9 +47,6 @@ public class DoctorController {
 
     @Autowired
     private ImageService imageService;
-
-    @Autowired
-    private ModelAndViewModifier viewModifier;
 
     @Autowired
     MessageSource messageSource;
@@ -146,8 +140,8 @@ public class DoctorController {
     public ModelAndView addDoctorClinic(@ModelAttribute("doctorClinicForm") final DoctorClinicForm form){
         final ModelAndView mav = new ModelAndView("doctor/addDoctorClinic");
 
-        viewModifier.addClinics(mav);
-        viewModifier.addDoctors(mav);
+        ViewModifierHelper.addClinics(mav);
+        ViewModifierHelper.addDoctors(mav);
 
         return mav;
     }
@@ -161,7 +155,7 @@ public class DoctorController {
         Doctor doctor = doctorService.getDoctorByEmail(userEmail);
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
-        viewModifier.addDaysAdnTimes(mav);
+        ViewModifierHelper.addDaysAdnTimes(mav);
 
         List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctorClinic, 2);
 
@@ -247,7 +241,7 @@ public class DoctorController {
         final ModelAndView mav = new ModelAndView("doctor/clinicPage");
 
 
-        viewModifier.addCurrentDates(mav, week);
+        ViewModifierHelper.addCurrentDates(mav, week);
 
         mav.addObject("week", doctorsWeek);
         mav.addObject("weekNum", week);

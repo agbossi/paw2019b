@@ -5,6 +5,7 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
+import ar.edu.itba.paw.webapp.helpers.ViewModifierHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,9 +35,6 @@ public class AdminController {
     private SpecialtyService specialtyService;
 
     @Autowired
-    private ModelAndViewModifier viewModifier;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -60,7 +58,7 @@ public class AdminController {
     @RequestMapping(value = "/doctors", method = { RequestMethod.GET })
     public ModelAndView doctors(){
         final ModelAndView mav = new ModelAndView("admin/doctors");
-        viewModifier.addDoctors(mav);
+        ViewModifierHelper.addDoctors(mav);
         return mav;
     }
     
@@ -68,7 +66,7 @@ public class AdminController {
     public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form,boolean photoError,Locale locale){
         final ModelAndView mav = new ModelAndView("admin/addDoctor");
 
-        viewModifier.addSearchInfo(mav);
+        ViewModifierHelper.addSearchInfo(mav);
         if(photoError){
             mav.addObject("errorMessage", messageSource.getMessage("doctor.photo.not.valid",null,locale));
 
@@ -115,7 +113,7 @@ public class AdminController {
     @RequestMapping(value = "/clinics", method = { RequestMethod.GET })
     public ModelAndView clinics(){
         final ModelAndView mav = new ModelAndView("admin/clinics");
-        viewModifier.addClinics(mav);
+        ViewModifierHelper.addClinics(mav);
 
         return mav;
     }
@@ -123,7 +121,7 @@ public class AdminController {
     @RequestMapping(value = "/addClinic", method = { RequestMethod.GET })
     public ModelAndView addClinic(@ModelAttribute("clinicForm") final ClinicForm form){
         final ModelAndView mav = new ModelAndView("admin/addClinic");
-        viewModifier.addLocations(mav);
+        ViewModifierHelper.addLocations(mav);
 
         return mav;
     }
@@ -147,7 +145,7 @@ public class AdminController {
     @RequestMapping(value = "/locations", method = { RequestMethod.GET })
     public ModelAndView locations(){
         final ModelAndView mav = new ModelAndView("admin/locations");
-        viewModifier.addLocations(mav);
+        ViewModifierHelper.addLocations(mav);
         return mav;
     }
 
@@ -182,7 +180,7 @@ public class AdminController {
     @RequestMapping(value = "/specialties", method = {RequestMethod.GET})
     public ModelAndView specialties(){
         final ModelAndView mav = new ModelAndView("admin/specialties");
-        viewModifier.addSpecialties(mav);
+        ViewModifierHelper.addSpecialties(mav);
         return mav;
     }
 
@@ -217,7 +215,7 @@ public class AdminController {
     @RequestMapping(value = "/prepaids",method = { RequestMethod.GET })
     public ModelAndView prepaids(){
         final ModelAndView mav = new ModelAndView("admin/prepaids");
-        viewModifier.addPrepaids(mav);
+        ViewModifierHelper.addPrepaids(mav);
         return mav;
     }
 
@@ -252,7 +250,7 @@ public class AdminController {
     @RequestMapping(value = "/prepaidClinics", method = { RequestMethod.GET })
     public ModelAndView prepaidClinics() {
         final ModelAndView mav = new ModelAndView("/admin/prepaidClinics");
-        viewModifier.addPrepaidClinics(mav);
+        ViewModifierHelper.addPrepaidClinics(mav);
         return mav;
     }
 
@@ -261,7 +259,7 @@ public class AdminController {
                                             @PathVariable(value = "clinicId") int clinicId) {
         prepaidToClinicService.deletePrepaidFromClinic(prepaid, clinicId);
         final ModelAndView mav = new ModelAndView("/admin/prepaidClinics");
-        viewModifier.addPrepaidClinics(mav);
+        ViewModifierHelper.addPrepaidClinics(mav);
         return mav;
     }
 
@@ -269,8 +267,8 @@ public class AdminController {
     public ModelAndView addPrepaidToClinic(@ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form){
         final ModelAndView mav = new ModelAndView("admin/addPrepaidToClinic");
 
-        viewModifier.addClinics(mav);
-        viewModifier.addPrepaids(mav);
+        ViewModifierHelper.addClinics(mav);
+        ViewModifierHelper.addPrepaids(mav);
         return mav;
     }
 
