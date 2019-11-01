@@ -56,8 +56,6 @@ public class SearchController {
     @RequestMapping(value = "/results", method = {RequestMethod.GET})
     public ModelAndView backToResults(@ModelAttribute("searchForm") final SearchForm form, HttpServletRequest request){
 
-        //UserContextHelper.loadUserQuery(form,request);
-
         final ModelAndView mav = new ModelAndView("index");
 
         String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
@@ -74,10 +72,6 @@ public class SearchController {
 
         if (errors.hasErrors())
             return search(form);
-
-        //ver que es el attr que no se usa
-        //saving form data in case someone does login or registration after query
-        //UserContextHelper.saveUserQuery(form,request);
 
         final ModelAndView mav = new ModelAndView("results");
 
