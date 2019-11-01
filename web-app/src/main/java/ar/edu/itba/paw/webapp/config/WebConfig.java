@@ -5,6 +5,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -44,11 +45,11 @@ import java.util.concurrent.Executor;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-    private String dbUser = "paw-2019b-4";
+    private String dbUser = "root";//"paw-2019b-4";
 
-    private String dbPassword = "7Up7gfwcS";
+    private String dbPassword = "root";//"7Up7gfwcS";
 
-    private String jdbcPath = "jdbc:postgresql://localhost/paw-2019b-4";
+    private String jdbcPath = "jdbc:postgresql://localhost/paw"; //"jdbc:postgresql://localhost/paw-2019b-4";
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
@@ -160,5 +161,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean(name = "threadPoolTaskExecutor")
     public Executor threadPoolTaskExecutor() {
         return new ThreadPoolTaskExecutor();
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertyConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 }
