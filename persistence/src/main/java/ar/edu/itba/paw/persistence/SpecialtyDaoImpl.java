@@ -61,7 +61,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao{
 
     @Override
     public void updateSpecialty(String oldName, String name) {
-        jdbcTemplate.update("update specialties set name = ? where name = ?", oldName, name);
+        jdbcTemplate.update("update specialties set name = ? where name = ?", name, oldName);
     }
 
     @Override

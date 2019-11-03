@@ -83,7 +83,7 @@ public class LocationDaoImpl implements LocationDao {
 
     @Override
     public void updateLocation(String oldName, String name) {
-        jdbcTemplate.update("update locations set name = ? where name = ?", oldName, name);
+        jdbcTemplate.update("update locations set name = ? where name = ?", name, oldName);
     }
 
     @Override

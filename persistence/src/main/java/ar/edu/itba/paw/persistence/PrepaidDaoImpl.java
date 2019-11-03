@@ -61,7 +61,7 @@ public class PrepaidDaoImpl implements PrepaidDao {
 
     @Override
     public void updatePrepaid(String oldName, String name) {
-        jdbcTemplate.update("update prepaids set name = ? where name = ?", oldName, name);
+        jdbcTemplate.update("update prepaids set name = ? where name = ?", name, oldName);
     }
 
     @Override
