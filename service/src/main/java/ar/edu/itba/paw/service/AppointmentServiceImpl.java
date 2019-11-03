@@ -99,7 +99,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     private String dateString(Calendar calendar){
         Date date = calendar.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("EEEE yyyy-mm-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("EEEE yyyy-MM-dd hh:mm:ss");
         return dateFormat.format(date);
     }
 }
