@@ -54,7 +54,7 @@
                             <div>
                                 <div>
                                     <div class="label-div">
-                                        <form:label path="newPassword"><spring:message code="password"/></form:label>
+                                        <form:label path="newPassword"><spring:message code="new.password"/></form:label>
                                         <form:label path="newPassword"/>
                                     </div>
                                     <div class="input-div">
