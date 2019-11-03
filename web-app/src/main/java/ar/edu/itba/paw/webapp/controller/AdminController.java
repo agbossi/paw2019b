@@ -125,6 +125,29 @@ public class AdminController {
         return mav;
     }
 
+    @RequestMapping(value = "/editClinic/{id}", method = { RequestMethod.GET})
+    public ModelAndView editClinic(@ModelAttribute("clinicForm") final ClinicForm form,
+                                   @PathVariable(value = "id") int id){
+        Clinic clinic = clinicService.getClinicById(id);
+        form.setName(clinic.getName());
+        form.setAddress(clinic.getAddress());
+        form.setLocation(clinic.getLocation().getLocationName());
+        final ModelAndView mav = new ModelAndView("admin/editClinic");
+        mav.addObject("clinic", clinic);
+        ViewModifierHelper.addLocations(mav, locationService);
+        return mav;
+    }
+
+    @RequestMapping(value = "/editClinic/{id}/post", method = { RequestMethod.POST})
+    public ModelAndView editClinicPost(@Valid @ModelAttribute("clinicForm") final ClinicForm form,
+                                        final BindingResult errors, @PathVariable(value = "id") int id){
+        if(errors.hasErrors())
+            return editClinic(form, id);
+
+        clinicService.updateClinic(id, form.getName(), form.getAddress(), form.getLocation());
+        return clinics();
+    }
+
     @RequestMapping(value = "/deleteClinic/{id}", method = { RequestMethod.GET })
     public ModelAndView deleteClinic(@PathVariable(value = "id") int id){
         clinicService.deleteClinic(id);
@@ -220,6 +243,25 @@ public class AdminController {
         return specialties();
     }
 
+    @RequestMapping(value = "/editSpecialty/{specialtyName}", method = { RequestMethod.GET})
+    public ModelAndView editSpecialty(@ModelAttribute("specialtyForm") final SpecialtyForm form,
+                                     @PathVariable(value = "specialtyName") String name){
+        form.setName(name);
+        final ModelAndView mav = new ModelAndView("admin/editSpecialty");
+        mav.addObject("specialty", specialtyService.getSpecialtyByName(name));
+        return mav;
+    }
+
+    @RequestMapping(value = "/editSpecialty/{specialtyName}/post", method = { RequestMethod.POST})
+    public ModelAndView editSpecialtyPost(@Valid @ModelAttribute("specialtyForm") final SpecialtyForm form,
+                                         final BindingResult errors, @PathVariable(value = "specialtyName") String name){
+        if(errors.hasErrors())
+            return editSpecialty(form, name);
+
+        specialtyService.updateSpecialty(name, form.getName());
+        return specialties();
+    }
+
     @RequestMapping(value = "/addedSpecialty", method = { RequestMethod.POST })
     public ModelAndView addedSpecialty(@Valid @ModelAttribute("specialtyForm") final SpecialtyForm form, final BindingResult errors,Locale locale){
 
@@ -247,6 +289,25 @@ public class AdminController {
     public ModelAndView addPrepaid(@ModelAttribute("prepaidForm") final PrepaidForm form){
         final ModelAndView mav = new ModelAndView("admin/addPrepaid");
         return mav;
+    }
+
+    @RequestMapping(value = "/editPrepaid/{name}", method = { RequestMethod.GET})
+    public ModelAndView editPrepaid(@ModelAttribute("prepaidForm") final PrepaidForm form,
+                                      @PathVariable(value = "name") String name){
+        form.setName(name);
+        final ModelAndView mav = new ModelAndView("admin/editPrepaid");
+        mav.addObject("prepaid", prepaidService.getPrepaidByName(name));
+        return mav;
+    }
+
+    @RequestMapping(value = "/editPrepaid/{name}/post", method = { RequestMethod.POST})
+    public ModelAndView editPrepaidPost(@Valid @ModelAttribute("prepaidForm") final PrepaidForm form,
+                                          final BindingResult errors, @PathVariable(value = "name") String name){
+        if(errors.hasErrors())
+            return editPrepaid(form, name);
+
+        prepaidService.updatePrepaid(name, form.getName());
+        return specialties();
     }
 
     @RequestMapping(value = "/deletePrepaid/{prepaidName}", method = { RequestMethod.GET })

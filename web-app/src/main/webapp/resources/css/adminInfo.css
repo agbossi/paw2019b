@@ -53,3 +53,7 @@
 .edit-info-container {
     grid-template-columns: 1fr !important;
 }
+
+.errors {
+    color: #a00;
+}
