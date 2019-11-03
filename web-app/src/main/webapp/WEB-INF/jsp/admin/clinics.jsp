@@ -19,13 +19,12 @@
     <c:forEach var="clinic" items="${clinics}">
         <div>
             <h6><c:out value="${clinic.name}"/>, <c:out value="${clinic.address}"/> (<c:out value="${clinic.location.locationName}"/>)</h6>
-            <h6><!--
+            <h6>
                 <b class="delete-element">
                 <a href="<c:url value="/admin/deleteClinic/${clinic.id}"/>">
                         <spring:message code="remove"/>
                     </b>
                 </a>
-                -->
             </h6>
         </div>
     </c:forEach>

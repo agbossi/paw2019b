@@ -46,4 +46,9 @@ public class ClinicServiceImpl implements ClinicService {
     public boolean clinicExists(String name, String address, String location) {
         return clinicDao.clinicExists(name,address,location);
     }
+
+    @Override
+    public long deleteClinic(int id) {
+        return clinicDao.deleteClinic(id);
+    }
 }

@@ -125,6 +125,12 @@ public class AdminController {
         return mav;
     }
 
+    @RequestMapping(value = "/deleteClinic/{id}", method = { RequestMethod.GET })
+    public ModelAndView deleteClinic(@PathVariable(value = "id") int id){
+        clinicService.deleteClinic(id);
+        return clinics();
+    }
+
     @RequestMapping(value = "/addedClinic", method = { RequestMethod.POST })
     public ModelAndView addedClinic(@Valid @ModelAttribute("clinicForm") final ClinicForm form, final BindingResult errors,Locale locale){
 

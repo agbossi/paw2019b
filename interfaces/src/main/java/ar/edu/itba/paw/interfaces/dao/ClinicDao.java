@@ -17,4 +17,6 @@ public interface ClinicDao {
     List<Clinic> getClinicsByLocation(String location);
 
     boolean clinicExists(String name,String address,String location);
+
+    long deleteClinic(int id);
 }
