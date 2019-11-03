@@ -60,6 +60,11 @@ public class SpecialtyDaoImpl implements SpecialtyDao{
     }
 
     @Override
+    public void updateSpecialty(String oldName, String name) {
+        jdbcTemplate.update("update specialties set name = ? where name = ?", oldName, name);
+    }
+
+    @Override
     public long deleteSpecialty(String name) {
         String deleteQuery = "DELETE FROM specialties WHERE name = ?";
         return jdbcTemplate.update(deleteQuery, name);

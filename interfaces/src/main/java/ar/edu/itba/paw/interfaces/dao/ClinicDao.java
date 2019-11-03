@@ -18,5 +18,7 @@ public interface ClinicDao {
 
     boolean clinicExists(String name,String address,String location);
 
+    void updateClinic(int id, String name, String address, String location);
+
     long deleteClinic(int id);
 }

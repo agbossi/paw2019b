@@ -12,5 +12,7 @@ public interface PrepaidDao {
 
     List<Prepaid> getPrepaids();
 
+    void updatePrepaid(String oldName, String name);
+
     long deletePrepaid(String name);
 }

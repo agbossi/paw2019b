@@ -12,5 +12,7 @@ public interface PrepaidService {
 
     Prepaid createPrepaid(String name);
 
+    void updatePrepaid(String oldName, String name);
+
     long deletePrepaid(String name);
 }

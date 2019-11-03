@@ -12,5 +12,7 @@ public interface LocationService {
 
     Location getLocationByName(String locationName);
 
+    void updateLocation(String oldName, String name);
+
     long deleteLocation(String name);
 }

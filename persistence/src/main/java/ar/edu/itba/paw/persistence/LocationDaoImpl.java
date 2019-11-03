@@ -82,6 +82,11 @@ public class LocationDaoImpl implements LocationDao {
     }
 
     @Override
+    public void updateLocation(String oldName, String name) {
+        jdbcTemplate.update("update locations set name = ? where name = ?", oldName, name);
+    }
+
+    @Override
     public long deleteLocation(String name) {
         String deleteQuery = "DELETE FROM locations WHERE name = ?";
         return jdbcTemplate.update(deleteQuery, name);
