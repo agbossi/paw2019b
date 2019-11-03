@@ -20,14 +20,27 @@
         <div>
             <h6><c:out value="${prepaidClinic.clinic.name}"/>, <c:out value="${prepaidClinic.prepaid.name}"/></h6>
             <h6>
-                <a href="<c:url value="/admin/delete/${prepaidClinic.prepaid.name}/${prepaidClinic.clinic.id}"/>">
+                <div class="delete-box">
                     <b class="delete-element">
-                        <spring:message code="remove"/>
+                        <a href="<c:url value="/admin/delete/${prepaidClinic.prepaid.name}/${prepaidClinic.clinic.id}"/>">
+                            <input type="submit" value="<spring:message code="remove"/>" name="<spring:message code="remove"/>" onclick="return confirmSubmit()">
+                        </a>
                     </b>
-                </a>
+                </div>
             </h6>
         </div>
     </c:forEach>
 </div>
 </body>
 </html>
+
+<script>
+    function confirmSubmit()
+    {
+        var agree=confirm("Are you sure you want to remove this prepaid for this clinic?");
+        if (agree)
+            return true ;
+        else
+            return false ;
+    }
+</script>
