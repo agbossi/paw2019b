@@ -44,7 +44,7 @@ import java.util.concurrent.Executor;
                  "ar.edu.itba.paw.persistence"})
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
-
+    
     private String dbUser = "paw-2019b-4";
 
     private String dbPassword = "7Up7gfwcS";

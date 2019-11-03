@@ -1,8 +1,11 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.helpers.validation.annotations.FieldMatch;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+//@FieldMatch(field = "newPassword",fieldMatch = "repeatPassword")
 public class EditDoctorProfileForm {
 
     // User information
