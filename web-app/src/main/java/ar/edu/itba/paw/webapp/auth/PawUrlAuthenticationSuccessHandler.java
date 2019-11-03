@@ -16,7 +16,7 @@ public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     private static final String adminRole  = "ROLE_ADMIN";
     private static final String doctorRole = "ROLE_DOCTOR";
 
-    private static final String targetURL   = "URL_PRIOR_LOGIN";
+    private static final String targetURL   = "URL_PRIOR_AUTH";
     private static final String defaultURL   = "/";
     private static final String login   = "login";
     private static final String signUp   = "signUp";
@@ -45,12 +45,7 @@ public class PawUrlAuthenticationSuccessHandler extends SavedRequestAwareAuthent
                 if (role.equals(adminRole) || role.equals(doctorRole)) {
                     getRedirectStrategy().sendRedirect(request, response, defaultURL);
                 } else {
-                    // we redirect home page
-                    if (!redirectUrl.contains(login) && !redirectUrl.contains(signUp)) {
-                        getRedirectStrategy().sendRedirect(request, response, redirectUrl);
-                    } else {
-                        super.onAuthenticationSuccess(request, response, authentication);
-                    }
+                    getRedirectStrategy().sendRedirect(request, response, redirectUrl);
                 }
             }
             super.onAuthenticationSuccess(request, response, authentication);

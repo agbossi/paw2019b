@@ -28,12 +28,7 @@
                     <div class="doctor-index-clinic-container">
                         <c:forEach var="dClinic" items="${doctorClinics}">
                             <div class="clinic-card">
-                                <sec:authorize access="hasRole('ROLE_USER')">
                                     <a href="<c:url value="/results/${doctor.license}/${dClinic.clinic.id}/1"/>"><c:out value="${dClinic.clinic.name}"/></a>
-                                </sec:authorize>
-                                <sec:authorize access="isAnonymous()">
-                                    <a href="<c:url value="/login"/>"><c:out value="${dClinic.clinic.name}"/></a>
-                                </sec:authorize>
                                 <p><c:out value="${dClinic.clinic.location.locationName}"/></p>
                                 <p>(<c:out value="${dClinic.clinic.address}"/>)</p>
                             </div>
