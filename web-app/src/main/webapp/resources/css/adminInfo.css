@@ -49,3 +49,7 @@
 .go-back-button {
     margin-top: 1em;
 }
+
+.edit-info-container {
+    grid-template-columns: 1fr !important;
+}
