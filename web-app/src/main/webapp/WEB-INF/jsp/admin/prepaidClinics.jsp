@@ -22,7 +22,7 @@
             <h6>
                 <div class="delete-box">
                     <b class="delete-element">
-                        <a href="<c:url value="/admin/delete/${prepaidClinic.prepaid.name}/${prepaidClinic.clinic.id}"/>">
+                        <a href="<c:url value="/admin/deletePrepaidClinic/${prepaidClinic.prepaid.name}/${prepaidClinic.clinic.id}"/>">
                             <input type="submit" value="<spring:message code="remove"/>" name="<spring:message code="remove"/>" onclick="return confirmSubmit()">
                         </a>
                     </b>

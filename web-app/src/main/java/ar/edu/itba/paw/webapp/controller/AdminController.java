@@ -259,13 +259,11 @@ public class AdminController {
         return mav;
     }
 
-    @RequestMapping(value = "/deletePrepaidClinics/delete/{prepaid}/{clinicId}", method = { RequestMethod.GET })
+    @RequestMapping(value = "/deletePrepaidClinic/{prepaid}/{clinicId}", method = { RequestMethod.GET })
     public ModelAndView deletePrepaidClinic(@PathVariable(value = "prepaid") String prepaid,
                                             @PathVariable(value = "clinicId") int clinicId) {
         prepaidToClinicService.deletePrepaidFromClinic(prepaid, clinicId);
-        final ModelAndView mav = new ModelAndView("/admin/prepaidClinics");
-        ViewModifierHelper.addPrepaidClinics(mav, prepaidToClinicService);
-        return mav;
+        return prepaidClinics();
     }
 
     @RequestMapping(value = "/addPrepaidToClinic",method = { RequestMethod.GET })
