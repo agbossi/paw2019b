@@ -86,6 +86,11 @@ public class ClinicDaoImpl implements ClinicDao {
     }
 
     @Override
+    public void updateClinic(int id, String name, String address, String location) {
+        jdbcTemplate.update("update clinics set name = ?, address = ?, location = ? where id    = ?", name, address, location, id);
+    }
+
+    @Override
     public long deleteClinic(int id) {
         String deleteQuery = "DELETE FROM clinics WHERE id = ?";
         return jdbcTemplate.update(deleteQuery, id);

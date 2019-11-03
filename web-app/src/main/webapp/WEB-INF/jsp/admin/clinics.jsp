@@ -22,9 +22,16 @@
             <h6>
                 <div class="delete-box">
                     <b class="delete-element">
-                        <a href="<c:url value="/admin/deleteClinic/${clinic.id}"/>">
-                            <input type="submit" value="<spring:message code="remove"/>" name="<spring:message code="remove"/>" onclick="return confirmSubmit()">
-                        </a>
+                        <div>
+                            <a href="<c:url value="/admin/deleteClinic/${clinic.id}"/>">
+                                <input class="edit-button" type="submit" value="<spring:message code="remove"/>" name="<spring:message code="remove"/>" onclick="return confirmSubmit()">
+                            </a>
+                        </div>
+                        <div>
+                            <a href="<c:url value="/admin/editClinic/${clinic.id}"/>">
+                                <input type="submit" class="edit-button go-back-button" value="<spring:message code="edit"/>" name="<spring:message code="edit"/>">
+                            </a>
+                        </div>
                     </b>
                 </div>
             </h6>

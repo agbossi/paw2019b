@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
 <head>
     <%@ page isELIgnored="false" %>
@@ -22,9 +23,16 @@
                     <h6>
                         <div class="delete-box">
                             <b class="delete-element">
-                                <a href="<c:url value="/admin/deleteLocation/${location.locationName}"/>">
-                                    <input type="submit" value="<spring:message code="remove"/>" name="<spring:message code="remove"/>" onclick="return confirmSubmit()">
-                                </a>
+                                <div>
+                                    <a href="<c:url value="/admin/deleteLocation/${location.locationName}"/>">
+                                        <input type="submit" class="edit-button" value="<spring:message code="remove"/>" name="<spring:message code="remove"/>" onclick="return confirmSubmit()">
+                                    </a>
+                                </div>
+                                <div>
+                                    <a href="<c:url value="/admin/editLocation/${location.locationName}"/>">
+                                        <input type="submit" class="edit-button go-back-button" value="<spring:message code="edit"/>" name="<spring:message code="edit"/>">
+                                    </a>
+                                </div>
                             </b>
                         </div>
                     </h6>
@@ -35,8 +43,7 @@
 </html>
 
 <script>
-    function confirmSubmit()
-    {
+    function confirmSubmit() {
         var agree=confirm("Are you sure you want to remove this location?");
         if (agree)
             return true ;
@@ -44,4 +51,5 @@
             return false ;
     }
 </script>
+
 

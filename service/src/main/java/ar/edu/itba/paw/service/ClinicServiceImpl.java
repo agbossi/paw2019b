@@ -48,6 +48,23 @@ public class ClinicServiceImpl implements ClinicService {
     }
 
     @Override
+    public void updateClinic(int id, String name, String address, String location) {
+        if(name.equals("") && address.equals("") && location.equals(""))
+            return;
+        Clinic clinic = getClinicById(id);
+        if(name.equals("")) {
+            name = clinic.getName();
+        }
+        if(address.equals("")) {
+            address = clinic.getAddress();
+        }
+        if(location.equals("")) {
+            location = clinic.getLocation().getLocationName();
+        }
+        clinicDao.updateClinic(id, name, address, location);
+    }
+
+    @Override
     public long deleteClinic(int id) {
         return clinicDao.deleteClinic(id);
     }

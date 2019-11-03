@@ -11,5 +11,7 @@ public interface SpecialtyDao {
 
     List<Specialty> getSpecialties();
 
+    void updateSpecialty(String oldName, String name);
+
     long deleteSpecialty(String name);
 }

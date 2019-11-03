@@ -11,5 +11,7 @@ public interface LocationDao {
 
     List<Location> getLocations();
 
+    void updateLocation(String oldName, String name);
+
     long deleteLocation(String name);
 }
