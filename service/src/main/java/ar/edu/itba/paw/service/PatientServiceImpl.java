@@ -27,9 +27,15 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private UserService userService;
 
+    private static final String NoPrepaid = "";
+
     @Transactional
     @Override
     public Patient create(String email,String id, String prepaid, String prepaidNumber, User user) {
+        if(prepaid.equals(NoPrepaid)) {
+            prepaid = null;
+            prepaidNumber = null;
+        }
         return patientDao.create(email,id, prepaid, prepaidNumber, user);
     }
 
