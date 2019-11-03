@@ -105,7 +105,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public long deleteDoctor(String license) {
-        String deleteQuery = "DELETE FROM doctors WHERE license = license";
+        String deleteQuery = "DELETE FROM doctors WHERE license = ?";
         return jdbcTemplate.update(deleteQuery, license);
     }
 

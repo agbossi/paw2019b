@@ -20,13 +20,11 @@
         <div>
             <h6><c:out value="${doctor.firstName}"/>, <c:out value="${doctor.lastName}"/> (<c:out value="${doctor.license}"/>)</h6>
             <h6>
-                <!--
                 <a href="<c:url value="/admin/deleteDoctor/${doctor.license}"/>">
                     <b class="delete-element">
                         <spring:message code="remove"/>
                     </b>
                 </a>
-                -->
             </h6>
         </div>
     </c:forEach>
