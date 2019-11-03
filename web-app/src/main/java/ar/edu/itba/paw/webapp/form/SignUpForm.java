@@ -6,7 +6,7 @@ import ar.edu.itba.paw.webapp.helpers.validation.annotations.Unique;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-//@FieldMatch(field = "password",fieldMatch = "repeatPassword")
+@FieldMatch(field = "password",fieldMatch = "repeatPassword")
 public class SignUpForm {
 
     @Size(min = 1, max = 20)
@@ -27,7 +27,7 @@ public class SignUpForm {
 
     @Size(min = 6, max = 25)
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
-    //@Unique(field = "user")
+    @Unique(field = "user")
     private String email;
 
     @Pattern(regexp = "[a-zA-Z0-9 ]*")

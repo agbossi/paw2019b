@@ -2,6 +2,7 @@ package ar.edu.itba.paw.webapp.helpers.validation.annotations;
 
 
 import ar.edu.itba.paw.webapp.helpers.validation.implementations.FieldMatchValidator;
+import ar.edu.itba.paw.webapp.helpers.validation.implementations.UniqueValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -16,10 +17,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RUNTIME)
-@Constraint(validatedBy = FieldMatchValidator.class)
+@Constraint(validatedBy = UniqueValidator.class)
 @Documented
 public @interface Unique {
-    String message() default "Already exists";
+    String message() default "{value.registered}"; //si esta harcodeado lo toma, asi no
 
     Class<?>[] groups() default {};
 

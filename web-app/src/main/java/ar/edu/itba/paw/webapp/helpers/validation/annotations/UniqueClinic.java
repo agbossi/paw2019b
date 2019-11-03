@@ -22,7 +22,7 @@ public @interface UniqueClinic {
 
     Class<? extends Payload>[] payload() default {};
 
-    String message() default "passwords dont match";
+    String message() default "passwords dont match"; //los constraints de clase no muestran mensaje por mas que este harcodeado
 
     String name();
 

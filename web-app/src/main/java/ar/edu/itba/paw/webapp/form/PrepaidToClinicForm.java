@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.webapp.form;
 
-public class PrepaidToClinicForm {
+import ar.edu.itba.paw.webapp.helpers.validation.annotations.UniquePrepaidToClinic;
 
+@UniquePrepaidToClinic(prepaid = "prepaid",clinic = "clinic")
+public class PrepaidToClinicForm {
 
     private  String prepaid;
 

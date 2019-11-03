@@ -51,6 +51,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     private String jdbcPath = "jdbc:postgresql://localhost/paw-2019b-4";
 
+
     @Value("classpath:schema.sql")
     private Resource schemaSql;
 

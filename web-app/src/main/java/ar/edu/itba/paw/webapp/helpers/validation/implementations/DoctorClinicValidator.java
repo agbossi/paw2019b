@@ -33,7 +33,7 @@ public class DoctorClinicValidator implements ConstraintValidator<UniqueDoctorCl
 
         Object clinicNumber = new BeanWrapperImpl(value).getPropertyValue(clinic); //clinicNumber es un int
 
-        return doctorClinicService.getDoctorInClinic(doctor,(int)clinicNumber) != null;
+        return doctorClinicService.getDoctorInClinic(doctor,(int)clinicNumber) == null;
 
 
     }

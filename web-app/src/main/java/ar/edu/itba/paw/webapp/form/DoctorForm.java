@@ -6,7 +6,7 @@ import ar.edu.itba.paw.webapp.helpers.validation.annotations.Unique;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-//@FieldMatch(field = "password",fieldMatch = "repeatPassword")
+@FieldMatch(field = "password",fieldMatch = "repeatPassword")
 public class DoctorForm {
 
     @Pattern(regexp = "[a-zA-Z ]+")
@@ -19,7 +19,7 @@ public class DoctorForm {
     private String specialty;
 
     @Pattern(regexp = "[0-9]+")
-    //@Unique(field = "doctor")
+    @Unique(field = "doctor")
     private String license;
 
     @Pattern(regexp = "[0-9 ]+")
@@ -34,7 +34,7 @@ public class DoctorForm {
     private String repeatPassword;
 
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
-    //@Unique(field = "user")
+    @Unique(field = "user")
     private String email;
 
     public String getFirstName() {

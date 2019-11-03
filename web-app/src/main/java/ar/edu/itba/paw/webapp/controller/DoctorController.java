@@ -116,7 +116,7 @@ public class DoctorController {
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
 
 
-        validator.passwordValidate(form.getNewPassword(),form.getRepeatPassword(),errors,locale);
+       // validator.passwordValidate(form.getNewPassword(),form.getRepeatPassword(),errors,locale);
         boolean photoError = validator.photoValidate(photo);
 
         //TODO test this
@@ -172,7 +172,7 @@ public class DoctorController {
         String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
         Doctor doctor = doctorService.getDoctorByEmail(userEmail);
 
-        validator.doctorClinicValidate(doctor.getLicense(),form.getClinic(),errors,locale);
+        //validator.doctorClinicValidate(doctor.getLicense(),form.getClinic(),errors,locale);
         if(errors.hasErrors())
             return addDoctorClinic(form);
 

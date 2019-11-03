@@ -85,8 +85,8 @@ public class AdminController {
                                     @RequestParam("photo") MultipartFile photo, Locale locale) {
 
 
-        validator.signUpValidate(form.getPassword(),form.getRepeatPassword(),form.getEmail(),errors,locale);
-        validator.licenseValidate(form.getLicense(),errors,locale);
+        //validator.signUpValidate(form.getPassword(),form.getRepeatPassword(),form.getEmail(),errors,locale);
+        //validator.licenseValidate(form.getLicense(),errors,locale);
         boolean photoError = validator.photoValidate(photo);
 
         if (errors.hasErrors() || photoError)
@@ -157,7 +157,7 @@ public class AdminController {
     @RequestMapping(value = "/addedClinic", method = { RequestMethod.POST })
     public ModelAndView addedClinic(@Valid @ModelAttribute("clinicForm") final ClinicForm form, final BindingResult errors,Locale locale){
 
-        validator.clinicValidate(form.getName(),form.getAddress(),form.getLocation(),errors,locale);
+        //validator.clinicValidate(form.getName(),form.getAddress(),form.getLocation(),errors,locale);
 
         if(errors.hasErrors())
             return addClinic(form);
@@ -211,7 +211,7 @@ public class AdminController {
     @RequestMapping(value = "/addedLocation", method = { RequestMethod.POST })
     public ModelAndView addedLocation(@Valid @ModelAttribute("locationForm") final LocationForm form, final BindingResult errors,Locale locale){
 
-        validator.validateLocation(form.getName(),errors,locale);
+     //   validator.validateLocation(form.getName(),errors,locale);
 
         if(errors.hasErrors())
             return addLocation(form);
@@ -265,7 +265,7 @@ public class AdminController {
     @RequestMapping(value = "/addedSpecialty", method = { RequestMethod.POST })
     public ModelAndView addedSpecialty(@Valid @ModelAttribute("specialtyForm") final SpecialtyForm form, final BindingResult errors,Locale locale){
 
-        validator.validateSpecialty(form.getName(),errors,locale);
+       // validator.validateSpecialty(form.getName(),errors,locale);
 
         if(errors.hasErrors())
             return addSpecialty(form);
@@ -319,7 +319,7 @@ public class AdminController {
     @RequestMapping(value = "/addedPrepaid",method = { RequestMethod.POST })
     public ModelAndView addedPrepaid(@Valid @ModelAttribute("prepaidForm") final PrepaidForm form,final BindingResult errors,Locale locale){
 
-        validator.prepaidValidate(form.getName(),errors,locale);
+       // validator.prepaidValidate(form.getName(),errors,locale);
 
         if (errors.hasErrors())
             return addPrepaid(form);
@@ -358,7 +358,7 @@ public class AdminController {
     @RequestMapping(value = "/addedPrepaidToClinic",method = { RequestMethod.POST })
     public ModelAndView addedPrepaidToClinic(@Valid @ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form,final BindingResult errors,Locale locale){
 
-        validator.prepaidToClinicValidate(form.getPrepaid(),form.getClinic(),errors,locale);
+        //validator.prepaidToClinicValidate(form.getPrepaid(),form.getClinic(),errors,locale);
 
         if (errors.hasErrors())
             return addPrepaidToClinic(form);

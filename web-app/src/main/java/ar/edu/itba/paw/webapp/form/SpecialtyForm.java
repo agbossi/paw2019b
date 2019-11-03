@@ -9,7 +9,7 @@ public class SpecialtyForm {
 
     @Size(min=1, max=30)
     @Pattern(regexp = "[a-zA-Z ]+")
-    //@Unique("specialty")
+    @Unique(field = "specialty")
     private String name;
 
     public String getName() {
