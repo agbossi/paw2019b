@@ -20,10 +20,19 @@ import java.util.List;
 public class SearchController {
 
     @Autowired
-    private DoctorClinicService doctorClinicService;
+    private LocationService locationService;
 
     @Autowired
-    ClinicService clinicService;
+    private SpecialtyService specialtyService;
+
+    @Autowired
+    private ClinicService clinicService;
+
+    @Autowired
+    private PrepaidService prepaidService;
+
+    @Autowired
+    private DoctorClinicService doctorClinicService;
 
     @Autowired
     private DoctorService doctorService;
@@ -44,7 +53,7 @@ public class SearchController {
         if(patient != null) {
             mav.addObject("patientPrepaid", patient.getPrepaid());
         }
-        ViewModifierHelper.addSearchInfo(mav);
+        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
 
         return mav;
     }
@@ -59,7 +68,7 @@ public class SearchController {
         if(patient != null) {
             mav.addObject("patientPrepaid", patient.getPrepaid());
         }
-        ViewModifierHelper.addSearchInfo(mav);
+        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
         return mav;
     }
 
@@ -72,7 +81,7 @@ public class SearchController {
         final ModelAndView mav = new ModelAndView("results");
 
         mav.addObject("patientPrepaid", form.getPrepaid());
-        ViewModifierHelper.addSearchInfo(mav);
+        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
 
         List<Doctor> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
                 new Specialty(form.getSpecialty()), form.getFirstName(),form.getLastName(),new Prepaid(form.getPrepaid()),form.getConsultPrice());
@@ -89,7 +98,7 @@ public class SearchController {
 
         ModelAndView mav = new ModelAndView("doctorPage");
         mav.addObject("doctor", doctor);
-        ViewModifierHelper.addDoctorClinicsForDoctor(mav, doctor);
+        ViewModifierHelper.addDoctorClinicsForDoctor(mav, doctor, doctorClinicService);
 
         return mav;
     }
@@ -109,7 +118,7 @@ public class SearchController {
         if(patient != null) {
             mav.addObject("patientPrepaid", patient.getPrepaid());
         }
-        ViewModifierHelper.addSearchInfo(mav);
+        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
         ViewModifierHelper.addCurrentDates(mav, week);
 
         List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctor, week);

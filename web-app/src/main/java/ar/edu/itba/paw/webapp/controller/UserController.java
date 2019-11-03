@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.PatientService;
+import ar.edu.itba.paw.interfaces.service.PrepaidService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.auth.SignUpAuthentication;
@@ -32,6 +33,9 @@ public class UserController {
     private PatientService patientService;
 
     @Autowired
+    private PrepaidService prepaidService;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -51,7 +55,7 @@ public class UserController {
         request.getSession().setAttribute("url_prior_login", referrer);
 
         final ModelAndView mav = new ModelAndView("signUp");
-        ViewModifierHelper.addPrepaids(mav);
+        ViewModifierHelper.addPrepaids(mav, prepaidService);
 
         return mav;
     }

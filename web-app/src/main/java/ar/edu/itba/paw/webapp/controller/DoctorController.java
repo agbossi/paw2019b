@@ -140,8 +140,8 @@ public class DoctorController {
     public ModelAndView addDoctorClinic(@ModelAttribute("doctorClinicForm") final DoctorClinicForm form){
         final ModelAndView mav = new ModelAndView("doctor/addDoctorClinic");
 
-        ViewModifierHelper.addClinics(mav);
-        ViewModifierHelper.addDoctors(mav);
+        ViewModifierHelper.addClinics(mav, clinicService);
+        ViewModifierHelper.addDoctors(mav, doctorService);
 
         return mav;
     }

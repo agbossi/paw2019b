@@ -32,6 +32,9 @@ public class PatientController {
     PasswordEncoder passwordEncoder;
 
     @Autowired
+    private PrepaidService prepaidService;
+
+    @Autowired
     private ValidationHelper validator;
 
     private void setFormInformation(PersonalInformationForm form, User user, Patient patient) {
@@ -66,7 +69,7 @@ public class PatientController {
 
         mav.addObject("user", user);
         mav.addObject("patient", patient);
-        ViewModifierHelper.addPrepaids(mav);
+        ViewModifierHelper.addPrepaids(mav, prepaidService);
 
         return mav;
     }
