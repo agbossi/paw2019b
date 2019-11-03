@@ -54,9 +54,6 @@ public class DoctorController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private ValidationHelper validator;
-
     private void setEditFormInformation(EditDoctorProfileForm form, User user, Doctor doctor) {
         form.setFirstName(user.getFirstName());
         form.setLastName(user.getLastName());
@@ -117,7 +114,7 @@ public class DoctorController {
 
 
        // validator.passwordValidate(form.getNewPassword(),form.getRepeatPassword(),errors,locale);
-        boolean photoError = validator.photoValidate(photo);
+        boolean photoError = ValidationHelper.photoValidate(photo);
 
         //TODO test this
         if(errors.hasErrors() || photoError) {
@@ -198,7 +195,7 @@ public class DoctorController {
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
 
-        if(!validator.scheduleValidate(doctorClinic.getDoctor(),day,hour)){
+        if(!ValidationHelper.scheduleValidate(doctorClinic.getDoctor(),day,hour,scheduleService)){
             scheduleService.createSchedule(hour, day, doctorClinic);
         }
 
@@ -218,7 +215,7 @@ public class DoctorController {
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
 
-        if(!validator.scheduleValidate(doctorClinic.getDoctor(),day,hour)){
+        if(!ValidationHelper.scheduleValidate(doctorClinic.getDoctor(),day,hour,scheduleService)){
             scheduleService.deleteSchedule(hour, day, doctorClinic);
         }
 

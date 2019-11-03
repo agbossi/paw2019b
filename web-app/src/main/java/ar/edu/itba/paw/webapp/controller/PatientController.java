@@ -78,7 +78,7 @@ public class PatientController {
     public ModelAndView editedProfile(@Valid @ModelAttribute("personalInformationForm") final PersonalInformationForm form,
                                       final BindingResult errors, Locale locale) {
 
-        validator.passwordValidate(form.getNewPassword(),form.getRepeatPassword(),errors,locale);
+        //validator.passwordValidate(form.getNewPassword(),form.getRepeatPassword(),errors,locale);
         
         if(errors.hasErrors()){
             return editProfile(form);

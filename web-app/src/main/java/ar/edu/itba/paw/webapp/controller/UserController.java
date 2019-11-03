@@ -44,9 +44,6 @@ public class UserController {
     @Autowired
     private MessageSource messageSource;
 
-    @Autowired
-    private ValidationHelper validator;
-
 
     @RequestMapping(value = "/signUp", method = { RequestMethod.GET })
     public ModelAndView signUp(@ModelAttribute("signUpForm") final SignUpForm form,HttpServletRequest request,HttpServletResponse response) {
@@ -63,7 +60,7 @@ public class UserController {
     @RequestMapping(value = "/signUp",method = { RequestMethod.POST })
     public ModelAndView signUpValidation(@Valid @ModelAttribute("signUpForm") final SignUpForm form, final BindingResult errors, HttpServletRequest request, HttpServletResponse response, Locale locale) {
 
-        validator.signUpValidate(form.getPassword(),form.getRepeatPassword(),form.getEmail(),errors,locale);
+       // validator.signUpValidate(form.getPassword(),form.getRepeatPassword(),form.getEmail(),errors,locale);
 
         if(errors.hasErrors()){
             return signUp(form,request,response);
