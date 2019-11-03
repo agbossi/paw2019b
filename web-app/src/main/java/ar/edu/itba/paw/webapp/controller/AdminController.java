@@ -148,7 +148,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/locations", method = { RequestMethod.GET })
-    public ModelAndView locations(){
+    public ModelAndView locations(@ModelAttribute("locationForm") final LocationForm form){
         final ModelAndView mav = new ModelAndView("admin/locations");
         ViewModifierHelper.addLocations(mav, locationService);
         return mav;
@@ -160,10 +160,16 @@ public class AdminController {
         return mav;
     }
 
+    @RequestMapping(value = "/editLocation/{locationName}", method = { RequestMethod.POST })
+    public ModelAndView editLocation(@ModelAttribute("locationForm") final LocationForm form,
+                                     @PathVariable(value = "locationName") String name){
+        return locations(form);
+    }
+
     @RequestMapping(value = "/deleteLocation/{locationName}", method = { RequestMethod.GET })
     public ModelAndView deleteLocation(@PathVariable(value = "locationName") String name){
         locationService.deleteLocation(name);
-        return locations();
+        return locations(new LocationForm());
     }
 
     @RequestMapping(value = "/addedLocation", method = { RequestMethod.POST })
