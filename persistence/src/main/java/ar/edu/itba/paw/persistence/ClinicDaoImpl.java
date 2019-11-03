@@ -53,7 +53,11 @@ public class ClinicDaoImpl implements ClinicDao {
 
     @Override
     public Clinic getClinicByName(String clinicName) {
-        return jdbcTemplate.query("select * from clinics where name = ?",ROW_MAPPER,clinicName);
+        final List<Clinic> list = jdbcTemplate.query("select * from clinics where name = ?",ROW_MAPPER,clinicName);
+        if(list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 
     @Override
