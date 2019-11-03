@@ -2,50 +2,29 @@ package ar.edu.itba.paw.webapp.helpers;
 
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.print.Doc;
 import java.util.*;
 
-@Component
-public class ModelAndViewModifier {
+public class ViewModifierHelper {
 
-    @Autowired
-    private ClinicService clinicService;
+    // Private constructor to prevent instantiation
+    private ViewModifierHelper() {
+        throw new UnsupportedOperationException();
+    }
 
-    @Autowired
-    private LocationService locationService;
-
-    @Autowired
-    private SpecialtyService specialtyService;
-
-    @Autowired
-    private DoctorService doctorService;
-
-    @Autowired
-    private PrepaidService prepaidService;
-
-    @Autowired
-    private DoctorClinicService doctorClinicService;
-
-    @Autowired
-    private PrepaidToClinicService prepaidToClinicService;
-
-    @Autowired
-    private DoctorHourService doctorHourService;
-
-    public ModelAndView addSearchInfo(ModelAndView mav){
-        addLocations(mav);
-        addSpecialties(mav);
-        addClinics(mav);
-        addPrepaids(mav);
+    public static ModelAndView addSearchInfo(ModelAndView mav, LocationService locationService,
+                                             SpecialtyService specialtyService, ClinicService clinicService,
+                                             PrepaidService prepaidService){
+        addLocations(mav, locationService);
+        addSpecialties(mav, specialtyService);
+        addClinics(mav, clinicService);
+        addPrepaids(mav, prepaidService);
 
         return mav;
     }
 
-    public ModelAndView addLocations(ModelAndView mav){
+    public static ModelAndView addLocations(ModelAndView mav, LocationService locationService){
         List<Location> locations = locationService.getLocations();
         Collections.sort(locations, new Comparator<Location>() {
             @Override
@@ -57,7 +36,7 @@ public class ModelAndViewModifier {
         return mav;
     }
 
-    public ModelAndView addSpecialties(ModelAndView mav){
+    public static ModelAndView addSpecialties(ModelAndView mav, SpecialtyService specialtyService){
         List<Specialty> specialties = specialtyService.getSpecialties();
         Collections.sort(specialties, new Comparator<Specialty>() {
             @Override
@@ -69,7 +48,7 @@ public class ModelAndViewModifier {
         return mav;
     }
 
-    public ModelAndView addClinics(ModelAndView mav){
+    public static ModelAndView addClinics(ModelAndView mav, ClinicService clinicService){
         List<Clinic> clinics = clinicService.getClinics();
         mav.addObject("clinics", clinics);
         Collections.sort(clinics, new Comparator<Clinic>() {
@@ -81,13 +60,13 @@ public class ModelAndViewModifier {
         return mav;
     }
 
-    public ModelAndView addDoctorClinicsForDoctor(ModelAndView mav, Doctor doctor){
+    public static ModelAndView addDoctorClinicsForDoctor(ModelAndView mav, Doctor doctor, DoctorClinicService doctorClinicService){
         List<DoctorClinic> doctors = doctorClinicService.getDoctorClinicsForDoctor(doctor);
         mav.addObject("doctorClinics", doctors);
         return mav;
     }
 
-    public ModelAndView addDoctors(ModelAndView mav){
+    public static ModelAndView addDoctors(ModelAndView mav, DoctorService doctorService){
         List<Doctor> doctors = doctorService.getDoctors();
         Collections.sort(doctors, new Comparator<Doctor>() {
             @Override
@@ -106,18 +85,18 @@ public class ModelAndViewModifier {
         return mav;
     }
 
-    public ModelAndView addDoctorsWithAvailability(ModelAndView mav){
+    public static ModelAndView addDoctorsWithAvailability(ModelAndView mav, DoctorService doctorService){
         List<Doctor> doctors = doctorService.getDoctorsWithAvailability();
         mav.addObject("doctors", doctors);
         return mav;
     }
 
-    public ModelAndView addFilteredDoctors(ModelAndView mav, List<Doctor> filteredDoctors){
+    public static ModelAndView addFilteredDoctors(ModelAndView mav, List<Doctor> filteredDoctors){
         mav.addObject("doctors", filteredDoctors);
 
         return mav;
     }
-    public ModelAndView addPrepaids(ModelAndView mav){
+    public static ModelAndView addPrepaids(ModelAndView mav, PrepaidService prepaidService){
         List<Prepaid> prepaids = prepaidService.getPrepaids();
         Collections.sort(prepaids, new Comparator<Prepaid>() {
             @Override
@@ -129,7 +108,7 @@ public class ModelAndViewModifier {
         return mav;
     }
 
-    public ModelAndView addPrepaidClinics(ModelAndView mav){
+    public static ModelAndView addPrepaidClinics(ModelAndView mav, PrepaidToClinicService prepaidToClinicService){
         List<PrepaidToClinic> prepaidClinics = prepaidToClinicService.getPrepaidToClinics();
         Collections.sort(prepaidClinics, new Comparator<PrepaidToClinic>() {
             @Override
@@ -145,7 +124,7 @@ public class ModelAndViewModifier {
         return mav;
     }
 
-    public ModelAndView addDaysAdnTimes(ModelAndView mav){
+    public static ModelAndView addDaysAdnTimes(ModelAndView mav){
         List<Integer> days= new LinkedList<>();
         days.add(Calendar.MONDAY);
         days.add(Calendar.TUESDAY);
@@ -173,7 +152,7 @@ public class ModelAndViewModifier {
         return mav;
     }
 
-    public ModelAndView addCurrentDates(ModelAndView mav, int week){
+    public static ModelAndView addCurrentDates(ModelAndView mav, int week){
         Calendar date = Calendar.getInstance();
         date.add(Calendar.DATE, 7 * (week - 1));
         Calendar first;

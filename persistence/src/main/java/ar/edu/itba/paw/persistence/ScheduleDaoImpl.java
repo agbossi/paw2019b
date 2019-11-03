@@ -53,9 +53,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
     @Override
     public List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic) {
-        final List<Schedule> list = jdbcTemplate.query( "select * from schedule where doctor = ? and clinic =?",
-                                                       ROW_MAPPER, doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId());
-        return (list.isEmpty() ? null : list );
+        return jdbcTemplate.query( "select * from schedule where doctor = ? and clinic =?",
+                                        ROW_MAPPER, doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId());
     }
 
     @Override

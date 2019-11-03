@@ -70,11 +70,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
                         "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
                         "where appointments.doctor = ? and appointments.clinic = ?",ROW_MAPPER,
                 doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId());
-        if(list.isEmpty()){
-            return null;
-        }
         return list;
-
     }
 
     @Override
@@ -85,9 +81,6 @@ public class AppointmentDaoImpl implements AppointmentDao {
                 "join (((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license) join clinics on doctorclinics.clinicid = clinics.id) " +
                 "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
                 "where appointments.patient = ?",ROW_MAPPER,patient.getEmail());
-        if(list.isEmpty()){
-            return null;
-        }
         return list;
     }
 
@@ -95,7 +88,6 @@ public class AppointmentDaoImpl implements AppointmentDao {
     public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date){
         Object[] args = new Object[] {patient.getEmail(), doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), date.getTime()};
         jdbcTemplate.update("delete from appointments where patient = ? and doctor = ? and clinic = ? and date = ?", args);
-
     }
 
     @Override
@@ -124,9 +116,6 @@ public class AppointmentDaoImpl implements AppointmentDao {
                         "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
                         "where appointments.doctor = ?",ROW_MAPPER,
                 doctor.getLicense());
-        if(list.isEmpty()){
-            return null;
-        }
         return list;
     }
 
@@ -153,9 +142,6 @@ public class AppointmentDaoImpl implements AppointmentDao {
                         "natural join users) as docli on (docli.license = appointments.doctor and docli.clinicid = appointments.clinic) " +
                         "where appointments.doctor = ?and appointments.clinic = ? and extract(dow from date) = ? and  extract(hour from date) = ?",ROW_MAPPER,
                         doctor.getDoctor().getLicense(), doctor.getClinic().getId(), day - 1, hour);
-        if(list.isEmpty()){
-            return null;
-        }
         return list;
     }
 
@@ -163,6 +149,5 @@ public class AppointmentDaoImpl implements AppointmentDao {
     public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour){
         Object[] args = new Object[] {doctorClinic.getDoctor().getLicense(), doctorClinic.getClinic().getId(), day -1, hour};
         jdbcTemplate.update("delete from appointments where doctor = ? and clinic = ? and extract(dow from date) = ? and  extract(hour from date) = ?", args);
-
     }
 }

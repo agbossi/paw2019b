@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.interfaces.dao.ScheduleDao;
 import ar.edu.itba.paw.interfaces.service.AppointmentService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
@@ -18,10 +17,10 @@ import java.util.List;
 public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
-    ScheduleDao scheduleDao;
+    private ScheduleDao scheduleDao;
 
     @Autowired
-    AppointmentService appointmentService;
+    private AppointmentService appointmentService;
 
     @Transactional
     @Override

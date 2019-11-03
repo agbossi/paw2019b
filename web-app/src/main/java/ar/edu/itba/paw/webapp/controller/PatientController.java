@@ -3,9 +3,9 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.PersonalInformationForm;
-import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
+import ar.edu.itba.paw.webapp.helpers.ViewModifierHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,25 +29,13 @@ public class PatientController {
     private UserService userService;
 
     @Autowired
-    private DoctorClinicService doctorClinicService;
-
-    @Autowired
-    private AppointmentService appointmentService;
-
-    @Autowired
-    private DoctorService doctorService;
-
-    @Autowired
-    private ClinicService clinicService;
-
-    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    private ValidationHelper validator;
+    private PrepaidService prepaidService;
 
     @Autowired
-    private ModelAndViewModifier viewModifier;
+    private ValidationHelper validator;
 
     private void setFormInformation(PersonalInformationForm form, User user, Patient patient) {
         form.setFirstName(user.getFirstName());
@@ -81,7 +69,7 @@ public class PatientController {
 
         mav.addObject("user", user);
         mav.addObject("patient", patient);
-        viewModifier.addPrepaids(mav);
+        ViewModifierHelper.addPrepaids(mav, prepaidService);
 
         return mav;
     }

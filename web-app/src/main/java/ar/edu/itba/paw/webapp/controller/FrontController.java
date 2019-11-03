@@ -7,14 +7,14 @@ import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.form.SearchForm;
-import ar.edu.itba.paw.webapp.helpers.ModelAndViewModifier;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
+import ar.edu.itba.paw.webapp.helpers.ViewModifierHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +28,16 @@ public class FrontController {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
-    private ModelAndViewModifier viewModifier;
+    private LocationService locationService;
+
+    @Autowired
+    private SpecialtyService specialtyService;
+
+    @Autowired
+    private ClinicService clinicService;
+
+    @Autowired
+    private PrepaidService prepaidService;
 
     @Autowired
     private DoctorService doctorService;
@@ -76,9 +85,10 @@ public class FrontController {
             if(patient != null) {
                 mav.addObject("patientPrepaid", patient.getPrepaid());
             }
-            viewModifier.addSearchInfo(mav);
+            ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService,
+                                    clinicService, prepaidService);
             // Patients are not interested in doctors that still haven't load their schedule
-            viewModifier.addDoctorsWithAvailability(mav);
+            ViewModifierHelper.addDoctorsWithAvailability(mav, doctorService);
         }
 
 

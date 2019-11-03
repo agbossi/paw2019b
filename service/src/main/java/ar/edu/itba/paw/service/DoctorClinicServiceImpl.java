@@ -15,13 +15,13 @@ import java.util.*;
 public class DoctorClinicServiceImpl implements DoctorClinicService {
 
     @Autowired
-    DoctorClinicDao doctorClinicDao;
+    private DoctorClinicDao doctorClinicDao;
 
     @Autowired
-    ScheduleService scheduleService;
+    private ScheduleService scheduleService;
 
     @Autowired
-    AppointmentService appointmentService;
+    private AppointmentService appointmentService;
 
     private void setScheduleAndAppointments(List<DoctorClinic> list) {
         if(list != null) {

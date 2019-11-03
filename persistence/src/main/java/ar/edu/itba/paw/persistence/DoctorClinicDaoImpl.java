@@ -14,7 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -70,9 +69,6 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                 " join clinics on doctorclinics.clinicid = clinics.id)" +
                 " join users on doctors.email = users.email", ROW_MAPPER);
-        if (list.isEmpty()) {
-            return null;
-        }
         return list;
     }
 
@@ -85,9 +81,6 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                         " join clinics on doctorclinics.clinicid = clinics.id)" +
                         " join users on doctors.email = users.email" +
                         " where doctorclinics.doctorLicense = ?", ROW_MAPPER, doctor.getLicense());
-        if (list.isEmpty()) {
-            return null;
-        }
         return list;
     }
 
@@ -98,9 +91,6 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                 " join clinics on doctorclinics.clinicid = clinics.id)" +
                 " join users on doctors.email = users.email where clinicid = ?", ROW_MAPPER, clinic);
-        if (list.isEmpty()) {
-            return null;
-        }
         return list;
     }
 
@@ -125,9 +115,6 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
                 " from ((doctorclinics join doctors on doctorclinics.doctorLicense = doctors.license)" +
                 " join clinics on doctorclinics.clinicid = clinics.id)" +
                 " join users on doctors.email = users.email where doctors.license = ?", ROW_MAPPER, doctor);
-        if (list.isEmpty()) {
-            return null;
-        }
         return list;
     }
 
@@ -169,7 +156,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
             }
         }, ROW_MAPPER);
 
-        return (list.isEmpty() ? null : list);
+        return list;
     }
 
 }

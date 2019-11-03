@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.service;
 
-import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
 import ar.edu.itba.paw.interfaces.service.DoctorService;
@@ -18,10 +17,6 @@ import java.util.Map;
 
 @Component
 public class DoctorServiceImpl implements DoctorService {
-
-    private static final String NO_LOCATION = "noLocation";
-    private static final String NO_SPECIALTY = "noSpecialty";
-    private static final String NO_CLINIC = "noClinic";
 
     @Autowired
     private DoctorDao doctorDao;
@@ -48,11 +43,6 @@ public class DoctorServiceImpl implements DoctorService {
     public List<Doctor> getDoctorBySpecialty(Specialty specialty) {
         return doctorDao.getDoctorBySpecialty(specialty);
     }
-
-    /*@Override
-    public List<Doctor> getDoctorBy(Location location, Specialty specialty, String clinic) {
-        return doctorDao.getFilteredDoctors(location, specialty, "noClinic");
-    }*/
 
     @Override
     public Doctor getDoctorByLicense(String license) {

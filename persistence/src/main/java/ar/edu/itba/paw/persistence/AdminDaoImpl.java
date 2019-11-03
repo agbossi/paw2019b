@@ -2,8 +2,6 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.AdminDao;
 import ar.edu.itba.paw.model.Admin;
-import ar.edu.itba.paw.model.Doctor;
-import ar.edu.itba.paw.model.Specialty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
