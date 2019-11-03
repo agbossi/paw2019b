@@ -88,8 +88,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<Appointment> getAllDoctorsAppointments(Doctor doctor) {
-        List<Appointment> appointments = appointmentDao.getAllDoctorsAppointments(doctor);
-        return appointments;
+        return appointmentDao.getAllDoctorsAppointments(doctor);
     }
 
     @Transactional
