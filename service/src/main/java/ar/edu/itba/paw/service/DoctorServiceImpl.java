@@ -90,6 +90,9 @@ public class DoctorServiceImpl implements DoctorService {
     public void updateDoctor(String license, String phoneNumber, String specialty) {
         Map<String,String> args = new HashMap<>();
         args.put("phoneNumber",phoneNumber);
+        if(specialty.equals("")) {
+            specialty = null;
+        }
         args.put("specialty",specialty);
         doctorDao.updateDoctor(license,args);
     }

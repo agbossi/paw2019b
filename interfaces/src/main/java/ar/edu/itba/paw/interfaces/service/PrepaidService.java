@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
+import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.Prepaid;
 
 import java.util.List;

@@ -77,4 +77,9 @@ public class PatientDaoImpl implements PatientDao {
             jdbcTemplate.update("update patients set prepaidNumber = ? where email = ?", args.get("prepaidNumber"), email);
         }
     }
+
+    @Override
+    public List<Patient> getPatientsByPrepaid(String prepaid) {
+        return jdbcTemplate.query("select * from patients natural join users where prepaid = ?", ROW_MAPPER, prepaid);
+    }
 }

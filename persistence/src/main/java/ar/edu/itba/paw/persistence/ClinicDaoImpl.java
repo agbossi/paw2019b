@@ -84,4 +84,10 @@ public class ClinicDaoImpl implements ClinicDao {
         final List<Clinic> list = jdbcTemplate.query("select * from clinics where name = ? and address = ? and location = ?",ROW_MAPPER,name,address,location);
         return !list.isEmpty();
     }
+
+    @Override
+    public long deleteClinic(int id) {
+        String deleteQuery = "DELETE FROM clinics WHERE id = ?";
+        return jdbcTemplate.update(deleteQuery, id);
+    }
 }

@@ -19,16 +19,28 @@
     <c:forEach var="clinic" items="${clinics}">
         <div>
             <h6><c:out value="${clinic.name}"/>, <c:out value="${clinic.address}"/> (<c:out value="${clinic.location.locationName}"/>)</h6>
-            <h6><!--
-                <b class="delete-element">
-                <a href="<c:url value="/admin/deleteClinic/${clinic.id}"/>">
-                        <spring:message code="remove"/>
+            <h6>
+                <div class="delete-box">
+                    <b class="delete-element">
+                        <a href="<c:url value="/admin/deleteClinic/${clinic.id}"/>">
+                            <input type="submit" value="<spring:message code="remove"/>" name="<spring:message code="remove"/>" onclick="return confirmSubmit()">
+                        </a>
                     </b>
-                </a>
-                -->
+                </div>
             </h6>
         </div>
     </c:forEach>
 </div>
 </body>
 </html>
+
+<script>
+    function confirmSubmit()
+    {
+        var agree=confirm("Are you sure you want to remove this clinic?");
+        if (agree)
+            return true ;
+        else
+            return false ;
+    }
+</script>

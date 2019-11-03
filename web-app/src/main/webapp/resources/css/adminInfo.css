@@ -31,6 +31,10 @@
     color: #86C5D8;
 }
 
+.delete-box {
+    text-align: right;
+}
+
 .delete-element {
     color: #aa0000;
     text-align: right;
