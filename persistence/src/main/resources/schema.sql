@@ -40,7 +40,6 @@ CREATE TABLE IF NOT EXISTS clinicPrepaids(
     prepaid VARCHAR(30) REFERENCES prepaids(name) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-
 CREATE TABLE IF NOT EXISTS doctorclinics (
     doctorLicense VARCHAR(20) REFERENCES doctors(license) ON UPDATE CASCADE ON DELETE CASCADE,
     clinicid INTEGER REFERENCES clinics(id) ON UPDATE CASCADE ON DELETE CASCADE,
@@ -60,8 +59,8 @@ CREATE TABLE IF NOT EXISTS schedule (
 CREATE TABLE IF NOT EXISTS patients (
     email VARCHAR(25) PRIMARY KEY REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE,
     id varchar(8),
-    prepaid VARCHAR(20) REFERENCES prepaids(name),
-    prepaidNumber varchar(20) 
+    prepaid VARCHAR(20) REFERENCES prepaids(name) ON UPDATE CASCADE ON DELETE SET NULL,
+    prepaidNumber varchar(20)
 );
 
 CREATE TABLE IF NOT EXISTS appointments (
@@ -78,5 +77,3 @@ CREATE TABLE IF NOT EXISTS images (
     doctor VARCHAR(20) REFERENCES doctors(license) ON UPDATE CASCADE ON DELETE CASCADE,
     image bytea
 );
-
-INSERT INTO users VALUES('admin','','admin','admin@doctorsearch.com') ON conflict do nothing;

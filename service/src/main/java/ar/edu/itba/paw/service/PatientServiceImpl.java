@@ -55,17 +55,27 @@ public class PatientServiceImpl implements PatientService {
     @Transactional
     @Override
     public void updatePatient(String email, String prepaid, String prepaidNumber, String id) {
+
         Map<String,String> args = new HashMap<>();
-        if(prepaid.equals("")){
+        if(!(prepaid == null || prepaid.equals("")) ){
             args.put("prepaid",prepaid);
         }
-        if(prepaidNumber.equals("")){
-            args.put("prepaidNumber",prepaidNumber);
+
+        // In case we want to intentionally set prepaidNumber to null
+        // or if we want to update our prepaidNumber
+        if(prepaidNumber == null || !(prepaidNumber.equals(""))) {
+            args.put("prepaidNumber", prepaidNumber);
         }
-        if(!id.equals("")){
+
+        if(!(id == null || id.equals(""))){
             args.put("id",id);
         }
         patientDao.updatePatient(email,args);
+    }
+
+    @Override
+    public List<Patient> getPatientsByPrepaid(String prepaid) {
+        return patientDao.getPatientsByPrepaid(prepaid);
     }
 
 }
