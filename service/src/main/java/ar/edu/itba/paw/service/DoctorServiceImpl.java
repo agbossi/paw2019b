@@ -3,6 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
 import ar.edu.itba.paw.interfaces.service.DoctorService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Specialty;
@@ -23,6 +24,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     private DoctorClinicService doctorClinicService;
+
+    @Autowired
+    private UserService userService;
 
     @Transactional
     @Override
@@ -80,7 +84,8 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional
     @Override
     public long deleteDoctor(String license) {
-        return doctorDao.deleteDoctor(license);
+        Doctor doc = getDoctorByLicense(license);
+        return userService.deleteUser(doc.getEmail());
     }
 
     @Transactional

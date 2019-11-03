@@ -12,4 +12,6 @@ public interface UserDao {
     void changePassword(String password,String email);
 
     void updateUser(String email, Map<String, String> args);
+
+    long deleteUser(String email);
 }

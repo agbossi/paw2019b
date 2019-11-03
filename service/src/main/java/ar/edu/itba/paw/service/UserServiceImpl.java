@@ -57,6 +57,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
+    public long deleteUser(String email) {
+        return userDao.deleteUser(email);
+    }
+
+    @Transactional
+    @Override
     public void changePassword(String password, String email) {
         userDao.changePassword(password,email);
     }

@@ -82,4 +82,11 @@ public class UserDaoImpl implements UserDao {
                     email);
         }
     }
+
+    @Override
+    public long deleteUser(String email) {
+        String deleteQuery = "DELETE FROM users WHERE email = ?";
+        return jdbcTemplate.update(deleteQuery, email);
+    }
+
 }
