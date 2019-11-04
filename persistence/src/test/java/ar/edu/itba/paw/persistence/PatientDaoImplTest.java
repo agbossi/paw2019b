@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-
+/*
 import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.Prepaid;
 import ar.edu.itba.paw.model.User;
@@ -70,4 +70,4 @@ public class PatientDaoImplTest {
         assertEquals(user.getEmail(), patient.getEmail());
     }
 
-}
+}*/

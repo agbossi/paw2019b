@@ -55,11 +55,11 @@ public class UserServiceImpl implements UserService {
         return doctorService.isDoctor(email);
     }
 
-    @Transactional
+   /* @Transactional
     @Override
     public void changePassword(String password, String email) {
         userDao.changePassword(password,email);
-    }
+    } */
 
     @Transactional
     @Override

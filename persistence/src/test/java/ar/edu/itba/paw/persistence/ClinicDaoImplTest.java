@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-
+/*
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import org.junit.Assert;
@@ -109,4 +109,4 @@ public class ClinicDaoImplTest {
         Assert.assertTrue(!bool2);
     }
 
-}
+}*/
