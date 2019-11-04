@@ -105,8 +105,8 @@ public class ClinicDaoImpl implements ClinicDao {
         clinic.setName(name);
         clinic.setAddress(address);
         entityManager.persist(clinic);
-        //tengo que hacer un get a bd? TODO ver como identificamos id en clinicas para buscar por este
-        return null;
+        //tengo que hacer un get a bd? TODO ver que la clinic tenga su id. segun stackoverflow esto se hace solo
+        return clinic;
     }
 
     @Override
