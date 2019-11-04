@@ -18,6 +18,8 @@ public class Patient {
 
     private List<Appointment> appointments;
 
+    private List<Doctor> favorites;
+
     public Patient(String email, String id, String prepaid, String prepaidNumber, String firstName, String lastName) {
         this.email = email;
         this.id = id;
@@ -66,6 +68,14 @@ public class Patient {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public List<Doctor> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<Doctor> favorites) {
+        this.favorites = favorites;
     }
 
     @Override
