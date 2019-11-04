@@ -77,8 +77,8 @@ public class ImageDaoImpl implements ImageDao {
        // im.setImage(image);
         //im.setLicense(doctor);
         //entityManager.persist(image);
-        //TODO mismo problema que clinic
-        return 0;
+        //TODO ver si funciona, y sino devolver el objeto y devolver el id en service y ver si funciona
+        return im.getId();
     }
 
     @Override
