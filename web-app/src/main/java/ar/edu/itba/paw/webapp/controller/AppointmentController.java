@@ -32,9 +32,7 @@ public class AppointmentController {
 
     @Autowired
     private UserService userService;
-    
-    private static final boolean CANCELLED_BY_DOCTOR = true;
-    private static final boolean CANCELLED_BY_PATIENT = false;
+
 
     @RequestMapping(value = "/createApp/{clinicId}/{doctorId}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
     public ModelAndView makeAppointment(@PathVariable(value = "clinicId") int clinicId, @PathVariable(value = "doctorId") String license,
