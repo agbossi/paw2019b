@@ -31,6 +31,9 @@ public class Patient {
     @OneToMany(mappedBy = "patient")
     private List<Appointment> appointments;
 
+    @Transient
+    private List<Doctor> favorites;
+    
     public Patient(String id, String prepaid, String prepaidNumber,User user) {
         this.user = user;
         this.id = id;
@@ -93,6 +96,14 @@ public class Patient {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public List<Doctor> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<Doctor> favorites) {
+        this.favorites = favorites;
     }
 
     @Override
