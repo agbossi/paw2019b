@@ -80,7 +80,6 @@ public class UserController {
     public ModelAndView login(HttpServletRequest request) {
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
-
         return new ModelAndView("login");
     }
     @RequestMapping(value="/login-error", method = RequestMethod.GET)

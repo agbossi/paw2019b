@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-
+/*
 import ar.edu.itba.paw.model.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -139,4 +139,4 @@ public class DoctorClinicDaoImplTest {
         assertTrue(consultPrice >= doctorClinics.get(0).getConsultPrice());
 
     }
-}
+} */

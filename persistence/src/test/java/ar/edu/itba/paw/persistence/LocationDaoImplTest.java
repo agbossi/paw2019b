@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-
+/*
 import ar.edu.itba.paw.model.Location;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,4 +70,4 @@ public class LocationDaoImplTest {
         assertEquals(1, locations.size());
 
     }
-}
+}*/

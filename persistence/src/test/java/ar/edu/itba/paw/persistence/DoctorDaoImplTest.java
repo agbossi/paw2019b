@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-
+/*
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Specialty;
 import ar.edu.itba.paw.model.User;
@@ -104,4 +104,4 @@ public class DoctorDaoImplTest {
         Assert.assertFalse(bool2);
     }
 
-}
+}*/

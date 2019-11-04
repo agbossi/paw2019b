@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.service;
-
+/*
 import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
 import ar.edu.itba.paw.interfaces.service.AppointmentService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
@@ -157,4 +157,4 @@ public class DoctorClinicServiceImplTest {
 
     }
 
-}
+}*/
