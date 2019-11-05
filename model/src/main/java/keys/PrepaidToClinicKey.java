@@ -1,5 +1,6 @@
 package keys;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,9 +8,11 @@ import java.util.Objects;
 @Embeddable
 public class PrepaidToClinicKey implements Serializable {
 
+    @Column
     private String prepaid;
 
-    private int clinic;
+    @Column
+    private int clinicid;
 
     public String getPrepaid() {
         return prepaid;
@@ -20,16 +23,16 @@ public class PrepaidToClinicKey implements Serializable {
     }
 
     public int getClinic() {
-        return clinic;
+        return clinicid;
     }
 
     public void setClinic(int clinic) {
-        this.clinic = clinic;
+        this.clinicid = clinic;
     }
 
     public PrepaidToClinicKey(String prepaid, int clinic) {
         this.prepaid = prepaid;
-        this.clinic = clinic;
+        this.clinicid = clinic;
     }
 
     public PrepaidToClinicKey() {
