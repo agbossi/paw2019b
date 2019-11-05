@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.PatientDao;
+import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -141,4 +143,15 @@ public class PatientDaoImpl implements PatientDao {
         final List<Patient> list = query.getResultList();
         return list.isEmpty() ? null : list;
     }
+
+    @Override
+    public void addDoctorToFavorites(Patient patient, Doctor doctor) {
+        //TODO persist de uno solo? de los dos? cada vez que se añade un favorito tengo que re persistir la entidad?
+    }
+
+    @Override
+    public List<Doctor> getPatientFavoriteDoctors(Patient patient) {
+        return null;
+    }
 }
+

@@ -5,6 +5,7 @@ import ar.edu.itba.paw.interfaces.service.AppointmentService;
 import ar.edu.itba.paw.interfaces.service.PatientService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Appointment;
+import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,16 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public Patient getPatientByEmail(String email) {
         return patientDao.getPatientByEmail(email);
+    }
+
+    @Override
+    public void addDoctorToFavorites(Patient patient, Doctor doctor) {
+        patientDao.addDoctorToFavorites(patient,doctor);
+    }
+
+    @Override
+    public List<Doctor> getPatientFavoriteDoctors(Patient patient) {
+        return patientDao.getPatientFavoriteDoctors(patient);
     }
 
 

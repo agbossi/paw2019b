@@ -1,6 +1,10 @@
 package ar.edu.itba.paw.model;
 
+
 import javax.persistence.*;
+
+import java.util.HashSet;
+
 import java.util.List;
 
 @Entity
@@ -31,7 +35,9 @@ public class Patient {
     @OneToMany(mappedBy = "patient")
     private List<Appointment> appointments;
 
-    @Transient
+    //TODO es necesario poner la otra punta de la relacion?
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "favorites",joinColumns = {@JoinColumn(name = "patientEmail")},inverseJoinColumns = {@JoinColumn(name = "doctorLicense")})
     private List<Doctor> favorites;
     
     public Patient(String id, String prepaid, String prepaidNumber,User user) {

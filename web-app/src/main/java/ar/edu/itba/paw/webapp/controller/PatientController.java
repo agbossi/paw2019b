@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -47,11 +48,12 @@ public class PatientController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
+        List<Doctor> favorites = patientService.getPatientFavoriteDoctors(patient);
 
         final ModelAndView mav = new ModelAndView("patient/profile");
         mav.addObject("user", user);
         mav.addObject("patient", patient);
-
+        mav.addObject("favorites",favorites);
         return mav;
     }
 
