@@ -11,6 +11,7 @@ import java.util.Date;
 public class Appointment {
 
     //TODO poner lo que va en bd en la clase key esto va como transient o no se rompe por estar en la key?
+    @Transient
     private Calendar date;
 
 
@@ -30,14 +31,14 @@ public class Appointment {
     private AppointmentKey appointmentKey;
 
     @ManyToOne
-    @JoinColumn(name = "patient")
+    @JoinColumn(name = "patient", insertable = false, updatable = false)
     private User patient;
 
     public Appointment(Calendar date, DoctorClinic doctorClinic, User patient) {
         this.date = date;
         this.doctorClinic = doctorClinic;
         this.patient = patient;
-        this.appointmentKey = new AppointmentKey(doctorClinic.getDoctor().getLicense(),doctorClinic.getClinic().getId(),date.getTime());
+        this.appointmentKey = new AppointmentKey(doctorClinic.getDoctor().getLicense(),patient.getEmail(),date.getTime());
     }
 
     public Appointment(){

@@ -16,11 +16,11 @@ public class PrepaidToClinic {
     private PrepaidToClinicKey prepaidToClinicKey;
 
     @ManyToOne
-    @JoinColumn(name = "clinicid",referencedColumnName = "id")
+    @JoinColumn(name = "clinicid", referencedColumnName = "id", insertable = false, updatable = false)
     private Clinic clinic;
 
     @ManyToOne
-    @JoinColumn(name = "prepaid",referencedColumnName = "name")
+    @JoinColumn(name = "prepaid", referencedColumnName = "name", insertable = false, updatable = false)
     private Prepaid prepaid;
 
     public PrepaidToClinic(Clinic clinic, Prepaid prepaid) {

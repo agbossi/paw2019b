@@ -18,10 +18,10 @@ public class Schedule {
     @JoinColumns({
             @JoinColumn(
                     name = "doctor",
-                    referencedColumnName = "doctorLicense"),
+                    referencedColumnName = "doctorLicense", insertable = false, updatable = false),
             @JoinColumn(
                     name = "clinic",
-                    referencedColumnName = "clinicid")
+                    referencedColumnName = "clinicid", insertable = false, updatable = false)
     })
     private DoctorClinic doctorClinic;
 

@@ -47,7 +47,7 @@ public class ImageController {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         Image image = imageService.getProfileImage(doctor);
         if(image.getImage() != null)
-            return IOUtils.toByteArray(image.getImage());
+            return image.getImage();
         else
             return new byte[] { };
     }

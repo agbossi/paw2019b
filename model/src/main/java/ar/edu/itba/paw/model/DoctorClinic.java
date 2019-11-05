@@ -14,7 +14,7 @@ public class DoctorClinic {
     //TODO estos dos no se si son oneToOne o ManyToOne
     //esto va asi o los annotations dentro de la pk?
     @ManyToOne
-    @JoinColumn(name = "doctorLicense",referencedColumnName = "license")
+    @JoinColumn(name = "doctorLicense",referencedColumnName = "license", insertable = false, updatable = false)
     private Doctor doctor;
 
     //TODO igual que en appointment, esto repite?
@@ -22,7 +22,7 @@ public class DoctorClinic {
     private DoctorClinicKey doctorClinicKey;
 
     @ManyToOne
-    @JoinColumn(name = "clinicid")
+    @JoinColumn(name = "clinicid", insertable = false, updatable = false)
     private Clinic clinic;
 
     @Column(name = "consultPrice")
