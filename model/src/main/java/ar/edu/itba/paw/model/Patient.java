@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.model;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class Patient {
@@ -18,6 +19,9 @@ public class Patient {
 
     private List<Appointment> appointments;
 
+    //TODO es necesario poner la otra punta de la relacion?
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "favorites",joinColumns = {@JoinColumn(name = "patientEmail")},inverseJoinColumns = {@JoinColumn(name = "doctorLicense")})
     private List<Doctor> favorites;
 
     public Patient(String email, String id, String prepaid, String prepaidNumber, String firstName, String lastName) {
