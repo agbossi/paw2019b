@@ -14,6 +14,9 @@ public class Patient {
     @MapsId
     private User user;
 
+    @Id
+    private String email;
+
     //TODO poner los nullable = false donde corresponda
 
     @Column(name = "prepaid")
@@ -33,6 +36,7 @@ public class Patient {
         this.id = id;
         this.prepaid = prepaid;
         this.prepaidNumber = prepaidNumber;
+        this.email = user.getEmail();
     }
 
     public Patient(){

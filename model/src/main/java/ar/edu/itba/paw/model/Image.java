@@ -13,14 +13,14 @@ public class Image {
 
     @OneToOne
     @JoinColumn(name = "doctor")
-    private String license;
+    private Doctor doctor;
 
     @Column(name = "image")
     private InputStream image;
 
-    public Image(long id, String license, InputStream image) {
+    public Image(long id, Doctor doctor, InputStream image) {
         this.id = id;
-        this.license = license;
+        this.doctor = doctor;
         this.image = image;
     }
 
@@ -33,7 +33,7 @@ public class Image {
     }
 
     public String getLicense() {
-        return license;
+        return doctor.getLicense();
     }
 
     public InputStream getImage() {
@@ -49,6 +49,6 @@ public class Image {
     }
 
     public void setLicense(String license) {
-        this.license = license;
+        this.doctor.setLicense(license);
     }
 }
