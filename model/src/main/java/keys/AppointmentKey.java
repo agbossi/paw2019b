@@ -14,7 +14,7 @@ public class AppointmentKey implements Serializable {
     private String doctorLicense;
 
     @Column
-    private int clinicId;
+    private String patient;
 
     @Column
     private Date date;
@@ -23,9 +23,9 @@ public class AppointmentKey implements Serializable {
 
     }
 
-    public AppointmentKey(String doctor,int clinic,Date date){
+    public AppointmentKey(String doctor,String clinic,Date date){
         this.doctorLicense = doctor;
-        this.clinicId = clinic;
+        this.patient = clinic;
         this.date = date;
     }
 
@@ -37,16 +37,16 @@ public class AppointmentKey implements Serializable {
         return doctorLicense;
     }
 
-    public int getClinic() {
-        return clinicId;
+    public String getPatient() {
+        return patient;
     }
 
     public void setDoctorLicense(String doctorLicense) {
         this.doctorLicense = doctorLicense;
     }
 
-    public void setClinicId(int clinicId) {
-        this.clinicId = clinicId;
+    public void setPatient(String patient) {
+        this.patient = patient;
     }
 
     public void setDate(Date date) {
@@ -59,12 +59,12 @@ public class AppointmentKey implements Serializable {
         if (!(o instanceof AppointmentKey)) return false;
         AppointmentKey k = (AppointmentKey) o;
         return Objects.equals(getDoctor(), k.getDoctor()) &&
-                Objects.equals(getClinic(), k.getClinic()) &&
+                Objects.equals(getPatient(), k.getPatient()) &&
                 Objects.equals(getDate(),k.getDate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getDoctor(), getClinic());
+        return Objects.hash(getDoctor(), getPatient());
     }
 }

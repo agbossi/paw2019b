@@ -16,9 +16,9 @@ public class Image {
     private Doctor doctor;
 
     @Column(name = "image")
-    private InputStream image;
+    private byte[] image;
 
-    public Image(long id, Doctor doctor, InputStream image) {
+    public Image(long id, Doctor doctor, byte[] image) {
         this.id = id;
         this.doctor = doctor;
         this.image = image;
@@ -36,11 +36,11 @@ public class Image {
         return doctor.getLicense();
     }
 
-    public InputStream getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(InputStream image) {
+    public void setImage(byte[] image) {
         this.image = image;
     }
 

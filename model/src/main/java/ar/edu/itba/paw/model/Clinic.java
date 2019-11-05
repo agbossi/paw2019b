@@ -17,7 +17,7 @@ public class Clinic {
     private String address;
 
     @ManyToOne
-    @JoinColumn(name = "name")
+    @JoinColumn(name = "location")
     private Location location;
 
 
