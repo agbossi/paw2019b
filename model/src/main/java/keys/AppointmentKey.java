@@ -11,7 +11,7 @@ import java.util.Objects;
 public class AppointmentKey implements Serializable {
 
     @Column
-    private String doctorLicense;
+    private String doctor;
 
     @Column
     private String patient;
@@ -24,7 +24,7 @@ public class AppointmentKey implements Serializable {
     }
 
     public AppointmentKey(String doctor,String clinic,Date date){
-        this.doctorLicense = doctor;
+        this.doctor = doctor;
         this.patient = clinic;
         this.date = date;
     }
@@ -34,7 +34,7 @@ public class AppointmentKey implements Serializable {
     }
 
     public String getDoctor() {
-        return doctorLicense;
+        return doctor;
     }
 
     public String getPatient() {
@@ -42,7 +42,7 @@ public class AppointmentKey implements Serializable {
     }
 
     public void setDoctorLicense(String doctorLicense) {
-        this.doctorLicense = doctorLicense;
+        this.doctor = doctorLicense;
     }
 
     public void setPatient(String patient) {

@@ -19,13 +19,16 @@ public class Appointment {
     @ManyToOne
     @JoinColumns({
             @JoinColumn(
-                    name = "doctor",
+                    name = "doctor",insertable = false, updatable = false,
                     referencedColumnName = "doctorLicense"),
             @JoinColumn(
-                    name = "clinic",
+                    name = "clinic",insertable = false, updatable = false,
                     referencedColumnName = "clinicid")
     })
     private DoctorClinic doctorClinic;
+
+    @Column
+    private int clinic;
 
     @EmbeddedId
     private AppointmentKey appointmentKey;
@@ -36,6 +39,7 @@ public class Appointment {
 
     public Appointment(Calendar date, DoctorClinic doctorClinic, User patient) {
         this.date = date;
+        this.clinic = doctorClinic.getClinic().getId();
         this.doctorClinic = doctorClinic;
         this.patient = patient;
         this.appointmentKey = new AppointmentKey(doctorClinic.getDoctor().getLicense(),patient.getEmail(),date.getTime());

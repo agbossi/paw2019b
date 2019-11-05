@@ -10,7 +10,8 @@ public class Clinic {
     private String name;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "clinics_id_seq")
+    @SequenceGenerator(sequenceName = "clinics_id_seq", name = "clinics_id_seq")
     private int id;
 
     @Column(name = "address")

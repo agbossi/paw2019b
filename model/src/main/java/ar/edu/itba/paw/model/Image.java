@@ -8,8 +8,9 @@ import java.io.InputStream;
 public class Image {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "images_id_seq")
+    @SequenceGenerator(sequenceName = "images_id_seq", name = "images_id_seq")
+    private int id;
 
     @OneToOne
     @JoinColumn(name = "doctor")
@@ -18,7 +19,7 @@ public class Image {
     @Column(name = "image")
     private byte[] image;
 
-    public Image(long id, Doctor doctor, byte[] image) {
+    public Image(int id, Doctor doctor, byte[] image) {
         this.id = id;
         this.doctor = doctor;
         this.image = image;
@@ -44,7 +45,7 @@ public class Image {
         this.image = image;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
