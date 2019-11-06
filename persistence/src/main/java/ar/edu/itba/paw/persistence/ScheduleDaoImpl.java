@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -123,9 +124,9 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
     @Override
     public void deleteSchedule(int hour, int day, DoctorClinic doctorClinic){
-        final TypedQuery<Schedule> query = entityManager.createQuery("delete from Schedule as schedule " +
+        final Query query = entityManager.createQuery("delete from Schedule as schedule " +
                 "where schedule.scheduleKey.day = :day and schedule.scheduleKey.hour = :hour " +
-                "and schedule.doctorClinic.doctor = :doctor and schedule.doctorClinic.clinic = :clinic",Schedule.class);
+                "and schedule.doctorClinic.doctor = :doctor and schedule.doctorClinic.clinic = :clinic");
         query.setParameter("day",day);
         query.setParameter("hour",hour);
         query.setParameter("doctor",doctorClinic.getDoctor().getLicense());

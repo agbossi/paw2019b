@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -108,8 +109,8 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
 
     @Override
     public long deletePrepaidFromClinic(String prepaid, int clinic) {
-        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("delete from PrepaidToClinic as p " +
-                "where p.prepaid = :prepaid and p.clinic.id = :clinic",PrepaidToClinic.class);
+        Query query = entityManager.createQuery("delete from PrepaidToClinic as p " +
+                "where p.prepaid = :prepaid and p.clinic.id = :clinic");
         query.setParameter("clinic",clinic);
         query.setParameter("prepaid",prepaid);
         return query.executeUpdate();

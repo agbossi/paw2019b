@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -101,20 +102,24 @@ public class PatientDaoImpl implements PatientDao {
 
     @Override
     public void updatePatient(String email, Map<String, String> args) {
-        TypedQuery<Patient> query = null;
+        Query query;
         if (args.containsKey("id")) {
-            query = entityManager.createQuery("update Patient as patient set id = :id where patient.user.email = :email", Patient.class);
+            query = entityManager.createQuery("update Patient as patient set id = :id where patient.user.email = :email");
+            query.setParameter("email",email);
             query.setParameter("id", args.get("id"));
+            query.executeUpdate();
         }
         if (args.containsKey("prepaid")) {
-            query = entityManager.createQuery("update Patient as patient set prepaid = :prepaid where patient.user.email = :email", Patient.class);
+            query = entityManager.createQuery("update Patient as patient set prepaid = :prepaid where patient.user.email = :email");
             query.setParameter("prepaid", args.get("prepaid"));
+            query.setParameter("email",email);
+            query.executeUpdate();
         }
         if (args.containsKey("prepaidNumber")) {
-            query = entityManager.createQuery("update Patient as patient set prepaidNumber = :prepaidNumber where patient.user.email = :email", Patient.class);
+            query = entityManager.createQuery("update Patient as patient set prepaidNumber = :prepaidNumber where patient.user.email = :email");
             query.setParameter("prepaidNumber", args.get("prepaidNumber"));
+            query.setParameter("email",email);
+            query.executeUpdate();
         }
-        query.setParameter("email",email);
-        query.executeUpdate();
     }
 }

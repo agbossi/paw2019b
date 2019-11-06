@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -98,7 +99,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao{
 
     @Override
     public long deleteSpecialty(String name) {
-        final TypedQuery<Specialty> query = entityManager.createQuery("delete from Specialty as specialty where specialty.name = :name",Specialty.class);
+        final Query query = entityManager.createQuery("delete from Specialty as specialty where specialty.name = :name");
         query.setParameter("name",name);
         return query.executeUpdate();
     }

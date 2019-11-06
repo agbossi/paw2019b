@@ -2,14 +2,11 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.UserDao;
 import ar.edu.itba.paw.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -107,7 +104,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void updateUser(String email, Map<String, String> args){
-        final TypedQuery<User> query = entityManager.createQuery("update User user set user.firstName = :firstName, user.lastName = :lastName where user.email = :email", User.class);
+        final Query query = entityManager.createQuery("update User as user set user.firstName = :firstName, user.lastName = :lastName where user.email = :email");
         query.setParameter("email",email);
         query.setParameter("firstName",args.get("firstName"));
         query.setParameter("lastName",args.get("lastName"));
