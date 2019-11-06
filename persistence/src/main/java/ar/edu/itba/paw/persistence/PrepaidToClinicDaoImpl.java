@@ -85,7 +85,7 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     @Override
     public List<PrepaidToClinic> getPrepaidToClinics(){
         //en el join es p.clinic o p.id?
-        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p inner join p.clinic",PrepaidToClinic.class);
+        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p",PrepaidToClinic.class);
         List<PrepaidToClinic> list = query.getResultList();
         return list.isEmpty() ? null : list;
     }
@@ -99,7 +99,7 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
 
     @Override
     public boolean clinicHasPrepaid(String prepaid, int clinic){
-        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p inner join p.clinic as pc where pc.id = :clinic and p.prepaid = :prepaid",PrepaidToClinic.class);
+        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p where p.clinic.id = :clinic and p.prepaid = :prepaid",PrepaidToClinic.class);
         query.setParameter("clinic",clinic);
         query.setParameter("prepaid",prepaid);
         List<PrepaidToClinic> list = query.getResultList();
@@ -109,7 +109,7 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     @Override
     public long deletePrepaidFromClinic(String prepaid, int clinic) {
         TypedQuery<PrepaidToClinic> query = entityManager.createQuery("delete from PrepaidToClinic as p " +
-                "where p.prepaid =: prepaid and p.clinic =: clinic",PrepaidToClinic.class);
+                "where p.prepaid = :prepaid and p.clinic.id = :clinic",PrepaidToClinic.class);
         query.setParameter("clinic",clinic);
         query.setParameter("prepaid",prepaid);
         return query.executeUpdate();

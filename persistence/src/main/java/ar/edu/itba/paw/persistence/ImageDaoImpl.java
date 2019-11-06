@@ -74,16 +74,16 @@ public class ImageDaoImpl implements ImageDao {
     public long createProfileImage(byte[] image, String doctor) {
         Image im = new Image();
         //TODO conflicto de tipos
-       // im.setImage(image);
-        //im.setLicense(doctor);
-        //entityManager.persist(image);
+        im.setImage(image);
+        im.setLicense(doctor);
+        entityManager.persist(image);
         //TODO ver si funciona, y sino devolver el objeto y devolver el id en service y ver si funciona
         return im.getId();
     }
 
     @Override
     public Image getProfileImage(String doctor){
-        TypedQuery<Image> query = entityManager.createQuery("from Image as image where image.license = :doctor",Image.class);
+        TypedQuery<Image> query = entityManager.createQuery("from Image as image where image.doctor.license = :doctor",Image.class);
         query.setParameter("doctor",doctor);
         List<Image> list = query.getResultList();
         return list.isEmpty() ? null : list.get(0);
@@ -91,7 +91,7 @@ public class ImageDaoImpl implements ImageDao {
 
     @Override
     public long updateProfileImage(byte[] image, String doctor){
-        TypedQuery<Image> query = entityManager.createQuery("update Image as im set im.image = :image where im.license = :doctor ",Image.class);
+        TypedQuery<Image> query = entityManager.createQuery("update Image as im set im.image = :image where im.doctor.license = :doctor ",Image.class);
         query.setParameter("image",image);
         query.setParameter("doctor",doctor);
         return query.executeUpdate();

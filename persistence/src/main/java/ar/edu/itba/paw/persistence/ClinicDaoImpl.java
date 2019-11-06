@@ -100,7 +100,6 @@ public class ClinicDaoImpl implements ClinicDao {
         clinic.setName(name);
         clinic.setAddress(address);
         entityManager.persist(clinic);
-        //tengo que hacer un get a bd? TODO ver que la clinic tenga su id. segun stackoverflow esto se hace solo
         return clinic;
     }
 
@@ -121,7 +120,7 @@ public class ClinicDaoImpl implements ClinicDao {
 
     @Override
     public Clinic getClinicById(int id) {
-        return null;
+        return entityManager.find(Clinic.class,id);
     }
 
     @Override

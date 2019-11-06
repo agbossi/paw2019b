@@ -191,8 +191,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public List<DoctorClinic> getDoctorClinicsForDoctor(Doctor doctor) {
-        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc inner join dc.doctor as dcDoc inner join dc.clinic as dcDocCli"  +
-                                         "inner join dcDoc.user where dc.doctor.license = :doctorLicense",DoctorClinic.class);
+        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc "  +
+                                         " where dc.doctor.license = :doctorLicense",DoctorClinic.class);
         query.setParameter("doctorLicense",doctor.getLicense());
         List<DoctorClinic> list = query.getResultList();
         return list.isEmpty() ? null : list;
@@ -200,8 +200,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public List<DoctorClinic> getDoctorsInClinic(int clinic){
-        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc inner join dc.doctor as dcDoc inner join dc.clinic as dcDocCli"  +
-                "inner join dcDoc.user where dc.clinic.id = :id",DoctorClinic.class);
+        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc"  +
+                " where dc.clinic.id = :id",DoctorClinic.class);
         query.setParameter("id",clinic);
         List<DoctorClinic> list = query.getResultList();
         return list.isEmpty() ? null : list;
