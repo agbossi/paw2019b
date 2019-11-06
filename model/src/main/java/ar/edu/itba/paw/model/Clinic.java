@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Table(name = "clinics")
@@ -21,16 +23,28 @@ public class Clinic {
     @JoinColumn(name = "location")
     private Location location;
 
+    @OneToMany(mappedBy = "clinic")
+    private List<PrepaidToClinic> prepaids;
+
 
     public Clinic(int id, String name, String address, Location location){
         this.id = id;
         this.name = name;
         this.address = address;
         this.location = location;
+        this.prepaids = new LinkedList<>();
     }
 
     public Clinic(){
 
+    }
+
+    public List<PrepaidToClinic> getPrepaids() {
+        return prepaids;
+    }
+
+    public void setPrepaids(List<PrepaidToClinic> prepaids) {
+        this.prepaids = prepaids;
     }
 
     public String getName() {
