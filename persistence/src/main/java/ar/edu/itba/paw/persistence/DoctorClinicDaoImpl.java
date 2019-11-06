@@ -136,7 +136,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
         DoctorQueryBuilder builder = new DoctorQueryBuilder();
         builder.buildQuery(location.getLocationName(), specialty.getSpecialtyName(), firstName, lastName, prepaid.getName(), consultPrice);
-
+        entityManager.createQuery()
         List<DoctorClinic> list = jdbcTemplate.query(builder.getQuery(), new PreparedStatementSetter() {
 
             public void setValues(PreparedStatement preparedStatement) throws SQLException {
@@ -223,7 +223,29 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     public List<DoctorClinic> getFilteredDoctors(final Location location, final Specialty specialty,
                                                  final String firstName, final String lastName, final Prepaid prepaid,
                                                  final int consultPrice){
-        return null;
+        DoctorQueryBuilder builder = new DoctorQueryBuilder();
+        builder.buildQuery(location.getLocationName(), specialty.getSpecialtyName(), firstName, lastName, prepaid.getName(), consultPrice);
+        TypedQuery<DoctorClinic> query = entityManager.createQuery(builder.getQuery(),DoctorClinic.class);
+        if(location.getLocationName() != ""){
+            query.setParameter("location",location.getLocationName());
+        }
+        if(specialty.getSpecialtyName() != ""){
+            query.setParameter("specialty",specialty.getSpecialtyName());
+        }
+        if(firstName != ""){
+            query.setParameter("firstName",firstName);
+        }
+        if(lastName != ""){
+            query.setParameter("lastName",lastName);
+        }
+        if(prepaid.getName() != ""){
+            query.setParameter("prepaid",prepaid.getName());
+        }
+        if(consultPrice > 0){
+            query.setParameter("consultPrice",consultPrice);
+        }
+        List<DoctorClinic> list = query.getResultList();
+        return list.isEmpty() ? null : list;
     }
 
 }
