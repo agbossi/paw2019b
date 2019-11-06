@@ -184,18 +184,18 @@ public class AppointmentDaoImpl implements AppointmentDao {
    //TODO ver que esta query hace lo que tiene que hacer
     @Override
     public List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic){
-        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap inner join ap.patient as pat inner join ap.doctorClinic as docCli inner join docCli.doctor as doc inner join docCli.clinic as cli" +
-                " where ap.doctorClinic.doctor = :doctor and ap.doctorClinic.clinic = :clinic",Appointment.class);
-        query.setParameter("doctor",doctorClinic.getDoctor());
-        query.setParameter("clinic",doctorClinic.getClinic());
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
+                " where ap.doctorClinic.doctor.license = :doctor and ap.doctorClinic.clinic.id = :clinic",Appointment.class);
+        query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
+        query.setParameter("clinic",doctorClinic.getClinic().getId());
         List<Appointment> list = query.getResultList();
         return list.isEmpty() ? null : list;
     }
 
     @Override
     public List<Appointment> getPatientsAppointments(User patient){
-        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap inner join ap.patient as pat inner join ap.doctorClinic as docCli inner join docCli.doctor as doc inner join docCli.clinic as cli" +
-                " where pat.email = :email",Appointment.class);
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
+                " where ap.patient.email = :email",Appointment.class);
         query.setParameter("email",patient.getEmail());
         List<Appointment> list = query.getResultList();
         return list.isEmpty() ? null : list;
@@ -203,17 +203,33 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
     @Override
     public List<Appointment> getAllDocAppointmentsOnSchedule(DoctorClinic doctor, int day, int hour){
-        return null;
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
+                " where ap.doctorClinic.doctor.license = :doctor and ap.clinic = :clinic and ap.appointmentKey.  extract(day from date) = :day and extract(hour from date) = :hour ",Appointment.class);
+        query.setParameter("doctor",doctor.getDoctor().getLicense());
+        query.setParameter("clinic",doctor.getClinic().getId());
+        query.setParameter("day",day-1);
+        query.setParameter("hour",hour);
+        List<Appointment> list = query.getResultList();
+        return list.isEmpty() ? null : list;
     }
 
     @Override
     public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date){
-
+        final TypedQuery<Appointment> query = entityManager.createQuery("delete from Appointment as ap where ap.patient.email = :email and ap.doctorClinic.doctor.license = :doctor and ap.clinic = :clinic and ap.appointmentKey.date = :date",Appointment.class);
+        query.setParameter("email",patient.getEmail());
+        query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
+        query.setParameter("clinic",doctorClinic.getClinic().getId());
+        query.setParameter("date",date.getTime());
+        query.executeUpdate();
     }
 
     @Override
     public Appointment hasAppointment(DoctorClinic doctorClinic, Calendar date){
-        return null;
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
+                " where ap.doctorClinic.doctor.license = :doctor and ap.clinic = :clinic and ap.appointmentKey.date = :date",Appointment.class);
+        query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
+        query.setParameter("clinic",doctorClinic.getClinic().getId());
+        query.setParameter("date",date.getTime());
     }
 
     @Override
@@ -226,9 +242,15 @@ public class AppointmentDaoImpl implements AppointmentDao {
         return false;
     }
 
+
+    //TODO finish
     @Override
     public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour){
-
+        final TypedQuery<Appointment> query = entityManager.createQuery("delete from Appointment as ap where ap.patient.email = :email and ap.doctorClinic.doctor.license = :doctor and ap.clinic = :clinic and ap.appointmentKey.date = :date",Appointment.class);
+        query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
+        query.setParameter("clinic",doctorClinic.getClinic().getId());
+        query.setParameter("date",date.getTime());
+        query.executeUpdate();
     }
 
 

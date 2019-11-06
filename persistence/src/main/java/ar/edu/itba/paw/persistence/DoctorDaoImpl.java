@@ -148,7 +148,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getDoctors(){
-        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor inner join doctor.user",Doctor.class);
+        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor",Doctor.class);
         final List<Doctor> list = query.getResultList();
         return list.isEmpty() ? null : list;
     }
@@ -160,7 +160,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getDoctorByName(String firstName,String lastName) {
-        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor inner join doctor.user " +
+        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor " +
                 "where doctor.user.firstName = :firstName and doctor.user.lastName = :lastName",Doctor.class);
 
         query.setParameter("firstName",firstName);
@@ -171,7 +171,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getDoctorBySpecialty(Specialty specialty){
-        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor inner join doctor.user " +
+        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor " +
                 "where doctor.specialty.name = :specialty",Doctor.class);
 
         query.setParameter("specialty",specialty.getSpecialtyName());
@@ -181,8 +181,8 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public boolean isDoctor(String email) {
-        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor inner join doctor.user " +
-                "where doctor.user.email = :email",Doctor.class);
+        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor" +
+                " where doctor.user.email = :email",Doctor.class);
 
         query.setParameter("email",email);
         final List<Doctor> list = query.getResultList();
@@ -191,7 +191,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public Doctor getDoctorByEmail(String email){
-        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor inner join doctor.user " +
+        final TypedQuery<Doctor> query = entityManager.createQuery("select doctor from Doctor as doctor  " +
                 "where doctor.user.email = :email",Doctor.class);
 
         query.setParameter("email",email);

@@ -94,8 +94,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
     @Override
     public List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic){
-        final TypedQuery<Schedule> query = entityManager.createQuery("from Schedule as schedule where schedule.doctorClinic.doctor = :doctor " +
-                "and schedule.doctorClinic.clinic = :clinic",Schedule.class);
+        final TypedQuery<Schedule> query = entityManager.createQuery("from Schedule as schedule where schedule.doctorClinic.doctor.license = :doctor " +
+                "and schedule.doctorClinic.clinic.id = :clinic",Schedule.class);
 
         query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
         query.setParameter("clinic",doctorClinic.getClinic().getId());
@@ -113,9 +113,9 @@ public class ScheduleDaoImpl implements ScheduleDao {
     @Override
     public boolean doctorHasSchedule(Doctor doctor, int day, int hour) {
         final TypedQuery<Schedule> query = entityManager.createQuery("from Schedule as schedule " +
-                "where schedule.doctorClinic.doctor = :doctor and schedule.scheduleKey.day = :day and schedule.scheduleKey.hour = :hour",Schedule.class);
+                "where schedule.doctorClinic.doctor.license = :doctor and schedule.scheduleKey.day = :day and schedule.scheduleKey.hour = :hour",Schedule.class);
 
-        query.setParameter("doctor",doctor);
+        query.setParameter("doctor",doctor.getLicense());
         query.setParameter("day",day);
         query.setParameter("hour",hour);
         List<Schedule> schedules = query.getResultList();
@@ -125,8 +125,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
     @Override
     public void deleteSchedule(int hour, int day, DoctorClinic doctorClinic){
         final TypedQuery<Schedule> query = entityManager.createQuery("delete from Schedule as schedule " +
-                "where schedule.scheduleKey.day =: day and schedule.scheduleKey.hour =: hour " +
-                "and schedule.doctorClinic.doctor =: doctor and schedule.doctorClinic.clinic =: clinic",Schedule.class);
+                "where schedule.scheduleKey.day = :day and schedule.scheduleKey.hour = :hour " +
+                "and schedule.doctorClinic.doctor = :doctor and schedule.doctorClinic.clinic = :clinic",Schedule.class);
         query.setParameter("day",day);
         query.setParameter("hour",hour);
         query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
