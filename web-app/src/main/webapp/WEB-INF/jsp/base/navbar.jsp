@@ -41,8 +41,8 @@
                 </sec:authorize>
 
                 &nbsp;
-                <a href="?lang=en"/><spring:message code="english"/></a>
-                <a href="?lang=es"/><spring:message code="spanish"/></a>
+                <a href="?lang=en"><spring:message code="english"/></a>
+                <a href="?lang=es"><spring:message code="spanish"/></a>
                 &nbsp;
 
                 <sec:authorize access="hasAnyRole('ROLE_USER','ROLE_DOCTOR','ROLE_ADMIN')">

@@ -33,4 +33,34 @@ public class UserContextHelper {
     public static User getLoggedUser(SecurityContext context, UserService userService) {
         return userService.findUserByEmail(getLoggedUserEmail(context));
     }
+
+    public static void saveUserQuery(SearchForm form, HttpServletRequest request){
+        HttpSession session = request.getSession();
+
+        session.setAttribute("firstName",form.getFirstName());
+        session.setAttribute("lastName",form.getLastName());
+        session.setAttribute("consultPrice",form.getConsultPrice());
+        session.setAttribute("location",form.getLocation());
+        session.setAttribute("prepaid",form.getPrepaid());
+        session.setAttribute("specialty",form.getSpecialty());
+    }
+
+    public static void loadUserQuery(SearchForm form,HttpServletRequest request){
+        HttpSession session = request.getSession();
+
+        form.setFirstName((String)session.getAttribute("firstName"));
+        form.setLastName((String)session.getAttribute("lastName"));
+        form.setConsultPrice((int)session.getAttribute("consultPrice"));
+        form.setLocation((String)session.getAttribute("location"));
+        form.setPrepaid((String)session.getAttribute("prepaid"));
+        form.setSpecialty((String)session.getAttribute("specialty"));
+
+//        session.removeAttribute("firstName");
+//        session.removeAttribute("lastName");
+//        session.removeAttribute("consultPrice");
+//        session.removeAttribute("location");
+//        session.removeAttribute("prepaid");
+//        session.removeAttribute("specialty");
+
+    }
 }

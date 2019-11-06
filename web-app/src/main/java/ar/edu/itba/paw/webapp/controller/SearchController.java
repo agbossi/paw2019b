@@ -61,14 +61,23 @@ public class SearchController {
     @RequestMapping(value = "/results", method = {RequestMethod.GET})
     public ModelAndView backToResults(@ModelAttribute("searchForm") final SearchForm form, HttpServletRequest request){
 
-        final ModelAndView mav = new ModelAndView("index");
+        final ModelAndView mav = new ModelAndView("results");
 
         String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
         Patient patient = patientService.getPatientByEmail(userEmail);
         if(patient != null) {
             mav.addObject("patientPrepaid", patient.getPrepaid());
         }
+
+        UserContextHelper.loadUserQuery(form,request);
+
         ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
+
+        List<Doctor> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
+                new Specialty(form.getSpecialty()), form.getFirstName(),form.getLastName(),new Prepaid(form.getPrepaid()),form.getConsultPrice());
+
+        ViewModifierHelper.addFilteredDoctors(mav, filteredDoctors);
+
         return mav;
     }
 
@@ -79,6 +88,8 @@ public class SearchController {
             return search(form);
 
         final ModelAndView mav = new ModelAndView("results");
+
+        UserContextHelper.saveUserQuery(form,request);
 
         mav.addObject("patientPrepaid", form.getPrepaid());
         ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
