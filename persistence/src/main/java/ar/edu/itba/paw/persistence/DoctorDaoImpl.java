@@ -2,24 +2,14 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.model.Doctor;
-import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Specialty;
 import ar.edu.itba.paw.model.User;
-import org.hibernate.Query;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.print.Doc;
-import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -206,14 +196,14 @@ public class DoctorDaoImpl implements DoctorDao {
         query3.setParameter("license", license);
         int count3 = query3.executeUpdate(); */
 
-        final TypedQuery<Doctor> query = entityManager.createQuery("delete from Doctor as doctor where doctor.license = :license",Doctor.class);
+        Query query = entityManager.createQuery("delete from Doctor as doctor where doctor.license = :license");
         query.setParameter("license",license);
         return query.executeUpdate();
     }
 
     @Override
     public void updateDoctor(String license, Map<String, String> args){
-        final TypedQuery<Doctor> query = entityManager.createQuery("update Doctor doctor set doctor.phoneNumber = :phoneNumber, doctor.specialty = :specialty where doctor.license = :license", Doctor.class);
+        final Query query = entityManager.createQuery("update Doctor doctor set doctor.phoneNumber = :phoneNumber, doctor.specialty = :specialty where doctor.license = :license");
         query.setParameter("license",license);
         query.setParameter("specialty",args.get("specialty"));
         query.setParameter("phoneNumber",args.get("phoneNumber"));

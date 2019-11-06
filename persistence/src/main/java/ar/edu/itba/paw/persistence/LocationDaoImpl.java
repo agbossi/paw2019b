@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -115,7 +116,7 @@ public class LocationDaoImpl implements LocationDao {
 
     @Override
     public long deleteLocation(String name){
-        TypedQuery<Location> query = entityManager.createQuery("delete from Location as location where location.name = :name",Location.class);
+        Query query = entityManager.createQuery("delete from Location as location where location.name = :name");
         query.setParameter("name",name);
         return query.executeUpdate();
     }

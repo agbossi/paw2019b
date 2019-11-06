@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
@@ -74,11 +75,9 @@ public class ImageDaoImpl implements ImageDao {
     @Override
     public long createProfileImage(byte[] image, String doctor) {
         Image im = new Image();
-        //TODO conflicto de tipos
         im.setImage(image);
         im.setLicense(doctor);
         entityManager.persist(image);
-        //TODO ver si funciona, y sino devolver el objeto y devolver el id en service y ver si funciona
         return im.getId();
     }
 
@@ -92,7 +91,7 @@ public class ImageDaoImpl implements ImageDao {
 
     @Override
     public long updateProfileImage(byte[] image, String doctor){
-        TypedQuery<Image> query = entityManager.createQuery("update Image as im set im.image = :image where im.doctor.license = :doctor ",Image.class);
+        Query query = entityManager.createQuery("update Image as im set im.image = :image where im.doctor.license = :doctor");
         query.setParameter("image",image);
         query.setParameter("doctor",doctor);
         return query.executeUpdate();
