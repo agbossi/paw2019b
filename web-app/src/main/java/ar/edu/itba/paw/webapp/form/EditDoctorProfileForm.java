@@ -21,7 +21,7 @@ public class EditDoctorProfileForm {
 
     @Size(max = 20)
     @Pattern(regexp = "[a-zA-Z0-9 ]*")
-    @EditablePassword
+    @EditablePassword(message = "{value.registered}")
     private String newPassword;
 
     @Size(max = 20)

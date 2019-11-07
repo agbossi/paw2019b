@@ -9,7 +9,7 @@ public class LocationForm {
 
     @Size(min=1, max=30)
     @Pattern(regexp = "[a-zA-Z ]+")
-    @Unique(field = "location")
+    @Unique(field = "location",message = "{value.registered}")
     private String name;
 
     public String getName() {

@@ -27,7 +27,7 @@ public class SignUpForm {
 
     @Size(min = 6, max = 25)
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
-    @Unique(field = "user")
+    @Unique(field = "user",message = "{value.registered}")
     private String email;
 
     @Pattern(regexp = "[a-zA-Z0-9 ]*")

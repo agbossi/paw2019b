@@ -17,7 +17,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-@Component
 public class ValidationHelper {
 
     private ValidationHelper() {

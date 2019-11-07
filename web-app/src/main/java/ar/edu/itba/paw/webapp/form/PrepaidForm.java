@@ -9,7 +9,7 @@ public class PrepaidForm {
 
     @Size(min=1, max=20)
     @Pattern(regexp = "[a-zA-Z0-9 ]*")
-    @Unique(field = "prepaid")
+    @Unique(field = "prepaid",message = "{value.registered}")
     private String name;
 
     public String getName() {

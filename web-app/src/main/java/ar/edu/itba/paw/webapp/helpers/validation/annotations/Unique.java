@@ -20,7 +20,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = UniqueValidator.class)
 @Documented
 public @interface Unique {
-    String message() default "{value.registered}"; //si esta harcodeado lo toma, asi no
+    String message() default "it's already registered"; //si esta harcodeado lo toma, asi no
 
     Class<?>[] groups() default {};
 

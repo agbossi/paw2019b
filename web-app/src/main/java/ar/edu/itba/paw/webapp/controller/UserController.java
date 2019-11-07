@@ -60,8 +60,6 @@ public class UserController {
     @RequestMapping(value = "/signUp",method = { RequestMethod.POST })
     public ModelAndView signUpValidation(@Valid @ModelAttribute("signUpForm") final SignUpForm form, final BindingResult errors, HttpServletRequest request, HttpServletResponse response, Locale locale) {
 
-       // validator.signUpValidate(form.getPassword(),form.getRepeatPassword(),form.getEmail(),errors,locale);
-
         if(errors.hasErrors()){
             return signUp(form,request,response);
         }

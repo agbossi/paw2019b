@@ -49,9 +49,6 @@ public class AdminController {
     private ImageService imageService;
 
     @Autowired
-    private ValidationHelper validator;
-
-    @Autowired
     private MessageSource messageSource;
 
     @RequestMapping(value = "/doctors", method = { RequestMethod.GET })
@@ -84,10 +81,7 @@ public class AdminController {
     public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors,
                                     @RequestParam("photo") MultipartFile photo, Locale locale) {
 
-
-        //validator.signUpValidate(form.getPassword(),form.getRepeatPassword(),form.getEmail(),errors,locale);
-        //validator.licenseValidate(form.getLicense(),errors,locale);
-        boolean photoError = validator.photoValidate(photo);
+        boolean photoError = ValidationHelper.photoValidate(photo);
 
         if (errors.hasErrors() || photoError)
             return addDoctor(form,photoError,locale);
@@ -157,8 +151,6 @@ public class AdminController {
     @RequestMapping(value = "/addedClinic", method = { RequestMethod.POST })
     public ModelAndView addedClinic(@Valid @ModelAttribute("clinicForm") final ClinicForm form, final BindingResult errors,Locale locale){
 
-        //validator.clinicValidate(form.getName(),form.getAddress(),form.getLocation(),errors,locale);
-
         if(errors.hasErrors())
             return addClinic(form);
 
@@ -211,8 +203,6 @@ public class AdminController {
     @RequestMapping(value = "/addedLocation", method = { RequestMethod.POST })
     public ModelAndView addedLocation(@Valid @ModelAttribute("locationForm") final LocationForm form, final BindingResult errors,Locale locale){
 
-     //   validator.validateLocation(form.getName(),errors,locale);
-
         if(errors.hasErrors())
             return addLocation(form);
 
@@ -264,8 +254,6 @@ public class AdminController {
 
     @RequestMapping(value = "/addedSpecialty", method = { RequestMethod.POST })
     public ModelAndView addedSpecialty(@Valid @ModelAttribute("specialtyForm") final SpecialtyForm form, final BindingResult errors,Locale locale){
-
-       // validator.validateSpecialty(form.getName(),errors,locale);
 
         if(errors.hasErrors())
             return addSpecialty(form);

@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Target( { ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface EditablePassword {
-    String message() default "password too short"; //"{user.password.too.short}";
+    String message() default "password too short";//"{user.password.too.short}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 

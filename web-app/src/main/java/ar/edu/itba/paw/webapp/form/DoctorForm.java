@@ -19,7 +19,7 @@ public class DoctorForm {
     private String specialty;
 
     @Pattern(regexp = "[0-9]+")
-    @Unique(field = "doctor")
+    @Unique(field = "doctor",message = "{value.registered}")
     private String license;
 
     @Pattern(regexp = "[0-9 ]+")
@@ -34,7 +34,7 @@ public class DoctorForm {
     private String repeatPassword;
 
     @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
-    @Unique(field = "user")
+    @Unique(field = "user",message = "{value.registered}")
     private String email;
 
     public String getFirstName() {

@@ -5,7 +5,7 @@ import ar.edu.itba.paw.webapp.helpers.validation.annotations.FieldMatch;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@FieldMatch(field = "newPassword",fieldMatch = "repeatPassword",message = "{user.password.not.matching}")
+@FieldMatch(field = "newPassword",fieldMatch = "repeatPassword")
 public class PersonalInformationForm {
 
     @Size(max = 20)
@@ -18,7 +18,7 @@ public class PersonalInformationForm {
 
     @Size(max = 20)
     @Pattern(regexp = "[a-zA-Z0-9 ]*")
-    @EditablePassword
+    @EditablePassword(message = "{user.password.too.short}")
     private String newPassword;
 
     @Size(max = 20)
