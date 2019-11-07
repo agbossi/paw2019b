@@ -15,8 +15,11 @@
                     <c:when test="${!empty doctors}">
                         <c:forEach var="doctor" items="${doctors}">
                             <div class="single-doctor">
-                                <img class="doctor-picture" src="<c:url value="/images/${doctor.license}"/>"/>
-                                <h3><a class="text-dark" href="<c:url value="/results/${doctor.license}"/>"><c:out value="${doctor.firstName}"/> <c:out value=" ${doctor.lastName}"/></a></h3>
+                                <img class="doctor-picture" src="<c:url value="/images/${doctor.license}"/>" onerror="this.onerror=null;this.src='<c:url value="/resources/images/docpic.jpg" />';"/>
+                                <h3>
+                                    <a class="text-dark" href="<c:url value="/results/${doctor.license}"/>">
+                                    <c:out value="${doctor.firstName}"/> <c:out value=" ${doctor.lastName}"/></a>
+                                </h3>
                                 <p>${doctor.specialty.specialtyName}</p>
                             </div>
                         </c:forEach>

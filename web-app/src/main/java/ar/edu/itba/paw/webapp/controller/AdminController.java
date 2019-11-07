@@ -62,14 +62,11 @@ public class AdminController {
     }
     
     @RequestMapping(value = "/addDoctor", method = { RequestMethod.GET })
-    public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form,boolean photoError,Locale locale){
+    public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form){
         final ModelAndView mav = new ModelAndView("admin/addDoctor");
 
         ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
-        if(photoError){
-            mav.addObject("errorMessage", messageSource.getMessage("doctor.photo.not.valid",null,locale));
 
-        }
 
         return mav;
     }
@@ -82,15 +79,14 @@ public class AdminController {
 
     @RequestMapping(value = "/addedDoctor", method = { RequestMethod.POST })
     public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors,
-                                    @RequestParam("photo") MultipartFile photo, Locale locale) {
+                                    Locale locale) {
 
 
         validator.signUpValidate(form.getPassword(),form.getRepeatPassword(),form.getEmail(),errors,locale);
         validator.licenseValidate(form.getLicense(),errors,locale);
-        boolean photoError = validator.photoValidate(photo);
 
-        if (errors.hasErrors() || photoError)
-            return addDoctor(form,photoError,locale);
+        if (errors.hasErrors())
+            return addDoctor(form);
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
         userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
@@ -99,12 +95,10 @@ public class AdminController {
                 form.getPhoneNumber(),
                 form.getEmail()
         );
-        long image = imageService.createProfileImage(photo, doctor);
 
 
         final ModelAndView mav = new ModelAndView("admin/addedDoctor");
         mav.addObject("doctor", doctor);
-        mav.addObject("imageId", image);
 
         return mav;
     }

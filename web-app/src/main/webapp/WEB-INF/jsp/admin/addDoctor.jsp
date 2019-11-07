@@ -109,21 +109,6 @@
                             </div>
                             <form:errors class="errors" path="repeatPassword" element="p"/>
                         </div>
-                        <div>
-                            <div>
-                                <div class="label-div">
-                                    <spring:message code="default.picture"/>
-                                </div>
-                                <div class="input-div">
-                                    <input type="file" name="photo" class="photo-input-tag"/>
-                                </div>
-                            </div>
-                            <c:if test="${errorMessage != null}">
-                                <div id="error">
-                                    <b><c:out value="${errorMessage}"/></b>
-                                </div>
-                            </c:if>
-                        </div>
                         <div class="add-doctor-add-button">
                             <input class="submit-add" type="submit" value="<spring:message code="submit.add"/>">
                         </div>

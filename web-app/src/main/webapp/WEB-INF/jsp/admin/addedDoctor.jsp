@@ -22,15 +22,6 @@
             <p><c:out value="${doctor.license}"/></p>
             <p><b><spring:message code="user.email"/></b></p>
             <p><c:out value="${doctor.email}"/></p>
-            <p><b><spring:message code="profile.picture"/></b></p>
-            <svg class="rounded-circle"
-                 width="140" height="140"
-                 xmlns="http://www.w3.org/2000/svg"
-                 preserveAspectRatio="xMidYMid slice"
-                 focusable="false" role="img" aria-label="Placeholder: 140x140">
-                <rect width="100%" height="100%" fill="#777"></rect>
-                <image width="100%" height="100%" xlink:href="<c:url value="/images/${doctor.license}"/>" clip-path="url(#circleView)" />
-            </svg>
         </div>
         <div>
             <a class="nav-link" href="<c:url value="/admin/addDoctor"/>"><spring:message code="add.another.doctor"/></a>

@@ -31,13 +31,18 @@ public class ImageServiceImpl implements ImageService {
     @Transactional
     @Override
     public long updateProfileImage(MultipartFile file, Doctor doctor) {
-        if(!file.isEmpty()){
-            try {
-                return imageDao.updateProfileImage(file.getBytes(), doctor.getLicense());
+        if( imageDao.getProfileImage(doctor.getLicense()) != null ) {
+            if(!file.isEmpty()){
+                try {
+                    return imageDao.updateProfileImage(file.getBytes(), doctor.getLicense());
+                }
+                catch (IOException e){
+                    return 0; // code for error
+                }
             }
-            catch (IOException e){
-                return 0; // code for error
-            }
+        }
+        else {
+            createProfileImage(file, doctor);
         }
         return 1;
     }
