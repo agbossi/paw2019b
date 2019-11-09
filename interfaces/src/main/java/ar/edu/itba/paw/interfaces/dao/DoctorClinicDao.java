@@ -7,6 +7,8 @@ import java.util.List;
 public interface DoctorClinicDao {
         DoctorClinic createDoctorClinic(Doctor doctor, Clinic clinic, int consultPrice);
 
+        long deleteDoctorClinic(String license, int clinicid);
+
         List<DoctorClinic> getDoctorClinics();
 
         List<DoctorClinic> getDoctorClinicsForDoctor(Doctor doctor);

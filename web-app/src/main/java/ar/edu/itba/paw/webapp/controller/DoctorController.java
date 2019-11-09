@@ -25,6 +25,9 @@ import java.util.Locale;
 @RequestMapping("/doctor")
 public class DoctorController {
     @Autowired
+    private AppointmentService appointmentService;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -144,6 +147,14 @@ public class DoctorController {
         ViewModifierHelper.addDoctors(mav, doctorService);
 
         return mav;
+    }
+
+    @RequestMapping(value = "/deleteDoctorClinic/{license}/{clinicid}", method = { RequestMethod.GET })
+    public ModelAndView deleteDoctorClinic(@PathVariable(value = "license") String license,
+                                           @PathVariable(value = "clinicid") int clinic){
+
+        doctorClinicService.deleteDoctorClinic(license, clinic);
+        return new ModelAndView("redirect:/");
     }
 
     @RequestMapping(value = "/addSchedule/{clinicid}", method = {RequestMethod.GET})

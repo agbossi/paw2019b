@@ -41,6 +41,12 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
         return doctorClinicDao.createDoctorClinic(doctor, clinic, consultPrice);
     }
 
+    @Transactional
+    @Override
+    public long deleteDoctorClinic(String license, int clinicid) {
+        return doctorClinicDao.deleteDoctorClinic(license, clinicid);
+    }
+
     @Override
     public List<DoctorClinic> getDoctorClinics() {
         List<DoctorClinic> list = doctorClinicDao.getDoctorClinics();

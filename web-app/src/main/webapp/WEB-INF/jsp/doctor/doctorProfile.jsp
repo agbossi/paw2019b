@@ -26,6 +26,14 @@
                                         <a href="<c:url value="/doctor/clinics/${docClinic.clinic.id}/1"/>"><h5><c:out value="${docClinic.clinic.name}"/></h5></a>
                                         <p><c:out value="${docClinic.clinic.location.locationName}"/></p>
                                         <p>(<c:out value="${docClinic.clinic.address}"/>)</p>
+
+                                        <div class="delete-box">
+                                            <b class="delete-element">
+                                                <a href="<c:url value="/doctor/deleteDoctorClinic/${docClinic.doctor.license}/${docClinic.clinic.id}"/>">
+                                                    <input type="submit" value="<spring:message code="leave.clinic"/>" name="<spring:message code="leave.clinic"/>" onclick="return confirmSubmit()">
+                                                </a>
+                                            </b>
+                                        </div>
                                     </div>
                                 </c:forEach>
                             </div>
@@ -35,3 +43,14 @@
         </div>
     </body>
 </html>
+
+<script>
+    function confirmSubmit()
+    {
+        var agree=confirm("Are you sure you want to leave this clinic?");
+        if (agree)
+            return true ;
+        else
+            return false ;
+    }
+</script>

@@ -63,6 +63,12 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     }
 
     @Override
+    public long deleteDoctorClinic(String license, int clinicid) {
+        String deleteQuery = "DELETE FROM doctorClinics WHERE doctorLicense = ? and clinicid = ?";
+        return jdbcTemplate.update(deleteQuery, license, clinicid);
+    }
+
+    @Override
     public List<DoctorClinic> getDoctorClinics() {
         final List<DoctorClinic> list = jdbcTemplate.query("select firstName,lastName,specialty,doctorLicense,phoneNumber,doctors.email," +
                 " clinicid,name,address,location,consultPrice" +

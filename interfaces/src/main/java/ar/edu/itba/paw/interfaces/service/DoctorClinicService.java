@@ -8,6 +8,8 @@ import java.util.Set;
 public interface DoctorClinicService {
     DoctorClinic createDoctorClinic(Doctor doctor,  Clinic clinic, int consultPrice);
 
+    long deleteDoctorClinic(String license, int clinicid);
+
     void setSchedule(DoctorClinic doctorClinic, int day, int hour);
 
     List<DoctorClinic> getDoctorClinics();
