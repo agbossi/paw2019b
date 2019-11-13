@@ -30,6 +30,7 @@ public class PrepaidServiceImpl implements PrepaidService {
         return prepaidDao.createPrepaid(name);
     }
 
+    @Transactional
     @Override
     public long deletePrepaid(String name) {
         return prepaidDao.deletePrepaid(name);

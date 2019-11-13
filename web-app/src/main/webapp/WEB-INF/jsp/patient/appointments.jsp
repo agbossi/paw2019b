@@ -22,7 +22,7 @@
                         <c:forEach var="appointment" items="${patient.appointments}">
                             <div class="item-card">
                                 <div class="appointment-information">
-                                    <p><format:formatDate value="${appointment.date.getTime()}" type="date" pattern="EEEE dd/MM/yyyy HH:mm"/>
+                                    <p><format:formatDate value="${appointment.appointmentKey.date.getTime()}" type="date" pattern="EEEE dd/MM/yyyy HH:mm"/>
                                     <div><b><spring:message code="a.withdr"/> <c:out value="${appointment.doctorClinic.doctor.lastName}"/>, <c:out value="${appointment.doctorClinic.doctor.firstName}"/></b></div>
                                     <div>
                                         <spring:message code="a.at"/> <c:out value="${appointment.doctorClinic.clinic.name}"/>
@@ -33,7 +33,7 @@
                                     </p>
                                 </div>
                                 <div class="cancel-appointment-button">
-                                    <a class="cancel-button btn btn-outline-primary" href="<c:url value="/cancelApp/${appointment.doctorClinic.clinic.id}/${appointment.doctorClinic.doctor.license}/${appointment.date.get(1)}-${appointment.date.get(2)}-${appointment.date.get(5)}-${appointment.date.get(11)}"/>"><spring:message code="a.cancel"/></a>
+                                    <a class="cancel-button btn btn-outline-primary" href="<c:url value="/cancelApp/${appointment.doctorClinic.clinic.id}/${appointment.doctorClinic.doctor.license}/${appointment.appointmentKey.date.get(1)}-${appointment.appointmentKey.date.get(2)}-${appointment.appointmentKey.date.get(5)}-${appointment.appointmentKey.date.get(11)}"/>"><spring:message code="a.cancel"/></a>
                                 </div>
                             </div>
                         </c:forEach>

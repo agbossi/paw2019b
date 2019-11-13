@@ -203,7 +203,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public void updateDoctor(String license, Map<String, String> args){
-        final Query query = entityManager.createQuery("update Doctor doctor set doctor.phoneNumber = :phoneNumber, doctor.specialty = :specialty where doctor.license = :license");
+        final Query query = entityManager.createQuery("update Doctor doctor set doctor.phoneNumber = :phoneNumber, doctor.specialty.id = :specialty where doctor.license = :license");
         query.setParameter("license",license);
         query.setParameter("specialty",args.get("specialty"));
         query.setParameter("phoneNumber",args.get("phoneNumber"));

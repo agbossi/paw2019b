@@ -33,6 +33,7 @@ public class PrepaidToClinicServiceImpl implements PrepaidToClinicService {
         return prepaidToClinicDao.clinicHasPrepaid(prepaid,clinic);
     }
 
+    @Transactional
     @Override
     public long deletePrepaidFromClinic(String prepaid, int clinic) {
         return prepaidToClinicDao.deletePrepaidFromClinic(prepaid, clinic);
