@@ -263,8 +263,8 @@ public class AppointmentDaoImpl implements AppointmentDao {
     //TODO finish how to do the date parts
     @Override
     public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour){
-        final Query query = entityManager.createQuery("delete from Appointment as ap where ap.patient.email = :email " +
-                "and ap.doctorClinic.doctor.license = :doctor and ap.clinic = :clinic and " +
+        final Query query = entityManager.createQuery("delete from Appointment as ap where " +
+                "ap.appointmentKey.doctor = :doctor and ap.clinic = :clinic and " +
                 "DAY(ap.appointmentKey.date) = :day and HOUR(ap.appointmentKey.date) = :hour");
         query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
         query.setParameter("clinic",doctorClinic.getClinic().getId());
