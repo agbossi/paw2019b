@@ -1,8 +1,12 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.helpers.validation.annotations.EditablePassword;
+import ar.edu.itba.paw.webapp.helpers.validation.annotations.FieldMatch;
+
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+@FieldMatch(field = "newPassword",fieldMatch = "repeatPassword")
 public class EditDoctorProfileForm {
 
     // User information
@@ -17,6 +21,7 @@ public class EditDoctorProfileForm {
 
     @Size(max = 20)
     @Pattern(regexp = "[a-zA-Z0-9 ]*")
+    @EditablePassword(message = "{user.password.too.short}")
     private String newPassword;
 
     @Size(max = 20)

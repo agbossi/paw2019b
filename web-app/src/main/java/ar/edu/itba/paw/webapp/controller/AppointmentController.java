@@ -33,8 +33,6 @@ public class AppointmentController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private ValidationHelper validator;
 
     @RequestMapping(value = "/createApp/{clinicId}/{doctorId}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
     public ModelAndView makeAppointment(@PathVariable(value = "clinicId") int clinicId, @PathVariable(value = "doctorId") String license,
@@ -51,7 +49,7 @@ public class AppointmentController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
 
-        if(!validator.appointmentValidate(doc.getLicense(),user.getEmail(),cal)){
+        if(!ValidationHelper.appointmentValidate(doc.getLicense(),user.getEmail(),cal,appointmentService)){
             appointmentService.createAppointment(doctorClinic, user, cal);
         }
 
@@ -76,7 +74,7 @@ public class AppointmentController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
 
-        if(validator.appointmentValidate(doc.getLicense(),user.getEmail(),cal)){
+        if(ValidationHelper.appointmentValidate(doc.getLicense(),user.getEmail(),cal,appointmentService)){
             appointmentService.cancelAppointment(doctorClinic, user, cal,false);
         }
 
@@ -102,7 +100,7 @@ public class AppointmentController {
         Clinic clinic = clinicService.getClinicById(clinicId);
         DoctorClinic docCli = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, clinic);
 
-        if(validator.appointmentValidate(doctor.getLicense(),patient.getEmail(),calendar)){
+        if(ValidationHelper.appointmentValidate(doctor.getLicense(),patient.getEmail(),calendar,appointmentService)){
             appointmentService.cancelAppointment(docCli, patient, calendar,true);
         }
 
@@ -124,7 +122,7 @@ public class AppointmentController {
         Clinic clinic = clinicService.getClinicById(clinicId);
         DoctorClinic docCli = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doc, clinic);
 
-        if(!validator.appointmentValidate(doc.getLicense(),user.getEmail(),cal)){
+        if(!ValidationHelper.appointmentValidate(doc.getLicense(),user.getEmail(),cal,appointmentService)){
             appointmentService.createAppointment(docCli, user, cal);
         }
 

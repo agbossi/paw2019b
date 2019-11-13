@@ -17,46 +17,13 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-@Component
 public class ValidationHelper {
 
-    @Autowired
-    private MessageSource messageSource;
+    private ValidationHelper() {
+        throw new UnsupportedOperationException();
+    }
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    DoctorService doctorService;
-
-    @Autowired
-    ScheduleService scheduleService;
-
-    @Autowired
-    PrepaidService prepaidService;
-
-    @Autowired
-    PrepaidToClinicService prepaidToClinicService;
-
-    @Autowired
-    ClinicService clinicService;
-
-    @Autowired
-    LocationService locationService;
-
-    @Autowired
-    SpecialtyService specialtyService;
-
-    @Autowired
-    AppointmentService appointmentService;
-
-    @Autowired
-    DoctorClinicService doctorClinicService;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-    final static int MIN_SIZE = 8;
+   /* final static int MIN_SIZE = 8;
 
     public void validateSpecialty(String name,BindingResult errors,Locale locale){
         if(specialtyService.getSpecialtyByName(name) != null){
@@ -115,8 +82,16 @@ public class ValidationHelper {
             FieldError licenseExistsError = new FieldError("form","license",messageSource.getMessage("doctor.license.already.exists",null,locale));
             errors.addError(licenseExistsError);
         }
-    }
-    public boolean scheduleValidate(Doctor doctor, int day, int hour){
+    } */
+   public static boolean scheduleValidate(Doctor doctor, int day, int hour,ScheduleService scheduleService){
+       return scheduleService.doctorHasSchedule(doctor,day,hour);
+   }
+
+   public static boolean appointmentValidate(String doctorLicense,String patientEmail,Calendar date,AppointmentService appointmentService){
+       return appointmentService.hasAppointment(doctorLicense,patientEmail,date);
+   }
+
+   /* public boolean scheduleValidate(Doctor doctor, int day, int hour){
         return scheduleService.doctorHasSchedule(doctor,day,hour);
     }
     public boolean appointmentValidate(String doctorLicense,String patientEmail,Calendar date){
@@ -133,13 +108,21 @@ public class ValidationHelper {
             FieldError ssoError = new FieldError("form", "email",messageSource.getMessage("user.exist.error.message",null,locale));
             errors.addError(ssoError);
         }
-    }
+    } */
 
-    public boolean photoValidate(MultipartFile photo) {
+   public static boolean photoValidate(MultipartFile photo){
+       if(!photo.isEmpty()){
+           String contentType = photo.getContentType();
+           return !(contentType.equals("image/jpeg") || contentType.equals("image/png") || contentType.equals("image/jpg"));
+       }
+       return false;
+   }
+
+   /* public boolean photoValidate(MultipartFile photo) {
         if(!photo.isEmpty()){
             String contentType = photo.getContentType();
             return !(contentType.equals("image/jpeg") || contentType.equals("image/png") || contentType.equals("image/jpg"));
         }
         return false;
-    }
+    } */
 }

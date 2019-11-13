@@ -34,9 +34,6 @@ public class PatientController {
     @Autowired
     private PrepaidService prepaidService;
 
-    @Autowired
-    private ValidationHelper validator;
-
     private void setFormInformation(PersonalInformationForm form, User user, Patient patient) {
         form.setFirstName(user.getFirstName());
         form.setLastName(user.getLastName());
@@ -78,7 +75,7 @@ public class PatientController {
     public ModelAndView editedProfile(@Valid @ModelAttribute("personalInformationForm") final PersonalInformationForm form,
                                       final BindingResult errors, Locale locale) {
 
-        validator.passwordValidate(form.getNewPassword(),form.getRepeatPassword(),errors,locale);
+        //validator.passwordValidate(form.getNewPassword(),form.getRepeatPassword(),errors,locale);
         
         if(errors.hasErrors()){
             return editProfile(form);

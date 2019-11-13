@@ -44,12 +44,13 @@ import java.util.concurrent.Executor;
                  "ar.edu.itba.paw.persistence"})
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
-
+    
     private String dbUser = "paw-2019b-4";
 
     private String dbPassword = "7Up7gfwcS";
 
     private String jdbcPath = "jdbc:postgresql://localhost/paw-2019b-4";
+
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
@@ -137,7 +138,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public MultipartResolver multipartResolver() {
-        return new CommonsMultipartResolver();
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+        resolver.setMaxUploadSizePerFile(10240); //10Kb
+        return resolver;
     }
 
     @Bean

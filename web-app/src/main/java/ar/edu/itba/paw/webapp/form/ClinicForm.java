@@ -1,8 +1,11 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.helpers.validation.annotations.UniqueClinic;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+@UniqueClinic(name = "name",address = "address",location = "location")
 public class ClinicForm {
 
     @NotNull
