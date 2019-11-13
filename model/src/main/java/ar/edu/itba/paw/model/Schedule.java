@@ -23,7 +23,12 @@ public class Schedule {
     })
     private DoctorClinic doctorClinic;
 
+    @Column
+    private int clinic;
+
+
     public Schedule(int day, int hour,DoctorClinic doctorClinic) {
+        this.clinic = doctorClinic.getClinic().getId();
         this.scheduleKey = new ScheduleKey(day,hour,doctorClinic.getDoctor().getLicense());
         this.doctorClinic = doctorClinic;
     }
