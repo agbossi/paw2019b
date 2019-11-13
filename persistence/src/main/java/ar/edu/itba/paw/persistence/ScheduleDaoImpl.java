@@ -130,7 +130,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
     public void deleteSchedule(int hour, int day, DoctorClinic doctorClinic){
         final Query query = entityManager.createQuery("delete from Schedule as schedule " +
                 "where schedule.scheduleKey.day = :day and schedule.scheduleKey.hour = :hour " +
-                "and schedule.doctorClinic.doctor = :doctor and schedule.doctorClinic.clinic = :clinic");
+                "and schedule.scheduleKey.doctor = :doctor and schedule.clinic = :clinic");
         query.setParameter("day",day);
         query.setParameter("hour",hour);
         query.setParameter("doctor",doctorClinic.getDoctor().getLicense());

@@ -228,6 +228,7 @@ public class DoctorController {
 
         if(!ValidationHelper.scheduleValidate(doctorClinic.getDoctor(),day,hour,scheduleService)){
             scheduleService.deleteSchedule(hour, day, doctorClinic);
+
         }
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic);
