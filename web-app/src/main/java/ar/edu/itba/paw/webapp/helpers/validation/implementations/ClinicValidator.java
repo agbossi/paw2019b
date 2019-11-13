@@ -31,6 +31,12 @@ public class ClinicValidator implements ConstraintValidator<UniqueClinic,Object>
         Object addressValue = new BeanWrapperImpl(value).getPropertyValue(address);
         Object locationValue = new BeanWrapperImpl(value).getPropertyValue(location);
 
-        return !clinicService.clinicExists((String) nameValue,(String) addressValue,(String) locationValue);
+        boolean valid = !clinicService.clinicExists((String) nameValue,(String) addressValue,(String) locationValue);
+        if ( !valid ) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate( "{value.registered}")
+                    .addNode(location).addConstraintViolation();
+        }
+        return valid;
     }
 }

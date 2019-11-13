@@ -29,6 +29,12 @@ public class PrepaidToClinicValidator implements ConstraintValidator<UniquePrepa
         Object prepaidValue = new BeanWrapperImpl(value)
                 .getPropertyValue(prepaid);
 
-        return !prepaidToClinicService.clinicHasPrepaid((String)prepaidValue,(int)clinicValue);
+        boolean valid = !prepaidToClinicService.clinicHasPrepaid((String)prepaidValue,(int)clinicValue);
+        if ( !valid ) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate( "{value.registered}")
+                    .addNode(clinic).addConstraintViolation();
+        }
+        return valid;
     }
 }
