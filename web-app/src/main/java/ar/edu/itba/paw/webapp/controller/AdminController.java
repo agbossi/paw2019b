@@ -102,12 +102,12 @@ public class AdminController {
                 form.getPhoneNumber(),
                 user
         );
-        long image = imageService.createProfileImage(photo, doctor);
+//        long image = imageService.createProfileImage(photo, doctor);
 
 
         final ModelAndView mav = new ModelAndView("admin/addedDoctor");
         mav.addObject("doctor", doctor);
-        mav.addObject("imageId", image);
+//        mav.addObject("imageId", image);
 
         return mav;
     }
