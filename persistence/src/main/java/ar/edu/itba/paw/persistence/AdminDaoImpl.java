@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +18,7 @@ import java.util.List;
 @Repository
 public class AdminDaoImpl implements AdminDao {
 
-    private JdbcTemplate jdbcTemplate;
+  /*  private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Admin> ROW_MAPPER = new RowMapper<Admin>() {
@@ -46,6 +48,19 @@ public class AdminDaoImpl implements AdminDao {
 
     @Override
     public boolean isAdmin(String email) {
-        return getAdmin(email) == null ? false : true;
+        return getAdmin(email) == null ? false : true; */
+
+  @PersistenceContext
+    EntityManager entityManager;
+
+    @Override
+    public Admin getAdmin(String email){
+        return entityManager.find(Admin.class,email);
+    }
+
+    @Override
+    public boolean isAdmin(String email){
+        return getAdmin(email) != null;
     }
 }
+

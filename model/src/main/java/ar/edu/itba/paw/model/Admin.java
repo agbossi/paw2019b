@@ -1,13 +1,23 @@
 package ar.edu.itba.paw.model;
 
-public class Admin {
-    private String email;
+import javax.persistence.*;
 
-    public Admin(String email) {
-        this.email = email;
+@Entity
+@Table(name = "admins")
+public class Admin {
+
+    @OneToOne
+    @JoinColumn(name = "email")
+    @MapsId
+    private User user;
+
+    public Admin(User user) {
+        this.user = user;
     }
 
+    public Admin(){}
+
     public String getEmail() {
-        return email;
+        return user.getEmail();
     }
 }
