@@ -75,13 +75,11 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/addedDoctor", method = { RequestMethod.POST })
-    public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors,
-                                    Locale locale) {
+    public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors) {
 
-        boolean photoError = ValidationHelper.photoValidate(photo);
 
-        if (errors.hasErrors() || photoError)
-            return addDoctor(form,photoError,locale);
+        if (errors.hasErrors())
+            return addDoctor(form);
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
         userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
