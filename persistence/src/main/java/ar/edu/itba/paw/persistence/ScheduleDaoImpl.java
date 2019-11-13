@@ -107,7 +107,11 @@ public class ScheduleDaoImpl implements ScheduleDao {
     @Override
     public boolean doctorHasScheduleInClinic(DoctorClinic doctorClinic, int day, int hour){
         List<Schedule> schedules = this.getDoctorClinicSchedule(doctorClinic);
-        return schedules.contains(new Schedule(day,hour,doctorClinic));
+        if(schedules != null) {
+            return schedules.contains(new Schedule(day, hour, doctorClinic));
+        }else{
+            return false;
+        }
     }
 
     @Override
