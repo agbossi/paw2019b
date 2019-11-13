@@ -139,6 +139,59 @@ public class ClinicDaoImpl implements ClinicDao {
         query.setParameter("address",address);
         List<Clinic> list = query.getResultList();
         return !list.isEmpty();
+    } */
+
+    //Hibernate
+
+    @PersistenceContext
+    EntityManager entityManager;
+
+    @Override
+    public Clinic createClinic(String name, String address, Location location){
+        Clinic clinic = new Clinic();
+        clinic.setLocation(location);
+        clinic.setName(name);
+        clinic.setAddress(address);
+        entityManager.persist(clinic);
+        return clinic;
+    }
+
+    @Override
+    public Clinic getClinicByName(String clinicName){
+        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic where clinic.name = :name",Clinic.class);
+        query.setParameter("name",clinicName);
+        List<Clinic> list = query.getResultList();
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    @Override
+    public List<Clinic> getClinics(){
+        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic",Clinic.class);
+        List<Clinic> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    }
+
+    @Override
+    public Clinic getClinicById(int id) {
+        return entityManager.find(Clinic.class,id);
+    }
+
+    @Override
+    public List<Clinic> getClinicsByLocation(Location location){
+        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic where clinic.location.name = :location",Clinic.class);
+        query.setParameter("location",location.getLocationName());
+        List<Clinic> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    }
+    @Override
+    public boolean clinicExists(String name, String address, Location location){
+        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic" +
+                " where clinic.location.name = :location and clinic.name = :name and clinic.address = :address",Clinic.class);
+        query.setParameter("location",location.getLocationName());
+        query.setParameter("name",name);
+        query.setParameter("address",address);
+        List<Clinic> list = query.getResultList();
+        return !list.isEmpty();
     }
 
     @Override
