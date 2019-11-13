@@ -90,6 +90,7 @@ public class PatientDaoImpl implements PatientDao {
 
     @Override
     public Patient create(String id, String prepaid, String prepaidNumber, User user) {
+
         Patient patient = new Patient(id, prepaid, prepaidNumber, user);
         entityManager.persist(patient);
         return patient;
