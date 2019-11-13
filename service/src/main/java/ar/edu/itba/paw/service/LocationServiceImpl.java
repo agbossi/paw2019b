@@ -31,6 +31,7 @@ public class LocationServiceImpl implements LocationService {
         return locationDao.getLocationByName(locationName);
     }
 
+    @Transactional
     @Override
     public void updateLocation(String oldName, String name) {
         locationDao.updateLocation(oldName, name);

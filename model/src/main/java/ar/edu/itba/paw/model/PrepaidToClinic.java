@@ -47,6 +47,10 @@ public class PrepaidToClinic {
         this.prepaid = prepaid;
     }
 
+    public PrepaidToClinicKey getPrepaidToClinicKey() {
+        return prepaidToClinicKey;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof PrepaidToClinic){

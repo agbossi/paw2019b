@@ -11,9 +11,6 @@ import java.util.Date;
 public class Appointment {
 
     //TODO poner lo que va en bd en la clase key esto va como transient o no se rompe por estar en la key?
-    @Transient
-    private Calendar date;
-
 
     //TODO la key con doctor clinic choca?
     @ManyToOne
@@ -38,18 +35,13 @@ public class Appointment {
     private User patient;
 
     public Appointment(Calendar date, DoctorClinic doctorClinic, User patient) {
-        this.date = date;
         this.clinic = doctorClinic.getClinic().getId();
         this.doctorClinic = doctorClinic;
         this.patient = patient;
-        this.appointmentKey = new AppointmentKey(doctorClinic.getDoctor().getLicense(),patient.getEmail(),date.getTime());
+        this.appointmentKey = new AppointmentKey(doctorClinic.getDoctor().getLicense(),patient.getEmail(),date);
     }
 
     public Appointment(){
-    }
-
-    public Calendar getDate() {
-        return date;
     }
 
     public DoctorClinic getDoctorClinic() {
@@ -60,9 +52,6 @@ public class Appointment {
         return patient;
     }
 
-    public void setDate(Calendar date) {
-        this.date = date;
-    }
 
     public void setDoctorClinic(DoctorClinic doctorClinic) {
         this.doctorClinic = doctorClinic;

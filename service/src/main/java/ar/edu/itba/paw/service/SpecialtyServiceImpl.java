@@ -31,6 +31,7 @@ public class SpecialtyServiceImpl implements SpecialtyService {
         return specialtyDao.getSpecialtyByName(specialtyName);
     }
 
+    @Transactional
     @Override
     public void updateSpecialty(String oldName, String name) {
         specialtyDao.updateSpecialty(oldName, name);

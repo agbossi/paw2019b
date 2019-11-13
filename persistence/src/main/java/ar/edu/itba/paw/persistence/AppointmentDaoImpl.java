@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -180,8 +181,8 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
     @Override
     public List<Appointment> getPatientsAppointments(User patient){
-        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
-                " where ap.patient.email = :email",Appointment.class);
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap " +
+                "where ap.patient.email = :email",Appointment.class);
         query.setParameter("email",patient.getEmail());
         List<Appointment> list = query.getResultList();
         return list.isEmpty() ? null : list;
@@ -189,34 +190,36 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
     @Override //TODO check extract thing
     public List<Appointment> getAllDocAppointmentsOnSchedule(DoctorClinic doctor, int day, int hour){
-       /* TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
-                " where ap.doctorClinic.doctor.license = :doctor and ap.clinic = :clinic and ap.appointmentKey.  extract(day from date) = :day and extract(hour from date) = :hour ",Appointment.class);
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
+                " where ap.doctorClinic.doctor.license = :doctor and ap.clinic = :clinic and " +
+                "DAY(ap.appointmentKey.date) = :day and HOUR(ap.appointmentKey.date) = :hour ",Appointment.class);
         query.setParameter("doctor",doctor.getDoctor().getLicense());
         query.setParameter("clinic",doctor.getClinic().getId());
         query.setParameter("day",day-1);
         query.setParameter("hour",hour);
         List<Appointment> list = query.getResultList();
-        return list.isEmpty() ? null : list; */
-       return null;
-    }
+        return list.isEmpty() ? null : list;
 
+    }
+    @Transactional
     @Override
     public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date){
-        final Query query = entityManager.createQuery("delete from Appointment as ap where ap.patient.email = :email and ap.doctorClinic.doctor.license = :doctor and ap.clinic = :clinic and ap.appointmentKey.date = :date");
+        final Query query = entityManager.createQuery("delete from Appointment as ap where ap.appointmentKey.patient = :email and ap.appointmentKey.doctor = :doctor and ap.clinic = :clinic and ap.appointmentKey.date = :date");
         query.setParameter("email",patient.getEmail());
         query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
         query.setParameter("clinic",doctorClinic.getClinic().getId());
-        query.setParameter("date",date.getTime());
+        query.setParameter("date",date);
         query.executeUpdate();
     }
 
     @Override
     public Appointment hasAppointment(DoctorClinic doctorClinic, Calendar date){
         TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
-                " where ap.doctorClinic.doctor.license = :doctor and ap.clinic = :clinic and ap.appointmentKey.date = :date",Appointment.class);
+                " where ap.doctorClinic.doctor.license = :doctor and ap.clinic = :clinic " +
+                "and ap.appointmentKey.date = :date",Appointment.class);
         query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
         query.setParameter("clinic",doctorClinic.getClinic().getId());
-        query.setParameter("date",date.getTime());
+        query.setParameter("date",date);
         List<Appointment> list = query.getResultList();
         return list.isEmpty() ? null : list.get(0);
     }
@@ -233,10 +236,11 @@ public class AppointmentDaoImpl implements AppointmentDao {
     @Override
     public boolean hasAppointment(String doctorLicense, String patientEmail, Calendar date){
         TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
-                " where ap.doctorClinic.doctor.license = :doctor and ap.patient.email = :email and ap.appointmentKey.date = :date",Appointment.class);
+                " where ap.doctorClinic.doctor.license = :doctor and ap.patient.email = :email " +
+                "and ap.appointmentKey.date = :date",Appointment.class);
         query.setParameter("doctor",doctorLicense);
         query.setParameter("email",patientEmail);
-        query.setParameter("date",date.getTime());
+        query.setParameter("date",date);
         List<Appointment> list = query.getResultList();
         return !list.isEmpty();
     }
@@ -245,11 +249,14 @@ public class AppointmentDaoImpl implements AppointmentDao {
     //TODO finish how to do the date parts
     @Override
     public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour){
-        //final Query query = entityManager.createQuery("delete from Appointment as ap where ap.patient.email = :email and ap.doctorClinic.doctor.license = :doctor and ap.clinic = :clinic and ap.appointmentKey.date = :date");
-        //query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
-        //query.setParameter("clinic",doctorClinic.getClinic().getId());
-        //query.setParameter("date",);
-        //query.executeUpdate();
+        final Query query = entityManager.createQuery("delete from Appointment as ap where ap.patient.email = :email " +
+                "and ap.doctorClinic.doctor.license = :doctor and ap.clinic = :clinic and " +
+                "DAY(ap.appointmentKey.date) = :day and HOUR(ap.appointmentKey.date) = :hour");
+        query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
+        query.setParameter("clinic",doctorClinic.getClinic().getId());
+        query.setParameter("day",day-1);
+        query.setParameter("hour",hour);
+        query.executeUpdate();
     }
 
 

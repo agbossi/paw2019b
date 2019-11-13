@@ -2,6 +2,8 @@ package keys;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,19 +19,20 @@ public class AppointmentKey implements Serializable {
     private String patient;
 
     @Column
-    private Date date;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar date;
 
     public AppointmentKey(){
 
     }
 
-    public AppointmentKey(String doctor,String clinic,Date date){
+    public AppointmentKey(String doctor,String clinic,Calendar date){
         this.doctor = doctor;
         this.patient = clinic;
         this.date = date;
     }
 
-    public Date getDate() {
+    public Calendar getDate() {
         return date;
     }
 
@@ -49,7 +52,7 @@ public class AppointmentKey implements Serializable {
         this.patient = patient;
     }
 
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.date = date;
     }
 
