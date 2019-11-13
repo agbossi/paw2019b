@@ -6,7 +6,7 @@ import ar.edu.itba.paw.model.User;
 import java.util.List;
 
 public interface PatientService {
-    Patient create(String id, String prepaid, String prepaidNumber, User user);
+    Patient create(String id, String prepaid, String prepaidNumber, String firstName, String lastName, String password, String email);
 
     Patient getPatientByEmail(String email);
 
