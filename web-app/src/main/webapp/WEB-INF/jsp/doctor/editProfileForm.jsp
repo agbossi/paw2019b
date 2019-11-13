@@ -13,7 +13,7 @@
 
 </head>
 <body>
-    <c:url value="/doctor/editProfileFormPost" var="postPath"/>
+    <c:url value="/doctor/editProfileForm" var="postPath"/>
     <form:form modelAttribute="editProfileForm" action="${postPath}" method="post" enctype="multipart/form-data">
         <div class="container">
             <div class="row">
@@ -134,7 +134,8 @@
             </div>
             <br/><br/>
             <div class="profile-save-options">
-                <a href="<c:url value="/doctor/editProfile"/>"><spring:message code="a.cancel"/></a> <input class="profile-save-changes" type="submit" value="<spring:message code="submit.save.changes"/>">
+                <a href="<c:url value="/doctor/editProfile"/>"><spring:message code="a.cancel"/></a>
+                <input class="profile-save-changes" type="submit" value="<spring:message code="submit.save.changes"/>">
             </div>
         </div>
     </form:form>

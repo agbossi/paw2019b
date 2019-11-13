@@ -110,7 +110,7 @@ public class DoctorController {
 
 
 
-    @RequestMapping(value = "/editProfileFormPost", method = { RequestMethod.POST })
+    @RequestMapping(value = "/editProfileForm", method = { RequestMethod.POST })
     public ModelAndView updateProfile(@Valid @ModelAttribute("editProfileForm") final EditDoctorProfileForm form,
                                       final BindingResult errors,
                                       @RequestParam("photo") MultipartFile photo,Locale locale){
