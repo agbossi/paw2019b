@@ -8,6 +8,10 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +21,7 @@ import java.util.Map;
 
 @Repository
 public class SpecialtyDaoImpl implements SpecialtyDao{
-    private JdbcTemplate jdbcTemplate;
+   /* private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
     private final static RowMapper<Specialty> ROW_MAPPER = new RowMapper<Specialty>() {
@@ -68,5 +72,43 @@ public class SpecialtyDaoImpl implements SpecialtyDao{
     public long deleteSpecialty(String name) {
         String deleteQuery = "DELETE FROM specialties WHERE name = ?";
         return jdbcTemplate.update(deleteQuery, name);
+    } */
+
+    //Hibernate
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Override
+    public Specialty createSpecialty(String name){
+        Specialty specialty = new Specialty(name);
+        entityManager.persist(specialty);
+        return specialty;
+    }
+
+    @Override
+    public Specialty getSpecialtyByName(String specialtyName){
+        return entityManager.find(Specialty.class,specialtyName);
+    }
+
+    @Override
+    public List<Specialty> getSpecialties(){
+        final TypedQuery<Specialty> query = entityManager.createQuery("from Specialty as spcecialty",Specialty.class);
+        final List<Specialty> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    }
+
+    @Override
+    public long deleteSpecialty(String name) {
+        final Query query = entityManager.createQuery("delete from Specialty as specialty where specialty.name = :name");
+        query.setParameter("name",name);
+        return query.executeUpdate();
+    }
+
+    @Override
+    public void updateSpecialty(String oldName, String name) {
+        final Query query = entityManager.createQuery("update Specialty as sp set sp.name = :newName where sp.name = :oldName");
+        query.setParameter("newName",name);
+        query.setParameter("oldName", oldName);
+        query.executeUpdate();
     }
 }

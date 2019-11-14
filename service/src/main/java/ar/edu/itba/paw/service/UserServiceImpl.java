@@ -63,12 +63,6 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void changePassword(String password, String email) {
-        userDao.changePassword(password,email);
-    }
-
-    @Transactional
-    @Override
     public void updateUser(String email, String newPassword, String firstName, String lastName) {
         Map<String,String> args = new HashMap<>();
         if(newPassword != null){

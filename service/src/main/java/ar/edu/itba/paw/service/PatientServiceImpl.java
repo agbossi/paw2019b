@@ -31,12 +31,13 @@ public class PatientServiceImpl implements PatientService {
 
     @Transactional
     @Override
-    public Patient create(String email,String id, String prepaid, String prepaidNumber, User user) {
+    public Patient create(String id, String prepaid, String prepaidNumber, String firstName, String lastName, String password, String email) {
         if(prepaid.equals(NoPrepaid)) {
             prepaid = null;
             prepaidNumber = null;
         }
-        return patientDao.create(email,id, prepaid, prepaidNumber, user);
+        User user = userService.createUser(firstName, lastName, password, email);
+        return patientDao.create(id, prepaid, prepaidNumber, user);
     }
 
     @Override
@@ -76,6 +77,11 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public List<Patient> getPatientsByPrepaid(String prepaid) {
         return patientDao.getPatientsByPrepaid(prepaid);
+    }
+
+    @Override
+    public List<Patient> getPatientsById(String id){
+        return patientDao.getPatientsById(id);
     }
 
 }

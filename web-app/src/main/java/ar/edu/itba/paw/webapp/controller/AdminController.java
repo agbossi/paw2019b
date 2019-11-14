@@ -77,16 +77,15 @@ public class AdminController {
     @RequestMapping(value = "/addedDoctor", method = { RequestMethod.POST })
     public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors) {
 
-
         if (errors.hasErrors())
             return addDoctor(form);
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
-        userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
+       User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
         Doctor doctor = doctorService.createDoctor(new Specialty(form.getSpecialty()),
                 form.getLicense(),
                 form.getPhoneNumber(),
-                form.getEmail()
+                user
         );
 
 
@@ -288,7 +287,7 @@ public class AdminController {
             return editPrepaid(form, name);
 
         prepaidService.updatePrepaid(name, form.getName());
-        return specialties();
+        return prepaids();
     }
 
     @RequestMapping(value = "/deletePrepaid/{prepaidName}", method = { RequestMethod.GET })

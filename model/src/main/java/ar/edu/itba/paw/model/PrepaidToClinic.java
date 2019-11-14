@@ -1,15 +1,35 @@
 package ar.edu.itba.paw.model;
 
+import keys.PrepaidToClinicKey;
+
+import javax.persistence.*;
+//TODO que poner si toda la clase es id
+@Entity
+@Table(name = "clinicPrepaids")
+
 public class PrepaidToClinic {
 
+    //igual que en doctor clinic. son ManyToOne? los joinColumns estan bien puestos?
+    //todo: necesito especificar pk si es pk toda la entidad?
+
+    @EmbeddedId
+    private PrepaidToClinicKey prepaidToClinicKey;
+
+    @ManyToOne
+    @JoinColumn(name = "clinicid", referencedColumnName = "id", insertable = false, updatable = false)
     private Clinic clinic;
 
+    @ManyToOne
+    @JoinColumn(name = "prepaid", referencedColumnName = "name", insertable = false, updatable = false)
     private Prepaid prepaid;
 
     public PrepaidToClinic(Clinic clinic, Prepaid prepaid) {
         this.clinic = clinic;
         this.prepaid = prepaid;
+        this.prepaidToClinicKey = new PrepaidToClinicKey(prepaid.getName(), clinic.getId());
     }
+
+    public PrepaidToClinic(){}
 
     public Clinic getClinic() {
         return clinic;
@@ -25,6 +45,10 @@ public class PrepaidToClinic {
 
     public void setPrepaid(Prepaid prepaid) {
         this.prepaid = prepaid;
+    }
+
+    public PrepaidToClinicKey getPrepaidToClinicKey() {
+        return prepaidToClinicKey;
     }
 
     @Override

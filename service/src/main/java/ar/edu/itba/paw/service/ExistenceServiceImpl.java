@@ -22,12 +22,15 @@ public class ExistenceServiceImpl implements ExistenceService {
     @Autowired
     SpecialtyService specialtyService;
 
+    @Autowired
+    PatientService patientService;
+
 
     @Override
     public boolean exists(String input,String type) {
         switch(type){
             case "doctor":
-                return !doctorService.isDoctor(input);
+                return doctorService.isDoctor(input);
             case "user":
                 return !userService.userExists(input);
             case "prepaid":
@@ -36,6 +39,8 @@ public class ExistenceServiceImpl implements ExistenceService {
                 return specialtyService.getSpecialtyByName(input) == null;
             case "location":
                 return locationService.getLocationByName(input) == null;
+            case "patient":
+                return patientService.getPatientsById(input) == null;
             default:
                 return false;
         }

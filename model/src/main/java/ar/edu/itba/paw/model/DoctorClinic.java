@@ -1,24 +1,52 @@
 package ar.edu.itba.paw.model;
 
+import keys.DoctorClinicKey;
+
+import javax.persistence.*;
 import javax.print.Doc;
+import javax.xml.namespace.QName;
 import java.util.List;
 
+@Entity
+@Table(name = "doctorClinics")
 public class DoctorClinic {
 
-    Doctor doctor;
+    //TODO estos dos no se si son oneToOne o ManyToOne
+    //esto va asi o los annotations dentro de la pk?
+    @ManyToOne
+    @JoinColumn(name = "doctorLicense",referencedColumnName = "license", insertable = false, updatable = false)
+    private Doctor doctor;
 
-    Clinic clinic;
+    //TODO igual que en appointment, esto repite?
+    @EmbeddedId
+    private DoctorClinicKey doctorClinicKey;
 
-    int consultPrice;
+    @ManyToOne
+    @JoinColumn(name = "clinicid", insertable = false, updatable = false)
+    private Clinic clinic;
 
-    List<Schedule> schedule;
+    @Column(name = "consultPrice")
+    private int consultPrice;
 
-    List<Appointment> appointments;
+    @OneToMany(mappedBy = "doctorClinic")
+    private List<Schedule> schedule;
+
+    @OneToMany(mappedBy = "doctorClinic")
+    private List<Appointment> appointments;
 
     public DoctorClinic(Doctor doctor, Clinic clinic, int consultPrice){
         this.doctor = doctor;
         this.clinic = clinic;
+        this.doctorClinicKey = new DoctorClinicKey(doctor.getLicense(),clinic.getId());
         this.consultPrice = consultPrice;
+    }
+
+    public DoctorClinic(){
+
+    }
+
+    public DoctorClinicKey getDoctorClinicKey() {
+        return doctorClinicKey;
     }
 
     public Doctor getDoctor() {
@@ -55,6 +83,10 @@ public class DoctorClinic {
 
     public void setAppointments(List<Appointment> appointments) {
         this.appointments = appointments;
+    }
+
+    public void setConsultPrice(int consultPrice) {
+        this.consultPrice = consultPrice;
     }
 
     @Override

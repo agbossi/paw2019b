@@ -1,30 +1,66 @@
 package ar.edu.itba.paw.model;
 
-import java.util.List;
+import keys.ScheduleKey;
 
+import javax.persistence.*;
+
+
+@Entity
+@Table(name = "schedule")
 public class Schedule {
-    int day;
-    int hour;
 
-    public Schedule(int day, int hour) {
-        this.day = day;
-        this.hour = hour;
+    @EmbeddedId
+    private ScheduleKey scheduleKey;
+
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(
+                    name = "doctor",
+                    referencedColumnName = "doctorLicense", insertable = false, updatable = false),
+            @JoinColumn(
+                    name = "clinic",
+                    referencedColumnName = "clinicid", insertable = false, updatable = false)
+    })
+    private DoctorClinic doctorClinic;
+
+    @Column
+    private int clinic;
+
+
+    public Schedule(int day, int hour,DoctorClinic doctorClinic) {
+        this.clinic = doctorClinic.getClinic().getId();
+        this.scheduleKey = new ScheduleKey(day,hour,doctorClinic.getDoctor().getLicense());
+        this.doctorClinic = doctorClinic;
     }
 
+    public Schedule(){}
+
     public int getDay() {
-        return day;
+        return getScheduleKey().getDay();
     }
 
     public void setDay(int day) {
-        this.day = day;
+        this.getScheduleKey().setDay(day);
     }
 
     public int getHour() {
-        return hour;
+        return getScheduleKey().getHour();
+    }
+
+    public ScheduleKey getScheduleKey() {
+        return scheduleKey;
+    }
+
+    public DoctorClinic getDoctorClinic() {
+        return doctorClinic;
+    }
+
+    public void setDoctorClinic(DoctorClinic doctorClinic) {
+        this.doctorClinic = doctorClinic;
     }
 
     public void setHour(int hour) {
-        this.hour = hour;
+        this.getScheduleKey().setHour(hour);
     }
 
     @Override

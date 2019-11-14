@@ -1,24 +1,47 @@
 package ar.edu.itba.paw.model;
 
+import keys.AppointmentKey;
+
+import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
 
+@Entity
+@Table(name = "appointments")
 public class Appointment {
 
-    private Calendar date;
+    //TODO poner lo que va en bd en la clase key esto va como transient o no se rompe por estar en la key?
 
-    DoctorClinic doctorClinic;
+    //TODO la key con doctor clinic choca?
+    @ManyToOne
+    @JoinColumns({
+            @JoinColumn(
+                    name = "doctor",insertable = false, updatable = false,
+                    referencedColumnName = "doctorLicense"),
+            @JoinColumn(
+                    name = "clinic",insertable = false, updatable = false,
+                    referencedColumnName = "clinicid")
+    })
+    private DoctorClinic doctorClinic;
 
-    User patient;
+    @Column
+    private int clinic;
+
+    @EmbeddedId
+    private AppointmentKey appointmentKey;
+
+    @ManyToOne
+    @JoinColumn(name = "patient", insertable = false, updatable = false)
+    private User patient;
 
     public Appointment(Calendar date, DoctorClinic doctorClinic, User patient) {
-        this.date = date;
+        this.clinic = doctorClinic.getClinic().getId();
         this.doctorClinic = doctorClinic;
         this.patient = patient;
+        this.appointmentKey = new AppointmentKey(doctorClinic.getDoctor().getLicense(),patient.getEmail(),date);
     }
 
-    public Calendar getDate() {
-        return date;
+    public Appointment(){
     }
 
     public DoctorClinic getDoctorClinic() {
@@ -27,5 +50,18 @@ public class Appointment {
 
     public User getPatient() {
         return patient;
+    }
+
+
+    public void setDoctorClinic(DoctorClinic doctorClinic) {
+        this.doctorClinic = doctorClinic;
+    }
+
+    public void setPatient(User patient) {
+        this.patient = patient;
+    }
+
+    public AppointmentKey getAppointmentKey() {
+        return appointmentKey;
     }
 }

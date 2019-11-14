@@ -1,18 +1,32 @@
 package ar.edu.itba.paw.model;
 
+import javax.persistence.*;
 import java.io.InputStream;
 
+@Entity
+@Table(name = "images")
 public class Image {
-    private long id;
 
-    private String license;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "images_id_seq")
+    @SequenceGenerator(sequenceName = "images_id_seq", name = "images_id_seq")
+    private int id;
 
-    private InputStream image;
+    @OneToOne
+    @JoinColumn(name = "doctor")
+    private Doctor doctor;
 
-    public Image(long id, String license, InputStream image) {
+    @Column(name = "image")
+    private byte[] image;
+
+    public Image(int id, Doctor doctor, byte[] image) {
         this.id = id;
-        this.license = license;
+        this.doctor = doctor;
         this.image = image;
+    }
+
+    public Image(){
+
     }
 
     public long getId() {
@@ -20,14 +34,22 @@ public class Image {
     }
 
     public String getLicense() {
-        return license;
+        return doctor.getLicense();
     }
 
-    public InputStream getImage() {
+    public byte[] getImage() {
         return image;
     }
 
-    public void setImage(InputStream image) {
+    public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setLicense(String license) {
+        this.doctor.setLicense(license);
     }
 }

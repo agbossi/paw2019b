@@ -31,11 +31,13 @@ public class SpecialtyServiceImpl implements SpecialtyService {
         return specialtyDao.getSpecialtyByName(specialtyName);
     }
 
+    @Transactional
     @Override
     public void updateSpecialty(String oldName, String name) {
         specialtyDao.updateSpecialty(oldName, name);
     }
 
+    @Transactional
     @Override
     public long deleteSpecialty(String name) {
         return specialtyDao.deleteSpecialty(name);

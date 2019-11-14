@@ -21,11 +21,12 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public long createProfileImage(MultipartFile file, Doctor doctor) {
         try {
-            return imageDao.createProfileImage(file.getBytes(), doctor.getLicense());
+             return imageDao.createProfileImage(file.getBytes(), doctor.getLicense());
         }
         catch (IOException e){
-            return 0; // code for error
+            //return 0; // code for error
         }
+        return 0;
     }
 
     @Transactional

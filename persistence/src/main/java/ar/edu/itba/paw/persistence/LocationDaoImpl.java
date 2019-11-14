@@ -9,17 +9,22 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Repository
 public class LocationDaoImpl implements LocationDao {
-    private JdbcTemplate jdbcTemplate;
+    /*private JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert jdbcInsert;
 
     @Autowired
@@ -90,6 +95,44 @@ public class LocationDaoImpl implements LocationDao {
     public long deleteLocation(String name) {
         String deleteQuery = "DELETE FROM locations WHERE name = ?";
         return jdbcTemplate.update(deleteQuery, name);
+    } */
+
+    //Hibernate
+    @PersistenceContext
+    EntityManager entityManager;
+
+    @Override
+    public Location getLocationByName(String locationName){
+        return entityManager.find(Location.class,locationName);
     }
 
+    @Override
+    public Location createLocation(String name){
+        Location location = new Location(name);
+        entityManager.persist(location);
+        return location;
+    }
+
+    @Override
+    public List<Location> getLocations(){
+        TypedQuery<Location> query = entityManager.createQuery("from Location as location",Location.class);
+        List<Location> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    }
+
+    @Override
+    public long deleteLocation(String name){
+        Query query = entityManager.createQuery("delete from Location as location where location.name = :name");
+        query.setParameter("name",name);
+        return query.executeUpdate();
+    }
+
+    @Override
+    public void updateLocation(String oldName, String name) {
+        final Query query = entityManager.createQuery("update Location as loc set loc.name = :newName where loc.name = :oldName");
+        query.setParameter("newName",name);
+        query.setParameter("oldName", oldName);
+        query.executeUpdate();
+
+    }
 }

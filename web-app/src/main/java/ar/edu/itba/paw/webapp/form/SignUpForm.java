@@ -39,6 +39,7 @@ public class SignUpForm {
 
     @Size(min = 8,max = 8)
     @Pattern(regexp = "[0-9]+")
+    @Unique(field = "patient",message = "{value.registered}")
     private String id;
 
     public String getFirstName() {

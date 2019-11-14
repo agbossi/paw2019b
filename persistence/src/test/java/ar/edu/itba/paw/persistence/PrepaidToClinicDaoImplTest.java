@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-
+/*
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Prepaid;
@@ -70,4 +70,4 @@ public class PrepaidToClinicDaoImplTest {
         Assert.assertTrue(bool1);
         Assert.assertFalse(bool2);
     }
-}
+}*/

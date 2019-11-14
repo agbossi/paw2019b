@@ -107,7 +107,7 @@ public class DoctorController {
 
 
 
-    @RequestMapping(value = "/editProfileFormPost", method = { RequestMethod.POST })
+    @RequestMapping(value = "/editProfileForm", method = { RequestMethod.POST })
     public ModelAndView updateProfile(@Valid @ModelAttribute("editProfileForm") final EditDoctorProfileForm form,
                                       final BindingResult errors,
                                       @RequestParam("photo") MultipartFile photo,Locale locale){
@@ -226,8 +226,9 @@ public class DoctorController {
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
 
-        if(!ValidationHelper.scheduleValidate(doctorClinic.getDoctor(),day,hour,scheduleService)){
+        if(ValidationHelper.scheduleValidate(doctorClinic.getDoctor(),day,hour,scheduleService)){
             scheduleService.deleteSchedule(hour, day, doctorClinic);
+
         }
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic);

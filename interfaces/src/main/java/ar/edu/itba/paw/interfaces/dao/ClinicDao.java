@@ -14,9 +14,9 @@ public interface ClinicDao {
 
     Clinic getClinicById(int id);
 
-    List<Clinic> getClinicsByLocation(String location);
+    List<Clinic> getClinicsByLocation(Location location);
 
-    boolean clinicExists(String name,String address,String location);
+    boolean clinicExists(String name, String address, Location location);
 
     void updateClinic(int id, String name, String address, String location);
 

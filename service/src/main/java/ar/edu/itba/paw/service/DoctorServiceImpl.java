@@ -7,6 +7,7 @@ import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Specialty;
+import ar.edu.itba.paw.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,8 +31,8 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Transactional
     @Override
-    public Doctor createDoctor(Specialty specialty,String license, String phoneNumber, String email) {
-        return doctorDao.createDoctor(specialty,license, phoneNumber,email);
+    public Doctor createDoctor(Specialty specialty, String license, String phoneNumber, User user) {
+        return doctorDao.createDoctor(specialty,license, phoneNumber,user);
     }
 
     @Override
@@ -66,9 +67,11 @@ public class DoctorServiceImpl implements DoctorService {
 
         for(Doctor doc : doctors) {
             List<DoctorClinic> doctorsClinics = doctorClinicService.getDoctorClinicsForDoctor(doc);
-            for( DoctorClinic dc : doctorsClinics ) {
-                if(dc.getSchedule()!=null && !(doctorsWithAvailability.contains(doc))) {
-                    doctorsWithAvailability.add(doc);
+            if(doctorsClinics != null) {
+                for (DoctorClinic dc : doctorsClinics) {
+                    if (dc.getSchedule() != null && !(doctorsWithAvailability.contains(doc))) {
+                        doctorsWithAvailability.add(doc);
+                    }
                 }
             }
         }

@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-
+/*
 import ar.edu.itba.paw.model.Prepaid;
 import ar.edu.itba.paw.model.Specialty;
 import org.junit.Before;
@@ -71,7 +71,7 @@ public class PrepaidDaoImplTest {
 
     }
 
-}
+}*/
 
 
 
