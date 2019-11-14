@@ -20,7 +20,7 @@ public interface DoctorDao {
 
     Doctor getDoctorByEmail(String email);
 
-    int deleteDoctor(String license);
+  //  int deleteDoctor(String license);
 
     void updateDoctor(String license, Map<String, String> args);
 }

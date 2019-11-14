@@ -37,6 +37,7 @@ public class SpecialtyServiceImpl implements SpecialtyService {
         specialtyDao.updateSpecialty(oldName, name);
     }
 
+    @Transactional
     @Override
     public long deleteSpecialty(String name) {
         return specialtyDao.deleteSpecialty(name);

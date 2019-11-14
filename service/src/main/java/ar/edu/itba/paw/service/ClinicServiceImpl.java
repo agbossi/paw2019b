@@ -43,10 +43,11 @@ public class ClinicServiceImpl implements ClinicService {
     }
 
     @Override
-    public boolean clinicExists(String name, String address, Location location) {
-        return clinicDao.clinicExists(name,address,location);
+    public boolean clinicExists(String name, String address, String location) {
+        return clinicDao.clinicExists(name,address, new Location(location));
     }
 
+    @Transactional
     @Override
     public void updateClinic(int id, String name, String address, String location) {
         if(name.equals("") && address.equals("") && location.equals(""))
@@ -64,6 +65,8 @@ public class ClinicServiceImpl implements ClinicService {
         clinicDao.updateClinic(id, name, address, location);
     }
 
+
+    @Transactional
     @Override
     public long deleteClinic(int id) {
         return clinicDao.deleteClinic(id);

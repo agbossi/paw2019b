@@ -11,13 +11,21 @@ public class Admin {
     @MapsId
     private User user;
 
+    @Id
+    String email;
+
     public Admin(User user) {
+        this.email = user.getEmail();
         this.user = user;
     }
 
     public Admin(){}
 
     public String getEmail() {
-        return user.getEmail();
+        return email;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

@@ -37,6 +37,7 @@ public class LocationServiceImpl implements LocationService {
         locationDao.updateLocation(oldName, name);
     }
 
+    @Transactional
     @Override
     public long deleteLocation(String name) {
         return locationDao.deleteLocation(name);

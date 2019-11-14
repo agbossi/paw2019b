@@ -181,21 +181,22 @@ public class DoctorDaoImpl implements DoctorDao {
         return list.isEmpty() ? null : list.get(0);
     }
 
-    @Override
-    public int deleteDoctor(String license) {
-       /* String qryString3 = "delete from Doctor d where d.license=:license";
-        Query query3 = session.createQuery(qryString3);
-        query3.setParameter("license", license);
-        int count3 = query3.executeUpdate(); */
-
-        Query query = entityManager.createQuery("delete from Doctor as doctor where doctor.license = :license");
-        query.setParameter("license",license);
-        return query.executeUpdate();
-    }
+//    @Override
+//    public int deleteDoctor(String license) {
+//       /* String qryString3 = "delete from Doctor d where d.license=:license";
+//        Query query3 = session.createQuery(qryString3);
+//        query3.setParameter("license", license);
+//        int count3 = query3.executeUpdate(); */
+//
+//        Query query = entityManager.createQuery("delete from Doctor as doctor where doctor.license = :license");
+//        query.setParameter("license",license);
+//        return query.executeUpdate();
+//    }
 
     @Override
     public void updateDoctor(String license, Map<String, String> args){
-        final Query query = entityManager.createQuery("update Doctor doctor set doctor.phoneNumber = :phoneNumber, doctor.specialty.id = :specialty where doctor.license = :license");
+        final Query query = entityManager.createQuery("update Doctor doctor set doctor.phoneNumber = :phoneNumber," +
+                " doctor.specialty.id = :specialty where doctor.license = :license");
         query.setParameter("license",license);
         query.setParameter("specialty",args.get("specialty"));
         query.setParameter("phoneNumber",args.get("phoneNumber"));

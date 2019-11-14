@@ -104,4 +104,11 @@ public class PrepaidDaoImpl implements PrepaidDao {
         query.setParameter("name",name);
         return query.executeUpdate();
     }
+
+    @Override
+    public void updatePrepaid(String oldName, String name) {
+        final Query query = entityManager.createQuery("update Prepaid prepaid set prepaid.id = :newName where prepaid.id = :oldName");
+        query.setParameter("newName",name);
+        query.setParameter("oldName", oldName);
+    }
 }

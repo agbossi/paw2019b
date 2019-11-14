@@ -119,10 +119,4 @@ public class ValidationHelper {
        return false;
    }
 
-        if(!photo.isEmpty()){
-            String contentType = photo.getContentType();
-            return !(contentType.equals("image/jpeg") || contentType.equals("image/png") || contentType.equals("image/jpg"));
-        }
-        return false;
-    } */
 }

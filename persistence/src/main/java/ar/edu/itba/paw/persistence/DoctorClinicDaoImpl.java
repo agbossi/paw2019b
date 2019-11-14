@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
@@ -246,6 +247,17 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
         }
         List<DoctorClinic> list = query.getResultList();
         return list.isEmpty() ? null : list;
+    }
+
+    @Override
+   public long deleteDoctorClinic(String license, int clinicid) {
+//        String deleteQuery = "DELETE FROM doctorClinics WHERE doctorLicense = ? and clinicid = ?";
+//        return jdbcTemplate.update(deleteQuery, license, clinicid);
+        Query query = entityManager.createQuery("delete from DoctorClinic as docCli where docCli.doctor.license = :license" +
+                " and docCli.clinic.id = :id");
+        query.setParameter("license",license);
+        query.setParameter("id",clinicid);
+        return query.executeUpdate();
     }
 
 }

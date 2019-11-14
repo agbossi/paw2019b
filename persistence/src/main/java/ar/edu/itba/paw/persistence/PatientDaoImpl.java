@@ -123,4 +123,13 @@ public class PatientDaoImpl implements PatientDao {
             query.executeUpdate();
         }
     }
+
+    @Override
+    public List<Patient> getPatientsByPrepaid(String prepaid) {
+        final TypedQuery<Patient> query = entityManager.createQuery("from Patient as pat where pat.prepaid= :prepaid",Patient.class);
+
+        query.setParameter("prepaid",prepaid);
+        final List<Patient> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    }
 }
