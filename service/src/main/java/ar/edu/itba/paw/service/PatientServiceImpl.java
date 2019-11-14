@@ -79,4 +79,9 @@ public class PatientServiceImpl implements PatientService {
         return patientDao.getPatientsByPrepaid(prepaid);
     }
 
+    @Override
+    public List<Patient> getPatientsById(String id){
+        return patientDao.getPatientsById(id);
+    }
+
 }

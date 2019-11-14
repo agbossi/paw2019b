@@ -111,7 +111,7 @@ public class PatientDaoImpl implements PatientDao {
             query.executeUpdate();
         }
         if (args.containsKey("prepaid")) {
-            query = entityManager.createQuery("update Patient as patient set prepaid = :prepaid where patient.user.email = :email");
+            query = entityManager.createQuery("update Patient as patient set patient.prepaid = :prepaid where patient.user.email = :email");
             query.setParameter("prepaid", args.get("prepaid"));
             query.setParameter("email",email);
             query.executeUpdate();
@@ -129,6 +129,15 @@ public class PatientDaoImpl implements PatientDao {
         final TypedQuery<Patient> query = entityManager.createQuery("from Patient as pat where pat.prepaid= :prepaid",Patient.class);
 
         query.setParameter("prepaid",prepaid);
+        final List<Patient> list = query.getResultList();
+        return list.isEmpty() ? null : list;
+    }
+
+    @Override
+    public List<Patient> getPatientsById(String id) {
+        final TypedQuery<Patient> query = entityManager.createQuery("from Patient as pat where pat.id= :id",Patient.class);
+
+        query.setParameter("id",id);
         final List<Patient> list = query.getResultList();
         return list.isEmpty() ? null : list;
     }

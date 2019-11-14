@@ -14,4 +14,6 @@ public interface PatientDao {
     void updatePatient(String email, Map<String, String> args);
 
     List<Patient> getPatientsByPrepaid(String prepaid);
+
+    List<Patient> getPatientsById(String id);
 }

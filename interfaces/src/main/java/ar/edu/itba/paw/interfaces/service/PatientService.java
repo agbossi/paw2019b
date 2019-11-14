@@ -15,4 +15,6 @@ public interface PatientService {
     void updatePatient(String email, String prepaid, String prepaidNumber, String id);
 
     List<Patient> getPatientsByPrepaid(String prepaid);
+
+    List<Patient> getPatientsById(String id);
 }
