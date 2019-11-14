@@ -153,15 +153,6 @@ public class PatientDaoImpl implements PatientDao {
     public List<Doctor> getPatientFavoriteDoctors(Patient patient) {
         return null;
     }
-
-    @Override
-    public void addDoctorToFavorites(Patient patient, Doctor doctor) {
-        //TODO persist de uno solo? de los dos? cada vez que se añade un favorito tengo que re persistir la entidad?
-    }
-
-    @Override
-    public List<Doctor> getPatientFavoriteDoctors(Patient patient) {
-        return null;
-    }
+    
 }
 
