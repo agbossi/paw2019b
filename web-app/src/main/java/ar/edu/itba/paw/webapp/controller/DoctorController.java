@@ -226,7 +226,7 @@ public class DoctorController {
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
 
-        if(!ValidationHelper.scheduleValidate(doctorClinic.getDoctor(),day,hour,scheduleService)){
+        if(ValidationHelper.scheduleValidate(doctorClinic.getDoctor(),day,hour,scheduleService)){
             scheduleService.deleteSchedule(hour, day, doctorClinic);
 
         }

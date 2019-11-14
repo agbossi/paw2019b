@@ -104,11 +104,21 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void updateUser(String email, Map<String, String> args){
-        final Query query = entityManager.createQuery("update User as user set user.firstName = :firstName, user.lastName = :lastName where user.email = :email");
-        query.setParameter("email",email);
-        query.setParameter("firstName",args.get("firstName"));
-        query.setParameter("lastName",args.get("lastName"));
-        query.executeUpdate();
+        final Query query;
+        if(!args.containsKey("password")) {
+            query = entityManager.createQuery("update User as user set user.firstName = :firstName, user.lastName = :lastName where user.email = :email");
+            query.setParameter("email", email);
+            query.setParameter("firstName", args.get("firstName"));
+            query.setParameter("lastName", args.get("lastName"));
+            query.executeUpdate();
+        }else{
+            query = entityManager.createQuery("update User as user set user.firstName = :firstName, user.lastName = :lastName, user.password = :password where user.email = :email");
+            query.setParameter("email", email);
+            query.setParameter("firstName", args.get("firstName"));
+            query.setParameter("lastName", args.get("lastName"));
+            query.setParameter("password", args.get("password"));
+            query.executeUpdate();
+        }
     }
 
     @Override
