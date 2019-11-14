@@ -242,7 +242,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
         if(prepaid.getName() != ""){
             query.setParameter("prepaid",prepaid.getName());
         }
-        if(consultPrice > 0){
+        else if(consultPrice > 0){
             query.setParameter("consultPrice",consultPrice);
         }
         List<DoctorClinic> list = query.getResultList();

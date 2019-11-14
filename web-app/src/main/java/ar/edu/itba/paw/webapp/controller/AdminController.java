@@ -287,7 +287,7 @@ public class AdminController {
             return editPrepaid(form, name);
 
         prepaidService.updatePrepaid(name, form.getName());
-        return specialties();
+        return prepaids();
     }
 
     @RequestMapping(value = "/deletePrepaid/{prepaidName}", method = { RequestMethod.GET })

@@ -106,8 +106,9 @@ public class SpecialtyDaoImpl implements SpecialtyDao{
 
     @Override
     public void updateSpecialty(String oldName, String name) {
-        final Query query = entityManager.createQuery("update Specialty sp set sp.id = :newName where sp.id = :oldName");
+        final Query query = entityManager.createQuery("update Specialty as sp set sp.name = :newName where sp.name = :oldName");
         query.setParameter("newName",name);
         query.setParameter("oldName", oldName);
+        query.executeUpdate();
     }
 }

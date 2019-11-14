@@ -102,10 +102,11 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
 
         List<DoctorClinic> list = doctorClinicDao.getFilteredDoctors(location, specialty, firstName, lastName, prepaid, consultPrice);
         List<Doctor> set = new ArrayList<>();
-
-        for (DoctorClinic doctorClinic : list) {
-            if (!set.contains(doctorClinic.getDoctor())) {
-                set.add(doctorClinic.getDoctor());
+        if (list != null) {
+            for (DoctorClinic doctorClinic : list) {
+                if (!set.contains(doctorClinic.getDoctor())) {
+                    set.add(doctorClinic.getDoctor());
+                }
             }
         }
 

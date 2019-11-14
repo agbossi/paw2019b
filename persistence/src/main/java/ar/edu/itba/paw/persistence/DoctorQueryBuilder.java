@@ -19,7 +19,7 @@ public class DoctorQueryBuilder {
             query.append("doctorCli.doctor.user.lastName = :lastName and ");
         }
         if(prepaid != ""){
-            query.append("p.prepaid.name = :prepaid and "); //TODO query a list with a value?
+            query.append("p.prepaid.name = :prepaid"); //TODO query a list with a value?
         }
         else if(consultPrice > 0){
             query.append("doctorCli.consultPrice <= :consultPrice");

@@ -145,7 +145,7 @@ public class ClinicDaoImpl implements ClinicDao {
     @Override
     public void updateClinic(int id, String name, String address, String location) {
        // jdbcTemplate.update("update clinics set name = ?, address = ?, location = ? where id    = ?", name, address, location, id);
-        final Query query = entityManager.createQuery("update Clinic clinic set clinic.name = :name, clinic.location.id = :location, " +
+        final Query query = entityManager.createQuery("update Clinic clinic set clinic.name = :name, clinic.location.name = :location, " +
                 "clinic.address = :address where clinic.id = :id");
         query.setParameter("id",id);
         query.setParameter("name",name);
