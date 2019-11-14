@@ -1,14 +1,6 @@
 package ar.edu.itba.paw.model;
 
-<<<<<<< HEAD
-
 import javax.persistence.*;
-
-import java.util.HashSet;
-
-=======
-import java.util.HashSet;
->>>>>>> b582cab152f5cb63a19474d4cbaa6bfd0f2505e8
 import java.util.List;
 
 @Entity
@@ -43,15 +35,10 @@ public class Patient {
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "favorites",joinColumns = {@JoinColumn(name = "patientEmail")},inverseJoinColumns = {@JoinColumn(name = "doctorLicense")})
     private List<Doctor> favorites;
-<<<<<<< HEAD
+
     
     public Patient(String id, String prepaid, String prepaidNumber,User user) {
         this.user = user;
-=======
-
-    public Patient(String email, String id, String prepaid, String prepaidNumber, String firstName, String lastName) {
-        this.email = email;
->>>>>>> b582cab152f5cb63a19474d4cbaa6bfd0f2505e8
         this.id = id;
         this.prepaid = prepaid;
         this.prepaidNumber = prepaidNumber;
@@ -112,14 +99,6 @@ public class Patient {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public List<Doctor> getFavorites() {
-        return favorites;
-    }
-
-    public void setFavorites(List<Doctor> favorites) {
-        this.favorites = favorites;
     }
 
     public List<Doctor> getFavorites() {

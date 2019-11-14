@@ -153,6 +153,6 @@ public class PatientDaoImpl implements PatientDao {
     public List<Doctor> getPatientFavoriteDoctors(Patient patient) {
         return null;
     }
-    
+
 }
 
