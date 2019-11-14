@@ -77,7 +77,6 @@ public class AdminController {
     @RequestMapping(value = "/addedDoctor", method = { RequestMethod.POST })
     public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors) {
 
-
         if (errors.hasErrors())
             return addDoctor(form);
 
