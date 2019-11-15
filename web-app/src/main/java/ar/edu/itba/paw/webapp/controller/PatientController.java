@@ -110,5 +110,23 @@ public class PatientController {
         return mav;
     }
 
+    @RequestMapping(value = "/favorites",  method = { RequestMethod.GET })
+    public ModelAndView favorites(){
+        final ModelAndView mav = new ModelAndView(("patient/favorites"));
+
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        Patient patient = patientService.getPatientByEmail(user.getEmail());
+        List<Doctor> fav = patientService.getPatientFavoriteDoctors(patient);
+
+        mav.addObject("user", user);
+        mav.addObject("patient", patient);
+
+        mav.addObject("doctors", fav);
+
+        return mav;
+
+
+    }
+
 
 }

@@ -32,8 +32,9 @@ public class Patient {
     private List<Appointment> appointments;
 
     //TODO es necesario poner la otra punta de la relacion?
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name = "favorites",joinColumns = {@JoinColumn(name = "patientEmail")},inverseJoinColumns = {@JoinColumn(name = "doctorLicense")})
+    @OneToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "favorites",joinColumns = {@JoinColumn(name = "patient")},inverseJoinColumns = {@JoinColumn(name = "doctor")})
+//    @OneToMany(mappedBy = "patient")
     private List<Doctor> favorites;
 
     
@@ -100,14 +101,14 @@ public class Patient {
     public void setId(String id) {
         this.id = id;
     }
-
-    public List<Doctor> getFavorites() {
-        return favorites;
-    }
-
-    public void setFavorites(List<Doctor> favorites) {
-        this.favorites = favorites;
-    }
+//
+//    public List<Doctor> getFavorites() {
+//        return favorites;
+//    }
+//
+//    public void setFavorites(List<Doctor> favorites) {
+//        this.favorites = favorites;
+//    }
 
     @Override
     public boolean equals(Object obj) {

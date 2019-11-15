@@ -2,16 +2,15 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.PatientDao;
 import ar.edu.itba.paw.interfaces.service.AppointmentService;
+import ar.edu.itba.paw.interfaces.service.FavoriteService;
 import ar.edu.itba.paw.interfaces.service.PatientService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.model.Appointment;
-import ar.edu.itba.paw.model.Doctor;
-import ar.edu.itba.paw.model.Patient;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -27,6 +26,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private FavoriteService favoriteService;
 
     private static final String NoPrepaid = "";
 
@@ -48,12 +50,21 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public void addDoctorToFavorites(Patient patient, Doctor doctor) {
-        patientDao.addDoctorToFavorites(patient,doctor);
+        favoriteService.create(doctor,patient);
     }
 
     @Override
     public List<Doctor> getPatientFavoriteDoctors(Patient patient) {
-        return patientDao.getPatientFavoriteDoctors(patient);
+        List<Favorite> list = favoriteService.getPatientsFavorite(patient);
+        List<Doctor> doctors = new ArrayList<>();
+        if(list != null){
+            for(Favorite fav : list){
+                doctors.add(fav.getDoctor());
+            }
+            return doctors;
+        }else {
+            return null;
+        }
     }
 
 

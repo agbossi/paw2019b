@@ -146,11 +146,19 @@ public class PatientDaoImpl implements PatientDao {
 
     @Override
     public void addDoctorToFavorites(Patient patient, Doctor doctor) {
-        //TODO persist de uno solo? de los dos? cada vez que se añade un favorito tengo que re persistir la entidad?
+//        //TODO persist de uno solo? de los dos? cada vez que se añade un favorito tengo que re persistir la entidad?
+//        List<Doctor> list = patient.getFavorites();
+//        list.add(doctor);
+//        patient.setFavorites(list);
+//        entityManager.persist(patient);
     }
 
     @Override
     public List<Doctor> getPatientFavoriteDoctors(Patient patient) {
+//
+//        final Patient result = entityManager.find(Patient.class, patient.getEmail());
+//
+//        return result.getFavorites();
         return null;
     }
 

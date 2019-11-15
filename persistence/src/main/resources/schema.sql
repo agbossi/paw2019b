@@ -82,3 +82,9 @@ CREATE TABLE IF NOT EXISTS images (
     doctor VARCHAR(20) REFERENCES doctors(license) ON UPDATE CASCADE ON DELETE CASCADE,
     image bytea
 );
+
+CREATE TABLE IF NOT EXISTS favorites (
+    patient VARCHAR(25) REFERENCES patients(email) ON UPDATE CASCADE ON DELETE CASCADE,
+    doctor VARCHAR(20) REFERENCES doctors(license) ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY (patient, doctor)
+);
