@@ -10,7 +10,7 @@
         <link href="<c:url value="/resources/css/doctors.css" />" rel="stylesheet" type="text/css" />
     </head>
     <body class="list-items-body">
-    <div class="container marketing " id="doctors">
+    <div class="container marketing ">
         <div class="doctor-row">
             <c:choose>
                 <c:when test="${!empty doctors}">

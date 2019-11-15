@@ -7,6 +7,7 @@ import ar.edu.itba.paw.model.Favorite;
 import ar.edu.itba.paw.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
     private FavoriteDao favoriteDao;
 
+    @Transactional
     @Override
     public Favorite create(Doctor doctor, Patient patient) {
         return favoriteDao.create(doctor, patient);
@@ -24,5 +26,16 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public List<Favorite> getPatientsFavorite(Patient patient) {
         return favoriteDao.getPatientsFavorite(patient);
+    }
+
+    @Override
+    public boolean isFavorite(Doctor doctor, Patient patient) {
+        return favoriteDao.isFavorite(doctor, patient);
+    }
+
+    @Transactional
+    @Override
+    public void deleteFavorite(Doctor doctor, Patient patient) {
+        favoriteDao.deleteFavorite(doctor, patient);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,10 +31,16 @@ public class PatientController {
     private UserService userService;
 
     @Autowired
+    private DoctorService doctorService;
+
+    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Autowired
     private PrepaidService prepaidService;
+
+    @Autowired
+    private FavoriteService favoriteService;
 
     private void setFormInformation(PersonalInformationForm form, User user, Patient patient) {
         form.setFirstName(user.getFirstName());
@@ -128,5 +135,38 @@ public class PatientController {
 
     }
 
+    @RequestMapping(value = "/addFavorite/{doctorId}", method = { RequestMethod.GET })
+    public ModelAndView addFavorite(@PathVariable("doctorId") String license){
 
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        Patient patient = patientService.getPatientByEmail(user.getEmail());
+
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+
+        if(!favoriteService.isFavorite(doctor, patient)){
+            favoriteService.create(doctor,patient);
+        }
+
+        final ModelAndView mav = new ModelAndView("redirect:/results/" + license);
+
+        return mav;
+    }
+
+    @RequestMapping(value = "deleteFavorite/{doctorId}", method = { RequestMethod.GET })
+    public ModelAndView deleteFavorite(@PathVariable("doctorId") String license){
+
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        Patient patient = patientService.getPatientByEmail(user.getEmail());
+
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+
+        if(favoriteService.isFavorite(doctor, patient)){
+            favoriteService.deleteFavorite(doctor,patient);
+        }
+
+        final ModelAndView mav = new ModelAndView("redirect:/results/" + license);
+
+        return mav;
+
+    }
 }

@@ -11,4 +11,8 @@ public interface FavoriteDao {
     Favorite create(Doctor doctor, Patient patient);
 
     List<Favorite> getPatientsFavorite(Patient patient);
+
+    boolean isFavorite(Doctor doctor, Patient patient);
+
+    void deleteFavorite(Doctor doctor, Patient patient);
 }

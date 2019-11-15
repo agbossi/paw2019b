@@ -14,7 +14,17 @@
     </head>
     <body class="d-flex flex-column h-100">
         <div class="doctor-information">
-            <h4><b><c:out value="${doctor.firstName}"/> <c:out value="${doctor.lastName}"/></b></h4>
+            <h4>
+                <b><c:out value="${doctor.firstName}"/> <c:out value="${doctor.lastName}"/></b>
+                <sec:authorize access="hasRole('ROLE_USER')">
+                    <c:if test="${isFav}">
+                        <a href="<c:out value="/deleteFavorite/${doctor.license}"/>"><img src="<c:url value="/resources/images/yesfav.png" />"></a>
+                    </c:if>
+                    <c:if test="${!isFav}">
+                        <a href="<c:out value="/addFavorite/${doctor.license}"/>"><img src="<c:url value="/resources/images/nofav.png" />"></a>
+                    </c:if>
+                </sec:authorize>
+            </h4>
             <div class="doctor-profile">
                 <h6><b><spring:message code="license"/></b> <c:out value="${doctor.license}"/></h6>
                 <h6><b><spring:message code="specialty"/></b>  <c:out value="${doctor.specialty.specialtyName}"/></h6>
