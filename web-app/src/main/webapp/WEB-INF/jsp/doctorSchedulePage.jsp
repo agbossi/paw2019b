@@ -21,9 +21,11 @@
                 <div>
                     <h6><b><spring:message code="clinic"/></b>  <c:out value="${doctorClinic.clinic.name}"/></h6>
                 </div>
-                <div>
-                    (<c:out value="${doctorClinic.clinic.location.locationName}"/>)
-                </div>
+                <c:if test="${not empty doctorClinic.clinic.location}">
+                    <div>
+                        (<c:out value="${doctorClinic.clinic.location.locationName}"/>)
+                    </div>
+                </c:if>
                 <div>
                     <spring:message code="consult.price"/>&nbsp;<b><c:out value="${doctorClinic.consultPrice}"/></b><spring:message code="currency"/>
                 </div>

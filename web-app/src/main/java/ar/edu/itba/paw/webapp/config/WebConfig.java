@@ -102,21 +102,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return ds;
     }
 
-   /* @Bean
-    public DataSourceInitializer dataSourceInitializer(final DataSource ds){
-        final DataSourceInitializer dsi = new DataSourceInitializer();
-        dsi.setDataSource(ds);
-        dsi.setDatabasePopulator(databasePopulator());
-        return dsi;
-    }
-
-    @Bean
-    public DatabasePopulator databasePopulator(){
-        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
-        dbp.addScript(schemaSql);
-        return dbp;
-    } */
-
     @Bean
     public MessageSource messageSource() {
         final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();

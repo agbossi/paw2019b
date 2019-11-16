@@ -59,8 +59,11 @@ public class ClinicServiceImpl implements ClinicService {
         if(address.equals("")) {
             address = clinic.getAddress();
         }
-        if(location.equals("")) {
+        if(location.equals("") && (clinic.getLocation() != null)) {
             location = clinic.getLocation().getLocationName();
+        }
+        else {
+            location = null;
         }
         clinicDao.updateClinic(id, name, address, location);
     }

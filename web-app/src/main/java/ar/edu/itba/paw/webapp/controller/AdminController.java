@@ -117,7 +117,12 @@ public class AdminController {
         Clinic clinic = clinicService.getClinicById(id);
         form.setName(clinic.getName());
         form.setAddress(clinic.getAddress());
-        form.setLocation(clinic.getLocation().getLocationName());
+
+        // TODO: are we gonna remove clinics if they dont have location ?
+        if(clinic.getLocation() != null) {
+            form.setLocation(clinic.getLocation().getLocationName());
+        }
+
         final ModelAndView mav = new ModelAndView("admin/editClinic");
         mav.addObject("clinic", clinic);
         ViewModifierHelper.addLocations(mav, locationService);
