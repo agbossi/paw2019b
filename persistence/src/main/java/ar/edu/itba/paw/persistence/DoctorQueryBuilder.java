@@ -6,19 +6,19 @@ public class DoctorQueryBuilder {
 
     public void buildQuery(String location, String specialty, String firstName, String lastName, String prepaid, int consultPrice){
         StringBuilder query = new StringBuilder("select doctorCli from DoctorClinic as doctorCli inner join doctorCli.clinic.prepaids as p where ");
-        if(location != ""){
+        if(!(location.equals(""))){
             query.append("doctorCli.clinic.location.name = :location and ");
         }
-        if(specialty != ""){
+        if(!(specialty.equals(""))){
             query.append("doctorCli.doctor.specialty.name = :specialty and ");
         }
-        if(firstName != ""){
+        if(!(firstName.equals(""))){
             query.append("doctorCli.doctor.user.firstName = :firstName and ");
         }
-        if(lastName != ""){
+        if(!(lastName.equals(""))){
             query.append("doctorCli.doctor.user.lastName = :lastName and ");
         }
-        if(prepaid != ""){
+        if(!(prepaid.equals(""))){
             query.append("p.prepaid.name = :prepaid"); //TODO query a list with a value?
         }
         else if(consultPrice > 0){
