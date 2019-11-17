@@ -11,7 +11,7 @@
     <div class="list-container">
         <div class="header-info">
             <div class="header-block">
-                <h5><spring:message code="account.header"/></h5>
+                <h4 class="header-msg"><spring:message code="account.header"/></h4>
             </div>
         </div>
         <div class="listed-items">

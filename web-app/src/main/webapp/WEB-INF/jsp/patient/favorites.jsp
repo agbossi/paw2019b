@@ -8,15 +8,16 @@
         <%@ page isELIgnored="false" %>
         <jsp:include page="../base/navbar.jsp" />
         <link href="<c:url value="/resources/css/doctors.css" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value="/resources/css/listAppointments.css" />" rel="stylesheet" type="text/css" />
         <link href="<c:url value="/resources/css/favorites.css" />" rel="stylesheet" type="text/css" />
     </head>
-    <body>
-        <div>
+    <body class="list-items-body">
+        <div class="list-container">
             <c:choose>
-                <c:when test="${!empty docotrs}">
+                <c:when test="${not empty doctors}">
                     <div class="header-info">
                         <div class="header-block">
-                            <h5 class="header-msg"><spring:message code="your.favorites.information"/></h5>
+                            <h4 class="header-msg"><spring:message code="your.favorites.information"/></h4>
                         </div>
                     </div>
                     <div class="doctor-row">
@@ -34,9 +35,9 @@
                 </c:when>
                 <c:otherwise>
                     <div class="header-info">
-                        <div class="header-block">
-                            <h5 class="header-msg"><spring:message code="no.favorites.found"/></h5>
-                        </div>
+                        <h4><spring:message code="no.favorites.found"/></h4>
+                        <br/>
+                        <a href=<c:url value="/"/>><spring:message code="go.back.home"/></a>
                     </div>
                 </c:otherwise>
             </c:choose>

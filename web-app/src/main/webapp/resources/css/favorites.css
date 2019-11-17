@@ -1,3 +1,11 @@
 .header-msg {
     margin-left: 1.25em;
 }
+
+.header-block {
+    margin-bottom: 2.5em;
+}
+
+.doctor-row{
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr !important;
+}
