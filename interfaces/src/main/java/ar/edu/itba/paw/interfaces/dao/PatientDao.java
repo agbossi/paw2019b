@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.dao;
 
+import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.User;
 
@@ -16,4 +17,5 @@ public interface PatientDao {
     List<Patient> getPatientsByPrepaid(String prepaid);
 
     List<Patient> getPatientsById(String id);
+
 }

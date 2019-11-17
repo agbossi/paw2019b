@@ -36,6 +36,7 @@
                 </sec:authorize>
 
                 <sec:authorize access="hasRole('ROLE_USER')">
+                    <a class="p-2 text-dark" href="<c:url value="/favorites"/>"><spring:message code="favorites"/></a>
                     <a class="p-2 text-dark" href="<c:url value="/appointments"/>"><spring:message code="appointments"/></a>
                     <a class="p-2 text-dark" href="<c:url value="/profile"/>"><spring:message code="profile"/></a>
                 </sec:authorize>

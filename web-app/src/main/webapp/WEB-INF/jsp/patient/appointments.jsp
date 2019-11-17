@@ -15,7 +15,7 @@
                 <c:when test="${not empty patient.appointments}">
                     <div class="header-info">
                         <div class="header-block">
-                            <h5><spring:message code="your.appointments.information"/></h5>
+                            <h4 class="header-msg"><spring:message code="your.appointments.information"/></h4>
                         </div>
                     </div>
                     <div class="listed-items">
@@ -41,7 +41,7 @@
                 </c:when>
                 <c:otherwise>
                     <div class="header-info">
-                        <spring:message code="no.appointments"/>
+                        <h4><spring:message code="no.appointments"/></h4>
                         <br/>
                         <a href=<c:url value="/"/>><spring:message code="go.back.home"/></a>
                     </div>

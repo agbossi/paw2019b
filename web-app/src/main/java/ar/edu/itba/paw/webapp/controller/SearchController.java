@@ -43,6 +43,10 @@ public class SearchController {
     @Autowired
     private DoctorHourService doctorHourService;
 
+    @Autowired
+    private FavoriteService favoriteService;
+
+
     @RequestMapping(value = "/search", method = {RequestMethod.GET})
     public ModelAndView search(@ModelAttribute("searchForm") final SearchForm form) {
 
@@ -111,6 +115,15 @@ public class SearchController {
         mav.addObject("doctor", doctor);
         ViewModifierHelper.addDoctorClinicsForDoctor(mav, doctor, doctorClinicService);
 
+        boolean isFav = false;
+
+        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        Patient patient = patientService.getPatientByEmail(userEmail);
+        if(patient != null) {
+            isFav = favoriteService.isFavorite(doctor, patient);
+        }
+
+        mav.addObject("isFav", isFav);
         return mav;
     }
 

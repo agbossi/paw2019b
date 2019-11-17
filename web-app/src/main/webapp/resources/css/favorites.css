@@ -1,0 +1,18 @@
+.header-msg {
+    margin-left: 1.25em;
+}
+
+.header-block {
+    margin-bottom: 2.5em;
+}
+
+.doctor-row{
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr !important;
+    margin: 1em 3em 1em 3em !important;
+}
+
+.doctor-row > div {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}

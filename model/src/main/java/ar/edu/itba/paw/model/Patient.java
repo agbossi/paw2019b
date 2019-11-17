@@ -31,6 +31,13 @@ public class Patient {
     @OneToMany(mappedBy = "patient")
     private List<Appointment> appointments;
 
+    //TODO es necesario poner la otra punta de la relacion?
+    @OneToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "favorites",joinColumns = {@JoinColumn(name = "patient")},inverseJoinColumns = {@JoinColumn(name = "doctor")})
+//    @OneToMany(mappedBy = "patient")
+    private List<Doctor> favorites;
+
+    
     public Patient(String id, String prepaid, String prepaidNumber,User user) {
         this.user = user;
         this.id = id;

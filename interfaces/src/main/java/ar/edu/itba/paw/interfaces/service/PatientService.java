@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.interfaces.service;
 
+import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.User;
 
@@ -9,6 +10,8 @@ public interface PatientService {
     Patient create(String id, String prepaid, String prepaidNumber, String firstName, String lastName, String password, String email);
 
     Patient getPatientByEmail(String email);
+
+    List<Doctor> getPatientFavoriteDoctors(Patient patient);
 
     void setAppointments(Patient patient);
 

@@ -14,15 +14,13 @@
 }
 
 .header-block {
-    width: 370px;
-    margin-left: 1em;
-    padding: 0.75em;
-    border-style: solid;
-    border-radius: 0.5em;
-    background-color: #CAE9F5;
-    border-color: #86C5D8;
-    text-align: center;
+    margin-bottom: 2.5em;
 }
+
+.header-msg {
+    margin-left: 1.25em;
+}
+
 
 .listed-items {
     display: grid;
