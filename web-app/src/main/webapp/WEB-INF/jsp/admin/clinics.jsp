@@ -18,14 +18,7 @@
 <div class="admin-info-container">
     <c:forEach var="clinic" items="${clinics}">
         <div>
-            <c:choose>
-                <c:when test="${not empty clinic.location}">
-                    <h6><c:out value="${clinic.name}"/>, <c:out value="${clinic.address}"/> (<c:out value="${clinic.location.locationName}"/>)</h6>
-                </c:when>
-                <c:otherwise>
-                    <h6><c:out value="${clinic.name}"/>, <c:out value="${clinic.address}"/></h6>
-                </c:otherwise>
-            </c:choose>
+            <h6><c:out value="${clinic.name}"/>, <c:out value="${clinic.address}"/> (<c:out value="${clinic.location.locationName}"/>)</h6>
             <h6>
                 <div class="delete-box">
                     <b class="delete-element">
