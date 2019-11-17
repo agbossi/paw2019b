@@ -64,6 +64,31 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return new JpaTransactionManager(emf);
     }
 
+    @Bean
+    public DataSource dataSource(){
+        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
+        ds.setDriverClass(org.postgresql.Driver.class);
+        ds.setUrl( jdbcPath );
+        ds.setUsername( dbUser );
+        ds.setPassword( dbPassword );
+
+        return ds;
+    }
+
+    @Bean
+    public DataSourceInitializer dataSourceInitializer(final DataSource ds) {
+        final DataSourceInitializer dsi = new DataSourceInitializer();
+        dsi.setDataSource(ds);
+        dsi.setDatabasePopulator(databasePopulator());
+        return dsi;
+    }
+
+    private DatabasePopulator databasePopulator() {
+        final ResourceDatabasePopulator dbp = new ResourceDatabasePopulator();
+        dbp.addScript(schemaSql);
+        return dbp;
+    }
+
     @Bean public LocalContainerEntityManagerFactoryBean entityManagerFactory(){
         final LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
 
@@ -89,17 +114,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         viewResolver.setSuffix(".jsp");
 
         return viewResolver;
-    }
-
-    @Bean
-    public DataSource dataSource(){
-        final SimpleDriverDataSource ds = new SimpleDriverDataSource();
-        ds.setDriverClass(org.postgresql.Driver.class);
-        ds.setUrl( jdbcPath );
-        ds.setUsername( dbUser );
-        ds.setPassword( dbPassword );
-
-        return ds;
     }
 
     @Bean
