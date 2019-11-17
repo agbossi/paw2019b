@@ -127,7 +127,6 @@ public class PatientController {
 
         mav.addObject("user", user);
         mav.addObject("patient", patient);
-
         mav.addObject("doctors", fav);
 
         return mav;

@@ -57,14 +57,10 @@ public class PatientServiceImpl implements PatientService {
     public List<Doctor> getPatientFavoriteDoctors(Patient patient) {
         List<Favorite> list = favoriteService.getPatientsFavorite(patient);
         List<Doctor> doctors = new ArrayList<>();
-        if(list != null){
-            for(Favorite fav : list){
-                doctors.add(fav.getDoctor());
-            }
-            return doctors;
-        }else {
-            return null;
+        for(Favorite fav : list){
+            doctors.add(fav.getDoctor());
         }
+        return doctors;
     }
 
 

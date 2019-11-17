@@ -32,7 +32,7 @@ public class FavoriteDaoImpl implements FavoriteDao {
         query.setParameter("email", patient.getEmail());
 
         final List<Favorite> list = query.getResultList();
-        return list.isEmpty() ? null : list;
+        return list;
     }
 
     @Override
