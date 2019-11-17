@@ -16,7 +16,7 @@
     grid-gap: 0.5em;
     height: 100vh;
     overflow: auto;
-    paddign: 1em;
+    padding-top: 1em;
     column-gap: 2em;
 }
 
@@ -56,4 +56,28 @@
 
 .errors {
     color: #a00;
+}
+
+.pagination {
+    height: 50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0em 1em 1em 1em;
+}
+
+.prev {
+    margin-right: 1em;
+}
+
+.next {
+    text-align: right;
+    margin-right: 1em;
+}
+
+.no-results {
+    margin: 2em 0em 0em 0.3em
+}
+
+.wrong-page {
+    color: red;
 }

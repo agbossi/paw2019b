@@ -24,15 +24,18 @@ public class ViewModifierHelper {
         return mav;
     }
 
-    public static ModelAndView addLocations(ModelAndView mav, LocationService locationService){
+    public static ModelAndView addLocations(ModelAndView mav, LocationService locationService) {
         List<Location> locations = locationService.getLocations();
-        Collections.sort(locations, new Comparator<Location>() {
-            @Override
-            public int compare(Location loc1, Location loc2) {
-                return loc1.getLocationName().toLowerCase().compareTo(loc2.getLocationName().toLowerCase());
-            }
-        });
         mav.addObject("locations", locations);
+        return mav;
+    }
+
+    public static <T> ModelAndView addPaginatedObjects(ModelAndView mav, PaginationService<T> paginationService, int page){
+        List<T> objects = paginationService.getPaginatedObjects(page);
+        int maxPageAvailable = paginationService.maxAvailablePage();
+        mav.addObject("objects", objects);
+        mav.addObject("page", page);
+        mav.addObject("maxPage", maxPageAvailable);
         return mav;
     }
 

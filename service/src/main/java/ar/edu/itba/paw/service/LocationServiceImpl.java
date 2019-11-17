@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -22,8 +23,19 @@ public class LocationServiceImpl implements LocationService {
     }
 
     @Override
-    public List<Location> getLocations() {
-        return locationDao.getLocations();
+    public List<Location> getLocations() { return locationDao.getLocations(); }
+
+    @Override
+    public List<Location> getPaginatedObjects(int page) {
+        if(page < 0) {
+            return new ArrayList<>();
+        }
+        return locationDao.getPaginatedObjects(page);
+    }
+
+    @Override
+    public int maxAvailablePage() {
+        return locationDao.maxAvailablePage();
     }
 
     @Override

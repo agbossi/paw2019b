@@ -5,7 +5,7 @@ import ar.edu.itba.paw.model.*;
 import java.util.List;
 import java.util.Map;
 
-public interface DoctorDao {
+public interface DoctorDao extends PaginationDao<Doctor> {
     Doctor createDoctor(Specialty specialty, String license, String phoneNumber, User user);
 
     List<Doctor> getDoctors();
@@ -19,8 +19,6 @@ public interface DoctorDao {
     boolean isDoctor(String email);
 
     Doctor getDoctorByEmail(String email);
-
-  //  int deleteDoctor(String license);
 
     void updateDoctor(String license, Map<String, String> args);
 }

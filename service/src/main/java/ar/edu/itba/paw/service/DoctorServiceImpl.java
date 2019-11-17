@@ -38,7 +38,6 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<Doctor> getDoctors() { return doctorDao.getDoctors(); }
 
-
     @Override
     public List<Doctor> getDoctorByName(String firstName,String lastName) {
         return doctorDao.getDoctorByName(firstName,lastName);
@@ -99,5 +98,18 @@ public class DoctorServiceImpl implements DoctorService {
         }
         args.put("specialty",specialty);
         doctorDao.updateDoctor(license,args);
+    }
+
+    @Override
+    public List<Doctor> getPaginatedObjects(int page) {
+        if(page < 0) {
+            return new ArrayList<>();
+        }
+        return doctorDao.getPaginatedObjects(page);
+    }
+
+    @Override
+    public int maxAvailablePage() {
+        return doctorDao.maxAvailablePage();
     }
 }

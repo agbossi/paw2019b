@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
+import ar.edu.itba.paw.interfaces.dao.PaginationDao;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Specialty;
 import ar.edu.itba.paw.model.User;
@@ -19,6 +20,8 @@ public class DoctorDaoImpl implements DoctorDao {
     @PersistenceContext
     private EntityManager entityManager;
 
+    private static final int MAX_DOCTORS_PER_PAGE_ADMIN = 24;
+
     @Override
     public Doctor createDoctor(final Specialty specialty, final String license, final String phoneNumber, User user){
         //este persist toca usuario?
@@ -32,6 +35,21 @@ public class DoctorDaoImpl implements DoctorDao {
         final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor",Doctor.class);
         final List<Doctor> list = query.getResultList();
         return list;
+    }
+
+    @Override
+    public List<Doctor> getPaginatedObjects(int page){
+        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor order by " +
+                "doctor.user.firstName, doctor.user.lastName, doctor.license",Doctor.class);
+        final List<Doctor> list = query.setFirstResult(page * MAX_DOCTORS_PER_PAGE_ADMIN)
+                .setMaxResults(MAX_DOCTORS_PER_PAGE_ADMIN)
+                .getResultList();
+        return list;
+    }
+
+    @Override
+    public int maxAvailablePage() {
+        return (int) Math.ceil(( getDoctors().size() / MAX_DOCTORS_PER_PAGE_ADMIN));
     }
 
     @Override

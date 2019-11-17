@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.LocationDao;
+import ar.edu.itba.paw.interfaces.dao.PaginationDao;
 import ar.edu.itba.paw.model.Location;
 import org.springframework.stereotype.Repository;
 
@@ -16,6 +17,8 @@ public class LocationDaoImpl implements LocationDao {
     @PersistenceContext
     EntityManager entityManager;
 
+    private final static int MAX_LOCATIONS_PER_PAGE = 24;
+
     @Override
     public Location getLocationByName(String locationName){
         return entityManager.find(Location.class,locationName);
@@ -30,9 +33,22 @@ public class LocationDaoImpl implements LocationDao {
 
     @Override
     public List<Location> getLocations(){
-        TypedQuery<Location> query = entityManager.createQuery("from Location as location",Location.class);
-        List<Location> list = query.getResultList();
+        TypedQuery<Location> query = entityManager.createQuery("from Location as location ORDER BY location.name",Location.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Location> getPaginatedObjects(int page){
+        TypedQuery<Location> query = entityManager.createQuery("from Location as location ORDER BY location.name",Location.class);
+        List<Location> list = query.setFirstResult(page * MAX_LOCATIONS_PER_PAGE)
+                                   .setMaxResults(MAX_LOCATIONS_PER_PAGE)
+                                   .getResultList();
         return list;
+    }
+
+    @Override
+    public int maxAvailablePage() {
+        return (int) Math.ceil(( getLocations().size() / MAX_LOCATIONS_PER_PAGE));
     }
 
     @Override

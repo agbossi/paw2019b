@@ -3,15 +3,12 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.*;
-import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
 import ar.edu.itba.paw.webapp.helpers.ViewModifierHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
@@ -20,6 +17,8 @@ import java.util.Locale;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
+    final static int FIRST_PAGE = 0;
 
     @Autowired
     private DoctorService doctorService;
@@ -45,16 +44,16 @@ public class AdminController {
     @Autowired
     private PrepaidToClinicService prepaidToClinicService;
 
-    @Autowired
-    private ImageService imageService;
-
-    @Autowired
-    private MessageSource messageSource;
 
     @RequestMapping(value = "/doctors", method = { RequestMethod.GET })
     public ModelAndView doctors(){
+        return doctors(FIRST_PAGE);
+    }
+
+    @RequestMapping(value = "/doctors/{page}", method = { RequestMethod.GET })
+    public ModelAndView doctors(@PathVariable(value = "page") int page){
         final ModelAndView mav = new ModelAndView("admin/doctors");
-        ViewModifierHelper.addDoctors(mav, doctorService);
+        ViewModifierHelper.addPaginatedObjects(mav, doctorService, page);
         return mav;
     }
     
@@ -97,9 +96,13 @@ public class AdminController {
 
     @RequestMapping(value = "/clinics", method = { RequestMethod.GET })
     public ModelAndView clinics(){
-        final ModelAndView mav = new ModelAndView("admin/clinics");
-        ViewModifierHelper.addClinics(mav, clinicService);
+        return clinics(FIRST_PAGE);
+    }
 
+    @RequestMapping(value = "/clinics/{page}", method = { RequestMethod.GET })
+    public ModelAndView clinics(@PathVariable(value = "page") int page){
+        final ModelAndView mav = new ModelAndView("admin/clinics");
+        ViewModifierHelper.addPaginatedObjects(mav, clinicService, page);
         return mav;
     }
 
@@ -157,8 +160,13 @@ public class AdminController {
 
     @RequestMapping(value = "/locations", method = { RequestMethod.GET })
     public ModelAndView locations(){
+        return locations(FIRST_PAGE);
+    }
+
+    @RequestMapping(value = "/locations/{page}", method = { RequestMethod.GET })
+    public ModelAndView locations(@PathVariable(value = "page") int page){
         final ModelAndView mav = new ModelAndView("admin/locations");
-        ViewModifierHelper.addLocations(mav, locationService);
+        ViewModifierHelper.addPaginatedObjects(mav, locationService, page);
         return mav;
     }
 
@@ -209,8 +217,13 @@ public class AdminController {
 
     @RequestMapping(value = "/specialties", method = {RequestMethod.GET})
     public ModelAndView specialties(){
+        return specialties(FIRST_PAGE);
+    }
+
+    @RequestMapping(value = "/specialties/{page}", method = { RequestMethod.GET })
+    public ModelAndView specialties(@PathVariable(value = "page") int page){
         final ModelAndView mav = new ModelAndView("admin/specialties");
-        ViewModifierHelper.addSpecialties(mav, specialtyService);
+        ViewModifierHelper.addPaginatedObjects(mav, specialtyService, page);
         return mav;
     }
 
@@ -261,8 +274,13 @@ public class AdminController {
 
     @RequestMapping(value = "/prepaids",method = { RequestMethod.GET })
     public ModelAndView prepaids(){
+        return prepaids(FIRST_PAGE);
+    }
+
+    @RequestMapping(value = "/prepaids/{page}", method = { RequestMethod.GET })
+    public ModelAndView prepaids(@PathVariable(value = "page") int page){
         final ModelAndView mav = new ModelAndView("admin/prepaids");
-        ViewModifierHelper.addPrepaids(mav, prepaidService);
+        ViewModifierHelper.addPaginatedObjects(mav, prepaidService, page);
         return mav;
     }
 
@@ -315,8 +333,13 @@ public class AdminController {
 
     @RequestMapping(value = "/prepaidClinics", method = { RequestMethod.GET })
     public ModelAndView prepaidClinics() {
-        final ModelAndView mav = new ModelAndView("/admin/prepaidClinics");
-        ViewModifierHelper.addPrepaidClinics(mav, prepaidToClinicService);
+        return prepaids(FIRST_PAGE);
+    }
+
+    @RequestMapping(value = "/prepaidClinics/{page}", method = { RequestMethod.GET })
+    public ModelAndView prepaidClinics(@PathVariable(value = "page") int page){
+        final ModelAndView mav = new ModelAndView("admin/prepaidClinics");
+        ViewModifierHelper.addPaginatedObjects(mav, prepaidToClinicService, page);
         return mav;
     }
 
@@ -338,8 +361,6 @@ public class AdminController {
 
     @RequestMapping(value = "/addedPrepaidToClinic",method = { RequestMethod.POST })
     public ModelAndView addedPrepaidToClinic(@Valid @ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form,final BindingResult errors,Locale locale){
-
-        //validator.prepaidToClinicValidate(form.getPrepaid(),form.getClinic(),errors,locale);
 
         if (errors.hasErrors())
             return addPrepaidToClinic(form);

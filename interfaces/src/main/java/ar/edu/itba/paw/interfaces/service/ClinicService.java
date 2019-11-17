@@ -5,7 +5,7 @@ import ar.edu.itba.paw.model.Location;
 
 import java.util.List;
 
-public interface ClinicService {
+public interface ClinicService extends PaginationService<Clinic> {
     Clinic createClinic(String name, String address, Location location);
 
     List<Clinic> getClinics();

@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.interfaces.dao.PaginationDao;
 import ar.edu.itba.paw.interfaces.dao.PrepaidDao;
 import ar.edu.itba.paw.model.Prepaid;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,8 @@ public class PrepaidDaoImpl implements PrepaidDao {
 
     @PersistenceContext
     EntityManager entityManager;
+
+    private final static int MAX_PREPAIDS_PER_PAGE = 24;
 
     @Override
     public Prepaid createPrepaid(String name){
@@ -33,6 +36,20 @@ public class PrepaidDaoImpl implements PrepaidDao {
         TypedQuery<Prepaid> query = entityManager.createQuery("from Prepaid as prepaid",Prepaid.class);
         List<Prepaid> list = query.getResultList();
         return list;
+    }
+
+    @Override
+    public List<Prepaid> getPaginatedObjects(int page){
+        TypedQuery<Prepaid> query = entityManager.createQuery("from Prepaid as prepaid ORDER BY prepaid.name", Prepaid.class);
+        List<Prepaid> list = query.setFirstResult(page * MAX_PREPAIDS_PER_PAGE)
+                .setMaxResults(MAX_PREPAIDS_PER_PAGE)
+                .getResultList();
+        return list;
+    }
+
+    @Override
+    public int maxAvailablePage() {
+        return (int) Math.ceil(( getPrepaids().size() / MAX_PREPAIDS_PER_PAGE));
     }
 
     @Override

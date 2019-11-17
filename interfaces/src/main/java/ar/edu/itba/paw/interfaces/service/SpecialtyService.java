@@ -4,7 +4,7 @@ import ar.edu.itba.paw.model.Specialty;
 
 import java.util.List;
 
-public interface SpecialtyService {
+public interface SpecialtyService extends PaginationService<Specialty> {
 
     Specialty createSpecialty(String name);
 

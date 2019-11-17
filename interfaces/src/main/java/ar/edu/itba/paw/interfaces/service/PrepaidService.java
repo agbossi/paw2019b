@@ -5,7 +5,7 @@ import ar.edu.itba.paw.model.Prepaid;
 
 import java.util.List;
 
-public interface PrepaidService {
+public interface PrepaidService extends PaginationService<Prepaid> {
     List<Prepaid> getPrepaids();
 
     Prepaid getPrepaidByName(String PrepaidName);

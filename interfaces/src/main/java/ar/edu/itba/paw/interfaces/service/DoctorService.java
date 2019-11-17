@@ -4,7 +4,7 @@ import ar.edu.itba.paw.model.*;
 
 import java.util.List;
 
-public interface DoctorService {
+public interface DoctorService extends PaginationService<Doctor> {
     Doctor createDoctor(Specialty specialty, String license, String phoneNumber, User user);
 
     List<Doctor> getDoctors();
@@ -12,8 +12,6 @@ public interface DoctorService {
     List<Doctor> getDoctorByName(String firstName,String lastName);
 
     List<Doctor> getDoctorBySpecialty(Specialty specialty);
-
-    //List<Doctor> getDoctorBy(Location location, Specialty specialty, String clinic);
 
     Doctor getDoctorByLicense(String license);
 

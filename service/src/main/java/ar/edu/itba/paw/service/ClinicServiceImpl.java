@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -70,5 +71,18 @@ public class ClinicServiceImpl implements ClinicService {
     @Override
     public long deleteClinic(int id) {
         return clinicDao.deleteClinic(id);
+    }
+
+    @Override
+    public List<Clinic> getPaginatedObjects(int page) {
+        if(page < 0) {
+            return new ArrayList<>();
+        }
+        return clinicDao.getPaginatedObjects(page);
+    }
+
+    @Override
+    public int maxAvailablePage() {
+        return clinicDao.maxAvailablePage();
     }
 }

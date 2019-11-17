@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.interfaces.dao.PaginationDao;
 import ar.edu.itba.paw.interfaces.dao.PrepaidToClinicDao;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Prepaid;
@@ -18,12 +19,30 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     @PersistenceContext
     EntityManager entityManager;
 
+    private final static int MAX_PREPAID_TO_CLINICS_PER_PAGE = 24;
+
     @Override
     public List<PrepaidToClinic> getPrepaidToClinics(){
         //en el join es p.clinic o p.id?
         TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p",PrepaidToClinic.class);
         List<PrepaidToClinic> list = query.getResultList();
         return list;
+    }
+
+    @Override
+    public List<PrepaidToClinic> getPaginatedObjects(int page){
+        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p ORDER BY " +
+                        "p.prepaid.name, p.clinic.name, clinic.location.name",
+                PrepaidToClinic.class);
+        List<PrepaidToClinic> list = query.setFirstResult(page * MAX_PREPAID_TO_CLINICS_PER_PAGE)
+                .setMaxResults(MAX_PREPAID_TO_CLINICS_PER_PAGE)
+                .getResultList();
+        return list;
+    }
+
+    @Override
+    public int maxAvailablePage() {
+        return (int) Math.ceil(( getPrepaidToClinics().size() / MAX_PREPAID_TO_CLINICS_PER_PAGE));
     }
 
     @Override

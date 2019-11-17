@@ -5,7 +5,7 @@ import ar.edu.itba.paw.model.Location;
 
 import java.util.List;
 
-public interface LocationService {
+public interface LocationService extends PaginationService<Location> {
     Location createLocation(String name);
 
     List<Location> getLocations();

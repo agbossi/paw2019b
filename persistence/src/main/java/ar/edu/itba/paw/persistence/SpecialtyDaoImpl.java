@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.interfaces.dao.PaginationDao;
 import ar.edu.itba.paw.model.Specialty;
 import ar.edu.itba.paw.interfaces.dao.SpecialtyDao;
 import org.springframework.stereotype.Repository;
@@ -11,10 +12,12 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
-public class SpecialtyDaoImpl implements SpecialtyDao{
+public class SpecialtyDaoImpl implements SpecialtyDao {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    private final static int MAX_SPECIALTIES_PER_PAGE = 24;
 
     @Override
     public Specialty createSpecialty(String name){
@@ -30,9 +33,23 @@ public class SpecialtyDaoImpl implements SpecialtyDao{
 
     @Override
     public List<Specialty> getSpecialties(){
-        final TypedQuery<Specialty> query = entityManager.createQuery("from Specialty as spcecialty",Specialty.class);
+        final TypedQuery<Specialty> query = entityManager.createQuery("from Specialty as spcecialty ORDER BY spcecialty.name",Specialty.class);
         final List<Specialty> list = query.getResultList();
         return list;
+    }
+
+    @Override
+    public List<Specialty> getPaginatedObjects(int page){
+        final TypedQuery<Specialty> query = entityManager.createQuery("from Specialty as spcecialty",Specialty.class);
+        final List<Specialty> list = query.setFirstResult(page * MAX_SPECIALTIES_PER_PAGE)
+                                          .setMaxResults(MAX_SPECIALTIES_PER_PAGE)
+                                          .getResultList();
+        return list;
+    }
+
+    @Override
+    public int maxAvailablePage() {
+        return (int) Math.ceil(( getSpecialties().size() / MAX_SPECIALTIES_PER_PAGE));
     }
 
     @Override

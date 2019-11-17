@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,5 +38,18 @@ public class PrepaidToClinicServiceImpl implements PrepaidToClinicService {
     @Override
     public long deletePrepaidFromClinic(String prepaid, int clinic) {
         return prepaidToClinicDao.deletePrepaidFromClinic(prepaid, clinic);
+    }
+
+    @Override
+    public List<PrepaidToClinic> getPaginatedObjects(int page) {
+        if(page < 0) {
+            return new ArrayList<>();
+        }
+        return prepaidToClinicDao.getPaginatedObjects(page);
+    }
+
+    @Override
+    public int maxAvailablePage() {
+        return prepaidToClinicDao.maxAvailablePage();
     }
 }

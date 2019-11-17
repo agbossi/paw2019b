@@ -4,7 +4,7 @@ import ar.edu.itba.paw.model.Prepaid;
 
 import java.util.List;
 
-public interface PrepaidDao {
+public interface PrepaidDao extends PaginationDao<Prepaid> {
 
     Prepaid createPrepaid(String name);
 
@@ -15,4 +15,5 @@ public interface PrepaidDao {
     void updatePrepaid(String oldName, String name);
 
     long deletePrepaid(String name);
+
 }

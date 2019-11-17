@@ -6,7 +6,7 @@ import ar.edu.itba.paw.model.PrepaidToClinic;
 
 import java.util.List;
 
-public interface PrepaidToClinicDao {
+public interface PrepaidToClinicDao extends PaginationDao<PrepaidToClinic> {
     List<PrepaidToClinic> getPrepaidToClinics();
 
     PrepaidToClinic addPrepaidToClinic(Prepaid prepaid, Clinic clinic);

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.ClinicDao;
+import ar.edu.itba.paw.interfaces.dao.PaginationDao;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,8 @@ public class ClinicDaoImpl implements ClinicDao {
 
     @PersistenceContext
     EntityManager entityManager;
+
+    private final static int MAX_CLINICS_PER_PAGE = 24;
 
     @Override
     public Clinic createClinic(String name, String address, Location location){
@@ -40,6 +43,22 @@ public class ClinicDaoImpl implements ClinicDao {
         TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic",Clinic.class);
         List<Clinic> list = query.getResultList();
         return list;
+    }
+
+    @Override
+    public List<Clinic> getPaginatedObjects(int page){
+        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic ORDER BY " +
+                                                                  "clinic.name, clinic.location.name, clinic.address",
+                                                                   Clinic.class);
+        List<Clinic> list = query.setFirstResult(page * MAX_CLINICS_PER_PAGE)
+                .setMaxResults(MAX_CLINICS_PER_PAGE)
+                .getResultList();
+        return list;
+    }
+
+    @Override
+    public int maxAvailablePage() {
+        return (int) Math.ceil(( getClinics().size() / MAX_CLINICS_PER_PAGE));
     }
 
     @Override
