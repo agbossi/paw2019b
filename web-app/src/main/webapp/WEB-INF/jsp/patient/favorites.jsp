@@ -8,12 +8,18 @@
         <%@ page isELIgnored="false" %>
         <jsp:include page="../base/navbar.jsp" />
         <link href="<c:url value="/resources/css/doctors.css" />" rel="stylesheet" type="text/css" />
+        <link href="<c:url value="/resources/css/favorites.css" />" rel="stylesheet" type="text/css" />
     </head>
-    <body class="list-items-body">
-    <div class="container marketing ">
-        <div class="doctor-row">
+    <body>
+        <div>
             <c:choose>
-                <c:when test="${!empty doctors}">
+                <c:when test="${!empty docotrs}">
+                    <div class="header-info">
+                        <div class="header-block">
+                            <h5 class="header-msg"><spring:message code="your.favorites.information"/></h5>
+                        </div>
+                    </div>
+                    <div class="doctor-row">
                     <c:forEach var="doctor" items="${doctors}">
                         <div class="single-doctor">
                             <img class="doctor-picture" src="<c:url value="/images/${doctor.license}"/>" onerror="this.onerror=null;this.src='<c:url value="/resources/images/docpic.jpg" />';"/>
@@ -24,12 +30,16 @@
                             <p>${doctor.specialty.specialtyName}</p>
                         </div>
                     </c:forEach>
+                    <div class="doctor-row">
                 </c:when>
                 <c:otherwise>
-                    <h3><spring:message code="no.results.found"/></h3>
+                    <div class="header-info">
+                        <div class="header-block">
+                            <h5 class="header-msg"><spring:message code="no.favorites.found"/></h5>
+                        </div>
+                    </div>
                 </c:otherwise>
             </c:choose>
         </div>
-    </div>
     </body>
 </html>
