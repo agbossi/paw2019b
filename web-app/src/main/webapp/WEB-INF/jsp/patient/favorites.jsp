@@ -22,13 +22,22 @@
                     </div>
                     <div class="doctor-row">
                     <c:forEach var="doctor" items="${doctors}">
-                        <div class="single-doctor">
-                            <img class="doctor-picture" src="<c:url value="/images/${doctor.license}"/>" onerror="this.onerror=null;this.src='<c:url value="/resources/images/docpic.jpg" />';"/>
-                            <h3>
-                                <a class="text-dark" href="<c:url value="/results/${doctor.license}"/>">
-                                    <c:out value="${doctor.firstName}"/> <c:out value=" ${doctor.lastName}"/></a>
-                            </h3>
-                            <p>${doctor.specialty.specialtyName}</p>
+                        <div class="doctor-box">
+                            <div class="single-doctor">
+                                <img class="doctor-picture" src="<c:url value="/images/${doctor.license}"/>" onerror="this.onerror=null;this.src='<c:url value="/resources/images/docpic.jpg" />';"/>
+                                <h3>
+                                    <a class="text-dark" href="<c:url value="/results/${doctor.license}"/>">
+                                        <c:out value="${doctor.firstName}"/> <c:out value=" ${doctor.lastName}"/></a>
+                                </h3>
+                                <p>${doctor.specialty.specialtyName}</p>
+                            </div>
+                            <div class="delete-box">
+                                <b class="delete-element">
+                                    <a href="<c:out value="/deleteFavorite/${doctor.license}"/>">
+                                        <input type="submit" value="Remove from favorites" name="Remove from favorites" onclick="return confirmSubmit()">
+                                    </a>
+                                </b>
+                            </div>
                         </div>
                     </c:forEach>
                     <div class="doctor-row">
@@ -44,3 +53,14 @@
         </div>
     </body>
 </html>
+
+<script>
+    function confirmSubmit()
+    {
+        var agree=confirm("Are you sure you want to remove this doctor from favorites?");
+        if (agree)
+            return true ;
+        else
+            return false ;
+    }
+</script>

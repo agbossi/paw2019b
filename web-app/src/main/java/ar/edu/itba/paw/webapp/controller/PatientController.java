@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Locale;
@@ -152,7 +153,7 @@ public class PatientController {
     }
 
     @RequestMapping(value = "deleteFavorite/{doctorId}", method = { RequestMethod.GET })
-    public ModelAndView deleteFavorite(@PathVariable("doctorId") String license){
+    public ModelAndView deleteFavorite(@PathVariable("doctorId") String license, HttpServletRequest request){
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
@@ -163,7 +164,8 @@ public class PatientController {
             favoriteService.deleteFavorite(doctor,patient);
         }
 
-        final ModelAndView mav = new ModelAndView("redirect:/results/" + license);
+        String referer = request.getHeader("Referer");
+        final ModelAndView mav = new ModelAndView("redirect:" + referer);
 
         return mav;
 
