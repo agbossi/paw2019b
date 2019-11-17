@@ -101,14 +101,6 @@ public class Patient {
     public void setId(String id) {
         this.id = id;
     }
-//
-//    public List<Doctor> getFavorites() {
-//        return favorites;
-//    }
-//
-//    public void setFavorites(List<Doctor> favorites) {
-//        this.favorites = favorites;
-//    }
 
     @Override
     public boolean equals(Object obj) {

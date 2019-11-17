@@ -31,7 +31,6 @@ public class Favorite {
 
     }
 
-
     public Doctor getDoctor() {
         return doctor;
     }

@@ -11,8 +11,6 @@ public interface PatientService {
 
     Patient getPatientByEmail(String email);
 
-    void addDoctorToFavorites(Patient patient, Doctor doctor);
-
     List<Doctor> getPatientFavoriteDoctors(Patient patient);
 
     void setAppointments(Patient patient);

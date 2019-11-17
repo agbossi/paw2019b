@@ -49,11 +49,6 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void addDoctorToFavorites(Patient patient, Doctor doctor) {
-        favoriteService.create(doctor,patient);
-    }
-
-    @Override
     public List<Doctor> getPatientFavoriteDoctors(Patient patient) {
         List<Favorite> list = favoriteService.getPatientsFavorite(patient);
         List<Doctor> doctors = new ArrayList<>();

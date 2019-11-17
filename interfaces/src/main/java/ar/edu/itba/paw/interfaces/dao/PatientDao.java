@@ -18,8 +18,4 @@ public interface PatientDao {
 
     List<Patient> getPatientsById(String id);
 
-    void addDoctorToFavorites(Patient patient, Doctor doctor);
-
-    List<Doctor> getPatientFavoriteDoctors(Patient patient);
-
 }
