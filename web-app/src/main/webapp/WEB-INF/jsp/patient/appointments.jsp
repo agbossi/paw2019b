@@ -33,7 +33,7 @@
                                     </p>
                                 </div>
                                 <div class="cancel-appointment-button">
-                                    <a class="cancel-button btn btn-outline-primary" href="<c:url value="/cancelApp/${appointment.doctorClinic.clinic.id}/${appointment.doctorClinic.doctor.license}/${appointment.appointmentKey.date.get(1)}-${appointment.appointmentKey.date.get(2)}-${appointment.appointmentKey.date.get(5)}-${appointment.appointmentKey.date.get(11)}"/>"><spring:message code="a.cancel"/></a>
+                                    <a onclick="return confirmSubmit()" class="cancel-button btn btn-outline-primary" href="<c:url value="/cancelApp/${appointment.doctorClinic.clinic.id}/${appointment.doctorClinic.doctor.license}/${appointment.appointmentKey.date.get(1)}-${appointment.appointmentKey.date.get(2)}-${appointment.appointmentKey.date.get(5)}-${appointment.appointmentKey.date.get(11)}"/>"><spring:message code="a.cancel"/></a>
                                 </div>
                             </div>
                         </c:forEach>
@@ -50,3 +50,14 @@
         </div>
     </body>
 </html>
+
+<script>
+    function confirmSubmit()
+    {
+        var agree=confirm("Are you sure you want to cancel this appointment?");
+        if (agree)
+            return true ;
+        else
+            return false ;
+    }
+</script>

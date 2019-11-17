@@ -66,7 +66,7 @@
                                             <c:when test="${day.scheduled && not empty day.hasAppointment}">
                                                 <div class="info">
                                                     <c:out value="${day.hasAppointment.patient.lastName}"/>, <c:out value="${day.hasAppointment.patient.firstName}"/>
-                                                    <a href="<c:url value="/docCancelApp/${doctorClinic.clinic.id}/${day.hasAppointment.patient.email}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="a.cancel"/></a>
+                                                    <a onclick="return confirmSubmit()" href="<c:url value="/docCancelApp/${doctorClinic.clinic.id}/${day.hasAppointment.patient.email}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="a.cancel"/></a>
                                                  </div>
                                             </c:when>
                                         </c:choose>
@@ -81,3 +81,14 @@
         </div>
     </body>
 </html>
+
+<script>
+    function confirmSubmit()
+    {
+        var agree=confirm("Are you sure you want to cancel this appointment?");
+        if (agree)
+            return true ;
+        else
+            return false ;
+    }
+</script>

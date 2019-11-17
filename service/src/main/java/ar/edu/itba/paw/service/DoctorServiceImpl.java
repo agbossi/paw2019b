@@ -67,11 +67,9 @@ public class DoctorServiceImpl implements DoctorService {
 
         for(Doctor doc : doctors) {
             List<DoctorClinic> doctorsClinics = doctorClinicService.getDoctorClinicsForDoctor(doc);
-            if(doctorsClinics != null) {
-                for (DoctorClinic dc : doctorsClinics) {
-                    if (dc.getSchedule() != null && !(doctorsWithAvailability.contains(doc))) {
-                        doctorsWithAvailability.add(doc);
-                    }
+            for (DoctorClinic dc : doctorsClinics) {
+                if ((dc.getSchedule() != null) && !(doctorsWithAvailability.contains(doc))) {
+                    doctorsWithAvailability.add(doc);
                 }
             }
         }
