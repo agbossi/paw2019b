@@ -30,7 +30,7 @@ public class ExistenceServiceImpl implements ExistenceService {
     public boolean exists(String input,String type) {
         switch(type){
             case "doctor":
-                return doctorService.isDoctor(input);
+                return doctorService.getDoctorByLicense(input) == null;
             case "user":
                 return !userService.userExists(input);
             case "prepaid":
@@ -40,7 +40,7 @@ public class ExistenceServiceImpl implements ExistenceService {
             case "location":
                 return locationService.getLocationByName(input) == null;
             case "patient":
-                return patientService.getPatientsById(input) == null;
+                return patientService.getPatientsById(input).isEmpty();
             default:
                 return false;
         }
