@@ -19,7 +19,7 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     @PersistenceContext
     EntityManager entityManager;
 
-    private final static int MAX_PREPAID_TO_CLINICS_PER_PAGE = 24;
+    private final static int MAX_PREPAID_TO_CLINICS_PER_PAGE = 20;
 
     @Override
     public List<PrepaidToClinic> getPrepaidToClinics(){

@@ -100,7 +100,9 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
                                    String firstName, String lastName,
                                    Prepaid prepaid, int consultPrice) {
 
-        return doctorClinicDao.getFilteredDoctors(location, specialty, firstName, lastName, prepaid, consultPrice);
+        List<DoctorClinic> doctorClinics = doctorClinicDao.getFilteredDoctors(location, specialty, firstName, lastName, prepaid, consultPrice);
+        setScheduleAndAppointments(doctorClinics);
+        return doctorClinics;
     }
 
 }

@@ -106,7 +106,7 @@ public class DoctorServiceImpl implements DoctorService {
         List<DoctorClinic> doctorClinics = doctorClinicService.getFilteredDoctorClinics(location, specialty,
                                                                     firstName, lastName, prepaid, consultPrice);
         for(DoctorClinic dc : doctorClinics) {
-            if((dc.getSchedule() != null) && !(licenses.contains(dc.getDoctor().getLicense()))) {
+            if((!dc.getSchedule().isEmpty()) && !(licenses.contains(dc.getDoctor().getLicense()))) {
                 licenses.add(dc.getDoctor().getLicense());
             }
         }
@@ -118,7 +118,7 @@ public class DoctorServiceImpl implements DoctorService {
         List<String> licenses = new ArrayList<>();
         List<DoctorClinic> doctorClinics = doctorClinicService.getDoctorClinics();
         for(DoctorClinic dc : doctorClinics) {
-            if((dc.getSchedule() != null) && !(licenses.contains(dc.getDoctor().getLicense()))) {
+            if((!dc.getSchedule().isEmpty()) && !(licenses.contains(dc.getDoctor().getLicense()))) {
                 licenses.add(dc.getDoctor().getLicense());
             }
         }

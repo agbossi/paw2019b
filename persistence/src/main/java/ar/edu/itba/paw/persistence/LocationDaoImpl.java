@@ -17,7 +17,7 @@ public class LocationDaoImpl implements LocationDao {
     @PersistenceContext
     EntityManager entityManager;
 
-    private final static int MAX_LOCATIONS_PER_PAGE = 24;
+    private final static int MAX_LOCATIONS_PER_PAGE = 20;
 
     @Override
     public Location getLocationByName(String locationName){

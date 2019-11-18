@@ -21,7 +21,7 @@ public class DoctorDaoImpl implements DoctorDao {
     private EntityManager entityManager;
 
     private static final int MAX_DOCTORS_PER_PAGE_ADMIN = 24;
-    private static final int MAX_DOCTORS_PER_PAGE_USER = 15;
+    private static final int MAX_DOCTORS_PER_PAGE_USER = 10;
 
     @Override
     public Doctor createDoctor(final Specialty specialty, final String license, final String phoneNumber, User user){

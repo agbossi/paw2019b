@@ -17,7 +17,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final static int MAX_SPECIALTIES_PER_PAGE = 24;
+    private final static int MAX_SPECIALTIES_PER_PAGE = 20;
 
     @Override
     public Specialty createSpecialty(String name){
