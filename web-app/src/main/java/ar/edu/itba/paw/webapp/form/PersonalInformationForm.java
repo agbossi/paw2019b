@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.form;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.EditablePassword;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.FieldMatch;
+import ar.edu.itba.paw.webapp.helpers.validation.annotations.Unique;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -33,6 +34,7 @@ public class PersonalInformationForm {
 
     @Size(min = 8,max = 8)
     @Pattern(regexp = "[0-9]+")
+    @Unique(field = "patient",message = "{value.registered}")
     private String id;
 
 
