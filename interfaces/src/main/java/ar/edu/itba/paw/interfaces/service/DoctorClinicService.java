@@ -22,7 +22,7 @@ public interface DoctorClinicService {
 
     DoctorClinic getDoctorClinicFromDoctorAndClinic(Doctor doctor, Clinic clinic);
 
-    List<Doctor> getDoctorBy(Location location, Specialty specialty,
+    List<DoctorClinic> getFilteredDoctorClinics(Location location, Specialty specialty,
                     String firstName, String lastName, Prepaid prepaid, int consultPrice);
 
 }

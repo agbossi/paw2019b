@@ -21,4 +21,8 @@ public interface DoctorDao extends PaginationDao<Doctor> {
     Doctor getDoctorByEmail(String email);
 
     void updateDoctor(String license, Map<String, String> args);
+
+    List<Doctor> getPaginatedDoctorsInList(List<String> licenses, int page);
+
+    int maxAvailableDoctorsInListPage(List<String> licenses);
 }

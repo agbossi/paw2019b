@@ -18,5 +18,9 @@
 
 .doctor-row{
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.doctor-row > div {
+    padding: 0.3em;
 }

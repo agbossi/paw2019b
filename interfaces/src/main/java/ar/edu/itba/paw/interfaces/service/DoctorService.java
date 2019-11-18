@@ -24,4 +24,13 @@ public interface DoctorService extends PaginationService<Doctor> {
     long deleteDoctor(String license);
 
     void updateDoctor(String license, String phoneNumber, String specialty);
+
+    List<String> getAvailableFilteredLicenses(Location location, Specialty specialty,
+                                                      String firstName, String lastName, Prepaid prepaid, int consultPrice);
+
+    List<String> getAvailableDoctorsLicenses();
+
+    List<Doctor> getPaginatedDoctors(List<String> licenses, int page);
+
+    int getMaxAvailableDoctorsPage(List<String> licenses);
 }

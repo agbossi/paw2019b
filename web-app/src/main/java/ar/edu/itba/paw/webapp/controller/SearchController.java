@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -46,6 +47,25 @@ public class SearchController {
     @Autowired
     private FavoriteService favoriteService;
 
+    @RequestMapping(value = "/doctors/{page}", method = {RequestMethod.GET})
+    public ModelAndView doctors(@PathVariable(value = "page") int page,
+                               @ModelAttribute("searchForm") final SearchForm form) {
+
+        final ModelAndView mav = new ModelAndView("base/doctors");
+
+        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
+        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        Patient patient = patientService.getPatientByEmail(userEmail);
+        if(patient != null) {
+            mav.addObject("patientPrepaid", patient.getPrepaid());
+        }
+
+        List<String> licenses = doctorService.getAvailableDoctorsLicenses();
+        ViewModifierHelper.addPaginatedDoctors(mav, licenses, doctorService, page);
+
+        return mav;
+    }
+
 
     @RequestMapping(value = "/search", method = {RequestMethod.GET})
     public ModelAndView search(@ModelAttribute("searchForm") final SearchForm form) {
@@ -62,6 +82,7 @@ public class SearchController {
         return mav;
     }
 
+
     @RequestMapping(value = "/results", method = {RequestMethod.GET})
     public ModelAndView backToResults(@ModelAttribute("searchForm") final SearchForm form, HttpServletRequest request){
 
@@ -73,12 +94,17 @@ public class SearchController {
             mav.addObject("patientPrepaid", patient.getPrepaid());
         }
 
+        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService,
+                clinicService, prepaidService);
         UserContextHelper.loadUserQuery(form,request);
 
-        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
-
-        List<Doctor> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
-                new Specialty(form.getSpecialty()), form.getFirstName(),form.getLastName(),new Prepaid(form.getPrepaid()),form.getConsultPrice());
+        List<String> licenses = doctorService.getAvailableFilteredLicenses(new Location(form.getLocation()),
+                new Specialty(form.getSpecialty()), form.getFirstName(),form.getLastName(),
+                new Prepaid(form.getPrepaid()),form.getConsultPrice());
+        List<Doctor> filteredDoctors = new ArrayList<>();
+        for(String lic : licenses) {
+            filteredDoctors.add(doctorService.getDoctorByLicense(lic));
+        }
 
         ViewModifierHelper.addFilteredDoctors(mav, filteredDoctors);
 
@@ -96,10 +122,16 @@ public class SearchController {
         UserContextHelper.saveUserQuery(form,request);
 
         mav.addObject("patientPrepaid", form.getPrepaid());
-        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
+        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService,
+                                         clinicService, prepaidService);
 
-        List<Doctor> filteredDoctors = doctorClinicService.getDoctorBy(new Location(form.getLocation()),
-                new Specialty(form.getSpecialty()), form.getFirstName(),form.getLastName(),new Prepaid(form.getPrepaid()),form.getConsultPrice());
+        List<String> licenses = doctorService.getAvailableFilteredLicenses(new Location(form.getLocation()),
+                new Specialty(form.getSpecialty()), form.getFirstName(),form.getLastName(),
+                new Prepaid(form.getPrepaid()),form.getConsultPrice());
+        List<Doctor> filteredDoctors = new ArrayList<>();
+        for(String lic : licenses) {
+            filteredDoctors.add(doctorService.getDoctorByLicense(lic));
+        }
 
         ViewModifierHelper.addFilteredDoctors(mav, filteredDoctors);
 

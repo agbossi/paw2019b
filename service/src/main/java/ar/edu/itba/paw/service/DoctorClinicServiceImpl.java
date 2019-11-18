@@ -96,21 +96,11 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     }
 
     @Override
-    public List<Doctor> getDoctorBy(Location location, Specialty specialty,
+    public List<DoctorClinic> getFilteredDoctorClinics(Location location, Specialty specialty,
                                    String firstName, String lastName,
                                    Prepaid prepaid, int consultPrice) {
 
-        List<DoctorClinic> list = doctorClinicDao.getFilteredDoctors(location, specialty, firstName, lastName, prepaid, consultPrice);
-        List<Doctor> set = new ArrayList<>();
-        if (list != null) {
-            for (DoctorClinic doctorClinic : list) {
-                if (!set.contains(doctorClinic.getDoctor())) {
-                    set.add(doctorClinic.getDoctor());
-                }
-            }
-        }
-
-        return set;
+        return doctorClinicDao.getFilteredDoctors(location, specialty, firstName, lastName, prepaid, consultPrice);
     }
 
 }

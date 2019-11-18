@@ -4,10 +4,7 @@ import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
 import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.model.Doctor;
-import ar.edu.itba.paw.model.DoctorClinic;
-import ar.edu.itba.paw.model.Specialty;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,6 +95,47 @@ public class DoctorServiceImpl implements DoctorService {
         }
         args.put("specialty",specialty);
         doctorDao.updateDoctor(license,args);
+    }
+
+    @Override
+    public List<String> getAvailableFilteredLicenses(Location location, Specialty specialty,
+                                                             String firstName, String lastName,
+                                                             Prepaid prepaid, int consultPrice) {
+
+        List<String> licenses = new ArrayList<>();
+        List<DoctorClinic> doctorClinics = doctorClinicService.getFilteredDoctorClinics(location, specialty,
+                                                                    firstName, lastName, prepaid, consultPrice);
+        for(DoctorClinic dc : doctorClinics) {
+            if((dc.getSchedule() != null) && !(licenses.contains(dc.getDoctor().getLicense()))) {
+                licenses.add(dc.getDoctor().getLicense());
+            }
+        }
+        return licenses;
+    }
+
+    @Override
+    public List<String> getAvailableDoctorsLicenses() {
+        List<String> licenses = new ArrayList<>();
+        List<DoctorClinic> doctorClinics = doctorClinicService.getDoctorClinics();
+        for(DoctorClinic dc : doctorClinics) {
+            if((dc.getSchedule() != null) && !(licenses.contains(dc.getDoctor().getLicense()))) {
+                licenses.add(dc.getDoctor().getLicense());
+            }
+        }
+        return licenses;
+    }
+
+    @Override
+    public List<Doctor> getPaginatedDoctors(List<String> licenses, int page) {
+        if(page < 0) {
+            return new ArrayList<>();
+        }
+        return doctorDao.getPaginatedDoctorsInList(licenses, page);
+    }
+
+    @Override
+    public int getMaxAvailableDoctorsPage(List<String> licenses) {
+        return doctorDao.maxAvailableDoctorsInListPage(licenses);
     }
 
     @Override

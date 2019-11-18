@@ -13,6 +13,16 @@ public class ViewModifierHelper {
         throw new UnsupportedOperationException();
     }
 
+    public static ModelAndView addPaginatedDoctors(ModelAndView mav, List<String> licenses,
+                                                   DoctorService doctorService, int page) {
+        List<Doctor> doctors = doctorService.getPaginatedDoctors(licenses, page);
+        int maxAvailablePage = doctorService.getMaxAvailableDoctorsPage(licenses);
+        mav.addObject("doctors", doctors);
+        mav.addObject("maxPage", maxAvailablePage);
+        mav.addObject("page", page);
+        return mav;
+    }
+
     public static ModelAndView addSearchInfo(ModelAndView mav, LocationService locationService,
                                              SpecialtyService specialtyService, ClinicService clinicService,
                                              PrepaidService prepaidService){

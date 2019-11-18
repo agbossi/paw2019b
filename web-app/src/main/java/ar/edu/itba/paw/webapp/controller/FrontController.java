@@ -26,6 +26,7 @@ import java.util.List;
 public class FrontController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
+    private static final int FIRST_PAGE = 0;
 
     @Autowired
     private LocationService locationService;
@@ -87,8 +88,10 @@ public class FrontController {
             }
             ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService,
                                     clinicService, prepaidService);
+
             // Patients are not interested in doctors that still haven't load their schedule
-            ViewModifierHelper.addDoctorsWithAvailability(mav, doctorService);
+            List<String> licenses = doctorService.getAvailableDoctorsLicenses();
+            ViewModifierHelper.addPaginatedDoctors(mav, licenses, doctorService, FIRST_PAGE);
         }
 
 

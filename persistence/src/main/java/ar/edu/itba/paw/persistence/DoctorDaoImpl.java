@@ -21,6 +21,7 @@ public class DoctorDaoImpl implements DoctorDao {
     private EntityManager entityManager;
 
     private static final int MAX_DOCTORS_PER_PAGE_ADMIN = 24;
+    private static final int MAX_DOCTORS_PER_PAGE_USER = 15;
 
     @Override
     public Doctor createDoctor(final Specialty specialty, final String license, final String phoneNumber, User user){
@@ -106,5 +107,22 @@ public class DoctorDaoImpl implements DoctorDao {
         query.setParameter("specialty",args.get("specialty"));
         query.setParameter("phoneNumber",args.get("phoneNumber"));
         query.executeUpdate();
+    }
+
+    @Override
+    public List<Doctor> getPaginatedDoctorsInList(List<String> licenses, int page) {
+        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor " +
+                "where doctor.license in (?1) order by " +
+                "doctor.user.firstName, doctor.user.lastName, doctor.license",Doctor.class);
+        query.setParameter(1, licenses);
+        final List<Doctor> list = query.setFirstResult(page * MAX_DOCTORS_PER_PAGE_USER)
+                .setMaxResults(MAX_DOCTORS_PER_PAGE_USER)
+                .getResultList();
+        return list;
+    }
+
+    @Override
+    public int maxAvailableDoctorsInListPage(List<String> licenses) {
+        return (int)Math.ceil(licenses.size() / MAX_DOCTORS_PER_PAGE_USER);
     }
 }
