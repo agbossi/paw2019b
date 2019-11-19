@@ -49,7 +49,7 @@ public class PrepaidServiceImpl implements PrepaidService {
         long result = prepaidDao.deletePrepaid(name);
         for(Patient patient : patients) {
             System.out.println(patient.getEmail());
-            patientService.updatePatient(patient.getEmail(), null ,null, null);
+            patientService.updatePatient(patient.getEmail(), null ,null);
         }
         return result;
     }

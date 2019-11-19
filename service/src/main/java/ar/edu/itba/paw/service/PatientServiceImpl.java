@@ -68,7 +68,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Transactional
     @Override
-    public void updatePatient(String email, String prepaid, String prepaidNumber, String id) {
+    public void updatePatient(String email, String prepaid, String prepaidNumber) {
 
         Map<String,String> args = new HashMap<>();
         if(!(prepaid == null || prepaid.equals("")) ){
@@ -81,9 +81,6 @@ public class PatientServiceImpl implements PatientService {
             args.put("prepaidNumber", prepaidNumber);
         }
 
-        if(!(id == null || id.equals(""))){
-            args.put("id",id);
-        }
         patientDao.updatePatient(email,args);
     }
 

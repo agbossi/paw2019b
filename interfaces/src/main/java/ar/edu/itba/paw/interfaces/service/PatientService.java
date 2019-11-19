@@ -15,7 +15,7 @@ public interface PatientService {
 
     void setAppointments(Patient patient);
 
-    void updatePatient(String email, String prepaid, String prepaidNumber, String id);
+    void updatePatient(String email, String prepaid, String prepaidNumber);
 
     List<Patient> getPatientsByPrepaid(String prepaid);
 

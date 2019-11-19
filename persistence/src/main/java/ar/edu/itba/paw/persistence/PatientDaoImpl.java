@@ -35,12 +35,6 @@ public class PatientDaoImpl implements PatientDao {
     @Override
     public void updatePatient(String email, Map<String, String> args) {
         Query query;
-        if (args.containsKey("id")) {
-            query = entityManager.createQuery("update Patient as patient set id = :id where patient.user.email = :email");
-            query.setParameter("email",email);
-            query.setParameter("id", args.get("id"));
-            query.executeUpdate();
-        }
         if (args.containsKey("prepaid")) {
             query = entityManager.createQuery("update Patient as patient set patient.prepaid = :prepaid where patient.user.email = :email");
             query.setParameter("prepaid", args.get("prepaid"));

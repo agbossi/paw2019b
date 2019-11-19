@@ -32,10 +32,10 @@ public class PersonalInformationForm {
     @Pattern(regexp = "[0-9 ]*")
     private String prepaidNumber;
 
-    @Size(min = 8,max = 8)
-    @Pattern(regexp = "[0-9]+")
-    @Unique(field = "patient",message = "{value.registered}")
-    private String id;
+//    @Size(min = 8,max = 8)
+//    @Pattern(regexp = "[0-9]+")
+//    @Unique(field = "patient",message = "{value.registered}")
+//    private String id;
 
 
     public String getFirstName() {
@@ -62,9 +62,9 @@ public class PersonalInformationForm {
         this.newPassword = password;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+//    public void setId(String id) {
+//        this.id = id;
+//    }
 
     public String getRepeatPassword() {
         return repeatPassword;
@@ -90,7 +90,7 @@ public class PersonalInformationForm {
         this.prepaidNumber = prepaidNumber;
     }
 
-    public String getId() {
-        return id;
-    }
+//    public String getId() {
+//        return id;
+//    }
 }

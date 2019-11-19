@@ -46,7 +46,6 @@ public class PatientController {
     private void setFormInformation(PersonalInformationForm form, User user, Patient patient) {
         form.setFirstName(user.getFirstName());
         form.setLastName(user.getLastName());
-        form.setId(patient.getId());
         form.setPrepaid(patient.getPrepaid());
         form.setPrepaidNumber(patient.getPrepaidNumber());
     }
@@ -98,7 +97,7 @@ public class PatientController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         userService.updateUser(user.getEmail(),password,form.getFirstName(),form.getLastName());
-        patientService.updatePatient(user.getEmail(),form.getPrepaid(),form.getPrepaidNumber(),form.getId());
+        patientService.updatePatient(user.getEmail(),form.getPrepaid(),form.getPrepaidNumber());
 
         return profile();
     }

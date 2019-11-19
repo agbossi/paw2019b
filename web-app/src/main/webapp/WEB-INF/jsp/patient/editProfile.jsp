@@ -43,17 +43,6 @@
                             <div>
                                 <div>
                                     <div class="label-div">
-                                        <form:label path="id"><spring:message code="user.id"/> </form:label>
-                                    </div>
-                                    <div class="input-div">
-                                        <h6><form:input path="id" placeholder="${patient.id}"/></h6>
-                                    </div>
-                                </div>
-                                <form:errors class="errors" path="id" element="p"/>
-                            </div>
-                            <div>
-                                <div>
-                                    <div class="label-div">
                                         <form:label path="newPassword"><spring:message code="new.password"/></form:label>
                                         <form:label path="newPassword"/>
                                     </div>
