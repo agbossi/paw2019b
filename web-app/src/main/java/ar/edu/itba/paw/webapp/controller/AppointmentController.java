@@ -83,8 +83,9 @@ public class AppointmentController {
         return mav;
     }
 
-    @RequestMapping(value = "/docCancelApp/{clinicId}/{patient}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/docCancelApp/{clinicId}/{patient}/{week}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
     public ModelAndView doctorCancelAppointment(@PathVariable(value = "clinicId") int clinicId, @PathVariable(value = "patient") String email,
+                                                @PathVariable(value = "week") int week,
                                                 @PathVariable(value = "day") int day, @PathVariable(value = "year") int year,
                                                 @PathVariable(value = "month") int month, @PathVariable(value = "time") int time,
                                                 Locale locale){
@@ -104,12 +105,13 @@ public class AppointmentController {
             appointmentService.cancelAppointment(docCli, patient, calendar,true);
         }
 
-        final ModelAndView mav = new ModelAndView("redirect:/doctor/clinics/" + clinicId +"/1");
+        final ModelAndView mav = new ModelAndView("redirect:/doctor/clinics/" + clinicId +"/" + week);
         return mav;
     }
 
-    @RequestMapping(value = "/doctorApp/{clinicid}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/doctorApp/{clinicid}/{week}/{year}-{month}-{day}-{time}", method = {RequestMethod.GET})
     public ModelAndView doctorMakesAppointment(@PathVariable(value = "clinicid") int clinicId,
+                                               @PathVariable(value = "week") int week,
                                                @PathVariable(value = "day") int day, @PathVariable(value = "year") int year,
                                                @PathVariable(value = "month") int month, @PathVariable(value = "time") int time){
 
@@ -127,7 +129,7 @@ public class AppointmentController {
         }
 
 
-        final ModelAndView mav = new ModelAndView("redirect:/doctor/clinics/" + clinicId +"/1");
+        final ModelAndView mav = new ModelAndView("redirect:/doctor/clinics/" + clinicId +"/" + week);
         return mav;
 
     }

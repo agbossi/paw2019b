@@ -61,12 +61,12 @@
                                     <td class="schedule-cell">
                                         <c:choose>
                                             <c:when test="${day.scheduled && empty day.hasAppointment}">
-                                                <a href="<c:url value="/doctorApp/${doctorClinic.clinic.id}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="available"/></a>
+                                                <a href="<c:url value="/doctorApp/${doctorClinic.clinic.id}/${weekNum}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="available"/></a>
                                             </c:when>
                                             <c:when test="${day.scheduled && not empty day.hasAppointment}">
                                                 <div class="info">
                                                     <c:out value="${day.hasAppointment.patient.lastName}"/>, <c:out value="${day.hasAppointment.patient.firstName}"/>
-                                                    <a onclick="return confirmSubmit()" href="<c:url value="/docCancelApp/${doctorClinic.clinic.id}/${day.hasAppointment.patient.email}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="a.cancel"/></a>
+                                                    <a onclick="return confirmSubmit()" href="<c:url value="/docCancelApp/${doctorClinic.clinic.id}/${day.hasAppointment.patient.email}/${weekNum}/${day.date.get(1)}-${day.date.get(2)}-${day.date.get(5)}-${day.date.get(11)}"/>"><spring:message code="a.cancel"/></a>
                                                  </div>
                                             </c:when>
                                         </c:choose>
