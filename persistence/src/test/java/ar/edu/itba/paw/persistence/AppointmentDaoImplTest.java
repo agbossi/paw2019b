@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-/*
+
 import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.model.*;
 import org.junit.Assert;
@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.Calendar;
 import java.util.List;
@@ -27,15 +29,19 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = TestConfig.class)
 public class AppointmentDaoImplTest {
 
-    private static final Doctor doc = new Doctor("docFirstName", "docLastName", new Specialty("specialty"), "1", "1234567890","doctor@mail.com");
+    private  static  final User user3 = new User("docFirstName", "docLastName", "password", "doctor@mail.com");
+
+    private static final Doctor doc = new Doctor(new Specialty("specialty"), "1", "1234567890", user3);
 
     private static final Clinic clinic = new Clinic(1,"clinic", "address", new Location("location"));
 
     private static final DoctorClinic doctorClinic = new DoctorClinic(doc, clinic, 1);
 
     private static final User user = new User("patFirstName", "patLastName", "password", "patient@mail.com");
-    
-    private static final Doctor doc2 = new Doctor("docFirstName2", "docLastName2", new Specialty("specialty"), "2", "1234567890","doctor2@mail.com");
+
+    private static final User user4 = new User("docFirstName2", "docLastName2", "password","doctor2@mail.com");
+
+    private static final Doctor doc2 = new Doctor(new Specialty("specialty"), "2", "1234567890", user4);
 
     private static final DoctorClinic doctorClinic2 = new DoctorClinic(doc2, clinic, 1);
 
@@ -43,36 +49,28 @@ public class AppointmentDaoImplTest {
 
     private static final Calendar cal = Calendar.getInstance();
 
-
-    @Autowired
-    private DataSource ds;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
     @Autowired
     private AppointmentDaoImpl appointmentDao;
 
-    private JdbcTemplate jdbcTemplate;
-
 
     @Before
     public void setUp() {
-        jdbcTemplate = new JdbcTemplate(ds);
-
         cal.set(2019,9,1,8,0,0);
         cal.set(Calendar.MILLISECOND, 0);
     }
 
     @Test
-    public void testCreate(){
+    public void testCreate() {
         final Appointment appointment = appointmentDao.createAppointment(doctorClinic2, user2, cal);
 
         assertNotNull(appointment);
         assertEquals(doctorClinic2.getDoctor().getLicense(), appointment.getDoctorClinic().getDoctor().getLicense());
         assertEquals(doctorClinic2.getClinic().getId(), appointment.getDoctorClinic().getClinic().getId());
         assertEquals(user2.getEmail(), appointment.getPatient().getEmail());
-        assertEquals(cal, appointment.getDate());
-
-        assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "appointments"));
-
+        assertEquals(cal, appointment.getAppointmentKey().getDate());
     }
 
     @Test
@@ -82,7 +80,7 @@ public class AppointmentDaoImplTest {
         assertNotNull(appointment);
         assertEquals(doctorClinic.getDoctor().getLicense(), appointment.getDoctorClinic().getDoctor().getLicense());
         assertEquals(doctorClinic.getClinic().getId(), appointment.getDoctorClinic().getClinic().getId());
-        assertEquals(cal, appointment.getDate());
+        assertEquals(cal, appointment.getAppointmentKey().getDate());
 
     }
 
@@ -104,10 +102,5 @@ public class AppointmentDaoImplTest {
 
     }
 
-    @Test
-    public void testCancelAppointment(){
-        appointmentDao.cancelAppointment(doctorClinic, user, cal);
 
-        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "appointments"));
-    }
-} */
+}

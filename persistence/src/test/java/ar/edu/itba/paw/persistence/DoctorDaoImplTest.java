@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-/*
+
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Specialty;
 import ar.edu.itba.paw.model.User;
@@ -15,6 +15,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import java.util.List;
@@ -41,18 +43,11 @@ public class DoctorDaoImplTest {
 
     private static final User docUser2 = new User("docFirstName", "docLastName", "password", "doctor@mail.com");
 
-    @Autowired
-    DataSource ds;
-
-    JdbcTemplate jdbcTemplate;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
     @Autowired
     private DoctorDaoImpl doctorDao;
-
-    @Before
-    public void setUp() {
-        jdbcTemplate = new JdbcTemplate(ds);
-    }
 
     @Test
     public void testCreate(){
@@ -63,7 +58,6 @@ public class DoctorDaoImplTest {
         assertEquals(license, doctor.getLicense());
         assertEquals(specialty.getSpecialtyName(), doctor.getSpecialty().getSpecialtyName());
         assertEquals(phone, doctor.getPhoneNumber());
-        assertEquals(4, JdbcTestUtils.countRowsInTable(jdbcTemplate, "doctors"));
 
     }
 
@@ -104,4 +98,4 @@ public class DoctorDaoImplTest {
         Assert.assertFalse(bool2);
     }
 
-}*/
+}

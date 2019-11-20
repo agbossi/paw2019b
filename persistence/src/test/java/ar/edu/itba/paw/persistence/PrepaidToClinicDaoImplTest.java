@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-/*
+
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Prepaid;
@@ -16,6 +16,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import static org.junit.Assert.assertEquals;
@@ -27,7 +29,7 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = TestConfig.class)
 public class PrepaidToClinicDaoImplTest {
 
-    private static final Prepaid prepaid = new Prepaid("prepaid");
+    private static final Prepaid prepaid = new Prepaid("prepaid1");
 
     private static final Prepaid prepaid2 = new Prepaid("prepaid2");
 
@@ -37,19 +39,11 @@ public class PrepaidToClinicDaoImplTest {
 
     private static final Clinic clinic2 = new Clinic(2, "clinic2", "address2", location);
 
-
-    @Autowired
-    DataSource ds;
-
-    JdbcTemplate jdbcTemplate;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
     @Autowired
     private PrepaidToClinicDaoImpl prepaidToClinicDao;
-
-    @Before
-    public void setUp() {
-        jdbcTemplate = new JdbcTemplate(ds);
-    }
 
     @Test
     public void testAddPrepaidToClinic(){
@@ -58,8 +52,6 @@ public class PrepaidToClinicDaoImplTest {
         assertNotNull(prepaidToClinic);
         assertEquals(prepaid2.getName(), prepaidToClinic.getPrepaid().getName());
         assertEquals(clinic2.getId(), prepaidToClinic.getClinic().getId());
-        assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "clinicPrepaids"));
-
     }
 
     @Test
@@ -70,4 +62,5 @@ public class PrepaidToClinicDaoImplTest {
         Assert.assertTrue(bool1);
         Assert.assertFalse(bool2);
     }
-}*/
+
+}
