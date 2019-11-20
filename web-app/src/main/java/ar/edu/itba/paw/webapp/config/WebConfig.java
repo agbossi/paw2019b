@@ -50,11 +50,11 @@ import java.util.concurrent.Executor;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
     
-    private String dbUser = "paw-2019b-4";
+    private String dbUser = "root";//"paw-2019b-4";
 
-    private String dbPassword = "7Up7gfwcS";
+    private String dbPassword = "root";//"7Up7gfwcS";
 
-    private String jdbcPath = "jdbc:postgresql://localhost/paw-2019b-4";
+    private String jdbcPath = "jdbc:postgresql://localhost/paw";//"jdbc:postgresql://localhost/paw-2019b-4";
 
 
     @Value("classpath:schema.sql")

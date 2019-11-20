@@ -46,6 +46,7 @@ public class ViewModifierHelper {
         mav.addObject("objects", objects);
         mav.addObject("page", page);
         mav.addObject("maxPage", maxPageAvailable);
+        System.out.println("La pagina maxima es " + maxPageAvailable);
         return mav;
     }
 

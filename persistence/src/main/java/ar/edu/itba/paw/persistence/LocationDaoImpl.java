@@ -48,7 +48,7 @@ public class LocationDaoImpl implements LocationDao {
 
     @Override
     public int maxAvailablePage() {
-        return (int) Math.ceil(( getLocations().size() / MAX_LOCATIONS_PER_PAGE));
+        return (int) (Math.ceil(( ((double)getLocations().size()) / (double)MAX_LOCATIONS_PER_PAGE)));
     }
 
     @Override

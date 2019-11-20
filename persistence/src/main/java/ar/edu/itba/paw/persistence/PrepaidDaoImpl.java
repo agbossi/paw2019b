@@ -49,7 +49,7 @@ public class PrepaidDaoImpl implements PrepaidDao {
 
     @Override
     public int maxAvailablePage() {
-        return (int) Math.ceil(( getPrepaids().size() / MAX_PREPAIDS_PER_PAGE));
+        return (int) (Math.ceil(( ((double)getPrepaids().size()) / (double)MAX_PREPAIDS_PER_PAGE)));
     }
 
     @Override

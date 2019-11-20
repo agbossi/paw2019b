@@ -50,7 +50,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public int maxAvailablePage() {
-        return (int) Math.ceil(( getDoctors().size() / MAX_DOCTORS_PER_PAGE_ADMIN));
+        return (int) (Math.ceil(( ((double)getDoctors().size()) / (double)MAX_DOCTORS_PER_PAGE_ADMIN)));
     }
 
     @Override
@@ -123,6 +123,6 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public int maxAvailableDoctorsInListPage(List<String> licenses) {
-        return (int)Math.ceil(licenses.size() / MAX_DOCTORS_PER_PAGE_USER);
+        return (int) (Math.ceil(( ((double)licenses.size()) / (double)MAX_DOCTORS_PER_PAGE_USER)));
     }
 }

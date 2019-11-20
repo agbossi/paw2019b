@@ -42,7 +42,7 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
 
     @Override
     public int maxAvailablePage() {
-        return (int) Math.ceil(( getPrepaidToClinics().size() / MAX_PREPAID_TO_CLINICS_PER_PAGE));
+        return (int) (Math.ceil(( ((double)getPrepaidToClinics().size()) / (double)MAX_PREPAID_TO_CLINICS_PER_PAGE)));
     }
 
     @Override

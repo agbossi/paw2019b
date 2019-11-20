@@ -49,7 +49,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
 
     @Override
     public int maxAvailablePage() {
-        return (int) Math.ceil(( getSpecialties().size() / MAX_SPECIALTIES_PER_PAGE));
+        return (int) (Math.ceil(( ((double)getSpecialties().size()) / (double)MAX_SPECIALTIES_PER_PAGE)));
     }
 
     @Override

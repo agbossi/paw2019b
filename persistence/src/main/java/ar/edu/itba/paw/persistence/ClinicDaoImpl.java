@@ -58,7 +58,7 @@ public class ClinicDaoImpl implements ClinicDao {
 
     @Override
     public int maxAvailablePage() {
-        return (int) Math.ceil(( getClinics().size() / MAX_CLINICS_PER_PAGE));
+        return (int) (Math.ceil(( ((double)getClinics().size()) / (double)MAX_CLINICS_PER_PAGE)));
     }
 
     @Override
