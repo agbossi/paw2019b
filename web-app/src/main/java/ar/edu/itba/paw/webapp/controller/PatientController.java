@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class PatientController {
@@ -31,25 +33,39 @@ public class PatientController {
     private DoctorService doctorService;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private FavoriteService favoriteService;
 
+    @Autowired
+    private PrepaidService prepaidService;
+
+    @ModelAttribute
+    public void prepaids(Model model) {
+        model.addAttribute("prepaids", prepaidService.getPrepaids());
+    }
+
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET })
     public ModelAndView profile() {
-        return new ModelAndView("patient/profile");
+        final ModelAndView mav = new ModelAndView("patient/profile");
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        Patient patient = patientService.getPatientByEmail(user.getEmail());
+        mav.addObject("user", user);
+        mav.addObject("patient", patient);
+        return mav;
     }
 
     @RequestMapping(value = "/editProfile", method = { RequestMethod.GET })
     public ModelAndView editProfile(@ModelAttribute("personalInformationForm") final PersonalInformationForm form) {
-
+        final ModelAndView mav = new ModelAndView("patient/editProfile");
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
         setFormInformation(form, user, patient);
+        mav.addObject("user", user);
+        mav.addObject("patient", patient);
 
-        final ModelAndView mav = new ModelAndView("patient/editProfile");
         return mav;
     }
 
@@ -80,13 +96,22 @@ public class PatientController {
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
         patientService.setAppointments(patient);
+        mav.addObject("user", user);
+        mav.addObject("patient", patient);
 
         return mav;
     }
 
     @RequestMapping(value = "/favorites",  method = { RequestMethod.GET })
     public ModelAndView favorites(){
-        return new ModelAndView(("patient/favorites"));
+        final ModelAndView mav = new ModelAndView(("patient/favorites"));
+        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
+        Patient patient = patientService.getPatientByEmail(user.getEmail());
+        List<Doctor> favorites = patientService.getPatientFavoriteDoctors(patient);
+        mav.addObject("user", user);
+        mav.addObject("patient", patient);
+        mav.addObject("favorites",favorites);
+        return mav;
     }
 
     @RequestMapping(value = "/addFavorite/{doctorId}", method = { RequestMethod.GET })
