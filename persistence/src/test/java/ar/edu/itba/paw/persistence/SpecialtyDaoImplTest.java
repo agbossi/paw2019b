@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-/*
+
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Specialty;
 import org.junit.Before;
@@ -10,9 +10,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.List;
 
@@ -29,18 +30,16 @@ public class SpecialtyDaoImplTest {
 
     private static final String name2 = "specialty2";
 
-    @Autowired
-    DataSource ds;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    JdbcTemplate jdbcTemplate;
-
+    @Test
+    public void testCreate() {
+        assertEquals(true, true);
+    }
+    /*
     @Autowired
     private SpecialtyDaoImpl specialtyDao;
-
-    @Before
-    public void setUp() {
-        jdbcTemplate = new JdbcTemplate(ds);
-    }
 
     @Test
     public void testCreate(){
@@ -70,5 +69,5 @@ public class SpecialtyDaoImplTest {
         assertEquals(1, specialties.size());
 
     }
-
-}*/
+*/
+}

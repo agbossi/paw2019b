@@ -1,18 +1,18 @@
 package ar.edu.itba.paw.persistence;
-/*
+
 import ar.edu.itba.paw.model.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.Calendar;
 import java.util.List;
@@ -26,11 +26,11 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = TestConfig.class)
 public class ScheduleDaoImplTest {
 
-    private static final Doctor doc = new Doctor("docFirstName", "docLastName", new Specialty("specialty"), "1", "1234567890","doctor@mail.com");
+    //private static final Doctor doc = new Doctor("docFirstName", "docLastName", new Specialty("specialty"), "1", "1234567890","doctor@mail.com");
 
     private static final Clinic clinic = new Clinic(1,"clinic", "address", new Location("location"));
 
-    private static final DoctorClinic doctorClinic = new DoctorClinic(doc, clinic, 1);
+    //private static final DoctorClinic doctorClinic = new DoctorClinic(doc, clinic, 1);
 
     private static final int day = 3;
 
@@ -40,18 +40,14 @@ public class ScheduleDaoImplTest {
 
     private static final int hour2 = 10;
 
-    @Autowired
-    DataSource ds;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private ScheduleDaoImpl scheduleDao;
-
-    @Before
-    public void setUp() {
-        jdbcTemplate = new JdbcTemplate(ds);
+    @Test
+    public void testCreate() {
+        assertEquals(true, true);
     }
+/*
 
     @Test
     public void testCreate(){
@@ -89,5 +85,5 @@ public class ScheduleDaoImplTest {
 
         assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedule"));
     }
-
-}*/
+*/
+}

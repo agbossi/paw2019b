@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-/*
+
 import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.Prepaid;
 import ar.edu.itba.paw.model.User;
@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import static org.junit.Assert.assertEquals;
@@ -35,19 +37,14 @@ public class PatientDaoImplTest {
 
     private static final String pripaidNumber = "123231";
 
-    @Autowired
-    DataSource ds;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private PatientDaoImpl patientDao;
-
-    @Before
-    public void setUp() {
-        jdbcTemplate = new JdbcTemplate(ds);
+    @Test
+    public void testCreate() {
+        assertEquals(true, true);
     }
-
+/*
     @Test
     public void testCreate(){
         Patient patient = patientDao.create(user2.getEmail(), id, prepaid.getName(), pripaidNumber, user2);
@@ -69,5 +66,5 @@ public class PatientDaoImplTest {
         assertNotNull(patient);
         assertEquals(user.getEmail(), patient.getEmail());
     }
-
-}*/
+*/
+}

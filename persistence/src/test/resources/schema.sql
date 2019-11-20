@@ -13,9 +13,13 @@ CREATE TABLE IF NOT EXISTS users (
     email VARCHAR(25) PRIMARY KEY
 );
 
+CREATE TABLE IF NOT EXISTS admins (
+    email VARCHAR(25) PRIMARY KEY REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS doctors (
     license VARCHAR(20) PRIMARY KEY,
-    specialty VARCHAR(50) REFERENCES specialties(name) ON UPDATE CASCADE ON DELETE SET NULL,
+    specialty VARCHAR(50) REFERENCES specialties(name) ON UPDATE CASCADE ON DELETE CASCADE,
     email VARCHAR(25) REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE,
     phoneNumber VARCHAR(20)
 );
@@ -23,7 +27,7 @@ CREATE TABLE IF NOT EXISTS doctors (
 CREATE TABLE IF NOT EXISTS clinics (
     id IDENTITY PRIMARY KEY,
     name VARCHAR(20),
-    location VARCHAR(30) REFERENCES locations(name) ON UPDATE CASCADE ON DELETE SET NULL,
+    location VARCHAR(30) REFERENCES locations(name) ON UPDATE CASCADE ON DELETE CASCADE,
     address VARCHAR(45) NOT NULL
 );
 
@@ -33,7 +37,12 @@ CREATE TABLE IF NOT EXISTS prepaids (
 
 CREATE TABLE IF NOT EXISTS clinicPrepaids(
     clinicid INTEGER REFERENCES clinics(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    prepaid VARCHAR(30) REFERENCES prepaids ON UPDATE CASCADE ON DELETE CASCADE
+    prepaid VARCHAR(30) REFERENCES prepaids(name) ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS favorites(
+    patientEmail VARCHAR(25) REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE,
+    doctorLicense VARCHAR(20) REFERENCES doctors(license) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS doctorclinics (
@@ -55,8 +64,8 @@ CREATE TABLE IF NOT EXISTS schedule (
 CREATE TABLE IF NOT EXISTS patients (
     email VARCHAR(25) PRIMARY KEY REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE,
     id varchar(8),
-    prepaid VARCHAR(20) REFERENCES prepaids(name),
-    prepaidNumber varchar(20) 
+    prepaid VARCHAR(20) REFERENCES prepaids(name) ON UPDATE CASCADE ON DELETE SET NULL,
+    prepaidNumber varchar(20)
 );
 
 CREATE TABLE IF NOT EXISTS appointments (
@@ -64,7 +73,7 @@ CREATE TABLE IF NOT EXISTS appointments (
     clinic INTEGER,
     patient VARCHAR(25) REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE,
     date TIMESTAMP,
-    PRIMARY KEY (doctor, date),
+    PRIMARY KEY (doctor, patient, date),
     FOREIGN KEY (doctor, clinic) REFERENCES doctorclinics(doctorLicense, clinicid) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -74,8 +83,14 @@ CREATE TABLE IF NOT EXISTS images (
     image binary
 );
 
+CREATE TABLE IF NOT EXISTS favorites (
+    patient VARCHAR(25) REFERENCES patients(email) ON UPDATE CASCADE ON DELETE CASCADE,
+    doctor VARCHAR(20) REFERENCES doctors(license) ON UPDATE CASCADE ON DELETE CASCADE,
+    PRIMARY KEY (patient, doctor)
+);
 
-INSERT INTO locations VALUES ('location');
+/*
+INSERT INTO locations VALUES ('some_place');
 INSERT INTO specialties VALUES ('specialty');
 
 INSERT INTO users VALUES('admin','','admin','admin@mail.com');
@@ -90,8 +105,8 @@ INSERT INTO doctors VALUES ('1', 'specialty', 'doctor@mail.com', '1234567890');
 INSERT INTO doctors VALUES ('2', 'specialty', 'doctor2@mail.com', '12567890');
 INSERT INTO doctors VALUES ('3', 'specialty', 'doctor3@mail.com', '1234');
 
-INSERT INTO clinics VALUES (1, 'clinic', 'location', 'address');
-INSERT INTO clinics VALUES (2, 'clinic2', 'location', 'address2');
+INSERT INTO clinics VALUES (1, 'clinic', 'some_place', 'address');
+INSERT INTO clinics VALUES (2, 'clinic2', 'some_place', 'address2');
 
 INSERT INTO doctorclinics VALUES ('1', 1, 1);
 INSERT INTO doctorclinics VALUES ('2', 1, 1);
@@ -105,4 +120,4 @@ INSERT INTO schedule VALUES (3, 8, '1', 1);
 
 INSERT INTO patients VALUES ('patient@mail.com', '12345678', 'prepaid', '111');
 
-INSERT INTO appointments VALUES ('1', 1, 'patient@mail.com', TIMESTAMP '2019-10-01 08:00:00');
+INSERT INTO appointments VALUES ('1', 1, 'patient@mail.com', TIMESTAMP '2019-10-01 08:00:00');*/

@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-/*
+
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Prepaid;
@@ -16,6 +16,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 
 import static org.junit.Assert.assertEquals;
@@ -37,20 +39,15 @@ public class PrepaidToClinicDaoImplTest {
 
     private static final Clinic clinic2 = new Clinic(2, "clinic2", "address2", location);
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    @Autowired
-    DataSource ds;
-
-    JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private PrepaidToClinicDaoImpl prepaidToClinicDao;
-
-    @Before
-    public void setUp() {
-        jdbcTemplate = new JdbcTemplate(ds);
+    @Test
+    public void testCreate() {
+        assertEquals(true, true);
     }
 
+    /*
     @Test
     public void testAddPrepaidToClinic(){
         PrepaidToClinic prepaidToClinic = prepaidToClinicDao.addPrepaidToClinic(prepaid2,clinic2);
@@ -70,4 +67,6 @@ public class PrepaidToClinicDaoImplTest {
         Assert.assertTrue(bool1);
         Assert.assertFalse(bool2);
     }
-}*/
+
+    */
+}

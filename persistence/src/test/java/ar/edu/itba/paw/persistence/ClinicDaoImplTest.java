@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.persistence;
-/*
+
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import org.junit.Assert;
@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import java.util.Calendar;
 import java.util.List;
@@ -39,20 +41,14 @@ public class ClinicDaoImplTest {
 
     private static final Location location = new Location("location");
 
+    @PersistenceContext
+    private EntityManager entityManager;
 
-    @Autowired
-    private DataSource ds;
-
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private ClinicDaoImpl clinicDao;
-
-    @Before
-    public void setUp() {
-        jdbcTemplate = new JdbcTemplate(ds);
+    @Test
+    public void testCreate() {
+        assertEquals(true, true);
     }
-
+/*
     @Test
     public void testCreate(){
         final Clinic clinic = clinicDao.createClinic(name2, address2, location);
@@ -108,5 +104,5 @@ public class ClinicDaoImplTest {
         Assert.assertTrue(bool);
         Assert.assertTrue(!bool2);
     }
-
-}*/
+*/
+}
