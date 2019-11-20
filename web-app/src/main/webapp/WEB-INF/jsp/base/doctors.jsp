@@ -45,7 +45,7 @@
                     </c:when>
                     <c:otherwise>
                         <c:choose>
-                            <c:when test="${page == 0}">
+                            <c:when test="${page == 0 || empty(page)}">
                                 <h3 class="no-results"><spring:message code="no.results.found"/></h3>
                             </c:when>
                             <c:otherwise>
