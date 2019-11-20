@@ -36,7 +36,7 @@
                             </c:if>
                         </h6>
                         <h6 class="next">
-                            <c:if test="${page < (maxPage)}">
+                            <c:if test="${page < (maxPage-1)}">
                                 <a  href="<c:url value="/doctors/${page+1}"/>">
                                     <spring:message code="next"/>
                                 </a>
