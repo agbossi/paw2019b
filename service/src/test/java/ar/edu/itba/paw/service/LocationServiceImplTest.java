@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.service;
-/*
+
 import ar.edu.itba.paw.interfaces.dao.LocationDao;
 import ar.edu.itba.paw.model.Location;
 import org.junit.Assert;
@@ -49,4 +49,4 @@ public class LocationServiceImplTest {
         Assert.assertNotNull(location);
         Assert.assertEquals(name, location.getLocationName());
     }
-}*/
+}

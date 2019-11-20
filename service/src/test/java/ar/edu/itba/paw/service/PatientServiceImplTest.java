@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.service;
-/*
+
 import ar.edu.itba.paw.interfaces.dao.PatientDao;
 import ar.edu.itba.paw.interfaces.service.AppointmentService;
 import ar.edu.itba.paw.interfaces.service.UserService;
@@ -33,15 +33,19 @@ public class PatientServiceImplTest {
     @Mock
     private PatientDao mockDao;
 
+    @Mock
+    private UserService userService;
+
     @Test
     public void testCreate(){
         //Set Up
-        Mockito.when(mockDao.create(Mockito.eq(user.getEmail()), Mockito.eq(id),Mockito.eq(prepaid.getName()),
+        Mockito.when(mockDao.create(Mockito.eq(id),Mockito.eq(prepaid.getName()),
                 Mockito.eq(prepaidNumber), Mockito.eq(user)))
-                .thenReturn(new Patient(user.getEmail(), id, prepaid.getName(), prepaidNumber, user.getFirstName(), user.getLastName()));
-
+                .thenReturn(new Patient(id, prepaid.getName(), prepaidNumber, user));
+        Mockito.when(userService.createUser(Mockito.eq(user.getFirstName()), Mockito.eq(user.getLastName()),
+                Mockito.eq(user.getPassword()), Mockito.eq(user.getEmail()))).thenReturn(user);
         //Execute
-        Patient patient = patientService.create(user.getEmail(), id, prepaid.getName(), prepaidNumber, user);
+        Patient patient = patientService.create(id, prepaid.getName(), prepaidNumber, user.getFirstName(), user.getLastName(), user.getPassword(), user.getEmail());
 
         //Assert
         Assert.assertNotNull(patient);
@@ -53,4 +57,4 @@ public class PatientServiceImplTest {
         Assert.assertEquals(user.getFirstName(), patient.getFirstName());
 
     }
-}*/
+}

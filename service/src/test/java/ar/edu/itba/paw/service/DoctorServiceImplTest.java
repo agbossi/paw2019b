@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.service;
-/*
+
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
 import ar.edu.itba.paw.interfaces.service.DoctorService;
@@ -38,7 +38,7 @@ public class DoctorServiceImplTest {
 
     private static final User user = new User("patFirstName", "patLastName", "password", "patient@mail.com");
 
-    private static final Doctor doctor = new Doctor(user.getFirstName(), user.getLastName(), specialty, license, phone, user.getEmail());
+    private static final Doctor doctor = new Doctor(specialty, license, phone, user);
 
     private static final DoctorClinic doctorClinic = new DoctorClinic(doctor, clinic, consultPrice);
 
@@ -55,11 +55,11 @@ public class DoctorServiceImplTest {
     @Test
     public void testCreate(){
         //Set Up
-        Mockito.when(mockDao.createDoctor(Mockito.eq(specialty), Mockito.eq(license), Mockito.eq(phone), Mockito.eq(user.getEmail())))
-                .thenReturn(new Doctor(user.getFirstName(), user.getLastName(), specialty, license,phone, user.getEmail()));
+        Mockito.when(mockDao.createDoctor(Mockito.eq(specialty), Mockito.eq(license), Mockito.eq(phone), Mockito.eq(user)))
+                .thenReturn(new Doctor(specialty, license, phone, user));
 
         //Execute
-        Doctor doctor = doctorService.createDoctor(specialty,license,phone,user.getEmail());
+        Doctor doctor = doctorService.createDoctor(specialty, license, phone, user);
 
         //Assert
         Assert.assertNotNull(doctor);
@@ -74,7 +74,7 @@ public class DoctorServiceImplTest {
     public void testGetDoctorsWithAvailability(){
         //Set Up
         List<Schedule> s = new ArrayList<>();
-        s.add(new Schedule(day, hour));
+        s.add(new Schedule(day, hour, doctorClinic));
         List<Doctor> docs = new ArrayList<>();
         docs.add(doctor);
         Mockito.when(mockDao.getDoctors())
@@ -94,4 +94,4 @@ public class DoctorServiceImplTest {
         Assert.assertEquals(doctor.getLicense(), doctors.get(0).getLicense());
 
     }
-}*/
+}

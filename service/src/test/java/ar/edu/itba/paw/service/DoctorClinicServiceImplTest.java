@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.service;
-/*
+
 import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
 import ar.edu.itba.paw.interfaces.service.AppointmentService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
@@ -23,7 +23,9 @@ public class DoctorClinicServiceImplTest {
 
     private static final Specialty specialty = new Specialty("specialty");
 
-    private static final Doctor doc = new Doctor("docFirstName", "docLastName", specialty, "1", "1234567890","doctor@mail.com");
+    private static final User user1 = new User("docFirstName", "docLastName","password", "doctor@mail.com");
+
+    private static final Doctor doc = new Doctor( specialty, "1", "1234567890", user1);
 
     private static final Clinic clinic = new Clinic(1,"clinic", "address", location);
 
@@ -39,7 +41,9 @@ public class DoctorClinicServiceImplTest {
 
     private static final DoctorClinic doctorClinic = new DoctorClinic(doc, clinic, consultPrice);
 
-    private static final Doctor doc2 = new Doctor("docFirstName3", "docLastName3", specialty, "3", "1234","doctor3@mail.com");
+    private static final User user2 = new User("docFirstName3", "docLastName3", "password", "doctor3@mail.com");
+
+    private static final Doctor doc2 = new Doctor(specialty, "3", "1234", user2);
 
 
 
@@ -76,7 +80,7 @@ public class DoctorClinicServiceImplTest {
         //Set Up
         doctorClinic.setSchedule(new ArrayList<Schedule>());
         Mockito.when(scheduleService.createSchedule(Mockito.eq(day), Mockito.eq(hour),Mockito.eq(doctorClinic)))
-                .thenReturn(new Schedule(day, hour));
+                .thenReturn(new Schedule(day, hour, doctorClinic));
 
         //Execute
         doctorClinicService.setSchedule(doctorClinic, day, hour);
@@ -89,7 +93,7 @@ public class DoctorClinicServiceImplTest {
     public void testGetDoctorClinicFromDoctorAndClinic(){
         //Set Up
         List<Schedule> s = new ArrayList<>();
-        s.add(new Schedule(3,10));
+        s.add(new Schedule(3,10, doctorClinic));
         Mockito.when(scheduleService.getDoctorClinicSchedule(Mockito.eq(doctorClinic)))
                 .thenReturn(s);
         Mockito.when(appointmentService.getDoctorsAppointments(Mockito.eq(doctorClinic)))
@@ -122,14 +126,14 @@ public class DoctorClinicServiceImplTest {
                 .thenReturn(doctors);
 
         //Execute
-        List<Doctor> docs = doctorClinicService.getDoctorBy(location,specialty, doc.getFirstName(), doc.getLastName(), prepaid, consultPrice);
+        List<DoctorClinic> docs = doctorClinicService.getFilteredDoctorClinics(location,specialty, doc.getFirstName(), doc.getLastName(), prepaid, consultPrice);
 
         //Assert
         Assert.assertNotNull(docs);
         Assert.assertEquals(1, docs.size());
         Assert.assertEquals(doc.getFirstName(), doctors.get(0).getDoctor().getFirstName());
-        Assert.assertEquals(doc.getLastName(), docs.get(0).getLastName());
-        Assert.assertEquals(doc.getSpecialty().getSpecialtyName(), docs.get(0).getSpecialty().getSpecialtyName());
+        Assert.assertEquals(doc.getLastName(), docs.get(0).getDoctor().getLastName());
+        Assert.assertEquals(doc.getSpecialty().getSpecialtyName(), docs.get(0).getDoctor().getSpecialty().getSpecialtyName());
 
 
     }
@@ -145,16 +149,16 @@ public class DoctorClinicServiceImplTest {
                 .thenReturn(doctors);
 
         //Execute
-        List<Doctor> docs = doctorClinicService.getDoctorBy(location,specialty, doc.getFirstName(), doc.getLastName(), prepaid2, consultPrice);
+        List<DoctorClinic> docs = doctorClinicService.getFilteredDoctorClinics(location,specialty, doc.getFirstName(), doc.getLastName(), prepaid2, consultPrice);
 
         //Assert
         Assert.assertNotNull(docs);
         Assert.assertEquals(1, docs.size());
         Assert.assertEquals(doc.getFirstName(), doctors.get(0).getDoctor().getFirstName());
-        Assert.assertEquals(doc.getLastName(), docs.get(0).getLastName());
-        Assert.assertEquals(doc.getSpecialty().getSpecialtyName(), docs.get(0).getSpecialty().getSpecialtyName());
+        Assert.assertEquals(doc.getLastName(), docs.get(0).getDoctor().getLastName());
+        Assert.assertEquals(doc.getSpecialty().getSpecialtyName(), docs.get(0).getDoctor().getSpecialty().getSpecialtyName());
 
 
     }
 
-}*/
+}
