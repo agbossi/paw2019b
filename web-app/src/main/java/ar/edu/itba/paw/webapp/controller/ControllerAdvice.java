@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
 
-
-import jdk.nashorn.internal.runtime.regexp.joni.exception.InternalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -14,7 +12,7 @@ import java.sql.SQLException;
 
 @org.springframework.web.bind.annotation.ControllerAdvice
 public class ControllerAdvice {
-/*
+
     @Autowired
     MessageSource messageSource;
 
@@ -40,5 +38,5 @@ public class ControllerAdvice {
         mav.addObject("url", request.getRequestURL());
         mav.setViewName("error");
         return mav;
-    }*/
+    }
 }
