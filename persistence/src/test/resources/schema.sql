@@ -89,35 +89,112 @@ CREATE TABLE IF NOT EXISTS favorites (
     PRIMARY KEY (patient, doctor)
 );
 
+/* Populates DB with locations */
+
+INSERT INTO locations(name)
+    SELECT * FROM (VALUES ('location'))
+    WHERE NOT EXISTS (SELECT * FROM locations WHERE name='location');
+
+/* Populates DB with specialties */
+
+/* NOT WORKING FOR SOME REASON */
+/*INSERT INTO specialties(name)
+    SELECT * FROM (VALUES ('specialty'))
+    WHERE NOT EXISTS (SELECT * FROM specialty  WHERE name='specialty');*/
+
+/* Populates DB with users */
+
+INSERT INTO users(firstName, lastName, password, email)
+    SELECT * FROM (VALUES ('admin', '', 'admin', 'admin@mail.com'))
+    WHERE NOT EXISTS (SELECT * FROM users  WHERE email='admin@mail.com');
+INSERT INTO users(firstName, lastName, password, email)
+    SELECT * FROM (VALUES ('docFirstName', 'docLastName', 'password', 'doctor@mail.com'))
+    WHERE NOT EXISTS (SELECT * FROM users  WHERE email='doctor@mail.com');
+INSERT INTO users(firstName, lastName, password, email)
+    SELECT * FROM (VALUES ('docFirstName2', 'docLastName2', 'password', 'doctor2@mail.com'))
+    WHERE NOT EXISTS (SELECT * FROM users  WHERE email='doctor2@mail.com');
+INSERT INTO users(firstName, lastName, password, email)
+    SELECT * FROM (VALUES ('docFirstName3', 'docLastName3', 'password', 'doctor3@mail.com'))
+    WHERE NOT EXISTS (SELECT * FROM users  WHERE email='doctor3@mail.com');
+INSERT INTO users(firstName, lastName, password, email)
+    SELECT * FROM (VALUES ('docFirstName4', 'docLastName4', 'password', 'doctor4@mail.com'))
+    WHERE NOT EXISTS (SELECT * FROM users  WHERE email='doctor4@mail.com');
+INSERT INTO users(firstName, lastName, password, email)
+    SELECT * FROM (VALUES ('patFirstName', 'patLastName', 'password', 'patient@mail.com'))
+    WHERE NOT EXISTS (SELECT * FROM users  WHERE email='patient@mail.com');
+INSERT INTO users(firstName, lastName, password, email)
+    SELECT * FROM (VALUES ('patFirstName2', 'patLastName2', 'password', 'patient2@mail.com'))
+    WHERE NOT EXISTS (SELECT * FROM users  WHERE email='patient2@mail.com');
+
+/* Populates DB with doctors */
+
+/* WITH NO SPECIALTY I CANNOT POPULATE THIS */
 /*
-INSERT INTO locations VALUES ('some_place');
-INSERT INTO specialties VALUES ('specialty');
+INSERT INTO doctors(license, specialty, email, phoneNumber)
+    SELECT * FROM (VALUES ('1', '', 'doctor@mail.com', '1234567890'))
+    WHERE NOT EXISTS (SELECT * FROM doctors  WHERE license='1234567890');
+INSERT INTO doctors(license, specialty, email, phoneNumber)
+    SELECT * FROM (VALUES ('2', '', 'doctor2@mail.com', '12567890'))
+    WHERE NOT EXISTS (SELECT * FROM doctors  WHERE license='12567890');
+INSERT INTO doctors(license, specialty, email, phoneNumber)
+    SELECT * FROM (VALUES ('3', '', 'doctor3@mail.com', '1234'))
+    WHERE NOT EXISTS (SELECT * FROM doctors  WHERE license='1234');
+*/
 
-INSERT INTO users VALUES('admin','','admin','admin@mail.com');
-INSERT INTO users VALUES ('docFirstName', 'docLastName', 'password', 'doctor@mail.com');
-INSERT INTO users VALUES ('docFirstName2', 'docLastName2', 'password', 'doctor2@mail.com');
-INSERT INTO users VALUES ('docFirstName3', 'docLastName3', 'password', 'doctor3@mail.com');
-INSERT INTO users VALUES ('docFirstName4', 'docLastName4', 'password', 'doctor4@mail.com');
-INSERT INTO users VALUES ('patFirstName', 'patLastName', 'password', 'patient@mail.com');
-INSERT INTO users VALUES ('patFirstName2', 'patLastName2', 'password', 'patient2@mail.com');
+/* Populates DB with prepaids */
 
-INSERT INTO doctors VALUES ('1', 'specialty', 'doctor@mail.com', '1234567890');
-INSERT INTO doctors VALUES ('2', 'specialty', 'doctor2@mail.com', '12567890');
-INSERT INTO doctors VALUES ('3', 'specialty', 'doctor3@mail.com', '1234');
+INSERT INTO prepaids(name)
+    SELECT * FROM (VALUES ('prepaid1'))
+    WHERE NOT EXISTS (SELECT * FROM prepaids  WHERE name='prepaid1');
+INSERT INTO prepaids(name)
+    SELECT * FROM (VALUES ('prepaid2'))
+    WHERE NOT EXISTS (SELECT * FROM prepaids  WHERE name='prepaid2');
 
-INSERT INTO clinics VALUES (1, 'clinic', 'some_place', 'address');
-INSERT INTO clinics VALUES (2, 'clinic2', 'some_place', 'address2');
+/* Populates DB with clinics */
 
-INSERT INTO doctorclinics VALUES ('1', 1, 1);
-INSERT INTO doctorclinics VALUES ('2', 1, 1);
+/* THROWING ERROR FOR SOME REASON */
+/*
+INSERT INTO clinics(id, name, location, address)
+    SELECT * FROM (VALUES (1, 'clinic', 'some_place', 'address'))
+    WHERE NOT EXISTS (SELECT * FROM clinics  WHERE id=1);
+INSERT INTO clinics(id, name, location, address)
+    SELECT * FROM (VALUES (2, 'clinic2', 'some_place', 'address2'))
+    WHERE NOT EXISTS (SELECT * FROM clinics  WHERE id=2);
+*/
 
-INSERT INTO prepaids VALUES('prepaid');
-INSERT INTO prepaids VALUES('prepaid2');
+/* Populates DB with clinics */
 
-INSERT INTO clinicPrepaids VALUES (1, 'prepaid');
+/* I NEED DOCTORS AND CLINICS FOR THIS */
+/*INSERT INTO doctorclinics(doctorLicense, clinicid, consultPrice)
+    SELECT * FROM (VALUES ('1', 1, 1))
+    WHERE NOT EXISTS (SELECT * FROM doctorclinics WHERE doctorLicense=1 AND clinicid=1);
+INSERT INTO doctorclinics(doctorLicense, clinicid, consultPrice)
+    SELECT * FROM (VALUES ('2', 2, 2))
+    WHERE NOT EXISTS (SELECT * FROM doctorclinics WHERE doctorLicense=2 AND clinicid=2);
+*/
 
-INSERT INTO schedule VALUES (3, 8, '1', 1);
+/* Populates DB with clinicPrepaids */
+/* I NEED CLINICS FOR THIS */
+/*INSERT INTO clinicPrepaids(clinicid, prepaid)
+    SELECT * FROM (VALUES ('1', 'prepaid'))
+    WHERE NOT EXISTS (SELECT * FROM clinicPrepaids WHERE clinicid=1 AND prepaid='prepaid');
+*/
 
-INSERT INTO patients VALUES ('patient@mail.com', '12345678', 'prepaid', '111');
+/* Populates DB with schedule */
+/*INSERT INTO schedule(day, hour, doctor, clinic)
+    SELECT * FROM (VALUES (3, 8, '1', 1))
+    WHERE NOT EXISTS (SELECT * FROM schedule WHERE day=3 AND hour=8 AND doctor='1');*/
 
-INSERT INTO appointments VALUES ('1', 1, 'patient@mail.com', TIMESTAMP '2019-10-01 08:00:00');*/
+/* Populates DB with patients */
+/*INSERT INTO patients(email, id, prepaid, prepaidNumber)
+    SELECT * FROM (VALUES ('patient@mail.com', '12345678', 'prepaid', '111'))
+    WHERE NOT EXISTS (SELECT * FROM patients WHERE email='patient@mail.com');
+*/
+
+
+/* Populates DB with appointments */
+/*INSERT INTO appointments(doctor, clinic, patient, date)
+    SELECT * FROM (VALUES ('1', 1, 'patient@mail.com', TIMESTAMP '2019-10-01 08:00:00')
+    WHERE NOT EXISTS (SELECT * FROM appointments WHERE doctor='1' AND patient='patient@mail.com' AND date=(TIMESTAMP '2019-10-01 08:00:00'));
+*/
+
