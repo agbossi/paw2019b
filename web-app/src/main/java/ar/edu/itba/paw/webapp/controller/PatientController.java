@@ -130,7 +130,7 @@ public class PatientController {
         return mav;
     }
 
-    @RequestMapping(value = "deleteFavorite/{doctorId}", method = { RequestMethod.GET })
+    @RequestMapping(value = "/deleteFavorite/{doctorId}", method = { RequestMethod.GET })
     public ModelAndView deleteFavorite(@PathVariable("doctorId") String license, HttpServletRequest request){
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);

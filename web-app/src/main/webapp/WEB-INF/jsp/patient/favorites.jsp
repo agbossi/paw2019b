@@ -33,7 +33,7 @@
                             </div>
                             <div class="delete-box">
                                 <b class="delete-element">
-                                    <a href="<c:out value="/deleteFavorite/${doctor.license}"/>">
+                                    <a href="<c:url value="/deleteFavorite/${doctor.license}"/>">
                                         <input type="submit" value="Remove from favorites" name="Remove from favorites" onclick="return confirmSubmit()">
                                     </a>
                                 </b>
