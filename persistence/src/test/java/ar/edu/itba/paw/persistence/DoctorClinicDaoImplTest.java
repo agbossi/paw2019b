@@ -30,22 +30,25 @@ public class DoctorClinicDaoImplTest {
 
     private static final Specialty specialty = new Specialty("specialty");
 
-    //private static final Doctor doc = new Doctor("docFirstName", "docLastName", specialty, "1", "1234567890","doctor@mail.com");
+    private  static  final User user3 = new User("docFirstName", "docLastName", "password", "doctor@mail.com");
+
+    private static final Doctor doc = new Doctor( specialty, "1", "1234567890",user3);
 
     private static final Clinic clinic = new Clinic(1,"clinic", "address", location);
 
-    //private static final Doctor doc2 = new Doctor("docFirstName3", "docLastName3", specialty, "3", "1234","doctor3@mail.com");
+    private  static  final User user4 = new User("docFirstName3", "docLastName3", "password", "doctor3@mail.com");
+
+
+    private static final Doctor doc2 = new Doctor(specialty, "3", "1234", user4);
 
     private static final int consultPrice = 1;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
-    @Test
-    public void testCreate() {
-        assertEquals(true, true);
-    }
-/*
+    @Autowired
+    private DoctorClinicDaoImpl doctorClinicDao;
+
     @Test
     public void testCreate(){
         DoctorClinic doctorClinic = doctorClinicDao.createDoctorClinic(doc2, clinic, consultPrice);
@@ -54,7 +57,6 @@ public class DoctorClinicDaoImplTest {
         assertEquals(doc2.getLicense(), doctorClinic.getDoctor().getLicense());
         assertEquals(clinic.getId(), doctorClinic.getClinic().getId());
         assertEquals(consultPrice, doctorClinic.getConsultPrice());
-        assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "doctorclinics"));
 
     }
 
@@ -136,5 +138,5 @@ public class DoctorClinicDaoImplTest {
         assertTrue(consultPrice >= doctorClinics.get(0).getConsultPrice());
 
     }
-*/
+
 }

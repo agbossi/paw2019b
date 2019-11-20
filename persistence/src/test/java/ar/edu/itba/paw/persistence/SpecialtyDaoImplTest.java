@@ -30,14 +30,9 @@ public class SpecialtyDaoImplTest {
 
     private static final String name2 = "specialty2";
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
-    @Test
-    public void testCreate() {
-        assertEquals(true, true);
-    }
-    /*
     @Autowired
     private SpecialtyDaoImpl specialtyDao;
 
@@ -47,8 +42,6 @@ public class SpecialtyDaoImplTest {
 
         assertNotNull(specialty);
         assertEquals(name2, specialty.getSpecialtyName());
-
-        assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "specialties"));
 
     }
 
@@ -69,5 +62,5 @@ public class SpecialtyDaoImplTest {
         assertEquals(1, specialties.size());
 
     }
-*/
+
 }

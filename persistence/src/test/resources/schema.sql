@@ -163,8 +163,8 @@ INSERT INTO doctorclinics(doctorLicense, clinicid, consultPrice)
     SELECT * FROM (VALUES ('1', 1, 1))
     WHERE NOT EXISTS (SELECT * FROM doctorclinics WHERE doctorLicense=1 AND clinicid=1);
 INSERT INTO doctorclinics(doctorLicense, clinicid, consultPrice)
-    SELECT * FROM (VALUES ('2', 2, 2))
-    WHERE NOT EXISTS (SELECT * FROM doctorclinics WHERE doctorLicense=2 AND clinicid=2);
+    SELECT * FROM (VALUES ('2', 1, 1))
+    WHERE NOT EXISTS (SELECT * FROM doctorclinics WHERE doctorLicense=2 AND clinicid=1);
 
 
 /* Populates DB with clinicPrepaids */

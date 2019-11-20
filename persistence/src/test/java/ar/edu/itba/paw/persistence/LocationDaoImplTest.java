@@ -31,22 +31,18 @@ public class LocationDaoImplTest {
 
     private static final String name2 = "location2";
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
-    @Test
-    public void testCreate() {
-        assertEquals(true, true);
-    }
-/*
+    @Autowired
+    private LocationDaoImpl locationDao;
+
     @Test
     public void testCreate(){
         Location location = locationDao.createLocation(name2);
 
         assertNotNull(location);
         assertEquals(name2, location.getLocationName());
-
-        assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "locations"));
 
     }
 
@@ -67,5 +63,5 @@ public class LocationDaoImplTest {
         assertEquals(1, locations.size());
 
     }
-*/
+
 }

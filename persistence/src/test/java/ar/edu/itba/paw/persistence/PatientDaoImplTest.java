@@ -37,17 +37,15 @@ public class PatientDaoImplTest {
 
     private static final String pripaidNumber = "123231";
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
+
+    @Autowired
+    private PatientDaoImpl patientDao;
 
     @Test
-    public void testCreate() {
-        assertEquals(true, true);
-    }
-/*
-    @Test
     public void testCreate(){
-        Patient patient = patientDao.create(user2.getEmail(), id, prepaid.getName(), pripaidNumber, user2);
+        Patient patient = patientDao.create(id, prepaid.getName(), pripaidNumber, user2);
 
         assertNotNull(patient);
         assertEquals(user2.getEmail(), patient.getEmail());
@@ -56,7 +54,6 @@ public class PatientDaoImplTest {
         assertEquals(pripaidNumber, patient.getPrepaidNumber());
         assertEquals(user2.getFirstName(), patient.getFirstName());
         assertEquals(user2.getLastName(), patient.getLastName());
-        assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "patients"));
     }
 
     @Test
@@ -66,5 +63,5 @@ public class PatientDaoImplTest {
         assertNotNull(patient);
         assertEquals(user.getEmail(), patient.getEmail());
     }
-*/
+
 }

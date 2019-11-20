@@ -43,14 +43,12 @@ public class DoctorDaoImplTest {
 
     private static final User docUser2 = new User("docFirstName", "docLastName", "password", "doctor@mail.com");
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
-    @Test
-    public void testCreate() {
-        assertEquals(true, true);
-    }
-/*
+    @Autowired
+    private DoctorDaoImpl doctorDao;
+
     @Test
     public void testCreate(){
         Doctor doctor = doctorDao.createDoctor(specialty,license,phone,docUser);
@@ -60,7 +58,6 @@ public class DoctorDaoImplTest {
         assertEquals(license, doctor.getLicense());
         assertEquals(specialty.getSpecialtyName(), doctor.getSpecialty().getSpecialtyName());
         assertEquals(phone, doctor.getPhoneNumber());
-        assertEquals(4, JdbcTestUtils.countRowsInTable(jdbcTemplate, "doctors"));
 
     }
 
@@ -100,5 +97,5 @@ public class DoctorDaoImplTest {
         Assert.assertTrue(bool1);
         Assert.assertFalse(bool2);
     }
-*/
+
 }

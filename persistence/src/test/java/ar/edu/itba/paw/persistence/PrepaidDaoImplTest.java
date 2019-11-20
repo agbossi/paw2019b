@@ -27,27 +27,22 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = TestConfig.class)
 public class PrepaidDaoImplTest {
 
-    private static final String name = "prepaid";
+    private static final String name = "prepaid1";
 
     private static final String name2 = "prepaid3";
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
-    @Test
-    public void testCreate() {
-        assertEquals(true, true);
-    }
+    @Autowired
+    private PrepaidDaoImpl prepaidDao;
 
-    /*
     @Test
     public void testCreate(){
         Prepaid prepaid = prepaidDao.createPrepaid(name2);
 
         assertNotNull(prepaid);
         assertEquals(name2, prepaid.getName());
-
-        assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "prepaids"));
 
     }
 
@@ -68,7 +63,7 @@ public class PrepaidDaoImplTest {
         assertEquals(2, prepaids.size());
 
     }
-*/
+
 }
 
 

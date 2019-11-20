@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -11,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @Transactional
 @Sql("classpath:schema.sql")
@@ -33,18 +36,11 @@ public class UserDaoTest {
     private static final String email2 = "patient@mail.com";
 
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
-    @Test
-    public void testCreate() {
-        assertEquals(true, true);
-    }
-
-    /*@Before
-    public void setUp() {
-        jdbcTemplate = new JdbcTemplate(ds);
-    }
+     @Autowired
+    private UserDaoImpl userDao;
 
     @Test
     public void testCreate() {
@@ -54,7 +50,6 @@ public class UserDaoTest {
         assertEquals(firstName, user.getFirstName());
         assertEquals(lastName, user.getLastName());
         assertEquals(password, user.getPassword());
-        assertEquals(8, JdbcTestUtils.countRowsInTable(jdbcTemplate,"users"));
 
     }
 
@@ -67,5 +62,5 @@ public class UserDaoTest {
         assertEquals(lastName2, user.getLastName());
         assertEquals(firstName2, user.getFirstName());
 
-    }*/
+    }
 }

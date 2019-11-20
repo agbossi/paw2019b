@@ -26,11 +26,12 @@ import static org.junit.Assert.assertNotNull;
 @ContextConfiguration(classes = TestConfig.class)
 public class ScheduleDaoImplTest {
 
-    //private static final Doctor doc = new Doctor("docFirstName", "docLastName", new Specialty("specialty"), "1", "1234567890","doctor@mail.com");
+    private static final User user = new User("docFirstName", "docLastName", "password","doctor@mail.com");
+    private static final Doctor doc = new Doctor(new Specialty("specialty"), "1", "1234567890", user);
 
     private static final Clinic clinic = new Clinic(1,"clinic", "address", new Location("location"));
 
-    //private static final DoctorClinic doctorClinic = new DoctorClinic(doc, clinic, 1);
+    private static final DoctorClinic doctorClinic = new DoctorClinic(doc, clinic, 1);
 
     private static final int day = 3;
 
@@ -40,14 +41,12 @@ public class ScheduleDaoImplTest {
 
     private static final int hour2 = 10;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
-    @Test
-    public void testCreate() {
-        assertEquals(true, true);
-    }
-/*
+    @Autowired
+    private ScheduleDaoImpl scheduleDao;
+
 
     @Test
     public void testCreate(){
@@ -56,8 +55,6 @@ public class ScheduleDaoImplTest {
         assertNotNull(schedule);
         assertEquals(day2, schedule.getDay());
         assertEquals(hour2, schedule.getHour());
-
-        assertEquals(2, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedule"));
 
     }
 
@@ -79,11 +76,4 @@ public class ScheduleDaoImplTest {
 
     }
 
-    @Test
-    public void testDeleteSchedule(){
-        scheduleDao.deleteSchedule(hour, day, doctorClinic);
-
-        assertEquals(0, JdbcTestUtils.countRowsInTable(jdbcTemplate, "schedule"));
-    }
-*/
 }

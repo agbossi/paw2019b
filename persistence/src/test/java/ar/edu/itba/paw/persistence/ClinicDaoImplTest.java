@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.interfaces.dao.ClinicDao;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import org.junit.Assert;
@@ -41,26 +42,23 @@ public class ClinicDaoImplTest {
 
     private static final Location location = new Location("location");
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
 
-    @Test
-    public void testCreate() {
-        assertEquals(true, true);
-    }
-/*
-    @Test
-    public void testCreate(){
-        final Clinic clinic = clinicDao.createClinic(name2, address2, location);
+    @Autowired
+    private ClinicDaoImpl clinicDao;
 
-        assertNotNull(clinic);
-        assertEquals(name2, clinic.getName());
-        assertEquals(address2, clinic.getAddress());
-        assertEquals(location.getLocationName(), clinic.getLocation().getLocationName());
-
-        assertEquals(3, JdbcTestUtils.countRowsInTable(jdbcTemplate, "clinics"));
-
-    }
+    /* NO funciona por el serial/indentity */
+//    @Test
+//    public void testCreate(){
+//        final Clinic clinic = clinicDao.createClinic(name2, address2, location);
+//
+//        assertNotNull(clinic);
+//        assertEquals(name2, clinic.getName());
+//        assertEquals(address2, clinic.getAddress());
+//        assertEquals(location.getLocationName(), clinic.getLocation().getLocationName());
+//
+//    }
 
     @Test
     public void testGetClinicByName(){
@@ -90,7 +88,7 @@ public class ClinicDaoImplTest {
 
     @Test
     public void testGetClinicByLocation(){
-        List<Clinic> clinics = clinicDao.getClinicsByLocation(location.getLocationName());
+        List<Clinic> clinics = clinicDao.getClinicsByLocation(location);
 
         assertNotNull(clinics);
         assertEquals(2, clinics.size());
@@ -98,11 +96,11 @@ public class ClinicDaoImplTest {
 
     @Test
     public void testClinicExists(){
-        boolean bool = clinicDao.clinicExists(name, address, location.getLocationName());
-        boolean bool2 = clinicDao.clinicExists(name2, address2, location.getLocationName());
+        boolean bool = clinicDao.clinicExists(name, address, location);
+        boolean bool2 = clinicDao.clinicExists(name2, address2, location);
 
         Assert.assertTrue(bool);
         Assert.assertTrue(!bool2);
     }
-*/
+
 }
