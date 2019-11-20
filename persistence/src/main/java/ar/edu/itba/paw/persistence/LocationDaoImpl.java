@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.LocationDao;
-import ar.edu.itba.paw.interfaces.dao.PaginationDao;
 import ar.edu.itba.paw.model.Location;
 import org.springframework.stereotype.Repository;
 

@@ -15,22 +15,14 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
 public class SearchController {
 
     @Autowired
-    private LocationService locationService;
-
-    @Autowired
-    private SpecialtyService specialtyService;
-
-    @Autowired
     private ClinicService clinicService;
-
-    @Autowired
-    private PrepaidService prepaidService;
 
     @Autowired
     private DoctorClinicService doctorClinicService;
@@ -52,62 +44,27 @@ public class SearchController {
                                @ModelAttribute("searchForm") final SearchForm form) {
 
         final ModelAndView mav = new ModelAndView("base/doctors");
-
-        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
-        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        Patient patient = patientService.getPatientByEmail(userEmail);
-        if(patient != null) {
-            mav.addObject("patientPrepaid", patient.getPrepaid());
-        }
-
         List<String> licenses = doctorService.getAvailableDoctorsLicenses();
-        ViewModifierHelper.addPaginatedDoctors(mav, licenses, doctorService, page);
+        addPaginatedDoctors(mav, licenses, doctorService, page);
 
         return mav;
     }
-
 
     @RequestMapping(value = "/search", method = {RequestMethod.GET})
     public ModelAndView search(@ModelAttribute("searchForm") final SearchForm form) {
 
         final ModelAndView mav = new ModelAndView("index");
-
-        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        Patient patient = patientService.getPatientByEmail(userEmail);
-        if(patient != null) {
-            mav.addObject("patientPrepaid", patient.getPrepaid());
-        }
-        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
-
         return mav;
     }
-
 
     @RequestMapping(value = "/results", method = {RequestMethod.GET})
     public ModelAndView backToResults(@ModelAttribute("searchForm") final SearchForm form, HttpServletRequest request){
 
         final ModelAndView mav = new ModelAndView("results");
 
-        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        Patient patient = patientService.getPatientByEmail(userEmail);
-        if(patient != null) {
-            mav.addObject("patientPrepaid", patient.getPrepaid());
-        }
-
-        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService,
-                clinicService, prepaidService);
         UserContextHelper.loadUserQuery(form,request);
-
-        List<String> licenses = doctorService.getAvailableFilteredLicenses(new Location(form.getLocation()),
-                new Specialty(form.getSpecialty()), form.getFirstName(),form.getLastName(),
-                new Prepaid(form.getPrepaid()),form.getConsultPrice());
-        List<Doctor> filteredDoctors = new ArrayList<>();
-        for(String lic : licenses) {
-            filteredDoctors.add(doctorService.getDoctorByLicense(lic));
-        }
-
-        ViewModifierHelper.addFilteredDoctors(mav, filteredDoctors);
-
+        addFilteredDoctors(mav, form.getLocation(), form.getSpecialty(), form.getFirstName(),
+                           form.getLastName(), form.getPrepaid(), form.getConsultPrice());
         return mav;
     }
 
@@ -118,34 +75,21 @@ public class SearchController {
             return search(form);
 
         final ModelAndView mav = new ModelAndView("results");
-
         UserContextHelper.saveUserQuery(form,request);
-
         mav.addObject("patientPrepaid", form.getPrepaid());
-        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService,
-                                         clinicService, prepaidService);
-
-        List<String> licenses = doctorService.getAvailableFilteredLicenses(new Location(form.getLocation()),
-                new Specialty(form.getSpecialty()), form.getFirstName(),form.getLastName(),
-                new Prepaid(form.getPrepaid()),form.getConsultPrice());
-        List<Doctor> filteredDoctors = new ArrayList<>();
-        for(String lic : licenses) {
-            filteredDoctors.add(doctorService.getDoctorByLicense(lic));
-        }
-
-        ViewModifierHelper.addFilteredDoctors(mav, filteredDoctors);
+        addFilteredDoctors(mav, form.getLocation(), form.getSpecialty(), form.getFirstName(),
+                form.getLastName(), form.getPrepaid(), form.getConsultPrice());
 
         return mav;
     }
 
     @RequestMapping(value = "/results/{license}", method = {RequestMethod.GET})
     public ModelAndView doctorsPage(@PathVariable(value = "license") String license) {
+        ModelAndView mav = new ModelAndView("doctorPage");
 
         Doctor doctor = doctorService.getDoctorByLicense(license);
-
-        ModelAndView mav = new ModelAndView("doctorPage");
         mav.addObject("doctor", doctor);
-        ViewModifierHelper.addDoctorClinicsForDoctor(mav, doctor, doctorClinicService);
+        addDoctorClinicsForDoctor(mav, doctor);
 
         boolean isFav = false;
 
@@ -169,18 +113,43 @@ public class SearchController {
                               clinicService.getClinicById(clinic));
 
         mav.addObject("doctorClinic", doctor);
-        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        Patient patient = patientService.getPatientByEmail(userEmail);
-        if(patient != null) {
-            mav.addObject("patientPrepaid", patient.getPrepaid());
-        }
-        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
-        ViewModifierHelper.addCurrentDates(mav, week);
 
+        List<Calendar> month = ViewModifierHelper.getMonth(week);
         List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctor, week);
+
+        mav.addObject("days", month);
+        mav.addObject("today", Calendar.getInstance());
         mav.addObject("week", doctorsWeek);
         mav.addObject("weekNum", week);
 
         return mav;
+    }
+
+    // Private methods for SearchController //
+
+    private void addPaginatedDoctors(ModelAndView mav, List<String> licenses,
+                                     DoctorService doctorService, int page) {
+        List<Doctor> doctors = doctorService.getPaginatedDoctors(licenses, page);
+        int maxAvailablePage = doctorService.getMaxAvailableDoctorsPage(licenses);
+        mav.addObject("doctors", doctors);
+        mav.addObject("maxPage", maxAvailablePage);
+        mav.addObject("page", page);
+    }
+
+    private void addFilteredDoctors(ModelAndView mav, String location, String specialty,
+                                    String firstName,String lastName,
+                                    String prepaid,int consultPrice) {
+        List<String> licenses = doctorService.getAvailableFilteredLicenses(new Location(location), new Specialty(specialty),
+                firstName,lastName, new Prepaid(prepaid), consultPrice);
+        List<Doctor> filteredDoctors = new ArrayList<>();
+        for(String lic : licenses) {
+            filteredDoctors.add(doctorService.getDoctorByLicense(lic));
+        }
+        mav.addObject("doctors", filteredDoctors);
+    }
+
+    private void addDoctorClinicsForDoctor(ModelAndView mav, Doctor doctor) {
+        List<DoctorClinic> doctors = doctorClinicService.getDoctorClinicsForDoctor(doctor);
+        mav.addObject("doctorClinics", doctors);
     }
 }

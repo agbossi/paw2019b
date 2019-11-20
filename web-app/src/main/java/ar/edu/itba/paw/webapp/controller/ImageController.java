@@ -35,8 +35,7 @@ public class ImageController {
         String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
         Doctor doctor = doctorService.getDoctorByEmail(userEmail);
 
-        // TODO: check for result == 0, and errors above!!!!
-        long result = imageService.createProfileImage(photo, doctor);
+        imageService.createProfileImage(photo, doctor);
 
         final ModelAndView mav = new ModelAndView("doctor/doctorProfile");
         return mav;

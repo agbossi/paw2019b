@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.*;
-import ar.edu.itba.paw.webapp.helpers.ViewModifierHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Locale;
 
 @Controller
@@ -44,6 +44,7 @@ public class AdminController {
     @Autowired
     private PrepaidToClinicService prepaidToClinicService;
 
+    /////// Doctor ////////
 
     @RequestMapping(value = "/doctors", method = { RequestMethod.GET })
     public ModelAndView doctors(){
@@ -53,18 +54,13 @@ public class AdminController {
     @RequestMapping(value = "/doctors/{page}", method = { RequestMethod.GET })
     public ModelAndView doctors(@PathVariable(value = "page") int page){
         final ModelAndView mav = new ModelAndView("admin/doctors");
-        ViewModifierHelper.addPaginatedObjects(mav, doctorService, page);
+        addPaginatedObjects(mav, doctorService, page);
         return mav;
     }
     
     @RequestMapping(value = "/addDoctor", method = { RequestMethod.GET })
     public ModelAndView addDoctor(@ModelAttribute("doctorForm") final DoctorForm form){
-        final ModelAndView mav = new ModelAndView("admin/addDoctor");
-
-        ViewModifierHelper.addSearchInfo(mav, locationService, specialtyService, clinicService, prepaidService);
-
-
-        return mav;
+        return new ModelAndView("admin/addDoctor");
     }
 
     @RequestMapping(value = "/deleteDoctor/{license}", method = { RequestMethod.GET })
@@ -80,7 +76,7 @@ public class AdminController {
             return addDoctor(form);
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
-       User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
+        User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
         Doctor doctor = doctorService.createDoctor(new Specialty(form.getSpecialty()),
                 form.getLicense(),
                 form.getPhoneNumber(),
@@ -94,6 +90,8 @@ public class AdminController {
         return mav;
     }
 
+    /////// Clinic ////////
+
     @RequestMapping(value = "/clinics", method = { RequestMethod.GET })
     public ModelAndView clinics(){
         return clinics(FIRST_PAGE);
@@ -102,16 +100,13 @@ public class AdminController {
     @RequestMapping(value = "/clinics/{page}", method = { RequestMethod.GET })
     public ModelAndView clinics(@PathVariable(value = "page") int page){
         final ModelAndView mav = new ModelAndView("admin/clinics");
-        ViewModifierHelper.addPaginatedObjects(mav, clinicService, page);
+        addPaginatedObjects(mav, clinicService, page);
         return mav;
     }
 
     @RequestMapping(value = "/addClinic", method = { RequestMethod.GET })
     public ModelAndView addClinic(@ModelAttribute("clinicForm") final ClinicForm form){
-        final ModelAndView mav = new ModelAndView("admin/addClinic");
-        ViewModifierHelper.addLocations(mav, locationService);
-
-        return mav;
+        return new ModelAndView("admin/addClinic");
     }
 
     @RequestMapping(value = "/editClinic/{id}", method = { RequestMethod.GET})
@@ -124,7 +119,6 @@ public class AdminController {
 
         final ModelAndView mav = new ModelAndView("admin/editClinic");
         mav.addObject("clinic", clinic);
-        ViewModifierHelper.addLocations(mav, locationService);
         return mav;
     }
 
@@ -145,18 +139,22 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/addedClinic", method = { RequestMethod.POST })
-    public ModelAndView addedClinic(@Valid @ModelAttribute("clinicForm") final ClinicForm form, final BindingResult errors,Locale locale){
+    public ModelAndView addedClinic(@Valid @ModelAttribute("clinicForm") final ClinicForm form,
+                                                                    final BindingResult errors){
 
         if(errors.hasErrors())
             return addClinic(form);
 
-        final Clinic clinic = clinicService.createClinic(form.getName(), form.getAddress(), new Location(form.getLocation()));
+        final Clinic clinic = clinicService.createClinic(form.getName(),
+                                                         form.getAddress(), new Location(form.getLocation()));
 
         final ModelAndView mav = new ModelAndView("admin/addedClinic");
         mav.addObject("clinic", clinic);
 
         return mav;
     }
+
+    /////// Location ////////
 
     @RequestMapping(value = "/locations", method = { RequestMethod.GET })
     public ModelAndView locations(){
@@ -166,21 +164,20 @@ public class AdminController {
     @RequestMapping(value = "/locations/{page}", method = { RequestMethod.GET })
     public ModelAndView locations(@PathVariable(value = "page") int page){
         final ModelAndView mav = new ModelAndView("admin/locations");
-        ViewModifierHelper.addPaginatedObjects(mav, locationService, page);
+        addPaginatedObjects(mav, locationService, page);
         return mav;
     }
 
     @RequestMapping(value = "/addLocation", method = { RequestMethod.GET })
     public ModelAndView addLocation(@ModelAttribute("locationForm") final LocationForm form){
-        final ModelAndView mav = new ModelAndView("admin/addLocation");
-        return mav;
+        return new ModelAndView("admin/addLocation");
     }
 
     @RequestMapping(value = "/editLocation/{locationName}", method = { RequestMethod.GET})
     public ModelAndView editLocation(@ModelAttribute("locationForm") final LocationForm form,
                                      @PathVariable(value = "locationName") String name){
-        form.setName(name);
         final ModelAndView mav = new ModelAndView("admin/editLocation");
+        form.setName(name);
         mav.addObject("location", locationService.getLocationByName(name));
         return mav;
     }
@@ -190,7 +187,6 @@ public class AdminController {
                                          final BindingResult errors, @PathVariable(value = "locationName") String name){
         if(errors.hasErrors())
             return editLocation(form, name);
-
         locationService.updateLocation(name, form.getName());
         return locations();
     }
@@ -202,7 +198,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/addedLocation", method = { RequestMethod.POST })
-    public ModelAndView addedLocation(@Valid @ModelAttribute("locationForm") final LocationForm form, final BindingResult errors,Locale locale){
+    public ModelAndView addedLocation(@Valid @ModelAttribute("locationForm") final LocationForm form,
+                                                                          final BindingResult errors){
 
         if(errors.hasErrors())
             return addLocation(form);
@@ -215,6 +212,8 @@ public class AdminController {
         return mav;
     }
 
+    /////// Specialty ////////
+
     @RequestMapping(value = "/specialties", method = {RequestMethod.GET})
     public ModelAndView specialties(){
         return specialties(FIRST_PAGE);
@@ -223,14 +222,13 @@ public class AdminController {
     @RequestMapping(value = "/specialties/{page}", method = { RequestMethod.GET })
     public ModelAndView specialties(@PathVariable(value = "page") int page){
         final ModelAndView mav = new ModelAndView("admin/specialties");
-        ViewModifierHelper.addPaginatedObjects(mav, specialtyService, page);
+        addPaginatedObjects(mav, specialtyService, page);
         return mav;
     }
 
     @RequestMapping(value = "/addSpecialty", method = {RequestMethod.GET})
     public ModelAndView addSpecialty(@ModelAttribute("specialtyForm") final SpecialtyForm form){
-        final ModelAndView mav = new ModelAndView("admin/addSpecialty");
-        return mav;
+        return new ModelAndView("admin/addSpecialty");
     }
 
     @RequestMapping(value = "/deleteSpecialty/{specialtyName}", method = { RequestMethod.GET })
@@ -272,6 +270,8 @@ public class AdminController {
         return mav;
     }
 
+    /////// Prepaid ////////
+
     @RequestMapping(value = "/prepaids",method = { RequestMethod.GET })
     public ModelAndView prepaids(){
         return prepaids(FIRST_PAGE);
@@ -280,21 +280,20 @@ public class AdminController {
     @RequestMapping(value = "/prepaids/{page}", method = { RequestMethod.GET })
     public ModelAndView prepaids(@PathVariable(value = "page") int page){
         final ModelAndView mav = new ModelAndView("admin/prepaids");
-        ViewModifierHelper.addPaginatedObjects(mav, prepaidService, page);
+        addPaginatedObjects(mav, prepaidService, page);
         return mav;
     }
 
     @RequestMapping(value = "/addPrepaid",method = { RequestMethod.GET })
     public ModelAndView addPrepaid(@ModelAttribute("prepaidForm") final PrepaidForm form){
-        final ModelAndView mav = new ModelAndView("admin/addPrepaid");
-        return mav;
+        return new ModelAndView("admin/addPrepaid");
     }
 
     @RequestMapping(value = "/editPrepaid/{name}", method = { RequestMethod.GET})
     public ModelAndView editPrepaid(@ModelAttribute("prepaidForm") final PrepaidForm form,
                                       @PathVariable(value = "name") String name){
-        form.setName(name);
         final ModelAndView mav = new ModelAndView("admin/editPrepaid");
+        form.setName(name);
         mav.addObject("prepaid", prepaidService.getPrepaidByName(name));
         return mav;
     }
@@ -316,13 +315,11 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/addedPrepaid",method = { RequestMethod.POST })
-    public ModelAndView addedPrepaid(@Valid @ModelAttribute("prepaidForm") final PrepaidForm form,final BindingResult errors,Locale locale){
-
-       // validator.prepaidValidate(form.getName(),errors,locale);
+    public ModelAndView addedPrepaid(@Valid @ModelAttribute("prepaidForm") final PrepaidForm form,
+                                                                       final BindingResult errors){
 
         if (errors.hasErrors())
             return addPrepaid(form);
-
 
         Prepaid prepaid = prepaidService.createPrepaid(form.getName());
         final ModelAndView mav = new ModelAndView("admin/addedPrepaid");
@@ -331,15 +328,17 @@ public class AdminController {
         return mav;
     }
 
+    /////// PrepaidClinic ////////
+
     @RequestMapping(value = "/prepaidClinics", method = { RequestMethod.GET })
     public ModelAndView prepaidClinics() {
-        return prepaids(FIRST_PAGE);
+        return prepaidClinics(FIRST_PAGE);
     }
 
     @RequestMapping(value = "/prepaidClinics/{page}", method = { RequestMethod.GET })
     public ModelAndView prepaidClinics(@PathVariable(value = "page") int page){
         final ModelAndView mav = new ModelAndView("admin/prepaidClinics");
-        ViewModifierHelper.addPaginatedObjects(mav, prepaidToClinicService, page);
+        addPaginatedObjects(mav, prepaidToClinicService, page);
         return mav;
     }
 
@@ -352,23 +351,33 @@ public class AdminController {
 
     @RequestMapping(value = "/addPrepaidToClinic",method = { RequestMethod.GET })
     public ModelAndView addPrepaidToClinic(@ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form){
-        final ModelAndView mav = new ModelAndView("admin/addPrepaidToClinic");
-
-        ViewModifierHelper.addClinics(mav, clinicService);
-        ViewModifierHelper.addPrepaids(mav, prepaidService);
-        return mav;
+        return new ModelAndView("admin/addPrepaidToClinic");
     }
 
     @RequestMapping(value = "/addedPrepaidToClinic",method = { RequestMethod.POST })
-    public ModelAndView addedPrepaidToClinic(@Valid @ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form,final BindingResult errors,Locale locale){
+    public ModelAndView addedPrepaidToClinic(@Valid @ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form,
+                                                                                               final BindingResult errors){
 
+        final ModelAndView mav = new ModelAndView("admin/addedPrepaidToClinic");
         if (errors.hasErrors())
             return addPrepaidToClinic(form);
 
-        PrepaidToClinic prepaidToClinic = prepaidToClinicService.addPrepaidToClinic(new Prepaid(form.getPrepaid()),clinicService.getClinicById(form.getClinic()));
-        final ModelAndView mav = new ModelAndView("admin/addedPrepaidToClinic");
+        PrepaidToClinic prepaidToClinic = prepaidToClinicService.addPrepaidToClinic(new Prepaid(form.getPrepaid()),
+                                                                    clinicService.getClinicById(form.getClinic()));
+
         mav.addObject("prepaidToClinic", prepaidToClinic);
 
+        return mav;
+    }
+
+    // Private methods for AdminController //
+
+    public static <T> ModelAndView addPaginatedObjects(ModelAndView mav, PaginationService<T> paginationService, int page){
+        List<T> objects = paginationService.getPaginatedObjects(page);
+        int maxPageAvailable = paginationService.maxAvailablePage();
+        mav.addObject("objects", objects);
+        mav.addObject("page", page);
+        mav.addObject("maxPage", maxPageAvailable);
         return mav;
     }
 }

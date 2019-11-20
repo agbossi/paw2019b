@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.dao.PaginationDao;
 import ar.edu.itba.paw.model.Specialty;
 import ar.edu.itba.paw.interfaces.dao.SpecialtyDao;
 import org.springframework.stereotype.Repository;
@@ -40,7 +39,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
 
     @Override
     public List<Specialty> getPaginatedObjects(int page){
-        final TypedQuery<Specialty> query = entityManager.createQuery("from Specialty as spcecialty",Specialty.class);
+        final TypedQuery<Specialty> query = entityManager.createQuery("from Specialty as spcecialty ORDER BY specialty.name",Specialty.class);
         final List<Specialty> list = query.setFirstResult(page * MAX_SPECIALTIES_PER_PAGE)
                                           .setMaxResults(MAX_SPECIALTIES_PER_PAGE)
                                           .getResultList();

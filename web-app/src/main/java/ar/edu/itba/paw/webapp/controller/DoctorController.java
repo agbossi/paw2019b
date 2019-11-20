@@ -18,14 +18,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 @Controller
 @RequestMapping("/doctor")
 public class DoctorController {
-    @Autowired
-    private AppointmentService appointmentService;
 
     @Autowired
     private UserService userService;
@@ -56,14 +55,6 @@ public class DoctorController {
 
     @Autowired
     PasswordEncoder passwordEncoder;
-
-    private void setEditFormInformation(EditDoctorProfileForm form, User user, Doctor doctor) {
-        form.setFirstName(user.getFirstName());
-        form.setLastName(user.getLastName());
-        form.setSpecialty(doctor.getSpecialty().getSpecialtyName());
-        form.setPhoneNumber(doctor.getPhoneNumber());
-    }
-
 
     @RequestMapping(value = "/editProfile", method = { RequestMethod.GET })
     public ModelAndView editProfile() {
@@ -115,11 +106,8 @@ public class DoctorController {
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
 
-
-       // validator.passwordValidate(form.getNewPassword(),form.getRepeatPassword(),errors,locale);
         boolean photoError = ValidationHelper.photoValidate(photo);
 
-        //TODO test this
         if(errors.hasErrors() || photoError) {
             return updateProfile(form,photoError,locale);
         }
@@ -140,8 +128,8 @@ public class DoctorController {
     public ModelAndView addDoctorClinic(@ModelAttribute("doctorClinicForm") final DoctorClinicForm form){
         final ModelAndView mav = new ModelAndView("doctor/addDoctorClinic");
 
-        ViewModifierHelper.addClinics(mav, clinicService);
-        ViewModifierHelper.addDoctors(mav, doctorService);
+        mav.addObject("clinics", clinicService.getClinics());
+        mav.addObject("doctors", doctorService.getDoctors());
 
         return mav;
     }
@@ -163,7 +151,9 @@ public class DoctorController {
         Doctor doctor = doctorService.getDoctorByEmail(userEmail);
         Clinic cli = clinicService.getClinicById(clinic);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
-        ViewModifierHelper.addDaysAdnTimes(mav);
+
+        mav.addObject("days", ViewModifierHelper.getDays());
+        mav.addObject("times", ViewModifierHelper.getTimes());
 
         List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctorClinic, 2);
 
@@ -180,7 +170,6 @@ public class DoctorController {
         String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
         Doctor doctor = doctorService.getDoctorByEmail(userEmail);
 
-        //validator.doctorClinicValidate(doctor.getLicense(),form.getClinic(),errors,locale);
         if(errors.hasErrors())
             return addDoctorClinic(form);
 
@@ -249,13 +238,22 @@ public class DoctorController {
 
         final ModelAndView mav = new ModelAndView("doctor/clinicPage");
 
-
-        ViewModifierHelper.addCurrentDates(mav, week);
-
+        List<Calendar> month = ViewModifierHelper.getMonth(week);
+        mav.addObject("days", month);
+        mav.addObject("today", Calendar.getInstance());
         mav.addObject("week", doctorsWeek);
         mav.addObject("weekNum", week);
         mav.addObject("doctorClinic", doctorClinic);
 
         return mav;
+    }
+
+    // Private methods for DoctorController //
+
+    private void setEditFormInformation(EditDoctorProfileForm form, User user, Doctor doctor) {
+        form.setFirstName(user.getFirstName());
+        form.setLastName(user.getLastName());
+        form.setSpecialty(doctor.getSpecialty().getSpecialtyName());
+        form.setPhoneNumber(doctor.getPhoneNumber());
     }
 }

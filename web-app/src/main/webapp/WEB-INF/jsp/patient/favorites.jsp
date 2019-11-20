@@ -14,14 +14,14 @@
     <body class="list-items-body">
         <div class="list-container">
             <c:choose>
-                <c:when test="${not empty doctors}">
+                <c:when test="${not empty favorites}">
                     <div class="header-info">
                         <div class="header-block">
                             <h4 class="header-msg"><spring:message code="your.favorites.information"/></h4>
                         </div>
                     </div>
                     <div class="doctor-row">
-                    <c:forEach var="doctor" items="${doctors}">
+                    <c:forEach var="doctor" items="${favorites}">
                         <div class="doctor-box">
                             <div class="single-doctor">
                                 <img class="doctor-picture" src="<c:url value="/images/${doctor.license}"/>" onerror="this.onerror=null;this.src='<c:url value="/resources/images/docpic.jpg" />';"/>

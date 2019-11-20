@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.dao.PaginationDao;
 import ar.edu.itba.paw.interfaces.dao.PrepaidDao;
 import ar.edu.itba.paw.model.Prepaid;
 import org.springframework.stereotype.Repository;
@@ -33,7 +32,7 @@ public class PrepaidDaoImpl implements PrepaidDao {
 
     @Override
     public List<Prepaid> getPrepaids(){
-        TypedQuery<Prepaid> query = entityManager.createQuery("from Prepaid as prepaid",Prepaid.class);
+        TypedQuery<Prepaid> query = entityManager.createQuery("from Prepaid as prepaid order by prepaid.name",Prepaid.class);
         List<Prepaid> list = query.getResultList();
         return list;
     }

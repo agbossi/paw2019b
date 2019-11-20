@@ -2,16 +2,14 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.PatientService;
 import ar.edu.itba.paw.interfaces.service.PrepaidService;
-import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.auth.SignUpAuthentication;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
-import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
-import ar.edu.itba.paw.webapp.helpers.ViewModifierHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.MessageSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +23,6 @@ import java.util.Locale;
 
 @Controller
 public class UserController {
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private PatientService patientService;
@@ -44,29 +39,35 @@ public class UserController {
     @Autowired
     private MessageSource messageSource;
 
+    @ModelAttribute
+    public void prepaids(Model model) {
+        model.addAttribute("prepaids", prepaidService.getPrepaids());
+    }
 
+    // Every time there is an error in signUp form I go back to this request
     @RequestMapping(value = "/signUp", method = { RequestMethod.GET })
-    public ModelAndView signUp(@ModelAttribute("signUpForm") final SignUpForm form,HttpServletRequest request,HttpServletResponse response) {
+    public ModelAndView signUp(@ModelAttribute("signUpForm") final SignUpForm form,
+                                                        HttpServletRequest request) {
 
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("url_prior_login", referrer);
-
         final ModelAndView mav = new ModelAndView("signUp");
-        ViewModifierHelper.addPrepaids(mav, prepaidService);
 
         return mav;
     }
 
     @RequestMapping(value = "/signUp",method = { RequestMethod.POST })
-    public ModelAndView signUpValidation(@Valid @ModelAttribute("signUpForm") final SignUpForm form, final BindingResult errors, HttpServletRequest request, HttpServletResponse response, Locale locale) {
+    public ModelAndView signUpValidation(@Valid @ModelAttribute("signUpForm") final SignUpForm form,
+                                         final BindingResult errors, HttpServletRequest request) {
 
         if(errors.hasErrors()){
-            return signUp(form,request,response);
+            return signUp(form,request);
         }
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
 
-        patientService.create(form.getId(),form.getPrepaid(), form.getPrepaidNumber(),form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
+        patientService.create(form.getId(),form.getPrepaid(), form.getPrepaidNumber(),
+                              form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
         signUpAuthentication.authWithAuthManager(request, form.getEmail(), form.getPassword());
 
         String ret = signUpAuthentication.signUpSuccess(request);
@@ -80,6 +81,7 @@ public class UserController {
         request.getSession().setAttribute("url_prior_login", referrer);
         return new ModelAndView("login");
     }
+
     @RequestMapping(value="/login-error", method = RequestMethod.GET)
     public ModelAndView getLogin(HttpServletRequest request,Locale locale){
 

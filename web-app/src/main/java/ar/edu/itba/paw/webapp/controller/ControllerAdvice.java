@@ -24,6 +24,7 @@ public class ControllerAdvice {
         mav.addObject("message",messageSource.getMessage("database.error",null, LocaleContextHolder.getLocale()));
         return mav;
     }
+
     @ExceptionHandler(NoHandlerFoundException.class)
     public ModelAndView handleError404(HttpServletRequest request, Exception e)   {
         ModelAndView mav = new ModelAndView("error");

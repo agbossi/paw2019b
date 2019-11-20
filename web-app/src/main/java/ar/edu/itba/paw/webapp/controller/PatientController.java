@@ -4,8 +4,6 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.PersonalInformationForm;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
-import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
-import ar.edu.itba.paw.webapp.helpers.ViewModifierHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,8 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Locale;
 
 @Controller
 public class PatientController {
@@ -38,30 +34,12 @@ public class PatientController {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    private PrepaidService prepaidService;
-
-    @Autowired
     private FavoriteService favoriteService;
 
-    private void setFormInformation(PersonalInformationForm form, User user, Patient patient) {
-        form.setFirstName(user.getFirstName());
-        form.setLastName(user.getLastName());
-        form.setPrepaid(patient.getPrepaid());
-        form.setPrepaidNumber(patient.getPrepaidNumber());
-    }
 
     @RequestMapping(value = "/profile", method = { RequestMethod.GET })
     public ModelAndView profile() {
-
-        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Patient patient = patientService.getPatientByEmail(user.getEmail());
-        List<Doctor> favorites = patientService.getPatientFavoriteDoctors(patient);
-
-        final ModelAndView mav = new ModelAndView("patient/profile");
-        mav.addObject("user", user);
-        mav.addObject("patient", patient);
-        mav.addObject("favorites",favorites);
-        return mav;
+        return new ModelAndView("patient/profile");
     }
 
     @RequestMapping(value = "/editProfile", method = { RequestMethod.GET })
@@ -72,19 +50,12 @@ public class PatientController {
         setFormInformation(form, user, patient);
 
         final ModelAndView mav = new ModelAndView("patient/editProfile");
-
-        mav.addObject("user", user);
-        mav.addObject("patient", patient);
-        ViewModifierHelper.addPrepaids(mav, prepaidService);
-
         return mav;
     }
 
     @RequestMapping(value = "/editProfile", method = { RequestMethod.POST })
     public ModelAndView editedProfile(@Valid @ModelAttribute("personalInformationForm") final PersonalInformationForm form,
-                                      final BindingResult errors, Locale locale) {
-
-        //validator.passwordValidate(form.getNewPassword(),form.getRepeatPassword(),errors,locale);
+                                      final BindingResult errors) {
         
         if(errors.hasErrors()){
             return editProfile(form);
@@ -94,7 +65,6 @@ public class PatientController {
         if(!form.getNewPassword().equals("")){
             password = passwordEncoder.encode(form.getNewPassword());
         }
-
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         userService.updateUser(user.getEmail(),password,form.getFirstName(),form.getLastName());
         patientService.updatePatient(user.getEmail(),form.getPrepaid(),form.getPrepaidNumber());
@@ -111,27 +81,12 @@ public class PatientController {
         Patient patient = patientService.getPatientByEmail(user.getEmail());
         patientService.setAppointments(patient);
 
-        mav.addObject("user", user);
-        mav.addObject("patient", patient);
-
         return mav;
     }
 
     @RequestMapping(value = "/favorites",  method = { RequestMethod.GET })
     public ModelAndView favorites(){
-        final ModelAndView mav = new ModelAndView(("patient/favorites"));
-
-        User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Patient patient = patientService.getPatientByEmail(user.getEmail());
-        List<Doctor> fav = patientService.getPatientFavoriteDoctors(patient);
-
-        mav.addObject("user", user);
-        mav.addObject("patient", patient);
-        mav.addObject("doctors", fav);
-
-        return mav;
-
-
+        return new ModelAndView(("patient/favorites"));
     }
 
     @RequestMapping(value = "/addFavorite/{doctorId}", method = { RequestMethod.GET })
@@ -139,7 +94,6 @@ public class PatientController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
-
         Doctor doctor = doctorService.getDoctorByLicense(license);
 
         if(!favoriteService.isFavorite(doctor, patient)){
@@ -156,7 +110,6 @@ public class PatientController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
-
         Doctor doctor = doctorService.getDoctorByLicense(license);
 
         if(favoriteService.isFavorite(doctor, patient)){
@@ -165,8 +118,15 @@ public class PatientController {
 
         String referer = request.getHeader("Referer");
         final ModelAndView mav = new ModelAndView("redirect:" + referer);
-
         return mav;
+    }
 
+    // Private methods for PatientController //
+
+    private void setFormInformation(PersonalInformationForm form, User user, Patient patient) {
+        form.setFirstName(user.getFirstName());
+        form.setLastName(user.getLastName());
+        form.setPrepaid(patient.getPrepaid());
+        form.setPrepaidNumber(patient.getPrepaidNumber());
     }
 }

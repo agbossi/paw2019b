@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
-import ar.edu.itba.paw.interfaces.dao.PaginationDao;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Specialty;
 import ar.edu.itba.paw.model.User;
@@ -33,7 +32,8 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getDoctors(){
-        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor",Doctor.class);
+        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor order by " +
+                "doctor.user.firstName, doctor.user.lastName, doctor.license",Doctor.class);
         final List<Doctor> list = query.getResultList();
         return list;
     }

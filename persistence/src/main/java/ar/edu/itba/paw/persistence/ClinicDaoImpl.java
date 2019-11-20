@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.ClinicDao;
-import ar.edu.itba.paw.interfaces.dao.PaginationDao;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import org.springframework.stereotype.Repository;
@@ -40,7 +39,8 @@ public class ClinicDaoImpl implements ClinicDao {
 
     @Override
     public List<Clinic> getClinics(){
-        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic",Clinic.class);
+        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic ORDER BY " +
+                        "clinic.name, clinic.location.name, clinic.address", Clinic.class);
         List<Clinic> list = query.getResultList();
         return list;
     }

@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.dao.PaginationDao;
 import ar.edu.itba.paw.interfaces.dao.PrepaidToClinicDao;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Prepaid;
@@ -24,7 +23,9 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     @Override
     public List<PrepaidToClinic> getPrepaidToClinics(){
         //en el join es p.clinic o p.id?
-        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p",PrepaidToClinic.class);
+        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p ORDER BY " +
+                        "p.prepaid.name, p.clinic.name, clinic.location.name",
+                PrepaidToClinic.class);
         List<PrepaidToClinic> list = query.getResultList();
         return list;
     }
