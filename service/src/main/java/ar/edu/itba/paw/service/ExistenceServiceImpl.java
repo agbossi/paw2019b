@@ -8,22 +8,22 @@ import org.springframework.stereotype.Service;
 public class ExistenceServiceImpl implements ExistenceService {
 
     @Autowired
-    DoctorService doctorService;
+    private DoctorService doctorService;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    PrepaidService prepaidService;
+    private PrepaidService prepaidService;
 
     @Autowired
-    LocationService locationService;
+    private LocationService locationService;
 
     @Autowired
-    SpecialtyService specialtyService;
+    private SpecialtyService specialtyService;
 
     @Autowired
-    PatientService patientService;
+    private PatientService patientService;
 
 
     @Override
