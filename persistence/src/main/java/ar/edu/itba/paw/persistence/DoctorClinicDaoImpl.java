@@ -15,7 +15,7 @@ import java.util.List;
 public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public DoctorClinic createDoctorClinic(Doctor doctor, Clinic clinic, int consultPrice){

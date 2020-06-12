@@ -14,7 +14,7 @@ import java.util.List;
 public class PrepaidDaoImpl implements PrepaidDao {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     private final static int MAX_PREPAIDS_PER_PAGE = 20;
 

@@ -14,7 +14,7 @@ import java.util.List;
 public class LocationDaoImpl implements LocationDao {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     private final static int MAX_LOCATIONS_PER_PAGE = 20;
 

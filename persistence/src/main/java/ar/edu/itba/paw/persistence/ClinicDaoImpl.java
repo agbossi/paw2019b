@@ -15,7 +15,7 @@ import java.util.List;
 public class ClinicDaoImpl implements ClinicDao {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     private final static int MAX_CLINICS_PER_PAGE = 20;
 

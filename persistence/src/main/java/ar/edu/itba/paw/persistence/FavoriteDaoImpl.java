@@ -16,7 +16,7 @@ import java.util.List;
 public class FavoriteDaoImpl implements FavoriteDao {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public Favorite create(Doctor doctor, Patient patient) {

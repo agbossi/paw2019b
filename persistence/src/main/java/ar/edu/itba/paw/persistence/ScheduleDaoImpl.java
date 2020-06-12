@@ -16,7 +16,7 @@ import java.util.List;
 public class ScheduleDaoImpl implements ScheduleDao {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public Schedule createSchedule(int day, int hour, DoctorClinic doctorClinic){
