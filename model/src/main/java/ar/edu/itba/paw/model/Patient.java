@@ -7,8 +7,6 @@ import java.util.List;
 @Table(name = "patients")
 public class Patient {
 
-    //TODO ver que es el param cascade de la anotation
-
     @OneToOne
     @JoinColumn(name = "email")
     @MapsId
@@ -16,8 +14,6 @@ public class Patient {
 
     @Id
     private String email;
-
-    //TODO poner los nullable = false donde corresponda
 
     @Column(name = "prepaid")
     private String prepaid;
@@ -31,10 +27,8 @@ public class Patient {
     @OneToMany(mappedBy = "patient")
     private List<Appointment> appointments;
 
-    //TODO es necesario poner la otra punta de la relacion?
     @OneToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "favorites",joinColumns = {@JoinColumn(name = "patient")},inverseJoinColumns = {@JoinColumn(name = "doctor")})
-//    @OneToMany(mappedBy = "patient")
     private List<Doctor> favorites;
 
     

@@ -3,21 +3,16 @@ package ar.edu.itba.paw.model;
 import keys.DoctorClinicKey;
 
 import javax.persistence.*;
-import javax.print.Doc;
-import javax.xml.namespace.QName;
 import java.util.List;
 
 @Entity
 @Table(name = "doctorClinics")
 public class DoctorClinic {
 
-    //TODO estos dos no se si son oneToOne o ManyToOne
-    //esto va asi o los annotations dentro de la pk?
     @ManyToOne
     @JoinColumn(name = "doctorLicense",referencedColumnName = "license", insertable = false, updatable = false)
     private Doctor doctor;
 
-    //TODO igual que en appointment, esto repite?
     @EmbeddedId
     private DoctorClinicKey doctorClinicKey;
 
@@ -43,10 +38,6 @@ public class DoctorClinic {
 
     public DoctorClinic(){
 
-    }
-
-    public DoctorClinicKey getDoctorClinicKey() {
-        return doctorClinicKey;
     }
 
     public Doctor getDoctor() {

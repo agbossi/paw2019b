@@ -4,7 +4,6 @@ import keys.ScheduleKey;
 
 import javax.persistence.*;
 
-
 @Entity
 @Table(name = "schedule")
 public class Schedule {

@@ -30,14 +30,6 @@ public class Location {
         return name;
     }
 
-    public List<Clinic> getClinicsInLocation() {
-        return clinicsInLocation;
-    }
-
-    public void setClinicsInLocation(List<Clinic> clinicsInLocation) {
-        this.clinicsInLocation = clinicsInLocation;
-    }
-
     public void setName(String name) {
         this.name = name;
     }

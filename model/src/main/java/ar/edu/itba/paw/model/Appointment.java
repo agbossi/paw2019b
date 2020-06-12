@@ -4,15 +4,11 @@ import keys.AppointmentKey;
 
 import javax.persistence.*;
 import java.util.Calendar;
-import java.util.Date;
 
 @Entity
 @Table(name = "appointments")
 public class Appointment {
 
-    //TODO poner lo que va en bd en la clase key esto va como transient o no se rompe por estar en la key?
-
-    //TODO la key con doctor clinic choca?
     @ManyToOne
     @JoinColumns({
             @JoinColumn(
