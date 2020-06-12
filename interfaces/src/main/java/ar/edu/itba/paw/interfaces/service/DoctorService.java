@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.model.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,8 +26,14 @@ public interface DoctorService extends PaginationService<Doctor> {
 
     void updateDoctor(String license, String phoneNumber, String specialty);
 
-    List<String> getAvailableFilteredLicenses(Location location, Specialty specialty,
-                                                      String firstName, String lastName, Prepaid prepaid, int consultPrice);
+    void updateDoctorProfile(
+            String email, String newPassword, String firstName, String lastName,
+            String license, String phoneNumber, String specialty,
+            MultipartFile file, Doctor doctor);
+
+    List<String> getAvailableFilteredLicenses(
+            Location location, Specialty specialty,
+            String firstName, String lastName, Prepaid prepaid, int consultPrice);
 
     List<String> getAvailableDoctorsLicenses();
 

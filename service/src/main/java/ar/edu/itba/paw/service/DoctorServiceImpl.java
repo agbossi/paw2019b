@@ -3,11 +3,13 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
 import ar.edu.itba.paw.interfaces.service.DoctorService;
+import ar.edu.itba.paw.interfaces.service.ImageService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +27,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ImageService imageService;
 
     @Transactional
     @Override
@@ -95,6 +100,17 @@ public class DoctorServiceImpl implements DoctorService {
         }
         args.put("specialty",specialty);
         doctorDao.updateDoctor(license,args);
+    }
+
+    @Transactional
+    @Override
+    public void updateDoctorProfile(
+            String email, String newPassword, String firstName, String lastName, // updates user fields
+            String license, String phoneNumber, String specialty, // updates doctor fields
+            MultipartFile file, Doctor doctor) { // updates image field
+        userService.updateUser(email, newPassword, firstName, lastName);
+        updateDoctor(license, phoneNumber, specialty);
+        imageService.updateProfileImage(file, doctor);
     }
 
     @Override

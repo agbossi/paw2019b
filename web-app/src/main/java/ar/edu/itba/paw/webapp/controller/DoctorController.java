@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.DoctorClinicForm;
 import ar.edu.itba.paw.webapp.form.EditDoctorProfileForm;
+import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import ar.edu.itba.paw.webapp.helpers.ValidationHelper;
 import ar.edu.itba.paw.webapp.helpers.ViewModifierHelper;
@@ -51,10 +52,10 @@ public class DoctorController {
     private ImageService imageService;
 
     @Autowired
-    MessageSource messageSource;
+    private MessageSource messageSource;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "/editProfile", method = { RequestMethod.GET })
     public ModelAndView editProfile() {
@@ -96,8 +97,6 @@ public class DoctorController {
         return mav;
     }
 
-
-
     @RequestMapping(value = "/editProfileForm", method = { RequestMethod.POST })
     public ModelAndView updateProfile(@Valid @ModelAttribute("editProfileForm") final EditDoctorProfileForm form,
                                       final BindingResult errors,
@@ -107,80 +106,64 @@ public class DoctorController {
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
 
         boolean photoError = ValidationHelper.photoValidate(photo);
+        if(errors.hasErrors() || photoError) return updateProfile(form,photoError,locale);
 
-        if(errors.hasErrors() || photoError) {
-            return updateProfile(form,photoError,locale);
-        }
-
-        String password = null;
-        if(!form.getNewPassword().equals("")){
-            password = passwordEncoder.encode(form.getNewPassword());
-        }
-
-        userService.updateUser(user.getEmail(),password,form.getFirstName(),form.getLastName());
-        doctorService.updateDoctor(doctor.getLicense(),form.getPhoneNumber(),form.getSpecialty());
-        imageService.updateProfileImage(photo,doctor);
-
+        doctorService.updateDoctorProfile(
+                user.getEmail(),
+                SecurityHelper.processNewPassword(form.getNewPassword(), passwordEncoder),
+                form.getFirstName(),form.getLastName(),
+                doctor.getLicense(),form.getPhoneNumber(),form.getSpecialty(),
+                photo,doctor
+        );
         return editProfile();
     }
 
     @RequestMapping(value = "/addDoctorClinic", method = { RequestMethod.GET })
     public ModelAndView addDoctorClinic(@ModelAttribute("doctorClinicForm") final DoctorClinicForm form){
         final ModelAndView mav = new ModelAndView("doctor/addDoctorClinic");
-
         mav.addObject("clinics", clinicService.getClinics());
         mav.addObject("doctors", doctorService.getDoctors());
-
         return mav;
     }
 
-    @RequestMapping(value = "/deleteDoctorClinic/{license}/{clinicid}", method = { RequestMethod.GET })
+    @RequestMapping(value = "/deleteDoctorClinic/{license}/{clinicId}", method = { RequestMethod.GET })
     public ModelAndView deleteDoctorClinic(@PathVariable(value = "license") String license,
-                                           @PathVariable(value = "clinicid") int clinic){
-
+                                           @PathVariable(value = "clinicId") int clinic){
         doctorClinicService.deleteDoctorClinic(license, clinic);
         return new ModelAndView("redirect:/");
     }
 
-    @RequestMapping(value = "/addSchedule/{clinicid}", method = {RequestMethod.GET})
-    public ModelAndView addDoctorSchedule(@PathVariable(value = "clinicid") int clinic){
-
-        final ModelAndView mav = new ModelAndView("doctor/doctorSchedule");
+    @RequestMapping(value = "/addSchedule/{clinicId}", method = {RequestMethod.GET})
+    public ModelAndView addDoctorSchedule(@PathVariable(value = "clinicId") int clinic){
 
         String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        Doctor doctor = doctorService.getDoctorByEmail(userEmail);
-        Clinic cli = clinicService.getClinicById(clinic);
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
-
-        mav.addObject("days", ViewModifierHelper.getDays());
-        mav.addObject("times", ViewModifierHelper.getTimes());
-
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(
+                doctorService.getDoctorByEmail(userEmail),
+                clinicService.getClinicById(clinic));
         List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctorClinic, 2);
 
+        final ModelAndView mav = new ModelAndView("doctor/doctorSchedule");
+        mav.addObject("days", ViewModifierHelper.getDays());
+        mav.addObject("times", ViewModifierHelper.getTimes());
         mav.addObject("doctorClinic", doctorClinic);
         mav.addObject("schedule", doctorsWeek);
         return mav;
-
     }
 
     @RequestMapping(value = "/addedDoctorClinic", method = { RequestMethod.POST })
     public ModelAndView addedDoctorClinic(@Valid @ModelAttribute("doctorClinicForm") final DoctorClinicForm form,
                                           final BindingResult errors, Locale locale){
-
-        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        Doctor doctor = doctorService.getDoctorByEmail(userEmail);
-
         if(errors.hasErrors())
             return addDoctorClinic(form);
 
-
-        DoctorClinic doctorClinic = doctorClinicService.createDoctorClinic(doctor,
-                                               clinicService.getClinicById(form.getClinic()),
-                                               form.getConsultPrice());
+        String email = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        DoctorClinic doctorClinic = doctorClinicService.createDoctorClinic(
+                doctorService.getDoctorByEmail(email),
+                clinicService.getClinicById(form.getClinic()),
+                form.getConsultPrice());
 
         final ModelAndView mav = new ModelAndView("doctor/addedDoctorClinic");
         mav.addObject("doctorClinic",doctorClinic );
-
         return mav;
     }
 
@@ -189,66 +172,51 @@ public class DoctorController {
                                       @PathVariable(value = "day") int day,
                                       @PathVariable(value = "hour") int hour){
 
-        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        Doctor doctor = doctorService.getDoctorByEmail(userEmail);
-
-        Clinic cli = clinicService.getClinicById(clinic);
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
-
-        if(!ValidationHelper.scheduleValidate(doctorClinic.getDoctor(),day,hour,scheduleService)){
-            scheduleService.createSchedule(hour, day, doctorClinic);
-        }
+        String email = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(
+                doctorService.getDoctorByEmail(email),
+                clinicService.getClinicById(clinic));
+        scheduleService.createSchedule(hour, day, doctorClinic);
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic);
-
         return mav;
     }
 
-    @RequestMapping(value = "/removeSchedule/{clinicid}/{day}-{hour}", method = {RequestMethod.GET})
-    public ModelAndView removeSchedule(@PathVariable(value = "clinicid") int clinic,
+    @RequestMapping(value = "/removeSchedule/{clinicId}/{day}-{hour}", method = {RequestMethod.GET})
+    public ModelAndView removeSchedule(@PathVariable(value = "clinicId") int clinic,
                                        @PathVariable(value = "day") int day,
                                        @PathVariable(value = "hour") int hour){
 
-        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        Doctor doctor = doctorService.getDoctorByEmail(userEmail);
-
-        Clinic cli = clinicService.getClinicById(clinic);
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
-
-        if(ValidationHelper.scheduleValidate(doctorClinic.getDoctor(),day,hour,scheduleService)){
-            scheduleService.deleteSchedule(hour, day, doctorClinic);
-
-        }
+        String email = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(
+                doctorService.getDoctorByEmail(email),
+                clinicService.getClinicById(clinic));
+        scheduleService.deleteSchedule(hour, day, doctorClinic);
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic);
-
         return mav;
     }
 
-    @RequestMapping(value = "/clinics/{clinicid}/{week}", method = {RequestMethod.GET})
-    public ModelAndView doctorClinics(@PathVariable(value = "clinicid") int clinic, @PathVariable(value = "week") int week){
+    @RequestMapping(value = "/clinics/{clinicId}/{week}", method = {RequestMethod.GET})
+    public ModelAndView doctorClinics(@PathVariable(value = "clinicId") int clinic, @PathVariable(value = "week") int week){
 
-        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        Doctor doctor = doctorService.getDoctorByEmail(userEmail);
-
-        Clinic cli = clinicService.getClinicById(clinic);
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, cli);
-
+        String email = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(
+                doctorService.getDoctorByEmail(email),
+                clinicService.getClinicById(clinic));
         List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctorClinic, week);
 
         final ModelAndView mav = new ModelAndView("doctor/clinicPage");
-
         List<Calendar> month = ViewModifierHelper.getMonth(week);
         mav.addObject("days", month);
         mav.addObject("today", Calendar.getInstance());
         mav.addObject("week", doctorsWeek);
         mav.addObject("weekNum", week);
         mav.addObject("doctorClinic", doctorClinic);
-
         return mav;
     }
 
-    // Private methods for DoctorController //
+    /* Private methods for DoctorController */
 
     private void setEditFormInformation(EditDoctorProfileForm form, User user, Doctor doctor) {
         form.setFirstName(user.getFirstName());

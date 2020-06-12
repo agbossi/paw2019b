@@ -15,5 +15,5 @@ public interface ScheduleService {
 
     void deleteSchedule(int hour, int day, DoctorClinic doctorClinic);
 
-    public boolean doctorHasSchedule(Doctor doctor, int day, int hour);
+    boolean doctorHasSchedule(Doctor doctor, int day, int hour);
 }
