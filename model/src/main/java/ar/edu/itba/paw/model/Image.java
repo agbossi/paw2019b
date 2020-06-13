@@ -37,7 +37,7 @@ public class Image {
     }
 
     public byte[] getImage() {
-        return image;
+        return image == null ? new byte[] {} : image;
     }
 
     public void setImage(byte[] image) {
