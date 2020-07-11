@@ -11,10 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class DoctorServiceImpl implements DoctorService {
@@ -144,7 +141,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<Doctor> getPaginatedDoctors(List<String> licenses, int page) {
         if(page < 0) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
         return doctorDao.getPaginatedDoctorsInList(licenses, page);
     }
@@ -157,7 +154,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public List<Doctor> getPaginatedObjects(int page) {
         if(page < 0) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
         return doctorDao.getPaginatedObjects(page);
     }
