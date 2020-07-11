@@ -14,7 +14,7 @@ import java.util.List;
 public class ImageDaoImpl implements ImageDao {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public long createProfileImage(byte[] image, String doctor) {

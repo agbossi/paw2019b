@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.model;
 
 import javax.persistence.*;
-import java.io.InputStream;
 
 @Entity
 @Table(name = "images")
@@ -38,7 +37,7 @@ public class Image {
     }
 
     public byte[] getImage() {
-        return image;
+        return image == null ? new byte[] {} : image;
     }
 
     public void setImage(byte[] image) {

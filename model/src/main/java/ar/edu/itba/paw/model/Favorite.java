@@ -47,7 +47,4 @@ public class Favorite {
         this.patient = patient;
     }
 
-    public FavoriteKey getFavoriteKey() {
-        return favoriteKey;
-    }
 }

@@ -3,7 +3,6 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.ScheduleDao;
 import ar.edu.itba.paw.interfaces.service.AppointmentService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
-import ar.edu.itba.paw.model.Appointment;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Schedule;
@@ -25,7 +24,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     @Override
     public Schedule createSchedule(int hour, int day, DoctorClinic doctorClinic) {
-        return scheduleDao.createSchedule(day, hour, doctorClinic);
+        if(!doctorHasSchedule(doctorClinic.getDoctor(),day,hour)) {
+            return scheduleDao.createSchedule(day, hour, doctorClinic);
+        }
+        return null; // TODO: change this for optional, check where is it called
     }
 
     @Override
@@ -41,12 +43,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional
     @Override
     public void deleteSchedule(int hour, int day, DoctorClinic doctorClinic) {
-        scheduleDao.deleteSchedule(hour, day, doctorClinic);
-        appointmentService.cancelAllAppointmentsOnSchedule(doctorClinic, day, hour);
-//        List<Appointment> appointments = appointmentDao.getAllDocAppointmentsOnSchedule(doctorClinic, day, hour);
-//        for (Appointment a: appointments) {
-//            appointmentDao.cancelAppointment(a.getDoctorClinic(), a.getPatient(), a.getDate());
-//        }
+        if(doctorHasSchedule(doctorClinic.getDoctor(), day, hour)) {
+            scheduleDao.deleteSchedule(hour, day, doctorClinic);
+            appointmentService.cancelAllAppointmentsOnSchedule(doctorClinic, day, hour);
+        }
     }
 
     @Override

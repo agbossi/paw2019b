@@ -12,7 +12,7 @@ public class Admin {
     private User user;
 
     @Id
-    String email;
+    private String email;
 
     public Admin(User user) {
         this.email = user.getEmail();

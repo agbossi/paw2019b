@@ -19,33 +19,29 @@ public class ImageServiceImpl implements ImageService {
 
     @Transactional
     @Override
+    // TODO: check if there's an more elegant way of doing this
     public long createProfileImage(MultipartFile file, Doctor doctor) {
         try {
              return imageDao.createProfileImage(file.getBytes(), doctor.getLicense());
         }
         catch (IOException e){
-            //return 0; // code for error
+            return -1; // means wrong id for image (error)
         }
-        return 0;
     }
 
     @Transactional
     @Override
     public long updateProfileImage(MultipartFile file, Doctor doctor) {
-        if( imageDao.getProfileImage(doctor.getLicense()) != null ) {
-            if(!file.isEmpty()){
-                try {
-                    return imageDao.updateProfileImage(file.getBytes(), doctor.getLicense());
-                }
-                catch (IOException e){
-                    return 0; // code for error
-                }
+        if(file.isEmpty()) return 0;
+        if(imageDao.getProfileImage(doctor.getLicense()) != null) {
+            try {
+                return imageDao.updateProfileImage(file.getBytes(), doctor.getLicense());
+            }
+            catch (IOException e){
+                return -1; // means wrong id for image (error)
             }
         }
-        else {
-            createProfileImage(file, doctor);
-        }
-        return 1;
+        else return createProfileImage(file, doctor);
     }
 
     @Override

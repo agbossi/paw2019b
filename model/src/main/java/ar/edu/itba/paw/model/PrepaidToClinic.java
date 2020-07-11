@@ -3,14 +3,11 @@ package ar.edu.itba.paw.model;
 import keys.PrepaidToClinicKey;
 
 import javax.persistence.*;
-//TODO que poner si toda la clase es id
+
 @Entity
 @Table(name = "clinicPrepaids")
 
 public class PrepaidToClinic {
-
-    //igual que en doctor clinic. son ManyToOne? los joinColumns estan bien puestos?
-    //todo: necesito especificar pk si es pk toda la entidad?
 
     @EmbeddedId
     private PrepaidToClinicKey prepaidToClinicKey;
@@ -29,7 +26,6 @@ public class PrepaidToClinic {
         this.prepaidToClinicKey = new PrepaidToClinicKey(prepaid.getName(), clinic.getId());
     }
 
-    public PrepaidToClinic(){}
 
     public Clinic getClinic() {
         return clinic;
@@ -45,10 +41,6 @@ public class PrepaidToClinic {
 
     public void setPrepaid(Prepaid prepaid) {
         this.prepaid = prepaid;
-    }
-
-    public PrepaidToClinicKey getPrepaidToClinicKey() {
-        return prepaidToClinicKey;
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.Map;
 public class PatientDaoImpl implements PatientDao {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public Patient create(String id, String prepaid, String prepaidNumber, User user) {

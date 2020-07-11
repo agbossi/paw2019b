@@ -9,9 +9,8 @@ import javax.persistence.PersistenceContext;
 
 @Repository
 public class AdminDaoImpl implements AdminDao {
-
-  @PersistenceContext
-    EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Admin getAdmin(String email){

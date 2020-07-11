@@ -23,13 +23,13 @@ import java.util.Locale;
 public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
-    AppointmentDao appointmentDao;
+    private AppointmentDao appointmentDao;
 
     @Autowired
-    DoctorClinicService doctorClinicService;
+    private DoctorClinicService doctorClinicService;
 
     @Autowired
-    PatientService patientService;
+    private PatientService patientService;
 
     @Autowired
     private EmailService emailService;

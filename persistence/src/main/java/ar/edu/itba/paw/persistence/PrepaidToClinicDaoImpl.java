@@ -16,7 +16,7 @@ import java.util.List;
 public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     private final static int MAX_PREPAID_TO_CLINICS_PER_PAGE = 20;
 

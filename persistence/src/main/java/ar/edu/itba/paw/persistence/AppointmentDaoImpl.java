@@ -15,7 +15,7 @@ import java.util.*;
 public class AppointmentDaoImpl implements AppointmentDao {
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public Appointment createAppointment(DoctorClinic doctorClinic, User patient, Calendar date){

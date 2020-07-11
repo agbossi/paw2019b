@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -57,7 +57,7 @@ public class PrepaidServiceImpl implements PrepaidService {
     @Override
     public List<Prepaid> getPaginatedObjects(int page) {
         if(page < 0) {
-            return new ArrayList<>();
+            return Collections.emptyList();
         }
         return prepaidDao.getPaginatedObjects(page);
     }
