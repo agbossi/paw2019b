@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.form.PersonalInformationForm;
+import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -77,12 +78,8 @@ public class PatientController {
             return editProfile(form);
         }
 
-        String password = null;
-        if(!form.getNewPassword().equals("")){
-            password = passwordEncoder.encode(form.getNewPassword());
-        }
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        userService.updateUser(user.getEmail(),password,form.getFirstName(),form.getLastName());
+        userService.updateUser(user.getEmail(), SecurityHelper.processNewPassword(form.getNewPassword(), passwordEncoder),form.getFirstName(),form.getLastName());
         patientService.updatePatient(user.getEmail(),form.getPrepaid(),form.getPrepaidNumber());
 
         return profile();
@@ -121,9 +118,7 @@ public class PatientController {
         Patient patient = patientService.getPatientByEmail(user.getEmail());
         Doctor doctor = doctorService.getDoctorByLicense(license);
 
-        if(!favoriteService.isFavorite(doctor, patient)){
-            favoriteService.create(doctor,patient);
-        }
+        patientService.addFavorite(patient, doctor);
 
         final ModelAndView mav = new ModelAndView("redirect:/results/" + license);
 
@@ -137,9 +132,7 @@ public class PatientController {
         Patient patient = patientService.getPatientByEmail(user.getEmail());
         Doctor doctor = doctorService.getDoctorByLicense(license);
 
-        if(favoriteService.isFavorite(doctor, patient)){
-            favoriteService.deleteFavorite(doctor,patient);
-        }
+        patientService.deleteFavorite(patient, doctor);
 
         String referer = request.getHeader("Referer");
         final ModelAndView mav = new ModelAndView("redirect:" + referer);

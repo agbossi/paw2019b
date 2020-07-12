@@ -20,4 +20,8 @@ public interface PatientService {
     List<Patient> getPatientsByPrepaid(String prepaid);
 
     List<Patient> getPatientsById(String id);
+
+    void addFavorite(Patient patient, Doctor doctor);
+
+    void deleteFavorite(Patient patient, Doctor doctor);
 }

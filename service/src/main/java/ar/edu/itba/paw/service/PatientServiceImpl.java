@@ -58,12 +58,25 @@ public class PatientServiceImpl implements PatientService {
         return doctors;
     }
 
+    @Override
+    public void addFavorite(Patient patient, Doctor doctor) {
+        if(!favoriteService.isFavorite(doctor, patient)){
+            favoriteService.create(doctor,patient);
+        }
+    }
 
     @Override
     public void setAppointments(Patient patient) {
         User user = userService.findUserByEmail(patient.getEmail());
         List<Appointment> appointments = appointmentService.getPatientsAppointments(user);
         patient.setAppointments(appointments);
+    }
+
+    @Override
+    public void deleteFavorite(Patient patient, Doctor doctor) {
+        if(favoriteService.isFavorite(doctor, patient)){
+            favoriteService.deleteFavorite(doctor,patient);
+        }
     }
 
     @Transactional
