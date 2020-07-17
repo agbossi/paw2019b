@@ -37,9 +37,6 @@ public class PatientController {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private FavoriteService favoriteService;
-
-    @Autowired
     private PrepaidService prepaidService;
 
     @ModelAttribute
@@ -47,14 +44,15 @@ public class PatientController {
         model.addAttribute("prepaids", prepaidService.getPrepaids());
     }
 
-
     @RequestMapping(value = "/profile", method = { RequestMethod.GET })
     public ModelAndView profile() {
         final ModelAndView mav = new ModelAndView("patient/profile");
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
+
         mav.addObject("user", user);
         mav.addObject("patient", patient);
+
         return mav;
     }
 
@@ -64,6 +62,7 @@ public class PatientController {
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
         setFormInformation(form, user, patient);
+
         mav.addObject("user", user);
         mav.addObject("patient", patient);
 
@@ -79,7 +78,9 @@ public class PatientController {
         }
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        userService.updateUser(user.getEmail(), SecurityHelper.processNewPassword(form.getNewPassword(), passwordEncoder),form.getFirstName(),form.getLastName());
+        userService.updateUser(user.getEmail(),
+                SecurityHelper.processNewPassword(form.getNewPassword(), passwordEncoder),
+                form.getFirstName(),form.getLastName());
         patientService.updatePatient(user.getEmail(),form.getPrepaid(),form.getPrepaidNumber());
 
         return profile();
@@ -93,6 +94,7 @@ public class PatientController {
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
         patientService.setAppointments(patient);
+
         mav.addObject("user", user);
         mav.addObject("patient", patient);
 
@@ -105,9 +107,11 @@ public class PatientController {
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Patient patient = patientService.getPatientByEmail(user.getEmail());
         List<Doctor> favorites = patientService.getPatientFavoriteDoctors(patient);
+
         mav.addObject("user", user);
         mav.addObject("patient", patient);
         mav.addObject("favorites",favorites);
+
         return mav;
     }
 
