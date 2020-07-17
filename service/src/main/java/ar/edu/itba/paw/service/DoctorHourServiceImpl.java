@@ -24,28 +24,15 @@ public class DoctorHourServiceImpl implements DoctorHourService {
     private ScheduleService scheduleService;
 
     private static final int DAYS_IN_A_WEEK = 7;
+    private static final int START_TIME = 8;
+    private static final int END_TIME = 19;
+    private static final int MONDAY = 0; // Monday according to Calendar rules
+    private static final int FRIDAY = 4; // Friday according to Calendar rules
 
 
     @Override
     public List<List<DoctorHour>> getDoctorsWeek(DoctorClinic doctorClinic, int week) {
-
-        Calendar date = Calendar.getInstance();
-        // sets date to be today
-        date.add(Calendar.DATE, DAYS_IN_A_WEEK * (week - 1));
-        Calendar first = date;
-
-        List<Calendar> month = new ArrayList<>();
-        if(date.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
-            // adds one day to the calendar in order for the day to be Monday
-            first.add(Calendar.DATE, 1);
-        }else if(date.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY){
-            // adds two days to the calendar in order for the day to be Monday
-            first.add(Calendar.DATE, 2);
-        }else{
-            first.add(Calendar.DATE, -(date.get(Calendar.DAY_OF_WEEK)) + 2);
-        }
-
-        List<List<DoctorHour>> DocWeek = new ArrayList<>();
+        Calendar first = getFirstWeekday(week);
 
         Calendar weekBeginning = Calendar.getInstance();
         weekBeginning.setTime(first.getTime());
@@ -57,37 +44,71 @@ public class DoctorHourServiceImpl implements DoctorHourService {
         List<Appointment> appointmentsWithinWeek = appointmentService.getDoctorAppointmentsWithinWeek(doctorClinic.getDoctor(),
             weekBeginning, weekEnd);
 
-        for (int i = 8; i < 20; i++){
-            DocWeek.add(getHourRow(doctorClinic, first, Calendar.getInstance(), i));
+        List<List<DoctorHour>> doctorWeek = new ArrayList<>();
+        for(int i=START_TIME; i<=END_TIME; i++) {
+            doctorWeek.add(new ArrayList<DoctorHour>());
         }
-        return DocWeek;
-    }
 
-    private List<DoctorHour> getHourRow(DoctorClinic doctorClinic, Calendar first, Calendar today,  int hour){
-        List<DoctorHour> row = new ArrayList<>();
-        for (int i = 0; i < 5 ; i++){
-            Calendar day = Calendar.getInstance();
-            day.setTime(first.getTime());
-            day.add(Calendar.DATE, i);
-            day.set(Calendar.HOUR_OF_DAY, hour);
-            day.set(Calendar.MINUTE, 0);
-            day.set(Calendar.SECOND, 0);
-            day.set(Calendar.MILLISECOND, 0);
-            if(today.compareTo(day) < 0) {
-                boolean isClinic = scheduleService.doctorHasSchedule(doctorClinic.getDoctor(), Calendar.MONDAY + i, hour);
-                boolean isSchedule = scheduleService.doctorHasScheduleInClinic(doctorClinic, Calendar.MONDAY + i, hour);
-                Appointment isApp = appointmentService.hasAppointment(doctorClinic, day);
-                DoctorHour docHour = new DoctorHour(day, isSchedule,isClinic,  isApp);
-                row.add(docHour);
-            }else{
-                DoctorHour docHour = new DoctorHour(day, false, false, null);
-                row.add(docHour);
+        int sch = 0, app = 0;
+        for(int i=MONDAY; i<=FRIDAY; i++) {
+            for(int j=START_TIME; j<=END_TIME; j++){
+                Calendar day = getDay(first, i, j);
+
+                boolean isSchedule = false;
+                boolean isClinic = false;
+                Appointment appointment = null;
+
+                if(day.compareTo(Calendar.getInstance()) >= 0) {
+                    if(appointmentsWithinWeek.size() > 0 && app < appointmentsWithinWeek.size()) {
+                        int cmp = day.compareTo(appointmentsWithinWeek.get(app).getAppointmentKey().getDate());
+                        if(cmp == 0){
+                            appointment = appointmentsWithinWeek.get(app);
+                            app++;
+                        }
+                    }
+                    if(doctorClinicSchedule.size() > 0 && sch < doctorClinicSchedule.size()) {
+                        Schedule schedule = doctorClinicSchedule.get(sch);
+                        int cmp = day.compareTo(getDay(first, schedule.getDay()-2, schedule.getHour()));
+                        if(cmp == 0){
+                            isSchedule = isClinic = true;
+                            sch++;
+                        }
+                    }
+                }
+                doctorWeek.get(j-START_TIME).add(new DoctorHour(day, isSchedule, isClinic, appointment));
             }
-
         }
-
-        return row;
+        return doctorWeek;
     }
 
+    private Calendar getDay(Calendar firstDay, int currentDay, int currentHour) {
+        Calendar day = Calendar.getInstance();
+        day.setTime(firstDay.getTime());
+        day.add(Calendar.DATE, currentDay);
+        day.set(Calendar.HOUR_OF_DAY, currentHour);
+        day.set(Calendar.MINUTE, 0);
+        day.set(Calendar.SECOND, 0);
+        day.set(Calendar.MILLISECOND, 0);
+        return day;
+    }
 
+    private Calendar getFirstWeekday(int week) {
+        Calendar date = Calendar.getInstance();
+        // sets date to be today
+        date.add(Calendar.DATE, DAYS_IN_A_WEEK * (week - 1));
+        Calendar first = date;
+
+        int weekDay = date.get(Calendar.DAY_OF_WEEK);
+
+        if(weekDay == Calendar.SUNDAY){
+            // adds one day to the calendar in order for the day to be Monday
+            first.add(Calendar.DATE, 1);
+        }else if(weekDay == Calendar.SATURDAY){
+            // adds two days to the calendar in order for the day to be Monday
+            first.add(Calendar.DATE, 2);
+        }else{
+            first.add(Calendar.DATE, -(date.get(Calendar.DAY_OF_WEEK)) + 2);
+        }
+        return first;
+    }
 }
