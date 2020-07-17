@@ -59,7 +59,10 @@ public class AppointmentDaoImpl implements AppointmentDao {
     @Transactional
     @Override
     public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date){
-        final Query query = entityManager.createQuery("delete from Appointment as ap where ap.appointmentKey.patient = :email and ap.appointmentKey.doctor = :doctor and ap.clinic = :clinic and ap.appointmentKey.date = :date");
+        final Query query = entityManager.createQuery(
+                "delete from Appointment as ap where ap.appointmentKey.patient = :email and " +
+                        "ap.appointmentKey.doctor = :doctor and ap.clinic = :clinic " +
+                        "and ap.appointmentKey.date = :date");
         query.setParameter("email",patient.getEmail());
         query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
         query.setParameter("clinic",doctorClinic.getClinic().getId());

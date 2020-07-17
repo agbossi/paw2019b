@@ -51,7 +51,6 @@ public class ViewModifierHelper {
             first = date;
             first.add(Calendar.DATE, -(date.get(Calendar.DAY_OF_WEEK)) + 2);
         }
-
         for (int i = 0; i < 7; i++){
             Calendar day = Calendar.getInstance();
             day.setTime(first.getTime());
