@@ -55,6 +55,7 @@ public class AdminController {
     public ModelAndView doctors(@PathVariable(value = "page") int page){
         final ModelAndView mav = new ModelAndView("admin/doctors");
         addPaginatedObjects(mav, doctorService, page);
+
         return mav;
     }
     
@@ -71,9 +72,7 @@ public class AdminController {
 
     @RequestMapping(value = "/addedDoctor", method = { RequestMethod.POST })
     public ModelAndView addedDoctor(@Valid @ModelAttribute("doctorForm") final DoctorForm form, final BindingResult errors) {
-
-        if (errors.hasErrors())
-            return addDoctor(form);
+        if (errors.hasErrors()) return addDoctor(form);
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
         User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
@@ -82,7 +81,6 @@ public class AdminController {
                 form.getPhoneNumber(),
                 user
         );
-
 
         final ModelAndView mav = new ModelAndView("admin/addedDoctor");
         mav.addObject("doctor", doctor);
@@ -101,6 +99,7 @@ public class AdminController {
     public ModelAndView clinics(@PathVariable(value = "page") int page){
         final ModelAndView mav = new ModelAndView("admin/clinics");
         addPaginatedObjects(mav, clinicService, page);
+
         return mav;
     }
 
@@ -113,20 +112,21 @@ public class AdminController {
     public ModelAndView editClinic(@ModelAttribute("clinicForm") final ClinicForm form,
                                    @PathVariable(value = "id") int id){
         Clinic clinic = clinicService.getClinicById(id);
+
         form.setName(clinic.getName());
         form.setAddress(clinic.getAddress());
         form.setLocation(clinic.getLocation().getLocationName());
 
         final ModelAndView mav = new ModelAndView("admin/editClinic");
         mav.addObject("clinic", clinic);
+
         return mav;
     }
 
     @RequestMapping(value = "/editClinic/{id}/post", method = { RequestMethod.POST})
     public ModelAndView editClinicPost(@Valid @ModelAttribute("clinicForm") final ClinicForm form,
                                         final BindingResult errors, @PathVariable(value = "id") int id){
-        if(errors.hasErrors())
-            return editClinic(form, id);
+        if(errors.hasErrors()) return editClinic(form, id);
 
         clinicService.updateClinic(id, form.getName(), form.getAddress(), form.getLocation());
         return clinics();
@@ -141,9 +141,7 @@ public class AdminController {
     @RequestMapping(value = "/addedClinic", method = { RequestMethod.POST })
     public ModelAndView addedClinic(@Valid @ModelAttribute("clinicForm") final ClinicForm form,
                                                                     final BindingResult errors){
-
-        if(errors.hasErrors())
-            return addClinic(form);
+        if(errors.hasErrors()) return addClinic(form);
 
         final Clinic clinic = clinicService.createClinic(form.getName(),
                                                          form.getAddress(), new Location(form.getLocation()));
@@ -176,17 +174,19 @@ public class AdminController {
     @RequestMapping(value = "/editLocation/{locationName}", method = { RequestMethod.GET})
     public ModelAndView editLocation(@ModelAttribute("locationForm") final LocationForm form,
                                      @PathVariable(value = "locationName") String name){
-        final ModelAndView mav = new ModelAndView("admin/editLocation");
         form.setName(name);
+
+        final ModelAndView mav = new ModelAndView("admin/editLocation");
         mav.addObject("location", locationService.getLocationByName(name));
+
         return mav;
     }
 
     @RequestMapping(value = "/editLocation/{locationName}/post", method = { RequestMethod.POST})
     public ModelAndView editLocationPost(@Valid @ModelAttribute("locationForm") final LocationForm form,
                                          final BindingResult errors, @PathVariable(value = "locationName") String name){
-        if(errors.hasErrors())
-            return editLocation(form, name);
+        if(errors.hasErrors()) return editLocation(form, name);
+
         locationService.updateLocation(name, form.getName());
         return locations();
     }
@@ -200,9 +200,7 @@ public class AdminController {
     @RequestMapping(value = "/addedLocation", method = { RequestMethod.POST })
     public ModelAndView addedLocation(@Valid @ModelAttribute("locationForm") final LocationForm form,
                                                                           final BindingResult errors){
-
-        if(errors.hasErrors())
-            return addLocation(form);
+        if(errors.hasErrors()) return addLocation(form);
 
         final Location location = locationService.createLocation(form.getName());
 
@@ -241,26 +239,26 @@ public class AdminController {
     public ModelAndView editSpecialty(@ModelAttribute("specialtyForm") final SpecialtyForm form,
                                      @PathVariable(value = "specialtyName") String name){
         form.setName(name);
+
         final ModelAndView mav = new ModelAndView("admin/editSpecialty");
         mav.addObject("specialty", specialtyService.getSpecialtyByName(name));
+
         return mav;
     }
 
     @RequestMapping(value = "/editSpecialty/{specialtyName}/post", method = { RequestMethod.POST})
     public ModelAndView editSpecialtyPost(@Valid @ModelAttribute("specialtyForm") final SpecialtyForm form,
                                          final BindingResult errors, @PathVariable(value = "specialtyName") String name){
-        if(errors.hasErrors())
-            return editSpecialty(form, name);
+        if(errors.hasErrors()) return editSpecialty(form, name);
 
         specialtyService.updateSpecialty(name, form.getName());
         return specialties();
     }
 
     @RequestMapping(value = "/addedSpecialty", method = { RequestMethod.POST })
-    public ModelAndView addedSpecialty(@Valid @ModelAttribute("specialtyForm") final SpecialtyForm form, final BindingResult errors,Locale locale){
-
-        if(errors.hasErrors())
-            return addSpecialty(form);
+    public ModelAndView addedSpecialty(@Valid @ModelAttribute("specialtyForm") final SpecialtyForm form,
+                                       final BindingResult errors,Locale locale){
+        if(errors.hasErrors()) return addSpecialty(form);
 
         final Specialty specialty = specialtyService.createSpecialty(form.getName());
 
@@ -292,17 +290,18 @@ public class AdminController {
     @RequestMapping(value = "/editPrepaid/{name}", method = { RequestMethod.GET})
     public ModelAndView editPrepaid(@ModelAttribute("prepaidForm") final PrepaidForm form,
                                       @PathVariable(value = "name") String name){
-        final ModelAndView mav = new ModelAndView("admin/editPrepaid");
         form.setName(name);
+
+        final ModelAndView mav = new ModelAndView("admin/editPrepaid");
         mav.addObject("prepaid", prepaidService.getPrepaidByName(name));
+
         return mav;
     }
 
     @RequestMapping(value = "/editPrepaid/{name}/post", method = { RequestMethod.POST})
     public ModelAndView editPrepaidPost(@Valid @ModelAttribute("prepaidForm") final PrepaidForm form,
                                           final BindingResult errors, @PathVariable(value = "name") String name){
-        if(errors.hasErrors())
-            return editPrepaid(form, name);
+        if(errors.hasErrors()) return editPrepaid(form, name);
 
         prepaidService.updatePrepaid(name, form.getName());
         return prepaids();
@@ -317,9 +316,7 @@ public class AdminController {
     @RequestMapping(value = "/addedPrepaid",method = { RequestMethod.POST })
     public ModelAndView addedPrepaid(@Valid @ModelAttribute("prepaidForm") final PrepaidForm form,
                                                                        final BindingResult errors){
-
-        if (errors.hasErrors())
-            return addPrepaid(form);
+        if (errors.hasErrors()) return addPrepaid(form);
 
         Prepaid prepaid = prepaidService.createPrepaid(form.getName());
         final ModelAndView mav = new ModelAndView("admin/addedPrepaid");
@@ -357,14 +354,12 @@ public class AdminController {
     @RequestMapping(value = "/addedPrepaidToClinic",method = { RequestMethod.POST })
     public ModelAndView addedPrepaidToClinic(@Valid @ModelAttribute("prepaidToClinicForm") final PrepaidToClinicForm form,
                                                                                                final BindingResult errors){
-
-        final ModelAndView mav = new ModelAndView("admin/addedPrepaidToClinic");
-        if (errors.hasErrors())
-            return addPrepaidToClinic(form);
+        if (errors.hasErrors()) return addPrepaidToClinic(form);
 
         PrepaidToClinic prepaidToClinic = prepaidToClinicService.addPrepaidToClinic(new Prepaid(form.getPrepaid()),
                                                                     clinicService.getClinicById(form.getClinic()));
 
+        final ModelAndView mav = new ModelAndView("admin/addedPrepaidToClinic");
         mav.addObject("prepaidToClinic", prepaidToClinic);
 
         return mav;
