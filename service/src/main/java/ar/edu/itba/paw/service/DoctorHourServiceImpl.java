@@ -46,12 +46,7 @@ public class DoctorHourServiceImpl implements DoctorHourService {
         }
 
         List<List<DoctorHour>> DocWeek = new ArrayList<>();
-
-//        List<Schedule> doctorClinicSchedule = scheduleService.getDoctorClinicSchedule(doctorClinic);
-//        for(int i = 0; i<doctorClinicSchedule.size(); i++) {
-//            Schedule sc = doctorClinicSchedule.get(i);
-//            System.out.println("Schedule at" + sc.getHour() + " day " + sc.getDay());
-//        }
+        
 
         for (int i = 8; i < 20; i++){
             DocWeek.add(getHourRow(doctorClinic, first, Calendar.getInstance(), i));

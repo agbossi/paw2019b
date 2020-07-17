@@ -20,5 +20,7 @@ public interface AppointmentService {
 
     List<Appointment> getAllDoctorsAppointments(Doctor doctor);
 
+    List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, Calendar beginning, Calendar end);
+
     void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour);
 }

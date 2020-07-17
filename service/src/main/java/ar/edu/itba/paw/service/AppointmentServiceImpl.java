@@ -96,6 +96,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentDao.getAllDoctorsAppointments(doctor);
     }
 
+    @Override
+    public List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, Calendar beginning, Calendar end){
+        return appointmentDao.getDoctorAppointmentsWithinWeek(doctor, beginning, end);
+    }
+
     @Transactional
     @Override
     public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour) {

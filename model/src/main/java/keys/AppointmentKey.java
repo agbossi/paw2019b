@@ -6,7 +6,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
 
 @Embeddable
@@ -22,6 +21,7 @@ public class AppointmentKey implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar date;
 
+    // DO NOT DELETE
     public AppointmentKey(){
 
     }
