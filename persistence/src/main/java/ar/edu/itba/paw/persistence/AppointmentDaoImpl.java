@@ -59,7 +59,10 @@ public class AppointmentDaoImpl implements AppointmentDao {
     @Transactional
     @Override
     public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date){
-        final Query query = entityManager.createQuery("delete from Appointment as ap where ap.appointmentKey.patient = :email and ap.appointmentKey.doctor = :doctor and ap.clinic = :clinic and ap.appointmentKey.date = :date");
+        final Query query = entityManager.createQuery(
+                "delete from Appointment as ap where ap.appointmentKey.patient = :email and " +
+                        "ap.appointmentKey.doctor = :doctor and ap.clinic = :clinic " +
+                        "and ap.appointmentKey.date = :date");
         query.setParameter("email",patient.getEmail());
         query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
         query.setParameter("clinic",doctorClinic.getClinic().getId());
@@ -89,6 +92,19 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
+    public List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, Calendar weekBeginning, Calendar weekEnd){
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
+                " where ap.doctorClinic.doctor.license = :doctor and" +
+                " ap.appointmentKey.date between :startDate and :endDate" +
+                " order by ap.appointmentKey.date",Appointment.class);
+        query.setParameter("doctor",doctor.getLicense())
+                .setParameter("startDate", weekBeginning)
+                .setParameter("endDate", weekEnd);
+        List<Appointment> list = query.getResultList();
+        return list;
+    }
+
+    @Override
     public boolean hasAppointment(String doctorLicense, String patientEmail, Calendar date){
         TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
                 " where ap.doctorClinic.doctor.license = :doctor and ap.patient.email = :email " +
@@ -99,7 +115,6 @@ public class AppointmentDaoImpl implements AppointmentDao {
         List<Appointment> list = query.getResultList();
         return !list.isEmpty();
     }
-
 
     //TODO finish how to do the date parts
     @Override

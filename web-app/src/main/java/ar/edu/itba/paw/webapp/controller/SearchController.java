@@ -111,13 +111,10 @@ public class SearchController {
         ModelAndView mav = new ModelAndView("doctorSchedulePage");
         DoctorClinic doctor = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctorService.getDoctorByLicense(license),
                               clinicService.getClinicById(clinic));
-
-        mav.addObject("doctorClinic", doctor);
-
-        List<Calendar> month = ViewModifierHelper.getMonth(week);
         List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctor, week);
 
-        mav.addObject("days", month);
+        mav.addObject("doctorClinic", doctor);
+        mav.addObject("days", ViewModifierHelper.getMonth(week));
         mav.addObject("today", Calendar.getInstance());
         mav.addObject("week", doctorsWeek);
         mav.addObject("weekNum", week);

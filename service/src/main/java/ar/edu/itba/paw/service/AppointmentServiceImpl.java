@@ -2,9 +2,7 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.interfaces.service.AppointmentService;
-import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
 import ar.edu.itba.paw.interfaces.service.EmailService;
-import ar.edu.itba.paw.interfaces.service.PatientService;
 import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -26,12 +24,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     private AppointmentDao appointmentDao;
 
     @Autowired
-    private DoctorClinicService doctorClinicService;
-
-    @Autowired
-    private PatientService patientService;
-
-    @Autowired
     private EmailService emailService;
 
     @Autowired
@@ -45,12 +37,14 @@ public class AppointmentServiceImpl implements AppointmentService {
             for (Schedule schedule: doctorClinic.getSchedule()) {
                 if(date.get(Calendar.DAY_OF_WEEK) == schedule.getDay() && date.get(Calendar.HOUR_OF_DAY) == schedule.getHour()){
                     Locale locale = LocaleContextHolder.getLocale();
-                    emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.created.subject",null,locale),messageSource.getMessage("appointment.created.text",null,locale)  + " " + dateString(date));
+                    emailService.sendSimpleMail(
+                            patient.getEmail(),
+                            messageSource.getMessage("appointment.created.subject",null,locale),
+                            messageSource.getMessage("appointment.created.text",null,locale)  + " " + dateString(date));
                     return appointmentDao.createAppointment(doctorClinic,patient,date);
                 }
             }
         }
-
         return null;
     }
 
@@ -69,9 +63,20 @@ public class AppointmentServiceImpl implements AppointmentService {
     public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date,boolean cancelledByDoctor) {
         Locale locale = LocaleContextHolder.getLocale();
         if(cancelledByDoctor){
-            emailService.sendSimpleMail(patient.getEmail(),messageSource.getMessage("appointment.cancelled.subject",null,locale),messageSource.getMessage("appointment.cancelled.by.doctor.text",null,locale)  + " " + dateString(date));
+            emailService.sendSimpleMail(
+                    patient.getEmail(),
+                    messageSource.getMessage("appointment.cancelled.subject",null,locale),
+                    messageSource.getMessage(
+                            "appointment.cancelled.by.doctor.text",null,locale)  +
+                            " " + dateString(date));
         }else {
-            emailService.sendSimpleMail(doctorClinic.getDoctor().getEmail(),messageSource.getMessage("appointment.cancelled.subject",null,locale), messageSource.getMessage("appointment.cancelled.by.patient.text",null,locale) + " " + patient.getFirstName() + " " + patient.getLastName() + " " + dateString(date));
+            emailService.sendSimpleMail(
+                    doctorClinic.getDoctor().getEmail(),
+                    messageSource.getMessage("appointment.cancelled.subject",null,locale),
+                    messageSource.getMessage(
+                            "appointment.cancelled.by.patient.text",null,locale) +
+                            " " + patient.getFirstName() + " " + patient.getLastName() +
+                            " " + dateString(date));
         }
         appointmentDao.cancelAppointment(doctorClinic,patient,date);
     }
@@ -89,6 +94,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public List<Appointment> getAllDoctorsAppointments(Doctor doctor) {
         return appointmentDao.getAllDoctorsAppointments(doctor);
+    }
+
+    @Override
+    public List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, Calendar beginning, Calendar end){
+        return appointmentDao.getDoctorAppointmentsWithinWeek(doctor, beginning, end);
     }
 
     @Transactional

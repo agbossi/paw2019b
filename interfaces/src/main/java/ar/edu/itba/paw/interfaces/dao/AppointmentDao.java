@@ -23,5 +23,7 @@ public interface AppointmentDao {
 
     List<Appointment> getAllDocAppointmentsOnSchedule(DoctorClinic doctor, int day, int hour);
 
+    List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, Calendar beginning, Calendar end);
+
     void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour);
 }
