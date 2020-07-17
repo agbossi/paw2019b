@@ -52,13 +52,5 @@ public class UserContextHelper {
         form.setLocation((String)session.getAttribute("location"));
         form.setPrepaid((String)session.getAttribute("prepaid"));
         form.setSpecialty((String)session.getAttribute("specialty"));
-
-//        session.removeAttribute("firstName");
-//        session.removeAttribute("lastName");
-//        session.removeAttribute("consultPrice");
-//        session.removeAttribute("location");
-//        session.removeAttribute("prepaid");
-//        session.removeAttribute("specialty");
-
     }
 }

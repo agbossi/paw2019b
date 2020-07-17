@@ -50,25 +50,25 @@ public class FrontController {
     // when user chose to remember her/his account.
     @RequestMapping("/")
     public ModelAndView index(@ModelAttribute("searchForm") final SearchForm form){
-
-        final ModelAndView mav = new ModelAndView("index");
-
-
-        // What do I need for users that are doctors
         String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        if(userService.isDoctor(userEmail)){
-            Doctor doctor = doctorService.getDoctorByEmail(userEmail);
-            List<DoctorClinic> doctorClinics = doctorClinicService.getDoctorClinicsForDoctor(doctor);
-            mav.addObject("doctorClinics", doctorClinics);
-            List<Appointment> appointments = appointmentService.getAllDoctorsAppointments(doctor);
-            mav.addObject("appointments",appointments);
-        }
-        else{ // else
+        if(userService.isDoctor(userEmail)) return doctorIndex(userEmail);
+        return patientIndex();
+    }
 
-            // Patients are not interested in doctors that still haven't load their schedule
-            List<String> licenses = doctorService.getAvailableDoctorsLicenses();
-            addPaginatedDoctors(mav, licenses, FIRST_PAGE);
-        }
+    public ModelAndView doctorIndex(String doctorEmail) {
+        Doctor doctor = doctorService.getDoctorByEmail(doctorEmail);
+        final ModelAndView mav = new ModelAndView("index");
+        List<DoctorClinic> doctorClinics = doctorClinicService.getDoctorClinicsForDoctor(doctor);
+        mav.addObject("doctorClinics", doctorClinics);
+        List<Appointment> appointments = appointmentService.getAllDoctorsAppointments(doctor);
+        mav.addObject("appointments",appointments);
+        return mav;
+    }
+
+    public ModelAndView patientIndex() {
+        final ModelAndView mav = new ModelAndView("index");
+        List<String> licenses = doctorService.getAvailableDoctorsLicenses();
+        addPaginatedDoctors(mav, licenses, FIRST_PAGE);
         return mav;
     }
 
