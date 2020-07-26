@@ -6,13 +6,13 @@ import java.util.Calendar;
 import java.util.List;
 
 public interface AppointmentService {
-    Appointment createAppointment(DoctorClinic doctorClinic, User patient, Calendar date);
+    Appointment createAppointment(String license, int clinicId, String patientEmail, int year, int month, int day, int time);
 
     List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic);
 
     List<Appointment> getPatientsAppointments(User patient);
 
-    void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date,boolean cancelledByDoctor);
+    void cancelAppointment(String license, int clinicId, String userEmail, int year, int month, int day, int time, boolean cancelledByDoctor);
 
     Appointment hasAppointment(DoctorClinic doctorClinic,Calendar date);
 

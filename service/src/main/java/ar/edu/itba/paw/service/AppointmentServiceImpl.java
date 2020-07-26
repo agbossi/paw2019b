@@ -1,8 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
-import ar.edu.itba.paw.interfaces.service.AppointmentService;
-import ar.edu.itba.paw.interfaces.service.EmailService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -29,21 +28,51 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private DoctorClinicService doctorClinicService;
+
+    @Autowired
+    private DoctorService doctorService;
+
+    @Autowired
+    private PatientService patientService;
+
+    @Autowired
+    private ClinicService clinicService;
+
+    @Autowired
+    private UserService userService;
+
     @Transactional
     @Override
-    public Appointment createAppointment(DoctorClinic doctorClinic, User patient, Calendar date) {
+    public Appointment createAppointment(String license, int clinicId, String userEmail, int year, int month, int day, int time) {
         Calendar today = Calendar.getInstance();
-        if (today.compareTo(date) < 0){
-            for (Schedule schedule: doctorClinic.getSchedule()) {
-                if(date.get(Calendar.DAY_OF_WEEK) == schedule.getDay() && date.get(Calendar.HOUR_OF_DAY) == schedule.getHour()){
-                    Locale locale = LocaleContextHolder.getLocale();
-                    emailService.sendSimpleMail(
-                            patient.getEmail(),
-                            messageSource.getMessage("appointment.created.subject",null,locale),
-                            messageSource.getMessage("appointment.created.text",null,locale)  + " " + dateString(date));
-                    return appointmentDao.createAppointment(doctorClinic,patient,date);
+
+        Calendar date = Calendar.getInstance();
+        date.set(year, month, day, time, 0, 0);
+        date.set(Calendar.MILLISECOND, 0);
+
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+        Clinic clinic = clinicService.getClinicById(clinicId);
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, clinic);
+
+
+        User user = userService.findUserByEmail(userEmail);
+
+        if(!hasAppointment(license , userEmail ,date)) {
+            if (today.compareTo(date) < 0) {
+                for (Schedule schedule : doctorClinic.getSchedule()) {
+                    if (date.get(Calendar.DAY_OF_WEEK) == schedule.getDay() && date.get(Calendar.HOUR_OF_DAY) == schedule.getHour()) {
+                        Locale locale = LocaleContextHolder.getLocale();
+                        emailService.sendSimpleMail(
+                                userEmail,
+                                messageSource.getMessage("appointment.created.subject", null, locale),
+                                messageSource.getMessage("appointment.created.text", null, locale) + " " + dateString(date));
+                        return appointmentDao.createAppointment(doctorClinic, user, date);
+                    }
                 }
             }
+            return null;
         }
         return null;
     }
@@ -60,25 +89,38 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Transactional
     @Override
-    public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date,boolean cancelledByDoctor) {
+    public void cancelAppointment(String license, int clinicId, String userEmail, int year, int month, int day, int time, boolean cancelledByDoctor) {
+
+        Calendar date = Calendar.getInstance();
+        date.set(year, month, day, time, 0, 0);
+        date.set(Calendar.MILLISECOND, 0);
+
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+        Clinic clinic = clinicService.getClinicById(clinicId);
+        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, clinic);
+
+        User user = userService.findUserByEmail(userEmail);
+
         Locale locale = LocaleContextHolder.getLocale();
-        if(cancelledByDoctor){
-            emailService.sendSimpleMail(
-                    patient.getEmail(),
-                    messageSource.getMessage("appointment.cancelled.subject",null,locale),
-                    messageSource.getMessage(
-                            "appointment.cancelled.by.doctor.text",null,locale)  +
-                            " " + dateString(date));
-        }else {
-            emailService.sendSimpleMail(
-                    doctorClinic.getDoctor().getEmail(),
-                    messageSource.getMessage("appointment.cancelled.subject",null,locale),
-                    messageSource.getMessage(
-                            "appointment.cancelled.by.patient.text",null,locale) +
-                            " " + patient.getFirstName() + " " + patient.getLastName() +
-                            " " + dateString(date));
+        if(hasAppointment(license , userEmail ,date)) {
+            if (cancelledByDoctor) {
+                emailService.sendSimpleMail(
+                        userEmail,
+                        messageSource.getMessage("appointment.cancelled.subject", null, locale),
+                        messageSource.getMessage(
+                                "appointment.cancelled.by.doctor.text", null, locale) +
+                                " " + dateString(date));
+            } else {
+                emailService.sendSimpleMail(
+                        doctor.getEmail(),
+                        messageSource.getMessage("appointment.cancelled.subject", null, locale),
+                        messageSource.getMessage(
+                                "appointment.cancelled.by.patient.text", null, locale) +
+                                " " + user.getFirstName() + " " + user.getLastName() +
+                                " " + dateString(date));
+            }
+            appointmentDao.cancelAppointment(doctorClinic, user, date);
         }
-        appointmentDao.cancelAppointment(doctorClinic,patient,date);
     }
 
     @Override

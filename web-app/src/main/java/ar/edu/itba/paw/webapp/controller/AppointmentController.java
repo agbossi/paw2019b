@@ -39,19 +39,9 @@ public class AppointmentController {
                                         @PathVariable(value = "day") int day, @PathVariable(value = "year") int year,
                                         @PathVariable(value = "month") int month, @PathVariable(value = "time") int time,
                                         Locale locale){
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, time, 0, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        Doctor doctor = doctorService.getDoctorByLicense(license);
-        Clinic clinic = clinicService.getClinicById(clinicId);
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, clinic);
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-
-        if(!ValidationHelper.appointmentValidate(doctor.getLicense(), user.getEmail(), calendar, appointmentService)){
-            appointmentService.createAppointment(doctorClinic, user, calendar);
-        }
+        appointmentService.createAppointment(license, clinicId, user.getEmail(), year, month, day, time);
 
         final ModelAndView mav = new ModelAndView("redirect:/appointments");
         return mav;
@@ -61,19 +51,9 @@ public class AppointmentController {
     public ModelAndView cancelAppointment(@PathVariable(value = "clinicId") int clinicId, @PathVariable(value = "doctorId") String license,
                                           @PathVariable(value = "day") int day, @PathVariable(value = "year") int year,
                                           @PathVariable(value = "month") int month, @PathVariable(value = "time") int time){
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, time, 0, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        Doctor doctor = doctorService.getDoctorByLicense(license);
-        Clinic clinic = clinicService.getClinicById(clinicId);
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, clinic);
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-
-        if(ValidationHelper.appointmentValidate(doctor.getLicense(),user.getEmail(),calendar,appointmentService)){
-            appointmentService.cancelAppointment(doctorClinic, user, calendar,false);
-        }
+        appointmentService.cancelAppointment(license, clinicId, user.getEmail(), year, month, day, time,false);
 
         final ModelAndView mav = new ModelAndView("redirect:/appointments");
         return mav;
@@ -85,21 +65,13 @@ public class AppointmentController {
                                                 @PathVariable(value = "day") int day, @PathVariable(value = "year") int year,
                                                 @PathVariable(value = "month") int month, @PathVariable(value = "time") int time,
                                                 Locale locale){
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, time, 0, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
-        User patient = userService.findUserByEmail(email);
-        Clinic clinic = clinicService.getClinicById(clinicId);
-        DoctorClinic docCli = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, clinic);
+        appointmentService.cancelAppointment(doctor.getLicense(), clinicId, email, year, month, day, time,true);
 
-        if(ValidationHelper.appointmentValidate(doctor.getLicense(),patient.getEmail(),calendar,appointmentService)){
-            appointmentService.cancelAppointment(docCli, patient, calendar,true);
-        }
 
-        final ModelAndView mav = new ModelAndView("redirect:/doctor/clinics/" + clinicId +"/" + week);
+        final ModelAndView mav = new ModelAndView("redirect:/doctor/clinics/" + clinicId + "/" + week);
         return mav;
     }
 
@@ -109,18 +81,11 @@ public class AppointmentController {
                                                @PathVariable(value = "day") int day, @PathVariable(value = "year") int year,
                                                @PathVariable(value = "month") int month, @PathVariable(value = "time") int time){
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month, day, time, 0, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
-        Clinic clinic = clinicService.getClinicById(clinicId);
-        DoctorClinic docClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, clinic);
 
-        if(!ValidationHelper.appointmentValidate(doctor.getLicense(),user.getEmail(),cal,appointmentService)){
-            appointmentService.createAppointment(docClinic, user, cal);
-        }
+        appointmentService.createAppointment(doctor.getLicense(), clinicId, doctor.getEmail(), year, month, day, time);
+
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor/clinics/" + clinicId +"/" + week);
         return mav;
