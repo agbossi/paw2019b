@@ -30,7 +30,8 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Transactional
     @Override
-    public Doctor createDoctor(Specialty specialty, String license, String phoneNumber, User user) {
+    public Doctor createDoctor(Specialty specialty, String license, String phoneNumber, String firstName, String lastName, String password, String email) {
+        User user = userService.createUser(firstName, lastName, password, email);
         return doctorDao.createDoctor(specialty,license, phoneNumber,user);
     }
 
@@ -103,10 +104,11 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public void updateDoctorProfile(
             String email, String newPassword, String firstName, String lastName, // updates user fields
-            String license, String phoneNumber, String specialty, // updates doctor fields
-            MultipartFile file, Doctor doctor) { // updates image field
+            String phoneNumber, String specialty, // updates doctor fields
+            MultipartFile file) { // updates image field
         userService.updateUser(email, newPassword, firstName, lastName);
-        updateDoctor(license, phoneNumber, specialty);
+        Doctor doctor = getDoctorByEmail(email);
+        updateDoctor(doctor.getLicense(), phoneNumber, specialty);
         imageService.updateProfileImage(file, doctor);
     }
 

@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
-import ar.edu.itba.paw.interfaces.service.AppointmentService;
-import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
-import ar.edu.itba.paw.interfaces.service.ScheduleService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,6 +21,12 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     @Autowired
     private AppointmentService appointmentService;
 
+    @Autowired
+    private DoctorService doctorService;
+
+    @Autowired
+    private ClinicService clinicService;
+
     private void setScheduleAndAppointments(List<DoctorClinic> list) {
         if(list != null) {
             for (DoctorClinic doctorClinic: list) {
@@ -37,7 +41,10 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
 
     @Transactional
     @Override
-    public DoctorClinic createDoctorClinic(Doctor doctor, Clinic clinic, int consultPrice) {
+    public DoctorClinic createDoctorClinic(String email, int clinicId, int consultPrice) {
+        Doctor doctor = doctorService.getDoctorByEmail(email);
+        Clinic clinic = clinicService.getClinicById(clinicId);
+
         return doctorClinicDao.createDoctorClinic(doctor, clinic, consultPrice);
     }
 
@@ -63,7 +70,9 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
 
     @Override
     public void setSchedule(DoctorClinic doctorClinic, int day, int hour) {
-        Schedule schedule = scheduleService.createSchedule(day, hour, doctorClinic);
+
+        Schedule schedule = scheduleService.createSchedule(day, hour, doctorClinic.getDoctor().getEmail(),
+                doctorClinic.getClinic().getId());
         List<Schedule> list = doctorClinic.getSchedule();
         list.add(schedule);
         doctorClinic.setSchedule(list);
@@ -100,7 +109,8 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
                                    String firstName, String lastName,
                                    Prepaid prepaid, int consultPrice) {
 
-        List<DoctorClinic> doctorClinics = doctorClinicDao.getFilteredDoctors(location, specialty, firstName, lastName, prepaid, consultPrice);
+        List<DoctorClinic> doctorClinics = doctorClinicDao.getFilteredDoctors(location, specialty, firstName,
+                lastName, prepaid, consultPrice);
         setScheduleAndAppointments(doctorClinics);
         return doctorClinics;
     }

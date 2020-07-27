@@ -1,10 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.PatientDao;
-import ar.edu.itba.paw.interfaces.service.AppointmentService;
-import ar.edu.itba.paw.interfaces.service.FavoriteService;
-import ar.edu.itba.paw.interfaces.service.PatientService;
-import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,6 +26,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private FavoriteService favoriteService;
+
+    @Autowired
+    private DoctorService doctorService;
 
     private static final String NoPrepaid = "";
 
@@ -59,7 +59,10 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void addFavorite(Patient patient, Doctor doctor) {
+    public void addFavorite(String patientEmail, String license) {
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+        Patient patient = getPatientByEmail(patientEmail);
+
         if(!favoriteService.isFavorite(doctor, patient)){
             favoriteService.create(doctor,patient);
         }
@@ -73,7 +76,10 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void deleteFavorite(Patient patient, Doctor doctor) {
+    public void deleteFavorite(String patientEmail, String license) {
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+        Patient patient = getPatientByEmail(patientEmail);
+
         if(favoriteService.isFavorite(doctor, patient)){
             favoriteService.deleteFavorite(doctor,patient);
         }

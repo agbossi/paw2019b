@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface DoctorService extends PaginationService<Doctor> {
-    Doctor createDoctor(Specialty specialty, String license, String phoneNumber, User user);
+    Doctor createDoctor(Specialty specialty, String license, String phoneNumber, String firstName, String lastName, String password, String email);
 
     List<Doctor> getDoctors();
 
@@ -28,8 +28,8 @@ public interface DoctorService extends PaginationService<Doctor> {
 
     void updateDoctorProfile(
             String email, String newPassword, String firstName, String lastName,
-            String license, String phoneNumber, String specialty,
-            MultipartFile file, Doctor doctor);
+            String phoneNumber, String specialty,
+            MultipartFile file);
 
     List<String> getAvailableFilteredLicenses(
             Location location, Specialty specialty,

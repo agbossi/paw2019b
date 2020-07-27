@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.PrepaidToClinicDao;
+import ar.edu.itba.paw.interfaces.service.ClinicService;
 import ar.edu.itba.paw.interfaces.service.PrepaidToClinicService;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Prepaid;
@@ -18,6 +19,9 @@ public class PrepaidToClinicServiceImpl implements PrepaidToClinicService {
     @Autowired
     private PrepaidToClinicDao prepaidToClinicDao;
 
+    @Autowired
+    private ClinicService clinicService;
+
     @Override
     public List<PrepaidToClinic> getPrepaidToClinics() {
         return prepaidToClinicDao.getPrepaidToClinics();
@@ -25,7 +29,9 @@ public class PrepaidToClinicServiceImpl implements PrepaidToClinicService {
 
     @Transactional
     @Override
-    public PrepaidToClinic addPrepaidToClinic(Prepaid prepaid, Clinic clinic) {
+    public PrepaidToClinic addPrepaidToClinic(String prepaidName, int clinicId) {
+        Prepaid prepaid = new Prepaid(prepaidName);
+        Clinic clinic = clinicService.getClinicById(clinicId);
         return prepaidToClinicDao.addPrepaidToClinic(prepaid,clinic);
     }
 

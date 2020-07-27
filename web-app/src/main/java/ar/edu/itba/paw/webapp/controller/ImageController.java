@@ -32,7 +32,6 @@ public class ImageController {
 
     @RequestMapping(value = "/images/{license}", method = { RequestMethod.GET })
     public @ResponseBody byte[] getImage(@PathVariable String license) {
-        Doctor doctor = doctorService.getDoctorByLicense(license);
-        return imageService.getProfileImage(doctor).getImage();
+        return imageService.getProfileImage(license).getImage();
     }
 }

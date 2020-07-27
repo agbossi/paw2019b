@@ -66,7 +66,7 @@ public class DoctorClinicServiceImplTest {
                 .thenReturn(new DoctorClinic(doc, clinic, consultPrice));
 
         //Execute
-        DoctorClinic doctorClinic = doctorClinicService.createDoctorClinic(doc, clinic,consultPrice);
+        DoctorClinic doctorClinic = doctorClinicService.createDoctorClinic(doc.getEmail(), clinic.getId(),consultPrice);
 
         //Asserts
         Assert.assertNotNull(doctorClinic);
@@ -79,7 +79,8 @@ public class DoctorClinicServiceImplTest {
     public void testSetSchedule(){
         //Set Up
         doctorClinic.setSchedule(new ArrayList<Schedule>());
-        Mockito.when(scheduleService.createSchedule(Mockito.eq(day), Mockito.eq(hour),Mockito.eq(doctorClinic)))
+        Mockito.when(scheduleService.createSchedule(Mockito.eq(day), Mockito.eq(hour),
+                Mockito.eq(doctorClinic).getDoctor().getEmail(),Mockito.eq(doctorClinic).getClinic().getId()))
                 .thenReturn(new Schedule(day, hour, doctorClinic));
 
         //Execute
