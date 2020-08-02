@@ -1,4 +1,4 @@
-package keys;
+package ar.edu.itba.paw.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

@@ -2,7 +2,7 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
 import ar.edu.itba.paw.model.*;
-import keys.DoctorClinicKey;
+import ar.edu.itba.paw.model.DoctorClinicKey;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

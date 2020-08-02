@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.model;
 
-import keys.DoctorClinicKey;
-
 import javax.persistence.*;
 import java.util.List;
 

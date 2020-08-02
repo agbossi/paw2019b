@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.model;
 
-import keys.ScheduleKey;
-
 import javax.persistence.*;
 
 @Entity
