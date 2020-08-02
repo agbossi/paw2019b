@@ -9,7 +9,7 @@ import java.util.List;
 public interface PrepaidToClinicService extends PaginationService<PrepaidToClinic> {
     List<PrepaidToClinic> getPrepaidToClinics();
 
-    PrepaidToClinic addPrepaidToClinic(Prepaid prepaid, Clinic clinic);
+    PrepaidToClinic addPrepaidToClinic(String prepaid, int clinic);
 
     boolean clinicHasPrepaid(String prepaid,int clinic);
 

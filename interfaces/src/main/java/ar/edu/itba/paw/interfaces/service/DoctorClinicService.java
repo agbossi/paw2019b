@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface DoctorClinicService {
-    DoctorClinic createDoctorClinic(Doctor doctor,  Clinic clinic, int consultPrice);
+    DoctorClinic createDoctorClinic(String email, int clinicId, int consultPrice);
 
     long deleteDoctorClinic(String license, int clinicid);
 

@@ -21,7 +21,7 @@ public interface PatientService {
 
     List<Patient> getPatientsById(String id);
 
-    void addFavorite(Patient patient, Doctor doctor);
+    void addFavorite(String patientEmail, String license);
 
-    void deleteFavorite(Patient patient, Doctor doctor);
+    void deleteFavorite(String patientEmail, String license);
 }

@@ -75,11 +75,10 @@ public class AdminController {
         if (errors.hasErrors()) return addDoctor(form);
 
         String encodedPassword = passwordEncoder.encode(form.getPassword());
-        User user = userService.createUser(form.getFirstName(),form.getLastName(),encodedPassword,form.getEmail());
         Doctor doctor = doctorService.createDoctor(new Specialty(form.getSpecialty()),
                 form.getLicense(),
                 form.getPhoneNumber(),
-                user
+                form.getFirstName(), form.getLastName(), encodedPassword, form.getEmail()
         );
 
         final ModelAndView mav = new ModelAndView("admin/addedDoctor");
@@ -356,8 +355,7 @@ public class AdminController {
                                                                                                final BindingResult errors){
         if (errors.hasErrors()) return addPrepaidToClinic(form);
 
-        PrepaidToClinic prepaidToClinic = prepaidToClinicService.addPrepaidToClinic(new Prepaid(form.getPrepaid()),
-                                                                    clinicService.getClinicById(form.getClinic()));
+        PrepaidToClinic prepaidToClinic = prepaidToClinicService.addPrepaidToClinic(form.getPrepaid(), form.getClinic());
 
         final ModelAndView mav = new ModelAndView("admin/addedPrepaidToClinic");
         mav.addObject("prepaidToClinic", prepaidToClinic);

@@ -59,7 +59,7 @@ public class DoctorServiceImplTest {
                 .thenReturn(new Doctor(specialty, license, phone, user));
 
         //Execute
-        Doctor doctor = doctorService.createDoctor(specialty, license, phone, user);
+        Doctor doctor = doctorService.createDoctor(specialty, license, phone, user.getFirstName(), user.getLastName(), user.getPassword(), user.getEmail());
 
         //Assert
         Assert.assertNotNull(doctor);

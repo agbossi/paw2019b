@@ -119,10 +119,7 @@ public class PatientController {
     public ModelAndView addFavorite(@PathVariable("doctorId") String license){
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Patient patient = patientService.getPatientByEmail(user.getEmail());
-        Doctor doctor = doctorService.getDoctorByLicense(license);
-
-        patientService.addFavorite(patient, doctor);
+        patientService.addFavorite(user.getEmail(), license);
 
         final ModelAndView mav = new ModelAndView("redirect:/results/" + license);
 
@@ -133,10 +130,7 @@ public class PatientController {
     public ModelAndView deleteFavorite(@PathVariable("doctorId") String license, HttpServletRequest request){
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Patient patient = patientService.getPatientByEmail(user.getEmail());
-        Doctor doctor = doctorService.getDoctorByLicense(license);
-
-        patientService.deleteFavorite(patient, doctor);
+        patientService.deleteFavorite(user.getEmail(), license);
 
         String referer = request.getHeader("Referer");
         final ModelAndView mav = new ModelAndView("redirect:" + referer);

@@ -10,7 +10,7 @@ public interface ImageService {
 
     long updateProfileImage(MultipartFile file, Doctor doctor);
 
-    Image getProfileImage(Doctor doctor);
+    Image getProfileImage(String license);
 
 
 }

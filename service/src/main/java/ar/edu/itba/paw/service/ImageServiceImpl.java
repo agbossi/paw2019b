@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.ImageDao;
+import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.interfaces.service.ImageService;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Image;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.print.Doc;
 import java.io.IOException;
 
 @Component
@@ -16,6 +18,9 @@ public class ImageServiceImpl implements ImageService {
 
     @Autowired
     private ImageDao imageDao;
+
+    @Autowired
+    private DoctorService doctorService;
 
     @Transactional
     @Override
@@ -45,7 +50,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public Image getProfileImage(Doctor doctor) {
+    public Image getProfileImage(String license) {
+        Doctor doctor = doctorService.getDoctorByLicense(license);
         return imageDao.getProfileImage(doctor.getLicense());
     }
 }

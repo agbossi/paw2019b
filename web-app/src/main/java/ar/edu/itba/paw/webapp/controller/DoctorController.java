@@ -64,7 +64,7 @@ public class DoctorController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
-        Image image = imageService.getProfileImage(doctor);
+        Image image = imageService.getProfileImage(doctor.getLicense());
 
         mav.addObject("user", user);
         mav.addObject("doctor", doctor);
@@ -80,7 +80,7 @@ public class DoctorController {
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
         Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
-        Image image = imageService.getProfileImage(doctor);
+        Image image = imageService.getProfileImage(doctor.getLicense());
 
         setEditFormInformation(form, user, doctor);
 
@@ -103,7 +103,6 @@ public class DoctorController {
                                       @RequestParam("photo") MultipartFile photo,Locale locale){
 
         User user = UserContextHelper.getLoggedUser(SecurityContextHolder.getContext(), userService);
-        Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
 
         boolean photoError = ValidationHelper.photoValidate(photo);
         if(errors.hasErrors() || photoError) return updateProfile(form,photoError,locale);
@@ -112,8 +111,8 @@ public class DoctorController {
                 user.getEmail(),
                 SecurityHelper.processNewPassword(form.getNewPassword(), passwordEncoder),
                 form.getFirstName(),form.getLastName(),
-                doctor.getLicense(),form.getPhoneNumber(),form.getSpecialty(),
-                photo,doctor
+                form.getPhoneNumber(),form.getSpecialty(),
+                photo
         );
         return editProfile();
     }
@@ -158,8 +157,8 @@ public class DoctorController {
 
         String email = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
         DoctorClinic doctorClinic = doctorClinicService.createDoctorClinic(
-                doctorService.getDoctorByEmail(email),
-                clinicService.getClinicById(form.getClinic()),
+                email,
+                form.getClinic(),
                 form.getConsultPrice());
 
         final ModelAndView mav = new ModelAndView("doctor/addedDoctorClinic");
@@ -173,10 +172,7 @@ public class DoctorController {
                                       @PathVariable(value = "hour") int hour){
 
         String email = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(
-                doctorService.getDoctorByEmail(email),
-                clinicService.getClinicById(clinic));
-        scheduleService.createSchedule(hour, day, doctorClinic);
+        scheduleService.createSchedule(hour, day, email, clinic);
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic);
         return mav;
@@ -188,10 +184,7 @@ public class DoctorController {
                                        @PathVariable(value = "hour") int hour){
 
         String email = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(
-                doctorService.getDoctorByEmail(email),
-                clinicService.getClinicById(clinic));
-        scheduleService.deleteSchedule(hour, day, doctorClinic);
+        scheduleService.deleteSchedule(hour, day, email, clinic);
 
         final ModelAndView mav = new ModelAndView("redirect:/doctor/addSchedule/" + clinic);
         return mav;
