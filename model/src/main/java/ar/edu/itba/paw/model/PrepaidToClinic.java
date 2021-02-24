@@ -23,6 +23,9 @@ public class PrepaidToClinic {
         this.prepaidToClinicKey = new PrepaidToClinicKey(prepaid.getName(), clinic.getId());
     }
 
+    public PrepaidToClinic() {
+
+    }
 
     public Clinic getClinic() {
         return clinic;

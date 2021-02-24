@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -39,11 +40,23 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getPaginatedObjects(int page){
-        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor order by " +
-                "doctor.user.firstName, doctor.user.lastName, doctor.license",Doctor.class);
-        return query.setFirstResult(page * MAX_DOCTORS_PER_PAGE_ADMIN)
+
+        Query nativeQuery = entityManager.createNativeQuery("SELECT license FROM doctors");
+        @SuppressWarnings("unchecked")
+        List<String> ids = nativeQuery.setFirstResult(page * MAX_DOCTORS_PER_PAGE_ADMIN)
                 .setMaxResults(MAX_DOCTORS_PER_PAGE_ADMIN)
                 .getResultList();
+
+        if(ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor where doctor.license " +
+                "IN (:filteredLicenses) order by " +
+                "doctor.user.firstName, doctor.user.lastName, doctor.license",Doctor.class);
+        query.setParameter("filteredLicenses", ids);
+
+        return query.getResultList();
     }
 
     @Override
@@ -105,13 +118,24 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getPaginatedDoctorsInList(List<String> licenses, int page) {
-        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor " +
-                "where doctor.license in (:licenses) order by " +
-                "doctor.user.firstName, doctor.user.lastName, doctor.license",Doctor.class);
-        query.setParameter("licenses", licenses);
-        return query.setFirstResult(page * MAX_DOCTORS_PER_PAGE_USER)
+
+        Query nativeQuery = entityManager.createNativeQuery("SELECT license FROM doctors where license IN (:filteredLicenses)");
+        nativeQuery.setParameter("filteredLicenses", licenses);
+        @SuppressWarnings("unchecked")
+        List<String> ids = nativeQuery.setFirstResult(page * MAX_DOCTORS_PER_PAGE_USER)
                 .setMaxResults(MAX_DOCTORS_PER_PAGE_USER)
                 .getResultList();
+
+        if(ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor where doctor.license " +
+                "IN (:filteredLicenses) order by " +
+                "doctor.user.firstName, doctor.user.lastName, doctor.license",Doctor.class);
+        query.setParameter("filteredLicenses", ids);
+
+        return query.getResultList();
     }
 
     @Override

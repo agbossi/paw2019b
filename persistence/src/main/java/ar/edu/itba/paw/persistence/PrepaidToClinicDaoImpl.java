@@ -4,12 +4,15 @@ import ar.edu.itba.paw.interfaces.dao.PrepaidToClinicDao;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Prepaid;
 import ar.edu.itba.paw.model.PrepaidToClinic;
+import ar.edu.itba.paw.model.PrepaidToClinicKey;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -32,13 +35,23 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
 
     @Override
     public List<PrepaidToClinic> getPaginatedObjects(int page){
-        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p ORDER BY " +
-                        "p.prepaid.name, p.clinic.name, clinic.location.name",
-                PrepaidToClinic.class);
-        List<PrepaidToClinic> list = query.setFirstResult(page * MAX_PREPAID_TO_CLINICS_PER_PAGE)
+
+        TypedQuery<PrepaidToClinicKey> idsQuery = entityManager.createQuery("select cp.prepaidToClinicKey from PrepaidToClinic as cp", PrepaidToClinicKey.class);
+
+        List<PrepaidToClinicKey> ids = idsQuery.setFirstResult(page * MAX_PREPAID_TO_CLINICS_PER_PAGE)
                 .setMaxResults(MAX_PREPAID_TO_CLINICS_PER_PAGE)
                 .getResultList();
-        return list;
+
+        if(ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p where " +
+                        "p.prepaidToClinicKey IN (:filteredPrepaidToClinic) ORDER BY " +
+                        "p.prepaid.name, p.clinic.name, clinic.location.name",
+                PrepaidToClinic.class);
+        query.setParameter("filteredPrepaidToClinic", ids);
+        return query.getResultList();
     }
 
     @Override

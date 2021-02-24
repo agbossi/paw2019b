@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -39,11 +40,22 @@ public class PrepaidDaoImpl implements PrepaidDao {
 
     @Override
     public List<Prepaid> getPaginatedObjects(int page){
-        TypedQuery<Prepaid> query = entityManager.createQuery("from Prepaid as prepaid ORDER BY prepaid.name", Prepaid.class);
-        List<Prepaid> list = query.setFirstResult(page * MAX_PREPAIDS_PER_PAGE)
+
+        Query nativeQuery = entityManager.createNativeQuery("SELECT name FROM prepaids");
+        @SuppressWarnings("unchecked")
+        List<String> ids = nativeQuery.setFirstResult(page * MAX_PREPAIDS_PER_PAGE)
                 .setMaxResults(MAX_PREPAIDS_PER_PAGE)
                 .getResultList();
-        return list;
+
+        if(ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        TypedQuery<Prepaid> query = entityManager.createQuery("from Prepaid as prepaid WHERE prepaid.name " +
+                "IN (:filteredPrepaids) ORDER BY prepaid.name", Prepaid.class);
+        query.setParameter("filteredPrepaids", ids);
+
+        return query.getResultList();
     }
 
     @Override

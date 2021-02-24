@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.model.PrepaidToClinicKey;
 import ar.edu.itba.paw.model.Specialty;
 import ar.edu.itba.paw.interfaces.dao.SpecialtyDao;
 import org.springframework.stereotype.Repository;
@@ -8,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -39,11 +41,21 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
 
     @Override
     public List<Specialty> getPaginatedObjects(int page){
-        final TypedQuery<Specialty> query = entityManager.createQuery("from Specialty as specialty ORDER BY specialty.name",Specialty.class);
-        final List<Specialty> list = query.setFirstResult(page * MAX_SPECIALTIES_PER_PAGE)
-                                          .setMaxResults(MAX_SPECIALTIES_PER_PAGE)
-                                          .getResultList();
-        return list;
+
+        Query nativeQuery = entityManager.createNativeQuery("SELECT name FROM specialties");
+
+        @SuppressWarnings("unchecked")
+        List<String> ids = nativeQuery.setFirstResult(page * MAX_SPECIALTIES_PER_PAGE)
+                .setMaxResults(MAX_SPECIALTIES_PER_PAGE)
+                .getResultList();
+
+        if(ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        final TypedQuery<Specialty> query = entityManager.createQuery("from Specialty as specialty where specialty.name in (:filteredSpecialties) ORDER BY specialty.name",Specialty.class);
+        query.setParameter("filteredSpecialties", ids);
+        return query.getResultList();
     }
 
     @Override

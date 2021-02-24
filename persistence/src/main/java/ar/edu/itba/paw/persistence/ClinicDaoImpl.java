@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -47,13 +48,21 @@ public class ClinicDaoImpl implements ClinicDao {
 
     @Override
     public List<Clinic> getPaginatedObjects(int page){
-        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic ORDER BY " +
-                                                                  "clinic.name, clinic.location.name, clinic.address",
-                                                                   Clinic.class);
-        List<Clinic> list = query.setFirstResult(page * MAX_CLINICS_PER_PAGE)
-                .setMaxResults(MAX_CLINICS_PER_PAGE)
-                .getResultList();
-        return list;
+
+        Query nativeQuery = entityManager.createNativeQuery("SELECT id FROM clinics");
+        @SuppressWarnings("unchecked")
+        List<Integer> ids = nativeQuery.setFirstResult(page * MAX_CLINICS_PER_PAGE)
+                            .setMaxResults(MAX_CLINICS_PER_PAGE)
+                            .getResultList();
+
+        if(ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic WHERE clinic.id IN (:filteredIds) " +
+                "ORDER BY clinic.name, clinic.location.name, clinic.address", Clinic.class);
+        query.setParameter("filteredIds", ids);
+        return query.getResultList();
     }
 
     @Override
