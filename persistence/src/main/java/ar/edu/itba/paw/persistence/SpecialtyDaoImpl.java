@@ -39,7 +39,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
 
     @Override
     public List<Specialty> getPaginatedObjects(int page){
-        final TypedQuery<Specialty> query = entityManager.createQuery("from Specialty as spcecialty ORDER BY specialty.name",Specialty.class);
+        final TypedQuery<Specialty> query = entityManager.createQuery("from Specialty as specialty ORDER BY specialty.name",Specialty.class);
         final List<Specialty> list = query.setFirstResult(page * MAX_SPECIALTIES_PER_PAGE)
                                           .setMaxResults(MAX_SPECIALTIES_PER_PAGE)
                                           .getResultList();

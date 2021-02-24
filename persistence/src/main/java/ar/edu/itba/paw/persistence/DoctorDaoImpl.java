@@ -34,18 +34,16 @@ public class DoctorDaoImpl implements DoctorDao {
     public List<Doctor> getDoctors(){
         final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor order by " +
                 "doctor.user.firstName, doctor.user.lastName, doctor.license",Doctor.class);
-        final List<Doctor> list = query.getResultList();
-        return list;
+        return query.getResultList();
     }
 
     @Override
     public List<Doctor> getPaginatedObjects(int page){
         final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor order by " +
                 "doctor.user.firstName, doctor.user.lastName, doctor.license",Doctor.class);
-        final List<Doctor> list = query.setFirstResult(page * MAX_DOCTORS_PER_PAGE_ADMIN)
+        return query.setFirstResult(page * MAX_DOCTORS_PER_PAGE_ADMIN)
                 .setMaxResults(MAX_DOCTORS_PER_PAGE_ADMIN)
                 .getResultList();
-        return list;
     }
 
     @Override
@@ -65,8 +63,7 @@ public class DoctorDaoImpl implements DoctorDao {
 
         query.setParameter("firstName",firstName);
         query.setParameter("lastName", lastName);
-        final List<Doctor> list = query.getResultList();
-        return list;
+        return query.getResultList();
     }
 
     @Override
@@ -75,15 +72,13 @@ public class DoctorDaoImpl implements DoctorDao {
                 "where doctor.specialty.name = :specialty",Doctor.class);
 
         query.setParameter("specialty",specialty.getSpecialtyName());
-        final List<Doctor> list = query.getResultList();
-        return list;
+        return query.getResultList();
     }
 
     @Override
     public boolean isDoctor(String email) {
         final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor" +
                 " where doctor.user.email = :email",Doctor.class);
-
         query.setParameter("email",email);
         final List<Doctor> list = query.getResultList();
         return !list.isEmpty();
@@ -93,7 +88,6 @@ public class DoctorDaoImpl implements DoctorDao {
     public Doctor getDoctorByEmail(String email){
         final TypedQuery<Doctor> query = entityManager.createQuery("select doctor from Doctor as doctor  " +
                 "where doctor.user.email = :email",Doctor.class);
-
         query.setParameter("email",email);
         final List<Doctor> list = query.getResultList();
         return list.isEmpty() ? null : list.get(0);
@@ -112,13 +106,12 @@ public class DoctorDaoImpl implements DoctorDao {
     @Override
     public List<Doctor> getPaginatedDoctorsInList(List<String> licenses, int page) {
         final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor " +
-                "where doctor.license in (?1) order by " +
+                "where doctor.license in (:licenses) order by " +
                 "doctor.user.firstName, doctor.user.lastName, doctor.license",Doctor.class);
-        query.setParameter(1, licenses);
-        final List<Doctor> list = query.setFirstResult(page * MAX_DOCTORS_PER_PAGE_USER)
+        query.setParameter("licenses", licenses);
+        return query.setFirstResult(page * MAX_DOCTORS_PER_PAGE_USER)
                 .setMaxResults(MAX_DOCTORS_PER_PAGE_USER)
                 .getResultList();
-        return list;
     }
 
     @Override

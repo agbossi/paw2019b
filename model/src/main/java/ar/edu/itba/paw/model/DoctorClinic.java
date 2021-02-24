@@ -1,5 +1,4 @@
 package ar.edu.itba.paw.model;
-
 import javax.persistence.*;
 import java.util.List;
 

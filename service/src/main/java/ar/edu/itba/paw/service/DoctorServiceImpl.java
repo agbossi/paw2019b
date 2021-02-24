@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.util.*;
 
 @Component
@@ -32,15 +33,17 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public Doctor createDoctor(Specialty specialty, String license, String phoneNumber, String firstName, String lastName, String password, String email) {
         User user = userService.createUser(firstName, lastName, password, email);
-        return doctorDao.createDoctor(specialty,license, phoneNumber,user);
+        return doctorDao.createDoctor(specialty, license, phoneNumber, user);
     }
 
     @Override
-    public List<Doctor> getDoctors() { return doctorDao.getDoctors(); }
+    public List<Doctor> getDoctors() {
+        return doctorDao.getDoctors();
+    }
 
     @Override
-    public List<Doctor> getDoctorByName(String firstName,String lastName) {
-        return doctorDao.getDoctorByName(firstName,lastName);
+    public List<Doctor> getDoctorByName(String firstName, String lastName) {
+        return doctorDao.getDoctorByName(firstName, lastName);
     }
 
     @Override
@@ -64,7 +67,7 @@ public class DoctorServiceImpl implements DoctorService {
         List<Doctor> doctorsWithAvailability = new ArrayList<>();
         List<Doctor> doctors = getDoctors();
 
-        for(Doctor doc : doctors) {
+        for (Doctor doc : doctors) {
             List<DoctorClinic> doctorsClinics = doctorClinicService.getDoctorClinicsForDoctor(doc);
             for (DoctorClinic dc : doctorsClinics) {
                 if ((dc.getSchedule() != null) && !(doctorsWithAvailability.contains(doc))) {
@@ -72,7 +75,6 @@ public class DoctorServiceImpl implements DoctorService {
                 }
             }
         }
-
         return doctorsWithAvailability;
     }
 
@@ -91,13 +93,13 @@ public class DoctorServiceImpl implements DoctorService {
     @Transactional
     @Override
     public void updateDoctor(String license, String phoneNumber, String specialty) {
-        Map<String,String> args = new HashMap<>();
-        args.put("phoneNumber",phoneNumber);
-        if(specialty.equals("")) {
+        Map<String, String> args = new HashMap<>();
+        args.put("phoneNumber", phoneNumber);
+        if (specialty.equals("")) {
             specialty = null;
         }
-        args.put("specialty",specialty);
-        doctorDao.updateDoctor(license,args);
+        args.put("specialty", specialty);
+        doctorDao.updateDoctor(license, args);
     }
 
     @Transactional
@@ -106,6 +108,7 @@ public class DoctorServiceImpl implements DoctorService {
             String email, String newPassword, String firstName, String lastName, // updates user fields
             String phoneNumber, String specialty, // updates doctor fields
             MultipartFile file) { // updates image field
+
         userService.updateUser(email, newPassword, firstName, lastName);
         Doctor doctor = getDoctorByEmail(email);
         updateDoctor(doctor.getLicense(), phoneNumber, specialty);
@@ -114,14 +117,14 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<String> getAvailableFilteredLicenses(Location location, Specialty specialty,
-                                                             String firstName, String lastName,
-                                                             Prepaid prepaid, int consultPrice) {
+                                                     String firstName, String lastName,
+                                                     Prepaid prepaid, int consultPrice) {
 
         List<String> licenses = new ArrayList<>();
         List<DoctorClinic> doctorClinics = doctorClinicService.getFilteredDoctorClinics(location, specialty,
-                                                                    firstName, lastName, prepaid, consultPrice);
-        for(DoctorClinic dc : doctorClinics) {
-            if((!dc.getSchedule().isEmpty()) && !(licenses.contains(dc.getDoctor().getLicense()))) {
+                firstName, lastName, prepaid, consultPrice);
+        for (DoctorClinic dc : doctorClinics) {
+            if ((!dc.getSchedule().isEmpty()) && !(licenses.contains(dc.getDoctor().getLicense()))) {
                 licenses.add(dc.getDoctor().getLicense());
             }
         }
@@ -132,8 +135,8 @@ public class DoctorServiceImpl implements DoctorService {
     public List<String> getAvailableDoctorsLicenses() {
         List<String> licenses = new ArrayList<>();
         List<DoctorClinic> doctorClinics = doctorClinicService.getDoctorClinics();
-        for(DoctorClinic dc : doctorClinics) {
-            if((!dc.getSchedule().isEmpty()) && !(licenses.contains(dc.getDoctor().getLicense()))) {
+        for (DoctorClinic dc : doctorClinics) {
+            if ((!dc.getSchedule().isEmpty()) && !(licenses.contains(dc.getDoctor().getLicense()))) {
                 licenses.add(dc.getDoctor().getLicense());
             }
         }
@@ -142,7 +145,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<Doctor> getPaginatedDoctors(List<String> licenses, int page) {
-        if(page < 0) {
+        if (page < 0 || licenses.isEmpty()) {
             return Collections.emptyList();
         }
         return doctorDao.getPaginatedDoctorsInList(licenses, page);
@@ -150,12 +153,12 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public int getMaxAvailableDoctorsPage(List<String> licenses) {
-        return doctorDao.maxAvailableDoctorsInListPage(licenses);
+        return licenses.isEmpty() ? 0 : doctorDao.maxAvailableDoctorsInListPage(licenses);
     }
 
     @Override
     public List<Doctor> getPaginatedObjects(int page) {
-        if(page < 0) {
+        if (page < 0) {
             return Collections.emptyList();
         }
         return doctorDao.getPaginatedObjects(page);

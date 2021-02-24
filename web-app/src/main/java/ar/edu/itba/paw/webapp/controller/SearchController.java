@@ -53,8 +53,7 @@ public class SearchController {
     @RequestMapping(value = "/search", method = {RequestMethod.GET})
     public ModelAndView search(@ModelAttribute("searchForm") final SearchForm form) {
 
-        final ModelAndView mav = new ModelAndView("index");
-        return mav;
+        return new ModelAndView("index");
     }
 
     @RequestMapping(value = "/results", method = {RequestMethod.GET})

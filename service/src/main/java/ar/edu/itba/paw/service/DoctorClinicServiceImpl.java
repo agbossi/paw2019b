@@ -32,7 +32,6 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
             for (DoctorClinic doctorClinic: list) {
                 List<Schedule> schedules = scheduleService.getDoctorClinicSchedule(doctorClinic);
                 List<Appointment> appointments = appointmentService.getDoctorsAppointments(doctorClinic);
-
                 doctorClinic.setSchedule(schedules);
                 doctorClinic.setAppointments(appointments);
             }
