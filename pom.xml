@@ -19,6 +19,7 @@
         <spring-security.version>4.0.4.RELEASE</spring-security.version>
         <org.slf4j.version>1.7.5</org.slf4j.version>
         <logback.version>1.1.2</logback.version>
+        <jersey.version>3.0-SNAPSHOT</jersey.version>
         <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
         <spring-security-taglibs.version>5.0.4.RELEASE</spring-security-taglibs.version>
         <org.hsqldb.version>2.3.1</org.hsqldb.version>
@@ -41,6 +42,44 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
                 <version>${org.springframework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.ext</groupId>
+                <artifactId>jersey-spring4</artifactId>
+                <version>${jersey.version}</version>
+                <exclusions>
+                    <exclusion><!-- La versión incluida requiere Java 9+ -->
+                        <groupId>org.glassfish.hk2</groupId>
+                        <artifactId>hk2</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.hk2</groupId>
+                <artifactId>hk2</artifactId>
+                <version>2.5.0-b05</version>
+                <!-- última versión compatible con Java 8 -->
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.core</groupId>
+                <artifactId>jersey-server</artifactId>
+                <version>${jersey.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.validation</groupId>
+                        <artifactId>validation-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.media</groupId>
+                <artifactId>jersey-media-moxy</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.media</groupId>
+                <artifactId>jersey-media-jaxb</artifactId>
+                <version>${jersey.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>
@@ -87,6 +126,11 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-orm</artifactId>
                 <version>${org.springframework.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.containers</groupId>
+                <artifactId>jersey-container-servlet-core</artifactId>
+                <version>${jersey.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
@@ -253,4 +297,14 @@
         <module>service</module>
     </modules>
 
+    <repositories>
+        <repository>
+            <id>jersey-snapshot</id>
+            <url>https://maven.java.net/content/repositories/snapshots/</url>
+            <name>Jersey Snapshots</name>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>
