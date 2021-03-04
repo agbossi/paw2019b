@@ -31,9 +31,9 @@ public interface DoctorService extends PaginationService<Doctor> {
             String phoneNumber, String specialty,
             MultipartFile file);
 
-    List<String> getAvailableFilteredLicenses(
+    List<String> getFilteredLicenses(
             Location location, Specialty specialty,
-            String firstName, String lastName, Prepaid prepaid, int consultPrice);
+            String firstName, String lastName, Prepaid prepaid, int consultPrice, boolean includeUnavailable);
 
     List<String> getAvailableDoctorsLicenses();
 

@@ -116,18 +116,25 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<String> getAvailableFilteredLicenses(Location location, Specialty specialty,
+    public List<String> getFilteredLicenses(Location location, Specialty specialty,
                                                      String firstName, String lastName,
-                                                     Prepaid prepaid, int consultPrice) {
+                                                     Prepaid prepaid, int consultPrice, boolean includeUnavailable) {
 
         List<String> licenses = new ArrayList<>();
         List<DoctorClinic> doctorClinics = doctorClinicService.getFilteredDoctorClinics(location, specialty,
                 firstName, lastName, prepaid, consultPrice);
-        for (DoctorClinic dc : doctorClinics) {
-            if ((!dc.getSchedule().isEmpty()) && !(licenses.contains(dc.getDoctor().getLicense()))) {
+        if (!includeUnavailable) {
+            for (DoctorClinic dc : doctorClinics) {
+                if ((!dc.getSchedule().isEmpty()) && !(licenses.contains(dc.getDoctor().getLicense()))) {
+                    licenses.add(dc.getDoctor().getLicense());
+                }
+            }
+        } else {
+            for (DoctorClinic dc : doctorClinics) {
                 licenses.add(dc.getDoctor().getLicense());
             }
         }
+
         return licenses;
     }
 

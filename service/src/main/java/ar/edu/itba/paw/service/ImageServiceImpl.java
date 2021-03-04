@@ -19,9 +19,6 @@ public class ImageServiceImpl implements ImageService {
     @Autowired
     private ImageDao imageDao;
 
-    @Autowired
-    private DoctorService doctorService;
-
     @Transactional
     @Override
     // TODO: check if there's an more elegant way of doing this
@@ -51,7 +48,6 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public Image getProfileImage(String license) {
-        Doctor doctor = doctorService.getDoctorByLicense(license);
-        return imageDao.getProfileImage(doctor.getLicense());
+        return imageDao.getProfileImage(license);
     }
 }

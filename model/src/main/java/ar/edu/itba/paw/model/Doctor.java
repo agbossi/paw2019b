@@ -31,6 +31,8 @@ public class Doctor {
 
     }
 
+    public User getUser() { return user; }
+
     public Specialty getSpecialty() {
         return specialty;
     }
