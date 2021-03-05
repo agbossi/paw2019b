@@ -22,9 +22,9 @@ public class DoctorClinicDto {
     /* TODO chequear todos los paths cuando pueda correr esto, si absolutePath te trae el raiz, hay que
             agregar license a schedule y appointment */
 
-    public static DoctorClinicDto fromDoctorClinic(DoctorClinic doctorClinic, UriInfo uriInfo, List<List<DoctorHourDto>> week) {
+    public static DoctorClinicDto fromDoctorClinic(DoctorClinic doctorClinic, byte[] docProfilePic, UriInfo uriInfo, List<List<DoctorHourDto>> week) {
         DoctorClinicDto doctorClinicDto = new DoctorClinicDto();
-        doctorClinicDto.doctorDto = DoctorDto.fromDoctor(doctorClinic.getDoctor(), uriInfo);
+        doctorClinicDto.doctorDto = DoctorDto.fromDoctor(doctorClinic.getDoctor(), docProfilePic);
         doctorClinicDto.clinicDto = ClinicDto.fromClinic(doctorClinic.getClinic());
         doctorClinicDto.consultPrice = doctorClinic.getConsultPrice();
         doctorClinicDto.schedules = uriInfo.getAbsolutePathBuilder()

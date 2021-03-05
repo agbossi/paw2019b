@@ -110,7 +110,7 @@ public class SearchController {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor != null) {
             final List<DoctorClinicDto> doctorClinics = doctorClinicService.getDoctorClinicsForDoctor(doctor)
-                    .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo, getDoctorWeek(dc, week)))
+                    .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, imageService.getProfileImage(dc.getDoctor().getLicense()).getImage(), uriInfo, getDoctorWeek(dc, week)))
                     .collect(Collectors.toList());
             return Response.ok(new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {}).build();
         }
@@ -127,7 +127,7 @@ public class SearchController {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
         if(dc != null) {
             List<List<DoctorHourDto>> doctorWeek = getDoctorWeek(dc, week);
-            return Response.ok(DoctorClinicDto.fromDoctorClinic(dc, uriInfo, doctorWeek))
+            return Response.ok(DoctorClinicDto.fromDoctorClinic(dc, imageService.getProfileImage(dc.getDoctor().getLicense()).getImage(), uriInfo, doctorWeek))
                     .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week - 1).build(),"prev")
                     .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week + 1).build(),"prev")
                     .build();
