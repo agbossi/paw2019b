@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
-
+/*
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
@@ -58,3 +58,4 @@ public class SearchAdvice {
         model.addAttribute("prepaids", prepaidService.getPrepaids());
     }
 }
+*/

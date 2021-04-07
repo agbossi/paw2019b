@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.webapp.controller;
-
+/*
 import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.interfaces.service.ImageService;
 import ar.edu.itba.paw.model.Doctor;
@@ -35,3 +35,4 @@ public class ImageController {
         return imageService.getProfileImage(license).getImage();
     }
 }
+*/
