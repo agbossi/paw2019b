@@ -112,8 +112,7 @@ public class SearchController {
             final List<DoctorClinicDto> doctorClinics = doctorClinicService.getDoctorClinicsForDoctor(doctor)
                     .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo,
                             imageService.getProfileImage(dc.getDoctor().getLicense()).getImage(),
-                            getDoctorWeek(dc, week)))
-                    .collect(Collectors.toList());
+                            getDoctorWeek(dc, week))).collect(Collectors.toList());
             return Response.ok(new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {}).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
