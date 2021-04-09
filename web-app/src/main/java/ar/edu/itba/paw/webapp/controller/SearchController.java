@@ -90,17 +90,6 @@ public class SearchController {
                                  @BeanParam final DoctorProfileImageForm profileImageForm) {
         return Response.ok().build();
     }
-    /* @GET
-    @Path("/{license}/profile-picture")
-    @Produces("image/jpg")
-    public Response getDoctorProfilePicture(@PathParam("license") final String license) {
-        byte[] image = imageService.getProfileImage(license).getImage();
-        //TODO ver como es esto
-        final CacheControl cache = new CacheControl();
-        cache.setNoTransform(false);
-        cache.setMaxAge(31536000);
-        return Response.ok(image).build();
-    } */
 
     @GET
     @Path("/{license}/doctorsClinics")

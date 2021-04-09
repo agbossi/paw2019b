@@ -68,19 +68,19 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
         DoctorQueryBuilder builder = new DoctorQueryBuilder();
         builder.buildQuery(location.getLocationName(), specialty.getSpecialtyName(), firstName, lastName, prepaid.getName(), consultPrice);
         TypedQuery<DoctorClinic> query = entityManager.createQuery(builder.getQuery(),DoctorClinic.class);
-        if(location.getLocationName() != ""){
+        if(!location.getLocationName().equals("")){
             query.setParameter("location",location.getLocationName());
         }
-        if(specialty.getSpecialtyName() != ""){
+        if(!specialty.getSpecialtyName().equals("")){
             query.setParameter("specialty",specialty.getSpecialtyName());
         }
-        if(firstName != ""){
+        if(!firstName.equals("")){
             query.setParameter("firstName",firstName);
         }
-        if(lastName != ""){
+        if(!lastName.equals("")){
             query.setParameter("lastName",lastName);
         }
-        if(prepaid.getName() != ""){
+        if(!prepaid.getName().equals("")){
             query.setParameter("prepaid",prepaid.getName());
         }
         else if(consultPrice > 0){
