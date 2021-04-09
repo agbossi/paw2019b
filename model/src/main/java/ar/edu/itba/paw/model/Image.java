@@ -14,9 +14,6 @@ import java.io.IOException;
 @Table(name = "images")
 public class Image {
 
-    @Transient
-    private static final Logger LOGGER = LoggerFactory.getLogger(Image.class);
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "images_id_seq")
     @SequenceGenerator(sequenceName = "images_id_seq", name = "images_id_seq")
@@ -47,21 +44,7 @@ public class Image {
         return doctor.getLicense();
     }
 
-    public byte[] getImage() {
-        if(this.image != null) {
-            return this.image;
-        }
-        try {
-            //TODO el path esta bien?
-            BufferedImage bufferedImage = ImageIO.read(new File("web-app/src/main/webapp/resources/images/docpic.jpg"));
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(bufferedImage, "jpg", baos);
-            return baos.toByteArray();
-        } catch (IOException e) {
-            LOGGER.error("Incorrect default image path",e);
-            return new byte[] {};
-        }
-    }
+    public byte[] getImage() { return this.image; }
 
     public void setImage(byte[] image) {
         this.image = image;

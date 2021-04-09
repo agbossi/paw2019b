@@ -19,8 +19,12 @@ public class DoctorHourDto {
 
     public static DoctorHourDto fromDoctorHour(DoctorHour doctorHour) {
         DoctorHourDto doctorHourDto = new DoctorHourDto();
-        doctorHourDto.appointment = AppointmentDto.fromAppointment(doctorHour.getHasAppointment());
-        doctorHourDto.isClinic = doctorHour.getClinic();
+        if(doctorHour.hasAppointment()) {
+            doctorHourDto.appointment = AppointmentDto.fromAppointment(doctorHour.getAppointment());
+        } else {
+            doctorHourDto.appointment = null;
+        }
+        doctorHourDto.isClinic = doctorHour.isClinic();
         doctorHourDto.isScheduled = doctorHour.getScheduled();
         //date?
         return doctorHourDto;

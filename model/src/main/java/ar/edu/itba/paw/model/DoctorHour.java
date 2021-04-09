@@ -27,11 +27,13 @@ public class DoctorHour {
         return isScheduled;
     }
 
-    public Appointment getHasAppointment() {
+    public Appointment getAppointment() {
         return appointment;
     }
 
-    public boolean getClinic() {
+    public boolean hasAppointment() { return appointment != null; }
+
+    public boolean isClinic() {
         return isClinic;
     }
 }

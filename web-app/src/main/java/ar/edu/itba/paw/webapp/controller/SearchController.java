@@ -72,7 +72,7 @@ public class SearchController {
 
     @GET
     @Path("/{license}")
-    @Produces(value = { MediaType.MULTIPART_FORM_DATA })
+    @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getDoctor(@PathParam("license") final String license) {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor != null) {
@@ -83,6 +83,7 @@ public class SearchController {
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
+    //TODO
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(value = { MediaType.APPLICATION_JSON, })

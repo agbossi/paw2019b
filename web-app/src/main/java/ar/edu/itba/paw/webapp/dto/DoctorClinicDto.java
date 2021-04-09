@@ -19,8 +19,9 @@ public class DoctorClinicDto {
     private List<List<DoctorHourDto>> week;
 
     //TODO ver pathbuilders, estoy llamando desde "/{license}/doctorsClinics" y "/{license}/doctorsClinics/{clinic}"
-    /* TODO chequear todos los paths cuando pueda correr esto, si absolutePath te trae el raiz, hay que
-            agregar license a schedule y appointment */
+
+    //lo que sale en schedules: /web_app_war_exploded/doctors/8895668/doctorsClinics/6/schedules
+    //lo que sale en appointments: /web_app_war_exploded/doctors/8895668/doctorsClinics/6/appointments
 
     public static DoctorClinicDto fromDoctorClinic(DoctorClinic doctorClinic, UriInfo uriInfo,byte[] doctorImage, List<List<DoctorHourDto>> week) {
         DoctorClinicDto doctorClinicDto = new DoctorClinicDto();

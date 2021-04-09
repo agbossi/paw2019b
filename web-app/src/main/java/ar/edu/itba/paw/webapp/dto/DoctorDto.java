@@ -4,6 +4,8 @@ import ar.edu.itba.paw.model.Doctor;
 import org.springframework.web.multipart.MultipartFile;
 import java.net.URI;
 
+//TODO aparece un user en response que no se de donde sale (que no es user data)
+
 public class DoctorDto {
 
     private String specialty;
