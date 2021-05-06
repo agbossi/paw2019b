@@ -20,10 +20,10 @@ public class DoctorClinic {
     @Column(name = "consultPrice")
     private int consultPrice;
 
-    @OneToMany(mappedBy = "doctorClinic")
+    @OneToMany(mappedBy = "doctorClinic", fetch=FetchType.EAGER)
     private List<Schedule> schedule;
 
-    @OneToMany(mappedBy = "doctorClinic")
+    @OneToMany(mappedBy = "doctorClinic", fetch=FetchType.EAGER)
     private List<Appointment> appointments;
 
     public DoctorClinic(Doctor doctor, Clinic clinic, int consultPrice){

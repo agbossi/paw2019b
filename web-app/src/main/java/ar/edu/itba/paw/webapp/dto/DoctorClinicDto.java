@@ -18,20 +18,29 @@ public class DoctorClinicDto {
     private URI appointments;
     private List<List<DoctorHourDto>> week;
 
-    //TODO ver pathbuilders, estoy llamando desde "/{license}/doctorsClinics" y "/{license}/doctorsClinics/{clinic}"
-
-    //lo que sale en schedules: /web_app_war_exploded/doctors/8895668/doctorsClinics/6/schedules
+    //lo que sale en schedules desde doctorsClinic: /web_app_war_exploded/doctors/8895668/doctorsClinics/6/schedules
     //lo que sale en appointments: /web_app_war_exploded/doctors/8895668/doctorsClinics/6/appointments
 
+
+    //lo que sale en schedules desde {clinic}: /web_app_war_exploded/doctors/8895668/doctorsClinics/6/6/schedules
     public static DoctorClinicDto fromDoctorClinic(DoctorClinic doctorClinic, UriInfo uriInfo,byte[] doctorImage, List<List<DoctorHourDto>> week) {
         DoctorClinicDto doctorClinicDto = new DoctorClinicDto();
         doctorClinicDto.doctorDto = DoctorDto.fromDoctor(doctorClinic.getDoctor(), doctorImage);
         doctorClinicDto.clinicDto = ClinicDto.fromClinic(doctorClinic.getClinic());
         doctorClinicDto.consultPrice = doctorClinic.getConsultPrice();
-        doctorClinicDto.schedules = uriInfo.getAbsolutePathBuilder()
-                .path(String.valueOf(doctorClinic.getClinic().getId())).path("schedules").build();
-        doctorClinicDto.appointments = uriInfo.getAbsolutePathBuilder()
-                .path(String.valueOf(doctorClinic.getClinic().getId())).path("appointments").build();
+
+        // TODO hay forma mas elegante de hacer esto?
+        if(uriInfo.getAbsolutePathBuilder().toString().endsWith("doctorsClinics") ||
+                uriInfo.getAbsolutePathBuilder().toString().endsWith("doctorsClinics/")) {
+            doctorClinicDto.schedules = uriInfo.getAbsolutePathBuilder()
+                    .path(String.valueOf(doctorClinic.getClinic().getId())).path("schedules").build();
+            doctorClinicDto.appointments = uriInfo.getAbsolutePathBuilder()
+                    .path(String.valueOf(doctorClinic.getClinic().getId())).path("appointments").build();
+        } else { // estoy llamando desde /doctors/{doctor}/doctorsClinics/{clinic}/
+            doctorClinicDto.schedules = uriInfo.getAbsolutePathBuilder().path("schedules").build();
+            doctorClinicDto.appointments = uriInfo.getAbsolutePathBuilder().path("appointments").build();
+        }
+
         doctorClinicDto.week = week;
         return doctorClinicDto;
     }

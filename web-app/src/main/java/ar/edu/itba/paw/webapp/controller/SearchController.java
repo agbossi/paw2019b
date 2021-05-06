@@ -5,12 +5,8 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.form.DoctorForm;
 import ar.edu.itba.paw.webapp.form.DoctorProfileImageForm;
-import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
-import org.glassfish.jersey.media.multipart.MultiPart;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
@@ -22,8 +18,6 @@ import java.util.stream.Collectors;
 @Path("doctors") //TODO estos son endpoints que dan info de los doctores,
                    // quizas habria que mergear con los de doctorController para que queden bajo doctors
 public class SearchController {
-
-    //TODO: arreglar dtos
 
     @Autowired
     private DoctorClinicService doctorClinicService;
@@ -83,15 +77,6 @@ public class SearchController {
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
-    //TODO
-    @POST
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response createDoctor(@FormDataParam("doctor") final DoctorForm form,
-                                 @BeanParam final DoctorProfileImageForm profileImageForm) {
-        return Response.ok().build();
-    }
-
     @GET
     @Path("/{license}/doctorsClinics")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -108,6 +93,7 @@ public class SearchController {
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
+
     //TODO preguntar a xime como era el tema de la semana inicial a mostrar y hasta donde se podia avanzar
     @GET
     @Path("/{license}/doctorsClinics/{clinic}")
@@ -121,12 +107,27 @@ public class SearchController {
             return Response.ok(DoctorClinicDto.fromDoctorClinic(dc, uriInfo,
                     imageService.getProfileImage(dc.getDoctor().getLicense()).getImage() , doctorWeek))
                     .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week - 1).build(),"prev")
-                    .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week + 1).build(),"prev")
+                    .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week + 1).build(),"next")
                     .build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
+    @GET
+    @Path("/{license}/doctorsClinics/{clinic}/schedules")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getDoctorClinicSchedules(@PathParam("license") final String license,
+                                             @PathParam("clinic") final Integer clinic) {
+        DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
+        if(dc != null) {
+            List<ScheduleDto> schedules = dc.getSchedule()
+                    .stream().map(ScheduleDto::fromSchedule).collect(Collectors.toList());
+            return Response.ok(new GenericEntity<List<ScheduleDto>>(schedules) {}).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+    }
+
+    //TODO repite el mismo appointment una y otra vez
     @GET
     @Path("/{license}/doctorsClinics/{clinic}/appointments")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -141,21 +142,14 @@ public class SearchController {
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
-    @GET
-    @Path("/{license}/doctorsClinics/{clinic}/schedules")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getDoctorClinicSchedules(@PathParam("license") final String license,
-                                                @PathParam("clinic") final Integer clinic) {
-        DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
-        if(dc != null) {
-            List<ScheduleDto> schedules = dc.getSchedule()
-                    .stream().map(ScheduleDto::fromSchedule).collect(Collectors.toList());
-            return Response.ok(new GenericEntity<List<ScheduleDto>>(schedules) {}).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+    //TODO
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    public Response createDoctor(@FormDataParam("doctor") final DoctorForm form,
+                                 @BeanParam final DoctorProfileImageForm profileImageForm) {
+        return Response.ok().build();
     }
-
-
 
     // private methods
 
