@@ -55,9 +55,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     @Override
-    public void deleteSchedule(int hour, int day, String email, int clinicId) {
+    public void deleteSchedule(int hour, int day, String license, int clinicId) {
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(
-                doctorService.getDoctorByEmail(email),
+                doctorService.getDoctorByLicense(license),
                 clinicService.getClinicById(clinicId));
 
         if(doctorHasSchedule(doctorClinic.getDoctor(), day, hour)) {
