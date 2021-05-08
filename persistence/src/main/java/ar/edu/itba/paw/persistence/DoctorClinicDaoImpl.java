@@ -50,8 +50,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     }
 
     @Override
-    public DoctorClinic getDoctorInClinic(String doctor, int clinic){
-        return entityManager.find(DoctorClinic.class,new DoctorClinicKey(doctor,clinic));
+    public DoctorClinic getDoctorInClinic(String license, int clinic){
+        return entityManager.find(DoctorClinic.class,new DoctorClinicKey(license,clinic));
     }
 
     //solo para que no explote la clase

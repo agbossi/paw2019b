@@ -13,7 +13,7 @@ public interface ScheduleService {
 
     boolean doctorHasScheduleInClinic(DoctorClinic doctorClinic, int day, int hour);
 
-    void deleteSchedule(int hour, int day, String email, int clinicId);
+    void deleteSchedule(int hour, int day, String license, int clinicId);
 
     boolean doctorHasSchedule(Doctor doctor, int day, int hour);
 }
