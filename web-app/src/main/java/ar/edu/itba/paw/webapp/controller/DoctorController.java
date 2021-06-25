@@ -284,7 +284,7 @@ public class DoctorController {
         int maxAvailablePage = doctorService.getMaxAvailableDoctorsPage(licenses);
 
         List<DoctorDto> doctors = doctorService.getPaginatedDoctors(licenses, page)
-                .stream().map(d -> DoctorDto.fromDoctor(d, imageService.getProfileImage(d.getLicense()).getImage())).collect(Collectors.toList());
+                .stream().map(d -> DoctorDto.fromDoctor(d, uriInfo)).collect(Collectors.toList());
 
         return Response.ok(new GenericEntity<List<DoctorDto>>(doctors) {})
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
@@ -301,7 +301,7 @@ public class DoctorController {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor != null) {
             byte[] profileImage = imageService.getProfileImage(doctor.getLicense()).getImage();
-            DoctorDto dto = DoctorDto.fromDoctor(doctor, profileImage);
+            DoctorDto dto = DoctorDto.fromDoctor(doctor, uriInfo);
             return Response.ok(dto).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
@@ -314,6 +314,13 @@ public class DoctorController {
         doctorService.deleteDoctor(license);
         return Response.noContent().build();
     }
+
+    /*@GET
+    @Path("/{license}/profilePicture")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getProfilePicture(@PathParam("license") final String license) {
+        imageService.getProfileImage(d.getLicense()).getImage();
+    } */
 
     @GET
     @Path("/{license}/doctorsClinics")

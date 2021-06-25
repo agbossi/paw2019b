@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.model.Doctor;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
 //TODO aparece un user en response que no se de donde sale (que no es user data)
@@ -12,15 +14,15 @@ public class DoctorDto {
     private UserDto userData;
     private String license;
     private String phoneNumber;
-    private byte[] profileImage;
+    private URI profileImage;
 
-    public static DoctorDto fromDoctor(Doctor doctor, byte[] profileImage) {
+    public static DoctorDto fromDoctor(Doctor doctor, UriInfo uriInfo) {
         DoctorDto doctorDto = new DoctorDto();
         doctorDto.license = doctor.getLicense();
         doctorDto.specialty = doctor.getSpecialty().getSpecialtyName();
         doctorDto.phoneNumber = doctor.getPhoneNumber();
         doctorDto.userData = UserDto.fromUser(doctor.getUser());
-        doctorDto.profileImage = profileImage;
+        doctorDto.profileImage = uriInfo.getBaseUriBuilder().path("doctors").path(doctor.getLicense()).path("ProfileImage").build();
         return doctorDto;
     }
 
@@ -32,11 +34,11 @@ public class DoctorDto {
         this.userData = userData;
     }
 
-    public byte[] getProfileImage() {
+    public URI getProfileImage() {
         return profileImage;
     }
 
-    public void setProfileImage(byte[] profileImage) {
+    public void setProfileImage(URI profileImage) {
         this.profileImage = profileImage;
     }
 
