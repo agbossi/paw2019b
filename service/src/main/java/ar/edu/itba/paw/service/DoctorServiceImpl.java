@@ -115,6 +115,17 @@ public class DoctorServiceImpl implements DoctorService {
         imageService.updateProfileImage(file, doctor);
     }
 
+    @Transactional
+    @Override
+    public void updateDoctorProfile(
+            String email, String newPassword, String firstName, String lastName, // updates user fields
+            String phoneNumber, String specialty) { // updates image field
+
+        userService.updateUser(email, newPassword, firstName, lastName);
+        Doctor doctor = getDoctorByEmail(email);
+        updateDoctor(doctor.getLicense(), phoneNumber, specialty);
+    }
+
     @Override
     public List<String> getFilteredLicenses(Location location, Specialty specialty,
                                                      String firstName, String lastName,

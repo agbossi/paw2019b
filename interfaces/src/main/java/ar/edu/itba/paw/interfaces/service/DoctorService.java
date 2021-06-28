@@ -31,6 +31,10 @@ public interface DoctorService extends PaginationService<Doctor> {
             String phoneNumber, String specialty,
             MultipartFile file);
 
+    void updateDoctorProfile(
+            String email, String newPassword, String firstName, String lastName, // updates user fields
+            String phoneNumber, String specialty);
+
     List<String> getFilteredLicenses(
             Location location, Specialty specialty,
             String firstName, String lastName, Prepaid prepaid, int consultPrice, boolean includeUnavailable);

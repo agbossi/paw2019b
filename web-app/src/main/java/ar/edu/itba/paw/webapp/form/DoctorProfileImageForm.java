@@ -4,20 +4,23 @@ import ar.edu.itba.paw.webapp.helpers.validation.annotations.ValidFileType;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
+import javax.validation.constraints.NotNull;
+
 public class DoctorProfileImageForm {
-    @FormDataParam("profilePicture")
+    @FormDataParam("profileImage")
     @ValidFileType(types = {"image/jpg", "image/png"}, message = "{doctor.photo.not.valid}")
-    private FormDataBodyPart profilePicture;
+    @NotNull
+    private FormDataBodyPart profileImage;
 
     public FormDataBodyPart getProfilePicture() {
-        return profilePicture;
+        return profileImage;
     }
 
     public void setProfilePicture(FormDataBodyPart profilePicture) {
-        this.profilePicture = profilePicture;
+        this.profileImage = profilePicture;
     }
 
     public byte[] getProfilePictureBytes() {
-        return profilePicture.getValueAs(byte[].class);
+        return profileImage.getValueAs(byte[].class);
     }
 }

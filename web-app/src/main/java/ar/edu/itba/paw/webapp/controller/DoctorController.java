@@ -223,12 +223,16 @@ public class DoctorController {
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.dto.*;
+import ar.edu.itba.paw.webapp.form.DoctorClinicForm;
 import ar.edu.itba.paw.webapp.form.DoctorForm;
 import ar.edu.itba.paw.webapp.form.DoctorProfileImageForm;
+import ar.edu.itba.paw.webapp.form.EditDoctorProfileForm;
+import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
@@ -258,6 +262,9 @@ public class DoctorController {
 
     @Autowired
     private ScheduleService scheduleService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private AppointmentService appointmentService;
@@ -300,7 +307,6 @@ public class DoctorController {
     public Response getDoctor(@PathParam("license") final String license) {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor != null) {
-            byte[] profileImage = imageService.getProfileImage(doctor.getLicense()).getImage();
             DoctorDto dto = DoctorDto.fromDoctor(doctor, uriInfo);
             return Response.ok(dto).build();
         }
@@ -315,12 +321,79 @@ public class DoctorController {
         return Response.noContent().build();
     }
 
-    /*@GET
-    @Path("/{license}/profilePicture")
+
+    // TODO: como se que el put viene del usuario?
+    @PUT
+    @Path("/{license}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getProfilePicture(@PathParam("license") final String license) {
-        imageService.getProfileImage(d.getLicense()).getImage();
-    } */
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateDoctor(@PathParam("license") final String license, EditDoctorProfileForm form) {
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+        if(doctor != null) {
+            doctorService.updateDoctorProfile(
+                    doctor.getEmail(),
+                    SecurityHelper.processNewPassword(form.getNewPassword(), passwordEncoder),
+                    form.getFirstName(),form.getLastName(),
+                    form.getPhoneNumber(),form.getSpecialty());
+            return Response.noContent().build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
+    @GET
+    @Path("/{license}/profileImage")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getProfileImage(@PathParam("license") final String license) {
+        Doctor d = doctorService.getDoctorByLicense(license);
+        if(d != null) {
+            byte[] img = imageService.getProfileImage(d.getLicense()).getImage();
+            ImageDto dto = ImageDto.fromImage(img);
+            return Response.ok(dto).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+    }
+
+    @DELETE
+    @Path("/{license}/profileImage")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response deleteProfileImage(@PathParam("license") final String license) {
+        imageService.deleteProfileImage(license);
+        return Response.noContent().build();
+    }
+
+    @PUT
+    @Path("/{license}/profileImage")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response updateProfileImage(@PathParam("license") final String license,
+                                       @BeanParam final DoctorProfileImageForm profileImageForm) {
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+        if(doctor != null) {
+            imageService.updateProfileImage(profileImageForm.getProfilePictureBytes(), doctor);
+            return Response.noContent().build();
+        }
+        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+    }
+
+    @POST
+    @Path("/{license}/profileImage")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response uploadProfileImage(@PathParam("license") final String license,
+                                       @BeanParam final DoctorProfileImageForm profileImageForm) {
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+        if(doctor != null) {
+            if(imageService.getProfileImage(doctor.getLicense()) != null) {
+                imageService.createProfileImage(profileImageForm.getProfilePictureBytes(), doctor);
+                return Response.created(uriInfo.getAbsolutePath()).build();
+            } else {
+                return Response.status(Response.Status.CONFLICT).build();
+            }
+        } else {
+            return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        }
+    }
 
     @GET
     @Path("/{license}/doctorsClinics")
@@ -334,6 +407,20 @@ public class DoctorController {
                             imageService.getProfileImage(dc.getDoctor().getLicense()).getImage(),
                             getDoctorWeek(dc, week))).collect(Collectors.toList());
             return Response.ok(new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {}).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+    }
+
+
+    @POST
+    @Path("/{license}/doctorsClinics")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response createDoctorClinic(@PathParam("license") final String license,
+                                       final DoctorClinicForm form) {
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+        if(doctor != null) {
+            doctorClinicService.createDoctorClinic(doctor.getEmail(), form.getClinic(), form.getConsultPrice());
+            return Response.created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(form.getClinic())).build()).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
@@ -406,7 +493,7 @@ public class DoctorController {
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
-    //TODO probar cuando la linea de userEmail haga sentido
+    //TODO probar cuando la linea de userEmail haga sentido. Creo que no se puede usar el context holder porque rompe con rest
     @DELETE
     @Path("/{license}/doctorsClinics/{clinic}/appointments")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -425,11 +512,12 @@ public class DoctorController {
 
     //TODO
     @POST
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(value = { MediaType.APPLICATION_JSON, })
-    public Response createDoctor(@FormDataParam("doctor") final DoctorForm form,
-                                 @BeanParam final DoctorProfileImageForm profileImageForm) {
-        return Response.ok().build();
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createDoctor(final DoctorForm form) {
+        doctorService.createDoctor(new Specialty(form.getSpecialty()), form.getLicense(), form.getPhoneNumber()
+        ,form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
+        return Response.created(uriInfo.getAbsolutePathBuilder().path(form.getLicense()).build()).build();
     }
 
     // private methods

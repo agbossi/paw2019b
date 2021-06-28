@@ -17,12 +17,17 @@ public class ImageDaoImpl implements ImageDao {
     private EntityManager entityManager;
 
     @Override
-    public long createProfileImage(byte[] image, String doctor) {
+    public Image createProfileImage(byte[] image, String doctor) {
         Image im = new Image();
         im.setImage(image);
         im.setLicense(doctor);
-        entityManager.persist(image);
-        return im.getId();
+        entityManager.persist(image); //TODO esto funciona??
+        return im;
+    }
+
+    @Override
+    public void deleteProfileImage(Image profileImage) {
+        entityManager.remove(profileImage);
     }
 
     @Override
