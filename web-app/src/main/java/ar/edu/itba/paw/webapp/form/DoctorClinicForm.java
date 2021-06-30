@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.helpers.validation.annotations.ClinicExists;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.UniqueDoctorClinic;
 
 import javax.validation.constraints.Min;
@@ -7,6 +8,7 @@ import javax.validation.constraints.Min;
 @UniqueDoctorClinic(clinic = "clinic")
 public class DoctorClinicForm {
 
+    @ClinicExists
     private int clinic;
 
     @Min(0)

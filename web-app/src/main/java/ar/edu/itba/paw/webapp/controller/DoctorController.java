@@ -223,10 +223,7 @@ public class DoctorController {
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.dto.*;
-import ar.edu.itba.paw.webapp.form.DoctorClinicForm;
-import ar.edu.itba.paw.webapp.form.DoctorForm;
-import ar.edu.itba.paw.webapp.form.DoctorProfileImageForm;
-import ar.edu.itba.paw.webapp.form.EditDoctorProfileForm;
+import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
 import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -339,6 +336,15 @@ public class DoctorController {
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+    }
+
+    @POST
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createDoctor(final DoctorForm form) {
+        doctorService.createDoctor(new Specialty(form.getSpecialty()), form.getLicense(), form.getPhoneNumber()
+                ,form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
+        return Response.created(uriInfo.getAbsolutePathBuilder().path(form.getLicense()).build()).build();
     }
 
     @GET
@@ -472,11 +478,26 @@ public class DoctorController {
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response deleteDoctorClinicSchedule(@PathParam("license") final String license,
                                                @PathParam("clinic") final Integer clinic,
-                                               @QueryParam("day") final int day,
-                                               @QueryParam("hour") final int hour) {
+                                               @QueryParam("day") final Integer day,
+                                               @QueryParam("hour") final Integer hour) {
         scheduleService.deleteSchedule(hour, day, license, clinic);
         return Response.noContent().build();
     }
+
+    //TODO el mismo tema de quien hace este post
+    @POST
+    @Path("/{license}/doctorsClinics/{clinic}/schedules")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createSchedule(@PathParam("license") final String license,
+                                   @PathParam("clinic") final Integer clinic,
+                                   ScheduleForm form) {
+        DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
+            scheduleService.createSchedule(form.getHour(), form.getDay(),
+                    dc.getDoctor().getEmail(), dc.getClinic().getId());
+        return Response.created(uriInfo.getAbsolutePath()).build(); //TODO esto no me cierra del todo
+    }
+
 
     //TODO repite el mismo appointment una y otra vez
     @GET
@@ -510,14 +531,17 @@ public class DoctorController {
         return Response.noContent().build();
     }
 
-    //TODO
+
     @POST
-    @Produces(value = { MediaType.APPLICATION_JSON, })
+    @Path("/{license}/doctorsClinics/{clinic}/appointments")
+    @Produces(value = { MediaType.APPLICATION_JSON })
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createDoctor(final DoctorForm form) {
-        doctorService.createDoctor(new Specialty(form.getSpecialty()), form.getLicense(), form.getPhoneNumber()
-        ,form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
-        return Response.created(uriInfo.getAbsolutePathBuilder().path(form.getLicense()).build()).build();
+    public Response createAppointment(@PathParam("license") final String license,
+                                      @PathParam("clinic") final Integer clinic,
+                                      AppointmentForm form) {
+        appointmentService.createAppointment(form.getLicense(), form.getClinic(), form.getPatient(),
+                form.getYear(), form.getMonth(), form.getDay(), form.getTime());
+        return Response.created(uriInfo.getAbsolutePath()).build(); //TODO esto no me cierra del todo
     }
 
     // private methods
