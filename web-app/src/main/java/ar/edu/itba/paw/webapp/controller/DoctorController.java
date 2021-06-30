@@ -234,6 +234,7 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -410,9 +411,8 @@ public class DoctorController {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor != null) {
             final List<DoctorClinicDto> doctorClinics = doctorClinicService.getDoctorClinicsForDoctor(doctor)
-                    .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo,
-                            imageService.getProfileImage(dc.getDoctor().getLicense()).getImage(),
-                            getDoctorWeek(dc, week))).collect(Collectors.toList());
+                    .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo, getDoctorWeek(dc, week)))
+                    .collect(Collectors.toList());
             return Response.ok(new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {}).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
@@ -451,8 +451,7 @@ public class DoctorController {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
         if(dc != null) {
             List<List<DoctorHourDto>> doctorWeek = getDoctorWeek(dc, week);
-            return Response.ok(DoctorClinicDto.fromDoctorClinic(dc, uriInfo,
-                    imageService.getProfileImage(dc.getDoctor().getLicense()).getImage() , doctorWeek))
+            return Response.ok(DoctorClinicDto.fromDoctorClinic(dc, uriInfo, doctorWeek))
                     .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week - 1).build(),"prev")
                     .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week + 1).build(),"next")
                     .build();
@@ -515,7 +514,7 @@ public class DoctorController {
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
-    //TODO probar cuando la linea de userEmail haga sentido. Creo que no se puede usar el context holder porque rompe con rest
+    //TODO no funciona totalmente porque no se si quien cancela es doctor o paciente
     @DELETE
     @Path("/{license}/doctorsClinics/{clinic}/appointments")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -526,9 +525,7 @@ public class DoctorController {
                                                   @QueryParam("day") final Integer day,
                                                   @QueryParam("time") final Integer time) {
 
-        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        appointmentService.cancelAppointment(license, clinic, userEmail,
-                year, month, day, time, doctorService.isDoctor(userEmail));
+        appointmentService.cancelAppointment(license, clinic, year, month, day, time);
         return Response.noContent().build();
     }
 
@@ -540,9 +537,13 @@ public class DoctorController {
     public Response createAppointment(@PathParam("license") final String license,
                                       @PathParam("clinic") final Integer clinic,
                                       AppointmentForm form) {
-        appointmentService.createAppointment(form.getLicense(), form.getClinic(), form.getPatient(),
+        Appointment appointment = appointmentService.createAppointment(
+                form.getLicense(), form.getClinic(), form.getPatient(),
                 form.getYear(), form.getMonth(), form.getDay(), form.getTime());
-        return Response.created(uriInfo.getAbsolutePath()).build(); //TODO esto no me cierra del todo
+        if(appointment != null) {
+            return Response.created(uriInfo.getAbsolutePath()).build(); //TODO esto no me cierra del todo
+        }
+        return Response.status(Response.Status.CONFLICT).build();
     }
 
     // private methods

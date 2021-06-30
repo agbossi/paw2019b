@@ -23,7 +23,7 @@ public class DoctorClinicDto {
 
 
     //lo que sale en schedules desde {clinic}: /web_app_war_exploded/doctors/8895668/doctorsClinics/6/6/schedules
-    public static DoctorClinicDto fromDoctorClinic(DoctorClinic doctorClinic, UriInfo uriInfo,byte[] doctorImage, List<List<DoctorHourDto>> week) {
+    public static DoctorClinicDto fromDoctorClinic(DoctorClinic doctorClinic, UriInfo uriInfo, List<List<DoctorHourDto>> week) {
         DoctorClinicDto doctorClinicDto = new DoctorClinicDto();
         doctorClinicDto.doctorDto = DoctorDto.fromDoctor(doctorClinic.getDoctor(), uriInfo);
         doctorClinicDto.clinicDto = ClinicDto.fromClinic(doctorClinic.getClinic());

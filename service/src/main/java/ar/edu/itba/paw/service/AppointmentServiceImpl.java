@@ -43,14 +43,21 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     private UserService userService;
 
+    @Override
+    public Calendar createAppointmentCalendar(int year, int month, int day, int time) {
+        Calendar date = Calendar.getInstance();
+        // TODO cuando corri esto para bajar duplicados empezo a sumarme un mes
+        date.set(year, month-1, day, time, 0, 0);
+        date.set(Calendar.MILLISECOND, 0);
+        return date;
+    }
+
     @Transactional
     @Override
     public Appointment createAppointment(String license, int clinicId, String userEmail, int year, int month, int day, int time) {
         Calendar today = Calendar.getInstance();
 
-        Calendar date = Calendar.getInstance();
-        date.set(year, month, day, time, 0, 0);
-        date.set(Calendar.MILLISECOND, 0);
+        Calendar date = createAppointmentCalendar(year, month, day, time);
 
         Doctor doctor = doctorService.getDoctorByLicense(license);
         Clinic clinic = clinicService.getClinicById(clinicId);
@@ -87,13 +94,24 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentDao.getPatientsAppointments(patient);
     }
 
+
+    public void cancelAppointment(String license, int clinicId, int year, int month, int day, int time) {
+        DoctorClinic dc = doctorClinicService.getDoctorInClinic(license, clinicId);
+        if(dc != null) {
+            Calendar appointmentDate = createAppointmentCalendar(year, month, day, time);
+            Appointment appointment = hasAppointment(dc, appointmentDate);
+            if(appointment != null) {
+                String patientEmail = appointment.getPatient().getEmail();
+                cancelAppointment(license, clinicId, patientEmail, year, month, day, time, false);
+            }
+        }
+    }
+
     @Transactional
     @Override
     public void cancelAppointment(String license, int clinicId, String userEmail, int year, int month, int day, int time, boolean cancelledByDoctor) {
 
-        Calendar date = Calendar.getInstance();
-        date.set(year, month, day, time, 0, 0);
-        date.set(Calendar.MILLISECOND, 0);
+        Calendar date = createAppointmentCalendar(year, month, day, time);
 
         Doctor doctor = doctorService.getDoctorByLicense(license);
         Clinic clinic = clinicService.getClinicById(clinicId);
