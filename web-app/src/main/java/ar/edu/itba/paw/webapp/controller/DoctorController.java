@@ -249,7 +249,7 @@ public class DoctorController {
     private DoctorService doctorService;
 
     @Autowired
-    private PatientService patientService;
+    private UserService userService;
 
     @Autowired
     private DoctorHourService doctorHourService;
@@ -329,7 +329,7 @@ public class DoctorController {
         if(doctor != null) {
             doctorService.updateDoctorProfile(
                     doctor.getEmail(),
-                    SecurityHelper.processNewPassword(form.getNewPassword(), passwordEncoder),
+                    SecurityHelper.processNewPassword(form.getNewPassword(), passwordEncoder, userService, doctor.getEmail()),
                     form.getFirstName(),form.getLastName(),
                     form.getPhoneNumber(),form.getSpecialty());
             return Response.noContent().build();
@@ -342,8 +342,9 @@ public class DoctorController {
     @Produces(value = { MediaType.APPLICATION_JSON, })
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createDoctor(final DoctorForm form) {
+        String encodedPassword = passwordEncoder.encode(form.getPassword());
         doctorService.createDoctor(new Specialty(form.getSpecialty()), form.getLicense(), form.getPhoneNumber()
-                ,form.getFirstName(), form.getLastName(), form.getPassword(), form.getEmail());
+                ,form.getFirstName(), form.getLastName(), encodedPassword, form.getEmail());
         return Response.created(uriInfo.getAbsolutePathBuilder().path(form.getLicense()).build()).build();
     }
 

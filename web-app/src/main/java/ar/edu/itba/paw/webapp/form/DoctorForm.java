@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.helpers.validation.annotations.Exists;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.FieldMatch;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.Unique;
 
@@ -16,6 +17,7 @@ public class DoctorForm {
     private String lastName;
 
     @Pattern(regexp = "[a-zA-Z ]+")
+    @Exists(field = "specialty")
     private String specialty;
 
     @Pattern(regexp = "[0-9]+")

@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.form;
 
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.EditablePassword;
+import ar.edu.itba.paw.webapp.helpers.validation.annotations.Exists;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.FieldMatch;
 
 import javax.validation.constraints.Pattern;
@@ -29,7 +30,7 @@ public class EditDoctorProfileForm {
     private String repeatPassword;
 
     // Doctor information
-
+    @Exists(field = "specialty")
     private String specialty;
 
     @Pattern(regexp = "[0-9]+")
