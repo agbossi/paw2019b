@@ -53,6 +53,7 @@ public class LocationDaoImpl implements LocationDao {
 
         TypedQuery<Location> query = entityManager.createQuery("from Location as location " +
                 "where location.name IN (:filteredLocations) ORDER BY location.name",Location.class);
+        query.setParameter("filteredLocations", ids);
         List<Location> list = query.setFirstResult(page * MAX_LOCATIONS_PER_PAGE)
                                    .setMaxResults(MAX_LOCATIONS_PER_PAGE)
                                    .getResultList();

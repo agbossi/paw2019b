@@ -225,18 +225,15 @@ import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
-import ar.edu.itba.paw.webapp.helpers.UserContextHelper;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.validation.Valid;
 
 @Component
 @Path("doctors") //TODO estos son endpoints que dan info de los doctores,
@@ -266,6 +263,9 @@ public class DoctorController {
 
     @Autowired
     private AppointmentService appointmentService;
+
+    @Autowired
+    private SpecialtyService specialtyService;
 
     @Context
     private UriInfo uriInfo;
@@ -325,7 +325,7 @@ public class DoctorController {
     @Path("/{license}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateDoctor(@PathParam("license") final String license, EditDoctorProfileForm form) {
+    public Response updateDoctor(@PathParam("license") final String license, @Valid EditDoctorProfileForm form) {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor != null) {
             doctorService.updateDoctorProfile(
@@ -344,7 +344,9 @@ public class DoctorController {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createDoctor(final DoctorForm form) {
         String encodedPassword = passwordEncoder.encode(form.getPassword());
-        doctorService.createDoctor(new Specialty(form.getSpecialty()), form.getLicense(), form.getPhoneNumber()
+        Specialty specialty = specialtyService.getSpecialtyByName(form.getSpecialty());
+
+        doctorService.createDoctor(specialty, form.getLicense(), form.getPhoneNumber()
                 ,form.getFirstName(), form.getLastName(), encodedPassword, form.getEmail());
         return Response.created(uriInfo.getAbsolutePathBuilder().path(form.getLicense()).build()).build();
     }
