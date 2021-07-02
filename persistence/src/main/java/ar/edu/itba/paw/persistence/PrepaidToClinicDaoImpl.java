@@ -14,6 +14,7 @@ import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
@@ -22,6 +23,7 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     private EntityManager entityManager;
 
     private final static int MAX_PREPAID_TO_CLINICS_PER_PAGE = 20;
+    private final static int MAX_PREPAID_FOR_CLINIC_PER_PAGE = 10;
 
     @Override
     public List<PrepaidToClinic> getPrepaidToClinics(){
@@ -31,6 +33,18 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
                 PrepaidToClinic.class);
         List<PrepaidToClinic> list = query.getResultList();
         return list;
+    }
+
+    @Override
+    public List<Prepaid> getPrepaidsForClinic(int clinic, int page) {
+        Query nativeQuery = entityManager.createNativeQuery("SELECT prepaid FROM clinicPrepaids where clinicid = ?1");
+        nativeQuery.setParameter(1, clinic);
+        @SuppressWarnings("unchecked")
+        List<String> ids = nativeQuery.setFirstResult(page * MAX_PREPAID_FOR_CLINIC_PER_PAGE)
+                .setMaxResults(MAX_PREPAID_FOR_CLINIC_PER_PAGE)
+                .getResultList();
+
+        return ids.stream().map(Prepaid::new).collect(Collectors.toList());
     }
 
     @Override
@@ -78,7 +92,7 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     @Override
     public long deletePrepaidFromClinic(String prepaid, int clinic) {
         Query query = entityManager.createQuery("delete from PrepaidToClinic as p " +
-                "where p.prepaid = :prepaid and p.clinic.id = :clinic");
+                "where p.prepaid.name = :prepaid and p.clinic.id = :clinic");
         query.setParameter("clinic",clinic);
         query.setParameter("prepaid",prepaid);
         return query.executeUpdate();

@@ -13,5 +13,7 @@ public interface PrepaidToClinicService extends PaginationService<PrepaidToClini
 
     boolean clinicHasPrepaid(String prepaid,int clinic);
 
+    List<Prepaid> getPrepaidsForClinic(int clinic, int page);
+
     long deletePrepaidFromClinic(String prepaid, int clinic);
 }

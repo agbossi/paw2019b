@@ -47,6 +47,11 @@ public class PrepaidToClinicServiceImpl implements PrepaidToClinicService {
     }
 
     @Override
+    public List<Prepaid> getPrepaidsForClinic(int clinic, int page) {
+        return prepaidToClinicDao.getPrepaidsForClinic(clinic, page);
+    }
+
+    @Override
     public List<PrepaidToClinic> getPaginatedObjects(int page) {
         if(page < 0) {
             return Collections.emptyList();

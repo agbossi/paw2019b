@@ -26,7 +26,7 @@ public class DoctorClinicDto {
     public static DoctorClinicDto fromDoctorClinic(DoctorClinic doctorClinic, UriInfo uriInfo, List<List<DoctorHourDto>> week) {
         DoctorClinicDto doctorClinicDto = new DoctorClinicDto();
         doctorClinicDto.doctorDto = DoctorDto.fromDoctor(doctorClinic.getDoctor(), uriInfo);
-        doctorClinicDto.clinicDto = ClinicDto.fromClinic(doctorClinic.getClinic());
+        doctorClinicDto.clinicDto = ClinicDto.fromClinic(doctorClinic.getClinic(), uriInfo);
         doctorClinicDto.consultPrice = doctorClinic.getConsultPrice();
         doctorClinicDto.schedules = uriInfo.getBaseUriBuilder().path("doctors")
                 .path(doctorClinic.getDoctor().getLicense()).path("doctorsClinics")

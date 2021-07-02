@@ -2,22 +2,34 @@ package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.model.Clinic;
 
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
+
 public class ClinicDto {
 
     private int id;
     private String address;
     private String Location;
     private String name;
+    private URI clinicPrepaids;
 
-    //Falta prepaid. va como uri?
-
-    public static ClinicDto fromClinic(Clinic clinic) {
+    public static ClinicDto fromClinic(Clinic clinic, UriInfo uriInfo) {
         ClinicDto clinicDto = new ClinicDto();
         clinicDto.address = clinic.getAddress();
         clinicDto.id = clinic.getId();
         clinicDto.Location = clinic.getLocation().getLocationName();
         clinicDto.name = clinic.getName();
+        clinicDto.clinicPrepaids = uriInfo.getBaseUriBuilder().path("clinics")
+                .path(String.valueOf(clinic.getId())).path("clinicPrepaids").build();
         return clinicDto;
+    }
+
+    public URI getClinicPrepaids() {
+        return clinicPrepaids;
+    }
+
+    public void setClinicPrepaids(URI clinicPrepaids) {
+        this.clinicPrepaids = clinicPrepaids;
     }
 
     public int getId() {

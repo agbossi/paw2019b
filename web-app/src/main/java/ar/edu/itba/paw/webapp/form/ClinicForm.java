@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.helpers.validation.annotations.Exists;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.UniqueClinic;
 
 import javax.validation.constraints.NotNull;
@@ -16,6 +17,7 @@ public class ClinicForm {
     @Pattern(regexp = "[a-zA-Z0-9 ]+")
     private String address;
 
+    @Exists(field = "location")
     private String location;
 
     public String getName() {

@@ -236,8 +236,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 @Component
-@Path("doctors") //TODO estos son endpoints que dan info de los doctores,
-// quizas habria que mergear con los de doctorController para que queden bajo doctors
+@Path("doctors")
 public class DoctorController {
 
     @Autowired
@@ -272,7 +271,7 @@ public class DoctorController {
 
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response geAvailableDoctors(
+    public Response getAvailableDoctors(
             @QueryParam("page") @DefaultValue("0") Integer page,
             @QueryParam("location") @DefaultValue("") final String location,
             @QueryParam("specialty") @DefaultValue("") final String specialty,
@@ -398,7 +397,7 @@ public class DoctorController {
                 imageService.createProfileImage(profileImageForm.getProfilePictureBytes(), doctor);
                 return Response.created(uriInfo.getAbsolutePath()).build();
             } else {
-                return Response.status(Response.Status.CONFLICT).build();
+                return Response.status(Response.Status.CONFLICT.getStatusCode()).build();
             }
         } else {
             return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
@@ -495,9 +494,15 @@ public class DoctorController {
                                    @PathParam("clinic") final Integer clinic,
                                    ScheduleForm form) {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
-            scheduleService.createSchedule(form.getHour(), form.getDay(),
-                    dc.getDoctor().getEmail(), dc.getClinic().getId());
-        return Response.created(uriInfo.getAbsolutePath()).build(); //TODO esto no me cierra del todo
+        if(dc != null) {
+            if(license.equals(form.getLicense()) && clinic == form.getClinic()) {
+                scheduleService.createSchedule(form.getHour(), form.getDay(),
+                        dc.getDoctor().getEmail(), dc.getClinic().getId());
+                return Response.created(uriInfo.getAbsolutePath()).build();
+            }
+            return Response.status(Response.Status.CONFLICT.getStatusCode()).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
 
@@ -539,13 +544,20 @@ public class DoctorController {
     public Response createAppointment(@PathParam("license") final String license,
                                       @PathParam("clinic") final Integer clinic,
                                       AppointmentForm form) {
-        Appointment appointment = appointmentService.createAppointment(
-                form.getLicense(), form.getClinic(), form.getPatient(),
-                form.getYear(), form.getMonth(), form.getDay(), form.getTime());
-        if(appointment != null) {
-            return Response.created(uriInfo.getAbsolutePath()).build(); //TODO esto no me cierra del todo
+        DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
+        if(dc != null) {
+            if(license.equals(form.getLicense()) && clinic == form.getClinic()) {
+                Appointment appointment = appointmentService.createAppointment(
+                        form.getLicense(), form.getClinic(), form.getPatient(),
+                        form.getYear(), form.getMonth(), form.getDay(), form.getTime());
+
+                if(appointment != null) {
+                    return Response.created(uriInfo.getAbsolutePath()).build();
+                }
+            }
+            return Response.status(Response.Status.CONFLICT.getStatusCode()).build();
         }
-        return Response.status(Response.Status.CONFLICT).build();
+        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
     // private methods

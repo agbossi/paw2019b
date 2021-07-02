@@ -40,4 +40,20 @@ public class ScheduleForm {
     public void setHour(int hour) {
         this.hour = hour;
     }
+
+    public String getLicense() {
+        return license;
+    }
+
+    public void setLicense(String license) {
+        this.license = license;
+    }
+
+    public int getClinic() {
+        return clinic;
+    }
+
+    public void setClinic(int clinic) {
+        this.clinic = clinic;
+    }
 }

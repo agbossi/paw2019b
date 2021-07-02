@@ -1,12 +1,16 @@
 package ar.edu.itba.paw.webapp.form;
 
+import ar.edu.itba.paw.webapp.helpers.validation.annotations.ClinicExists;
+import ar.edu.itba.paw.webapp.helpers.validation.annotations.Exists;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.UniquePrepaidToClinic;
 
 @UniquePrepaidToClinic(prepaid = "prepaid",clinic = "clinic")
 public class PrepaidToClinicForm {
 
-    private  String prepaid;
+    @Exists(field = "prepaid")
+    private String prepaid;
 
+    @ClinicExists
     private int clinic;
 
     public String getPrepaid() {
