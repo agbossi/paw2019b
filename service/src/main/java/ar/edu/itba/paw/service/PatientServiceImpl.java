@@ -103,6 +103,13 @@ public class PatientServiceImpl implements PatientService {
         patientDao.updatePatient(email,args);
     }
 
+    @Transactional
+    @Override
+    public void updatePatientProfile(String email, String newPassword, String firstName, String lastName, String prepaid, String prepaidNumber) {
+        userService.updateUser(email, newPassword, firstName, lastName);
+        updatePatient(email, prepaid, prepaidNumber);
+    }
+
     @Override
     public List<Patient> getPatientsByPrepaid(String prepaid) {
         return patientDao.getPatientsByPrepaid(prepaid);

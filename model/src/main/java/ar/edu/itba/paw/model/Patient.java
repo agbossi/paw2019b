@@ -42,6 +42,18 @@ public class Patient {
     public Patient(){
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public List<Doctor> getFavorites() {
+        return favorites;
+    }
+
+    public void setFavorites(List<Doctor> favorites) {
+        this.favorites = favorites;
+    }
+
     public String getId() {
         return id;
     }

@@ -38,4 +38,10 @@ public class FavoriteServiceImpl implements FavoriteService {
     public void deleteFavorite(Doctor doctor, Patient patient) {
         favoriteDao.deleteFavorite(doctor, patient);
     }
+
+    @Transactional
+    @Override
+    public void deleteFavorite(String doctor, String patient) {
+        favoriteDao.deleteFavorite(doctor, patient);
+    }
 }

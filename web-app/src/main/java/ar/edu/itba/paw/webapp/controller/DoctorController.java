@@ -269,6 +269,7 @@ public class DoctorController {
     @Context
     private UriInfo uriInfo;
 
+
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getAvailableDoctors(
@@ -333,9 +334,9 @@ public class DoctorController {
                     form.getFirstName(),form.getLastName(),
                     form.getPhoneNumber(),form.getSpecialty());
             return Response.noContent().build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
         }
+        return Response.status(Response.Status.NOT_FOUND).build();
+
     }
 
     @POST

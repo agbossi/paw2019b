@@ -13,6 +13,8 @@ public interface PatientService {
 
     List<Doctor> getPatientFavoriteDoctors(Patient patient);
 
+    void updatePatientProfile(String email, String newPassword, String firstName, String lastName, String prepaid, String prepaidNumber);
+
     void setAppointments(Patient patient);
 
     void updatePatient(String email, String prepaid, String prepaidNumber);

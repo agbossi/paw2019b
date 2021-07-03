@@ -147,3 +147,143 @@ public class PatientController {
         form.setPrepaidNumber(patient.getPrepaidNumber());
     }
 } */
+
+import ar.edu.itba.paw.interfaces.service.AppointmentService;
+import ar.edu.itba.paw.interfaces.service.FavoriteService;
+import ar.edu.itba.paw.interfaces.service.PatientService;
+import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.model.Patient;
+import ar.edu.itba.paw.webapp.dto.AppointmentDto;
+import ar.edu.itba.paw.webapp.dto.DoctorDto;
+import ar.edu.itba.paw.webapp.dto.PatientDto;
+import ar.edu.itba.paw.webapp.form.FavoriteForm;
+import ar.edu.itba.paw.webapp.form.PersonalInformationForm;
+import ar.edu.itba.paw.webapp.form.SignUpForm;
+import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
+@Path("patients")
+public class PatientController {
+
+    @Context
+    UriInfo uriInfo;
+
+    @Autowired
+    private PatientService patientService;
+
+    @Autowired
+    private FavoriteService favoriteService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private AppointmentService appointmentService;
+
+    @GET
+    @Path("{id}")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getPatient(@PathParam("id") final String patientEmail) {
+        Patient patient = patientService.getPatientByEmail(patientEmail);
+        if(patient != null) {
+            PatientDto dto = PatientDto.fromPatient(patient, uriInfo);
+            return Response.ok(dto).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+    }
+
+    @DELETE
+    @Path("{id}")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response deletePatient(@PathParam("id") final String patientEmail,
+                                  @QueryParam("license") String doctorLicense) {
+        patientService.deleteFavorite(patientEmail, doctorLicense);
+        return Response.noContent().build();
+    }
+
+    @PUT
+    @Path("{id}")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response updatePatient(@PathParam("id") final String patientEmail,
+                                  PersonalInformationForm form) {
+        Patient patient = patientService.getPatientByEmail(patientEmail);
+        if(patient != null) {
+            patientService.updatePatientProfile(patientEmail, SecurityHelper.processNewPassword(form.getNewPassword(),
+                    passwordEncoder, userService, patientEmail), form.getFirstName(),
+                    form.getLastName(), form.getPrepaid(), form.getPrepaidNumber());
+            return Response.noContent().build();
+        }
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    @POST
+    @Produces(value = { MediaType.APPLICATION_JSON, })
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createPatient(final SignUpForm form) {
+        String encodedPassword = passwordEncoder.encode(form.getPassword());
+        patientService.create(form.getId(), form.getPrepaid(),
+                form.getPrepaidNumber(), form.getFirstName(),
+                form.getLastName(), encodedPassword, form.getEmail());
+        return Response.created(uriInfo.getAbsolutePathBuilder().path(form.getEmail()).build()).build();
+    }
+
+    @GET
+    @Path("{id}/favorites")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getPatientFavorites(@QueryParam("patient") String patientEmail) {
+        Patient patient = patientService.getPatientByEmail(patientEmail);
+        if(patient != null) {
+            List<DoctorDto> favorites = favoriteService.getPatientsFavorite(patient)
+                    .stream().map(f -> DoctorDto.fromDoctor(f.getDoctor(), uriInfo)).collect(Collectors.toList());
+            return Response.ok(new GenericEntity<List<DoctorDto>>(favorites) {}).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+    }
+
+    @DELETE
+    @Path("{id}/favorites")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response removeFromFavorites(@PathParam("id") final String patientEmail,
+                                        @QueryParam("doctor") String doctorLicense) {
+        favoriteService.deleteFavorite(patientEmail, doctorLicense);
+        return Response.noContent().build();
+    }
+
+    @POST
+    @Path("{id}/favorites")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addFavorite(@PathParam("id") final String patientEmail,
+                                final FavoriteForm form) {
+        patientService.addFavorite(patientEmail, form.getLicense());
+        return Response.created(uriInfo.getAbsolutePath()).build();
+    }
+
+    @GET
+    @Path("{id}/appointments")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getPatientAppointments(@PathParam("id") final String patientEmail) {
+        Patient patient = patientService.getPatientByEmail(patientEmail);
+        if(patient != null) {
+            List<AppointmentDto> appointments = appointmentService.getPatientsAppointments(patient.getUser())
+                    .stream().map(AppointmentDto::fromAppointment).collect(Collectors.toList());
+            return Response.ok(new GenericEntity<List<AppointmentDto>>(appointments) {}).build();
+        }
+        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+    }
+
+
+
+}

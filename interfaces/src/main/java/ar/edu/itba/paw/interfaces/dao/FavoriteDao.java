@@ -14,5 +14,7 @@ public interface FavoriteDao {
 
     boolean isFavorite(Doctor doctor, Patient patient);
 
+    void deleteFavorite(String doctorLicense, String patientEmail);
+
     void deleteFavorite(Doctor doctor, Patient patient);
 }

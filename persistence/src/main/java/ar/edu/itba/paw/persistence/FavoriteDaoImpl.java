@@ -56,4 +56,14 @@ public class FavoriteDaoImpl implements FavoriteDao {
         query.setParameter("email", patient.getEmail());
         query.executeUpdate();
     }
+
+    @Override
+    public void deleteFavorite(String doctorLicense, String patientEmail) {
+        final Query query = entityManager.createQuery("delete from Favorite as fav " +
+                "where fav.favoriteKey.doctor = :license and fav.favoriteKey.patient = :email");
+
+        query.setParameter("license", doctorLicense);
+        query.setParameter("email", patientEmail);
+        query.executeUpdate();
+    }
 }

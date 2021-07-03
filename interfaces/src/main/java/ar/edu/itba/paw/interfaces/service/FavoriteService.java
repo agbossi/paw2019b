@@ -15,4 +15,6 @@ public interface FavoriteService {
     boolean isFavorite(Doctor doctor, Patient patient);
 
     void deleteFavorite(Doctor doctor, Patient patient);
+
+    void deleteFavorite(String doctorLicense, String patientEmail);
 }
