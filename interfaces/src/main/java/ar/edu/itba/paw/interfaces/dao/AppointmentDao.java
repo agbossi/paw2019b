@@ -13,6 +13,8 @@ public interface AppointmentDao {
 
     List<Appointment> getPatientsAppointments(User patient);
 
+    List<Appointment> getPatientsAppointments(User patient, int clinicId);
+
     void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date);
 
     Appointment hasAppointment(DoctorClinic doctorClinic,Calendar date);

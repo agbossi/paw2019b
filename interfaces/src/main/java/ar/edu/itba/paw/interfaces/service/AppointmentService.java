@@ -9,13 +9,21 @@ public interface AppointmentService {
 
     Calendar createAppointmentCalendar(int year, int month, int day, int time);
 
-    void cancelAppointment(String license, int clinicId, int year, int month, int day, int time);
+    void cancelAppointment(String license, int clinicId, int year, int month, int day, int time, boolean cancelledByDoctor);
+
+    void cancelUserAppointment(String userEmail, String license, int clinicId, int year, int month, int day, int time);
 
     Appointment createAppointment(String license, int clinicId, String patientEmail, int year, int month, int day, int time);
 
     List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic);
 
     List<Appointment> getPatientsAppointments(User patient);
+
+    List<Appointment> getPatientsAppointments(User patient, int clinicId);
+
+    List<Appointment> getUserAppointments(User user);
+
+    List<Appointment> getUserAppointmentsForClinic(User user, Clinic clinic);
 
     void cancelAppointment(String license, int clinicId, String userEmail, int year, int month, int day, int time, boolean cancelledByDoctor);
 

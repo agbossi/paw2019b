@@ -43,6 +43,15 @@ public class AppointmentDaoImpl implements AppointmentDao {
         return list;
     }
 
+    @Override
+    public List<Appointment> getPatientsAppointments(User patient, int clinicId) {
+        TypedQuery<Appointment> query = entityManager.createQuery("select ap from Appointment as ap " +
+                "where ap.appointmentKey.clinic = :clinic and ap.patient.email = :email", Appointment.class);
+        query.setParameter("email",patient.getEmail());
+        query.setParameter("clinic",clinicId);
+        return query.getResultList();
+    }
+
     @Override //TODO check extract thing
     public List<Appointment> getAllDocAppointmentsOnSchedule(DoctorClinic doctor, int day, int hour){
         TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +

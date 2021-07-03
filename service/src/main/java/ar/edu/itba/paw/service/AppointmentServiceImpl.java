@@ -94,17 +94,28 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentDao.getPatientsAppointments(patient);
     }
 
+    @Override
+    public List<Appointment> getPatientsAppointments(User patient, int clinicId) {
+        return appointmentDao.getPatientsAppointments(patient, clinicId);
+    }
 
-    public void cancelAppointment(String license, int clinicId, int year, int month, int day, int time) {
+    @Override
+    public void cancelAppointment(String license, int clinicId, int year, int month, int day, int time, boolean cancelledByDoctor) {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license, clinicId);
         if(dc != null) {
             Calendar appointmentDate = createAppointmentCalendar(year, month, day, time);
             Appointment appointment = hasAppointment(dc, appointmentDate);
             if(appointment != null) {
                 String patientEmail = appointment.getPatient().getEmail();
-                cancelAppointment(license, clinicId, patientEmail, year, month, day, time, false);
+                cancelAppointment(license, clinicId, patientEmail, year, month, day, time, cancelledByDoctor);
             }
         }
+    }
+
+    @Override
+    public void cancelUserAppointment(String userEmail, String license, int clinicId, int year, int month, int day, int time) {
+        boolean canceledByDoctor = userService.isDoctor(userEmail);
+        cancelAppointment(license, clinicId, year, month, day, time, canceledByDoctor);
     }
 
     @Transactional
@@ -138,6 +149,29 @@ public class AppointmentServiceImpl implements AppointmentService {
                                 " " + dateString(date));
             }
             appointmentDao.cancelAppointment(doctorClinic, user, date);
+        }
+    }
+
+    //TODO agregar filtro de fechas
+    @Override
+    public List<Appointment> getUserAppointments(User user) {
+        if(userService.isDoctor(user.getEmail())) {
+            Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
+            return getAllDoctorsAppointments(doctor);
+        } else {
+            return getPatientsAppointments(user);
+        }
+    }
+
+    @Override
+    public List<Appointment> getUserAppointmentsForClinic(User user, Clinic clinic) {
+        if(userService.isDoctor(user.getEmail())) {
+            Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
+            DoctorClinic doctorClinic = doctorClinicService
+                    .getDoctorInClinic(doctor.getLicense(), clinic.getId());
+            return getDoctorsAppointments(doctorClinic);
+        } else {
+            return getPatientsAppointments(user, clinic.getId());
         }
     }
 

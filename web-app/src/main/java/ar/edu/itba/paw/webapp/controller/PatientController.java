@@ -271,19 +271,4 @@ public class PatientController {
         return Response.created(uriInfo.getAbsolutePath()).build();
     }
 
-    @GET
-    @Path("{id}/appointments")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getPatientAppointments(@PathParam("id") final String patientEmail) {
-        Patient patient = patientService.getPatientByEmail(patientEmail);
-        if(patient != null) {
-            List<AppointmentDto> appointments = appointmentService.getPatientsAppointments(patient.getUser())
-                    .stream().map(AppointmentDto::fromAppointment).collect(Collectors.toList());
-            return Response.ok(new GenericEntity<List<AppointmentDto>>(appointments) {}).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-    }
-
-
-
 }

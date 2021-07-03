@@ -22,7 +22,6 @@ public class DoctorClinicDto {
     //lo que sale en appointments: /web_app_war_exploded/doctors/8895668/doctorsClinics/6/appointments
 
 
-    //lo que sale en schedules desde {clinic}: /web_app_war_exploded/doctors/8895668/doctorsClinics/6/6/schedules
     public static DoctorClinicDto fromDoctorClinic(DoctorClinic doctorClinic, UriInfo uriInfo, List<List<DoctorHourDto>> week) {
         DoctorClinicDto doctorClinicDto = new DoctorClinicDto();
         doctorClinicDto.doctorDto = DoctorDto.fromDoctor(doctorClinic.getDoctor(), uriInfo);
@@ -31,9 +30,9 @@ public class DoctorClinicDto {
         doctorClinicDto.schedules = uriInfo.getBaseUriBuilder().path("doctors")
                 .path(doctorClinic.getDoctor().getLicense()).path("doctorsClinics")
                 .path(String.valueOf(doctorClinic.getClinic().getId())).path("schedules").build();
-        doctorClinicDto.appointments = uriInfo.getBaseUriBuilder().path("doctors")
-                .path(doctorClinic.getDoctor().getLicense()).path("doctorsClinics")
-                .path(String.valueOf(doctorClinic.getClinic().getId())).path("appointments").build();
+        doctorClinicDto.appointments = uriInfo.getBaseUriBuilder().path("appointments")
+                .path(doctorClinic.getDoctor().getEmail())
+                .path(String.valueOf(doctorClinic.getClinic().getId())).build();
         doctorClinicDto.week = week;
         return doctorClinicDto;
     }

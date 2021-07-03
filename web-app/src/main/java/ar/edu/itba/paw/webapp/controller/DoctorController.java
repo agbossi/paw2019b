@@ -507,38 +507,7 @@ public class DoctorController {
     }
 
 
-    //TODO repite el mismo appointment una y otra vez
-    @GET
-    @Path("/{license}/doctorsClinics/{clinic}/appointments")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getDoctorClinicAppointments(@PathParam("license") final String license,
-                                                @PathParam("clinic") final Integer clinic) {
-        DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
-        if(dc != null) {
-            List<AppointmentDto> appointments = dc.getAppointments()
-                    .stream().map(AppointmentDto::fromAppointment).collect(Collectors.toList());
-            return Response.ok(new GenericEntity<List<AppointmentDto>>(appointments) {}).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-    }
-
-    //TODO no funciona totalmente porque no se si quien cancela es doctor o paciente
-    @DELETE
-    @Path("/{license}/doctorsClinics/{clinic}/appointments")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response deleteDoctorClinicAppointment(@PathParam("license") final String license,
-                                                  @PathParam("clinic") final Integer clinic,
-                                                  @QueryParam("year") final Integer year,
-                                                  @QueryParam("month") final Integer month,
-                                                  @QueryParam("day") final Integer day,
-                                                  @QueryParam("time") final Integer time) {
-
-        appointmentService.cancelAppointment(license, clinic, year, month, day, time);
-        return Response.noContent().build();
-    }
-
-
-    @POST
+/*    @POST
     @Path("/{license}/doctorsClinics/{clinic}/appointments")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Consumes(MediaType.APPLICATION_JSON)
@@ -559,7 +528,7 @@ public class DoctorController {
             return Response.status(Response.Status.CONFLICT.getStatusCode()).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-    }
+    } */
 
     // private methods
 
@@ -569,20 +538,4 @@ public class DoctorController {
                 l.stream().map(DoctorHourDto::fromDoctorHour).collect(Collectors.toList()))
                 .collect(Collectors.toList());
     }
-
-    //TODO: decidir si hago un dto de favorite + doctorClinic o dejo favorite como endpoint aparte en
-    // patient controller y luego en front hago un contains o algo asi (es para que al cargar pagina del
-    // doctor, aparezca como favorito). A su vez esta forma requiere Spring Security que no me queda claro
-    // si lo podemos usar de esta forma
-    /*private boolean isFavorite(Doctor doctor) {
-        boolean isFav = false;
-
-        String userEmail = UserContextHelper.getLoggedUserEmail(SecurityContextHolder.getContext());
-        Patient patient = patientService.getPatientByEmail(userEmail);
-        if(patient != null) {
-            isFav = favoriteService.isFavorite(doctor, patient);
-        }
-        return isFav;
-    } */
-
 }

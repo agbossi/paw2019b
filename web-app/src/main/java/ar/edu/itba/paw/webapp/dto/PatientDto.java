@@ -20,8 +20,8 @@ public class PatientDto {
         patientDto.id = patient.getId();
         patientDto.prepaid = patient.getPrepaid();
         patientDto.prepaidNumber = patient.getPrepaidNumber();
-        patientDto.appointments = uriInfo.getBaseUriBuilder().path("patients")
-                .path(patient.getEmail()).path("appointments").build();
+        patientDto.appointments = uriInfo.getBaseUriBuilder().path("appointments")
+                .path(patient.getEmail()).build();
         patientDto.favorites = uriInfo.getBaseUriBuilder().path("patients")
                 .path(patient.getEmail()).path("favorites").build();
         return patientDto;
