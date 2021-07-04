@@ -52,7 +52,7 @@ public class LocationController {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createLocation(/*@Valid*/ final LocationForm form) {
+    public Response createLocation(@Valid final LocationForm form) {
         Location location = locationService.createLocation(form.getName());
         return Response.created(uriInfo.getAbsolutePathBuilder().
                 path(location.getLocationName()).build()).build();

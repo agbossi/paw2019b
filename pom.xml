@@ -20,6 +20,7 @@
         <org.slf4j.version>1.7.5</org.slf4j.version>
         <logback.version>1.1.2</logback.version>
         <jersey.version>3.0-SNAPSHOT</jersey.version>
+        <jersey-bean-validation.version>2.27</jersey-bean-validation.version>
         <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
         <spring-security-taglibs.version>5.0.4.RELEASE</spring-security-taglibs.version>
         <org.hsqldb.version>2.3.1</org.hsqldb.version>
@@ -89,6 +90,11 @@
                 <groupId>org.glassfish.jersey.media</groupId>
                 <artifactId>jersey-media-multipart</artifactId>
                 <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jersey.ext</groupId>
+                <artifactId>jersey-bean-validation</artifactId>
+                <version>${jersey-bean-validation.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>
