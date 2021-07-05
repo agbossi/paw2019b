@@ -85,6 +85,12 @@ public class PatientServiceImpl implements PatientService {
         }
     }
 
+    @Override
+    @Transactional
+    public void deletePatient(String email) {
+        userService.deleteUser(email);
+    }
+
     @Transactional
     @Override
     public void updatePatient(String email, String prepaid, String prepaidNumber) {

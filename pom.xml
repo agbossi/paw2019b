@@ -20,7 +20,7 @@
         <org.slf4j.version>1.7.5</org.slf4j.version>
         <logback.version>1.1.2</logback.version>
         <jersey.version>3.0-SNAPSHOT</jersey.version>
-        <jersey-bean-validation.version>2.27</jersey-bean-validation.version>
+       <!-- <jersey-bean-validation.version>2.27</jersey-bean-validation.version> -->
         <logback-ext-spring.version>0.1.1</logback-ext-spring.version>
         <spring-security-taglibs.version>5.0.4.RELEASE</spring-security-taglibs.version>
         <org.hsqldb.version>2.3.1</org.hsqldb.version>
@@ -94,7 +94,13 @@
             <dependency>
                 <groupId>org.glassfish.jersey.ext</groupId>
                 <artifactId>jersey-bean-validation</artifactId>
-                <version>${jersey-bean-validation.version}</version>
+                <version>${jersey.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.glassfish.hk2.external</groupId>
+                        <artifactId>jakarta.inject</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.springframework.security</groupId>

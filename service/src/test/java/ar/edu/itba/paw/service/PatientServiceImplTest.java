@@ -1,5 +1,5 @@
 package ar.edu.itba.paw.service;
-
+/*
 import ar.edu.itba.paw.interfaces.dao.PatientDao;
 import ar.edu.itba.paw.interfaces.service.AppointmentService;
 import ar.edu.itba.paw.interfaces.service.UserService;
@@ -58,3 +58,4 @@ public class PatientServiceImplTest {
 
     }
 }
+*/

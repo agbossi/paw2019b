@@ -21,6 +21,8 @@ public interface PatientService {
 
     List<Patient> getPatientsByPrepaid(String prepaid);
 
+    void deletePatient(String email);
+
     List<Patient> getPatientsById(String id);
 
     void addFavorite(String patientEmail, String license);

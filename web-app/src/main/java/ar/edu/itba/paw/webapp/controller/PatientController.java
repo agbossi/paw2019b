@@ -189,9 +189,6 @@ public class PatientController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private AppointmentService appointmentService;
-
     @GET
     @Path("{id}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -207,9 +204,8 @@ public class PatientController {
     @DELETE
     @Path("{id}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response deletePatient(@PathParam("id") final String patientEmail,
-                                  @QueryParam("license") String doctorLicense) {
-        patientService.deleteFavorite(patientEmail, doctorLicense);
+    public Response deletePatient(@PathParam("id") final String patientEmail) {
+        patientService.deletePatient(patientEmail);
         return Response.noContent().build();
     }
 
@@ -242,7 +238,7 @@ public class PatientController {
     @GET
     @Path("{id}/favorites")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getPatientFavorites(@QueryParam("patient") String patientEmail) {
+    public Response getPatientFavorites(@PathParam("id") String patientEmail) {
         Patient patient = patientService.getPatientByEmail(patientEmail);
         if(patient != null) {
             List<DoctorDto> favorites = favoriteService.getPatientsFavorite(patient)
@@ -257,7 +253,7 @@ public class PatientController {
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response removeFromFavorites(@PathParam("id") final String patientEmail,
                                         @QueryParam("doctor") String doctorLicense) {
-        favoriteService.deleteFavorite(patientEmail, doctorLicense);
+        favoriteService.deleteFavorite(doctorLicense, patientEmail);
         return Response.noContent().build();
     }
 

@@ -139,6 +139,20 @@ public class AppointmentController {
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
+    @DELETE
+    @Path("{userId}")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response cancelAppointment(@PathParam("userId") final String email,
+                                      @QueryParam("clinicId") final Integer clinic,
+                                      @QueryParam("license") final String license,
+                                      @QueryParam("year") final Integer year,
+                                      @QueryParam("month") final Integer month,
+                                      @QueryParam("day") final Integer day,
+                                      @QueryParam("time") final Integer time) {
+        appointmentService.cancelUserAppointment(email, license, clinic, year, month, day, time);
+        return Response.noContent().build();
+    }
+
     @GET
     @Path("{userId}/{clinicId}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -157,7 +171,7 @@ public class AppointmentController {
     @DELETE
     @Path("{userId}/{clinicId}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response cancelAppointment(@PathParam("userId") final String email,
+    public Response cancelAppointmentInClinic(@PathParam("userId") final String email,
                                       @PathParam("clinicId") final Integer clinic,
                                       @QueryParam("license") final String license,
                                       @QueryParam("year") final Integer year,
