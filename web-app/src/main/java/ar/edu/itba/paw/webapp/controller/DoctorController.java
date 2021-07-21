@@ -226,6 +226,7 @@ import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -259,9 +260,6 @@ public class DoctorController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AppointmentService appointmentService;
 
     @Autowired
     private SpecialtyService specialtyService;
@@ -320,11 +318,12 @@ public class DoctorController {
     }
 
 
-    // TODO: como se que el put viene del usuario?
+    // TODO: como se que el put viene del usuario? --> preauth con license
     @PUT
     @Path("/{license}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Consumes(MediaType.APPLICATION_JSON)
+    @PreAuthorize("hasPermission('#license', 'doctor')")
     public Response updateDoctor(@PathParam("license") final String license, @Valid EditDoctorProfileForm form) {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor != null) {
@@ -367,6 +366,7 @@ public class DoctorController {
     @DELETE
     @Path("/{license}/profileImage")
     @Produces(value = { MediaType.APPLICATION_JSON })
+    @PreAuthorize("hasPermission('#license', 'doctor')")
     public Response deleteProfileImage(@PathParam("license") final String license) {
         imageService.deleteProfileImage(license);
         return Response.noContent().build();
@@ -376,6 +376,7 @@ public class DoctorController {
     @Path("/{license}/profileImage")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(value = { MediaType.APPLICATION_JSON })
+    @PreAuthorize("hasPermission('#license', 'doctor')")
     public Response updateProfileImage(@PathParam("license") final String license,
                                        @BeanParam final DoctorProfileImageForm profileImageForm) {
         Doctor doctor = doctorService.getDoctorByLicense(license);
@@ -390,6 +391,7 @@ public class DoctorController {
     @Path("/{license}/profileImage")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(value = { MediaType.APPLICATION_JSON })
+    @PreAuthorize("hasPermission('#license', 'doctor')")
     public Response uploadProfileImage(@PathParam("license") final String license,
                                        @BeanParam final DoctorProfileImageForm profileImageForm) {
         Doctor doctor = doctorService.getDoctorByLicense(license);
@@ -424,6 +426,7 @@ public class DoctorController {
     @POST
     @Path("/{license}/doctorsClinics")
     @Produces(value = { MediaType.APPLICATION_JSON })
+    @PreAuthorize("hasPermission('#license', 'doctor')")
     public Response createDoctorClinic(@PathParam("license") final String license,
                                        final DoctorClinicForm form) {
         Doctor doctor = doctorService.getDoctorByLicense(license);
@@ -437,6 +440,7 @@ public class DoctorController {
     @DELETE
     @Path("/{license}/doctorsClinics/{clinic}")
     @Produces(value = { MediaType.APPLICATION_JSON })
+    @PreAuthorize("hasPermission('#license', 'doctor')")
     public Response deleteDoctorClinic(@PathParam("license") final String license,
                                        @PathParam("clinic") final Integer clinic) {
         doctorClinicService.deleteDoctorClinic(license, clinic);
@@ -478,6 +482,7 @@ public class DoctorController {
     @DELETE
     @Path("/{license}/doctorsClinics/{clinic}/schedules")
     @Produces(value = { MediaType.APPLICATION_JSON })
+    @PreAuthorize("hasPermission('#license', 'doctor')")
     public Response deleteDoctorClinicSchedule(@PathParam("license") final String license,
                                                @PathParam("clinic") final Integer clinic,
                                                @QueryParam("day") final Integer day,
@@ -486,11 +491,11 @@ public class DoctorController {
         return Response.noContent().build();
     }
 
-    //TODO el mismo tema de quien hace este post
     @POST
     @Path("/{license}/doctorsClinics/{clinic}/schedules")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Consumes(MediaType.APPLICATION_JSON)
+    @PreAuthorize("hasPermission('#license', 'doctor')")
     public Response createSchedule(@PathParam("license") final String license,
                                    @PathParam("clinic") final Integer clinic,
                                    ScheduleForm form) {

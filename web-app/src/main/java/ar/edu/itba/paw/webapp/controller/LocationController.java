@@ -48,7 +48,6 @@ public class LocationController {
         return Response.noContent().build();
     }
 
-    //TODO, como logro que se valide el form
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
