@@ -29,6 +29,9 @@ public class CustomPermissionEvaluator implements PermissionEvaluator {
             String license = targetDomainObject.toString();
             Doctor doctor = doctorService.getDoctorByLicense(license);
             return doctor.getEmail().equals(auth.getName());
+        } else if(propertyFrom.equals("user")) {
+            String email = targetDomainObject.toString();
+            return email.equals(auth.getName());
         }
 
         return false;

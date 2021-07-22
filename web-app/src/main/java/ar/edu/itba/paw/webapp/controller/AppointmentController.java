@@ -131,7 +131,7 @@ public class AppointmentController {
     @GET
     @Path("{userId}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    @PreAuthorize("#email == authentication.principal.username")
+    @PreAuthorize("hasPermission(#email, 'user')")
     public Response getUserAppointments(@PathParam("userId") final String email) {
         User user = userService.findUserByEmail(email);
         if(user != null) {
@@ -145,7 +145,7 @@ public class AppointmentController {
     @DELETE
     @Path("{userId}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    @PreAuthorize("#email == authentication.principal.username")
+    @PreAuthorize("hasPermission(#email, 'user')")
     public Response cancelAppointment(@PathParam("userId") final String email,
                                       @QueryParam("clinicId") final Integer clinic,
                                       @QueryParam("license") final String license,
@@ -160,7 +160,7 @@ public class AppointmentController {
     @GET
     @Path("{userId}/{clinicId}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    @PreAuthorize("#email == authentication.principal.username")
+    @PreAuthorize("hasPermission(#email, 'user')")
     public Response getUserAppointmentsForClinic(@PathParam("userId") final String email,
                                                  @PathParam("clinicId") final Integer clinicId) {
         User user = userService.findUserByEmail(email);
@@ -175,7 +175,7 @@ public class AppointmentController {
 
     @DELETE
     @Path("{userId}/{clinicId}")
-    @PreAuthorize("#email == authentication.principal.username")
+    @PreAuthorize("hasPermission(#email, 'user')")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response cancelAppointmentInClinic(@PathParam("userId") final String email,
                                       @PathParam("clinicId") final Integer clinic,
@@ -192,7 +192,7 @@ public class AppointmentController {
     @POST
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Consumes(MediaType.APPLICATION_JSON)
-    @PreAuthorize("#form.patient == authentication.principal.username")
+    @PreAuthorize("hasPermission(#email, 'user')")
     public Response createAppointment(final AppointmentForm form) {
         appointmentService.createAppointment(form.getLicense(), form.getClinic(),
                 form.getPatient(), form.getYear(), form.getMonth(), form.getDay(),
