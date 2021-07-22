@@ -162,6 +162,7 @@ import ar.edu.itba.paw.webapp.form.SignUpForm;
 import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -192,6 +193,7 @@ public class PatientController {
     @GET
     @Path("{id}")
     @Produces(value = { MediaType.APPLICATION_JSON })
+    @PreAuthorize("#patientEmail == authentication.principal.username")
     public Response getPatient(@PathParam("id") final String patientEmail) {
         Patient patient = patientService.getPatientByEmail(patientEmail);
         if(patient != null) {
@@ -204,6 +206,7 @@ public class PatientController {
     @DELETE
     @Path("{id}")
     @Produces(value = { MediaType.APPLICATION_JSON })
+    @PreAuthorize("#patientEmail == authentication.principal.username")
     public Response deletePatient(@PathParam("id") final String patientEmail) {
         patientService.deletePatient(patientEmail);
         return Response.noContent().build();
@@ -212,6 +215,7 @@ public class PatientController {
     @PUT
     @Path("{id}")
     @Produces(value = { MediaType.APPLICATION_JSON })
+    @PreAuthorize("#patientEmail == authentication.principal.username")
     public Response updatePatient(@PathParam("id") final String patientEmail,
                                   PersonalInformationForm form) {
         Patient patient = patientService.getPatientByEmail(patientEmail);
@@ -238,6 +242,7 @@ public class PatientController {
     @GET
     @Path("{id}/favorites")
     @Produces(value = { MediaType.APPLICATION_JSON })
+    @PreAuthorize("#patientEmail == authentication.principal.username")
     public Response getPatientFavorites(@PathParam("id") String patientEmail) {
         Patient patient = patientService.getPatientByEmail(patientEmail);
         if(patient != null) {
@@ -251,6 +256,7 @@ public class PatientController {
     @DELETE
     @Path("{id}/favorites")
     @Produces(value = { MediaType.APPLICATION_JSON })
+    @PreAuthorize("#patientEmail == authentication.principal.username")
     public Response removeFromFavorites(@PathParam("id") final String patientEmail,
                                         @QueryParam("doctor") String doctorLicense) {
         favoriteService.deleteFavorite(doctorLicense, patientEmail);
@@ -261,6 +267,7 @@ public class PatientController {
     @Path("{id}/favorites")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Consumes(MediaType.APPLICATION_JSON)
+    @PreAuthorize("#patientEmail == authentication.principal.username")
     public Response addFavorite(@PathParam("id") final String patientEmail,
                                 final FavoriteForm form) {
         patientService.addFavorite(patientEmail, form.getLicense());

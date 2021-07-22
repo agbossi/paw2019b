@@ -1,37 +1,48 @@
 package ar.edu.itba.paw.webapp.config;
 
-import ar.edu.itba.paw.webapp.auth.PawUrlAuthenticationSuccessHandler;
-import ar.edu.itba.paw.webapp.auth.PawUserDetailsService;
+import ar.edu.itba.paw.webapp.auth.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.GenericFilterBean;
 
-import java.util.concurrent.TimeUnit;
+import java.util.Base64;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled=true)
 @PropertySource(value = "classpath:authKey.properties")
 @ComponentScan("ar.edu.itba.paw.webapp.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public static final BCryptPasswordEncoder B_CRYPT_PASSWORD_ENCODER = new BCryptPasswordEncoder();
+
     @Autowired
     private PawUserDetailsService userDetailsService;
 
-    @Value("${key}")
-    private String rememberMeKey;
+    /* @Value("${key}")
+     private String rememberMeKey; */
+
+    @Value("${secret}")
+    private String authTokenSecretKey;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -39,38 +50,51 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override protected void configure(final HttpSecurity http) throws Exception{
-        http.sessionManagement().invalidSessionUrl("/")
-                    .and().authorizeRequests()
-                    .antMatchers("/login").anonymous()
-                    .antMatchers("/signUp").anonymous()
-                    .antMatchers("/login-error").anonymous()
-                    .antMatchers("/admin/**").hasRole("ADMIN")
-                    .antMatchers("/doctor/**").hasRole("DOCTOR")
-                    .antMatchers("/profile").hasRole("USER")
-                    .antMatchers("/appointments").hasRole("USER")
-                    .antMatchers("/results/{\\d+}").permitAll()
-                    .antMatchers("/results/{\\d+}/**").hasRole("USER")
-                    .antMatchers("/**").permitAll()
-                .and().formLogin()
-                    .usernameParameter("email")
-                    .passwordParameter("password")
-                    .defaultSuccessUrl("/", false)
-                    .failureUrl("/login-error")
-                    .loginPage("/login")
-                    .successHandler(myAuthenticationSuccessHandler())
-                .and().rememberMe()
-                    .rememberMeParameter("rememberme")
-                    .userDetailsService(userDetailsService).key(rememberMeKey)
-                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(30))
-                .and().logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/login")
-                    .and().exceptionHandling()
-                    .accessDeniedPage("/403")
-                .and().csrf().disable();
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/doctors/**").anonymous()
+                .antMatchers(HttpMethod.GET, "/specialties").anonymous()
+                .antMatchers(HttpMethod.GET, "/locations").anonymous()
+                .antMatchers(HttpMethod.GET, "/clinics/**").anonymous()
+                .antMatchers(HttpMethod.GET, "/prepaids").anonymous()
+                .antMatchers(HttpMethod.POST, "/login").anonymous()
+                .antMatchers(HttpMethod.POST, "/patients").anonymous()
+                .antMatchers(HttpMethod.POST, "/locations").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/locations/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/specialties").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/specialties/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/prepaids").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/prepaids/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/clinics/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/clinics/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, "/clinics/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/patients/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/patients/**").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/doctors/*/profileImage").hasAnyRole("ADMIN", "DOCTOR")
+                .antMatchers(HttpMethod.POST, "/doctors").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/doctors/**").hasRole("DOCTOR")
+                .antMatchers(HttpMethod.PUT, "/doctors/**").hasRole("DOCTOR")
+                .antMatchers(HttpMethod.DELETE, "/doctors/**").hasRole("DOCTOR")
+                .antMatchers("/appointments").hasAnyRole("USER", "DOCTOR")
+                .antMatchers(HttpMethod.GET).authenticated()
+                .antMatchers(HttpMethod.POST).authenticated()
+                .antMatchers(HttpMethod.DELETE).authenticated()
+                .antMatchers(HttpMethod.PUT).authenticated()
+                .antMatchers("/**").permitAll()
+                .and()
+                .formLogin().usernameParameter("email").passwordParameter("password")
+                .loginProcessingUrl("/login").successHandler(myAuthenticationSuccessHandler())
+                .failureHandler(new SimpleUrlAuthenticationFailureHandler())
+                .and()
+                .addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class)
+                .userDetailsService(userDetailsService)
+                .exceptionHandling().authenticationEntryPoint(authEntryPoint())
+                .and()
+                .csrf().disable();
     }
 
-    @Override public void configure(final WebSecurity web) throws Exception {
+    @Override public void configure(final WebSecurity web) {
         web.ignoring().antMatchers("/css/**", "/js/**", "/img/**", "/favicon.ico", "/403");
     }
 
@@ -81,12 +105,27 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationSuccessHandler myAuthenticationSuccessHandler(){
-        return new PawUrlAuthenticationSuccessHandler("/");
+        return new PawUrlStatelessAuthenticationSuccessHandler();
     }
 
     @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public String authTokenSecretKey() {
+        return Base64.getEncoder().encodeToString(authTokenSecretKey.getBytes()); //TODO que va aca?
+    }
+
+    @Bean
+    public GenericFilterBean authFilter() {
+        return new StatelessAuthenticationFilter();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint authEntryPoint() {
+        return new JwtAuthenticationEntryPoint();
     }
 }
