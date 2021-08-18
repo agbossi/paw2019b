@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LocationCaching implements Caching<LocationDto> {
+
     @Override
     public int calculateHash(LocationDto element) {
         if(element == null) {

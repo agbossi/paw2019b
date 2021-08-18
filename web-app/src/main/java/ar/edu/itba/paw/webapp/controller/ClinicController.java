@@ -6,11 +6,13 @@ import ar.edu.itba.paw.interfaces.service.LocationService;
 import ar.edu.itba.paw.interfaces.service.PrepaidToClinicService;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
+import ar.edu.itba.paw.webapp.caching.ClinicCaching;
 import ar.edu.itba.paw.webapp.dto.ClinicDto;
 import ar.edu.itba.paw.webapp.dto.PrepaidDto;
 import ar.edu.itba.paw.webapp.form.ClinicForm;
 import ar.edu.itba.paw.webapp.form.PrepaidForm;
 import ar.edu.itba.paw.webapp.form.PrepaidToClinicForm;
+import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +33,9 @@ public class ClinicController {
 
     @Autowired
     LocationService locationService;
+
+    @Autowired
+    ClinicCaching clinicCaching;
 
     @Context
     UriInfo uriInfo;
@@ -78,11 +83,13 @@ public class ClinicController {
     @GET
     @Path("{clinicId}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getClinic(@PathParam("clinicId") final Integer clinicId) {
+    public Response getClinic(@PathParam("clinicId") final Integer clinicId,
+                              @Context Request request) {
         Clinic clinic = clinicService.getClinicById(clinicId);
         if(clinic != null) {
             ClinicDto dto = ClinicDto.fromClinic(clinic, uriInfo);
-            return Response.ok(dto).build();
+            return CacheHelper.handleResponse(dto, clinicCaching, "clinic", request).build();
+            //return Response.ok(dto).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }

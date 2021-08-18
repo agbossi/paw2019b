@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.interfaces.web;
 
 import javax.ws.rs.core.EntityTag;
+import java.math.BigInteger;
 import java.util.Collection;
 
 public interface Caching<T> {
@@ -12,12 +13,12 @@ public interface Caching<T> {
     }
 
     default EntityTag calculateEtag(Collection<T> elements) {
-        int hashCode = 1;
+        BigInteger hashcode = new BigInteger(String.valueOf(1));
         int elemHash;
         for(T element : elements) {
             elemHash = calculateHash(element);
-            hashCode = 31 * hashCode + elemHash;
+            hashcode = hashcode.multiply(BigInteger.valueOf(31)).add(BigInteger.valueOf(elemHash));
         }
-        return new EntityTag(Integer.toString(hashCode));
+        return new EntityTag(hashcode.toString());
     }
 }

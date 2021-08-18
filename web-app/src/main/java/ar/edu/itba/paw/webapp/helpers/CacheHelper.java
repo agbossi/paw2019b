@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CacheHelper<T> {
+public class CacheHelper {
     private static final Map<String, Integer> cacheTimes = getTimes();
 
     //TODO: ajustar tiempos
@@ -76,26 +76,23 @@ public class CacheHelper<T> {
     }
 
     public static <T> Response.ResponseBuilder handleResponse(T cacheable, Caching<T> service, String key, Request request) {
+        return getResponseBuilder(key, evaluateTag(cacheable, service, request), Response.ok(cacheable));
+    }
+
+    public static <T> Response.ResponseBuilder handleResponse(List<T> cacheable, Caching<T> service, GenericEntity<List<T>> token, String key, Request request) {
+        return getResponseBuilder(key, evaluateTag(cacheable, service, request), Response.ok(token));
+    }
+
+    private static <T> Response.ResponseBuilder getResponseBuilder(String key, EntityTag entityTag, Response.ResponseBuilder ok) {
         CacheControl cc = getCacheControl(key);
-        EntityTag etag = evaluateTag(cacheable, service, request);
-        Response.ResponseBuilder isValid = handleCache(etag, cc);
+        Response.ResponseBuilder isValid = handleCache(entityTag, cc);
 
         if(isValid != null) {
             return isValid;
         }
 
-        return Response.ok(cacheable).cacheControl(cc).tag(etag);
+        return ok.cacheControl(cc).tag(entityTag);
     }
-
-    public static <T> Response.ResponseBuilder handleResponse(List<T> cacheable, Caching<T> service, String key, Request request) {
-        CacheControl cc = getCacheControl(key);
-        EntityTag etag = evaluateTag(cacheable, service, request);
-        Response.ResponseBuilder isValid = handleCache(etag, cc);
-
-        if(isValid != null) {
-            return isValid;
-        }
-
-        return Response.ok(new GenericEntity<List<T>>(cacheable) {}).cacheControl(cc).tag(etag);
-    }
+    //TODO: cuando puse a manoel hashcode de la lista en if-none-match en vez de lo que devuleve server
+    //      funco. lo que esta mandando server se chotea
 }
