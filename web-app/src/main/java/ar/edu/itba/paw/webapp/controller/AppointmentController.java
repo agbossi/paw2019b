@@ -102,7 +102,6 @@ import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.webapp.dto.AppointmentDto;
 import ar.edu.itba.paw.webapp.form.AppointmentForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
@@ -192,7 +191,7 @@ public class AppointmentController {
     @POST
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Consumes(MediaType.APPLICATION_JSON)
-    @PreAuthorize("hasPermission(#email, 'user')")
+    @PreAuthorize("hasPermission(#form.patient, 'user')")
     public Response createAppointment(final AppointmentForm form) {
         appointmentService.createAppointment(form.getLicense(), form.getClinic(),
                 form.getPatient(), form.getYear(), form.getMonth(), form.getDay(),
