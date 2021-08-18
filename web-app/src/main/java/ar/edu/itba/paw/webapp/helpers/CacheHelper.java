@@ -1,5 +1,7 @@
 package ar.edu.itba.paw.webapp.helpers;
 
+import ar.edu.itba.paw.interfaces.web.Caching;
+
 import javax.ws.rs.core.*;
 import java.util.HashMap;
 import java.util.List;
@@ -40,11 +42,11 @@ public class CacheHelper<T> {
         return cc;
     }
 
-    private static <T> EntityTag getTag(T cacheable, Cache<T> service) {
+    private static <T> EntityTag getTag(T cacheable, Caching<T> service) {
         return service.calculateEtag(cacheable);
     }
 
-    private static <T> EntityTag getTag(List<T> cacheable, Cache<T> service) {
+    private static <T> EntityTag getTag(List<T> cacheable, Caching<T> service) {
         return service.calculateEtag(cacheable);
     }
 
@@ -55,12 +57,12 @@ public class CacheHelper<T> {
         return builder == null ? etag : null;
     }
 
-    private static <T> EntityTag evaluateTag(T cacheable, Cache<T> service, Request request) {
+    private static <T> EntityTag evaluateTag(T cacheable, Caching<T> service, Request request) {
         EntityTag etag = getTag(cacheable, service);
         return verifyTag(etag, request);
     }
 
-    private static <T> EntityTag evaluateTag(List<T> cacheable, Cache<T> service, Request request) {
+    private static <T> EntityTag evaluateTag(List<T> cacheable, Caching<T> service, Request request) {
         EntityTag etag = getTag(cacheable, service);
         return verifyTag(etag, request);
     }
@@ -73,7 +75,7 @@ public class CacheHelper<T> {
         return null;
     }
 
-    public static <T> Response.ResponseBuilder handleResponse(T cacheable, Cache<T> service, String key, Request request) {
+    public static <T> Response.ResponseBuilder handleResponse(T cacheable, Caching<T> service, String key, Request request) {
         CacheControl cc = getCacheControl(key);
         EntityTag etag = evaluateTag(cacheable, service, request);
         Response.ResponseBuilder isValid = handleCache(etag, cc);
@@ -85,7 +87,7 @@ public class CacheHelper<T> {
         return Response.ok(cacheable).cacheControl(cc).tag(etag);
     }
 
-    public static <T> Response.ResponseBuilder handleResponse(List<T> cacheable, Cache<T> service, String key, Request request) {
+    public static <T> Response.ResponseBuilder handleResponse(List<T> cacheable, Caching<T> service, String key, Request request) {
         CacheControl cc = getCacheControl(key);
         EntityTag etag = evaluateTag(cacheable, service, request);
         Response.ResponseBuilder isValid = handleCache(etag, cc);
