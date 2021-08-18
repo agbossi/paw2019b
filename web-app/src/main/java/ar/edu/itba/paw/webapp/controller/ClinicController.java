@@ -88,7 +88,8 @@ public class ClinicController {
         Clinic clinic = clinicService.getClinicById(clinicId);
         if(clinic != null) {
             ClinicDto dto = ClinicDto.fromClinic(clinic, uriInfo);
-            return CacheHelper.handleResponse(dto, clinicCaching, "clinic", request).build();
+            Response.ResponseBuilder r = CacheHelper.handleResponse(dto, clinicCaching, "clinic", request);
+            return r.build();
             //return Response.ok(dto).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
