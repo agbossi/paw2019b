@@ -68,6 +68,7 @@ public class CacheHelper {
     }
 
     private static Response.ResponseBuilder handleCache(EntityTag etag, CacheControl cc) {
+        //si llega nulo es porque no se modifico
         if (etag == null) {
             return Response.status(Response.Status.NOT_MODIFIED).cacheControl(cc);
         }
@@ -88,6 +89,7 @@ public class CacheHelper {
         Response.ResponseBuilder isValid = handleCache(entityTag, cc);
 
         if(isValid != null) {
+            //el objeto no se modifico, devuelvo Response.Status.NOT_MODIFIED
             return isValid;
         }
 
