@@ -7,6 +7,7 @@ import ar.edu.itba.paw.interfaces.service.PrepaidToClinicService;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.webapp.caching.ClinicCaching;
+import ar.edu.itba.paw.webapp.caching.PrepaidCaching;
 import ar.edu.itba.paw.webapp.dto.ClinicDto;
 import ar.edu.itba.paw.webapp.dto.PrepaidDto;
 import ar.edu.itba.paw.webapp.form.ClinicForm;
@@ -26,34 +27,46 @@ import java.util.stream.Collectors;
 public class ClinicController {
 
     @Autowired
-    ClinicService clinicService;
+    private ClinicService clinicService;
 
     @Autowired
-    PrepaidToClinicService prepaidToClinicService;
+    private PrepaidToClinicService prepaidToClinicService;
 
     @Autowired
-    LocationService locationService;
+    private LocationService locationService;
 
     @Autowired
-    ClinicCaching clinicCaching;
+    private ClinicCaching clinicCaching;
+
+    @Autowired
+    private PrepaidCaching prepaidCaching;
 
     @Context
-    UriInfo uriInfo;
+    private UriInfo uriInfo;
 
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getClinics(@QueryParam("page") @DefaultValue("0") Integer page) {
+    public Response getClinics(@QueryParam("page") @DefaultValue("0") Integer page,
+                               @Context Request request) {
         page = (page < 0) ? 0 : page;
 
         List<ClinicDto> clinics = clinicService.getPaginatedObjects(page).stream()
                 .map(c -> ClinicDto.fromClinic(c, uriInfo)).collect(Collectors.toList());
         int maxPage = clinicService.maxAvailablePage();
-        return Response.ok(new GenericEntity<List<ClinicDto>>(clinics) {})
+        Response.ResponseBuilder ret = CacheHelper.handleResponse(clinics, clinicCaching,
+                new GenericEntity<List<ClinicDto>>(clinics) {}, "clinics", request)
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(), "first")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page - 1).build(), "prev")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(), "next")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(), "last");
+        return ret.build();
+
+        /*return Response.ok(new GenericEntity<List<ClinicDto>>(clinics) {})
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(), "first")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page - 1).build(), "prev")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(), "next")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(), "last")
-                .build();
+                .build(); */
     }
 
     //TODO me esta devolviendo ids negativos wtf
@@ -107,14 +120,17 @@ public class ClinicController {
     @Path("{clinicId}/clinicPrepaids")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getClinicPrepaids(@PathParam("clinicId") final Integer clinicId,
-                                      @QueryParam("page") @DefaultValue("0") Integer page) {
+                                      @QueryParam("page") @DefaultValue("0") Integer page,
+                                      @Context Request request) {
         page = (page < 0) ? 0 : page;
 
         Clinic clinic = clinicService.getClinicById(clinicId);
         if(clinic != null) {
             List<PrepaidDto> prepaids = prepaidToClinicService.getPrepaidsForClinic(clinicId, page)
                     .stream().map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
-            return Response.ok(new GenericEntity<List<PrepaidDto>>(prepaids) {}).build();
+            return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {},
+                    "prepaids", request).build();
+            //return Response.ok(new GenericEntity<List<PrepaidDto>>(prepaids) {}).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }

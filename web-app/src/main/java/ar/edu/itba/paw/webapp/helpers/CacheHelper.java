@@ -14,11 +14,11 @@ public class CacheHelper {
     private static Map<String, Integer> getTimes() {
         Map<String, Integer> map = new HashMap<>();
         map.put("doctors", 10);
-        map.put("license", 10);
+        map.put("doctor", 10);
         map.put("profileImage", 10);
         map.put("doctorsClinics", 10);
         map.put("doctorsClinic", 10);
-        map.put("schedule", 10);
+        map.put("schedules", 10);
         map.put("appointments", 10);
         map.put("clinics", 10);
         map.put("clinic", 10);
@@ -95,6 +95,4 @@ public class CacheHelper {
 
         return ok.cacheControl(cc).tag(entityTag);
     }
-    //TODO: cuando puse a manoel hashcode de la lista en if-none-match en vez de lo que devuleve server
-    //      funco. lo que esta mandando server se chotea
 }

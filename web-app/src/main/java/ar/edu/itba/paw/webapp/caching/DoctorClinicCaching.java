@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+//TODO: doctorclinic no tiene en cuenta su semana (doctor hours) en la comparacion de cacheo
+//      como podria afectar eso?
+
 @Component
 public class DoctorClinicCaching implements Caching<DoctorClinicDto> {
     @Override

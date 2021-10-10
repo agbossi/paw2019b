@@ -2,8 +2,10 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.PrepaidService;
 import ar.edu.itba.paw.model.Prepaid;
+import ar.edu.itba.paw.webapp.caching.PrepaidCaching;
 import ar.edu.itba.paw.webapp.dto.PrepaidDto;
 import ar.edu.itba.paw.webapp.form.PrepaidForm;
+import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,20 +25,30 @@ public class PrepaidController {
     @Autowired
     private PrepaidService prepaidService;
 
+    @Autowired
+    private PrepaidCaching prepaidCaching;
+
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getPrepaids(@QueryParam("page") @DefaultValue("0") Integer page) {
+    public Response getPrepaids(@QueryParam("page") @DefaultValue("0") Integer page,
+                                @Context Request request) {
         page = (page < 0) ? 0 : page;
         List<PrepaidDto> prepaids = prepaidService.getPaginatedObjects(page).stream()
                 .map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
         int maxPage = prepaidService.maxAvailablePage();
 
-        return Response.ok(new GenericEntity<List<PrepaidDto>>(prepaids) {})
+        return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {}, "prepaids", request)
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(), "first")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page - 1).build(), "prev")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(), "next")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(), "last")
                 .build();
+        /*return Response.ok(new GenericEntity<List<PrepaidDto>>(prepaids) {})
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(), "first")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page - 1).build(), "prev")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(), "next")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(), "last")
+                .build(); */
     }
 
     @DELETE

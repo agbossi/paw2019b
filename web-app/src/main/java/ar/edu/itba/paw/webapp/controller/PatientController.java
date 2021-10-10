@@ -152,11 +152,14 @@ import ar.edu.itba.paw.interfaces.service.FavoriteService;
 import ar.edu.itba.paw.interfaces.service.PatientService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Patient;
+import ar.edu.itba.paw.webapp.caching.DoctorCaching;
+import ar.edu.itba.paw.webapp.caching.PatientCaching;
 import ar.edu.itba.paw.webapp.dto.DoctorDto;
 import ar.edu.itba.paw.webapp.dto.PatientDto;
 import ar.edu.itba.paw.webapp.form.FavoriteForm;
 import ar.edu.itba.paw.webapp.form.PersonalInformationForm;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
+import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -187,15 +190,23 @@ public class PatientController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PatientCaching patientCaching;
+
+    @Autowired
+    private DoctorCaching doctorCaching;
+
     @GET
     @Path("{id}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#patientEmail, 'user')")
-    public Response getPatient(@PathParam("id") final String patientEmail) {
+    public Response getPatient(@PathParam("id") final String patientEmail,
+                               @Context Request request) {
         Patient patient = patientService.getPatientByEmail(patientEmail);
         if(patient != null) {
             PatientDto dto = PatientDto.fromPatient(patient, uriInfo);
-            return Response.ok(dto).build();
+            return CacheHelper.handleResponse(dto, patientCaching, "patient", request).build();
+            // return Response.ok(dto).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
@@ -240,12 +251,16 @@ public class PatientController {
     @Path("{id}/favorites")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#patientEmail, 'user')")
-    public Response getPatientFavorites(@PathParam("id") String patientEmail) {
+    public Response getPatientFavorites(@PathParam("id") String patientEmail,
+                                        @Context Request request) {
         Patient patient = patientService.getPatientByEmail(patientEmail);
         if(patient != null) {
             List<DoctorDto> favorites = favoriteService.getPatientsFavorite(patient)
                     .stream().map(f -> DoctorDto.fromDoctor(f.getDoctor(), uriInfo)).collect(Collectors.toList());
-            return Response.ok(new GenericEntity<List<DoctorDto>>(favorites) {}).build();
+            return CacheHelper.handleResponse(favorites, doctorCaching,
+                    new GenericEntity<List<DoctorDto>>(favorites) {},
+                    "favorites", request).build();
+            // return Response.ok(new GenericEntity<List<DoctorDto>>(favorites) {}).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }

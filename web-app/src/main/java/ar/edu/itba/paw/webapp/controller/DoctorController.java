@@ -222,8 +222,13 @@ public class DoctorController {
 
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.webapp.caching.DoctorCaching;
+import ar.edu.itba.paw.webapp.caching.DoctorClinicCaching;
+import ar.edu.itba.paw.webapp.caching.ImageCaching;
+import ar.edu.itba.paw.webapp.caching.ScheduleCaching;
 import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.form.*;
+import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -264,6 +269,18 @@ public class DoctorController {
     @Autowired
     private SpecialtyService specialtyService;
 
+    @Autowired
+    private DoctorCaching doctorCaching;
+
+    @Autowired
+    private ImageCaching imageCaching;
+
+    @Autowired
+    private DoctorClinicCaching doctorClinicCaching;
+
+    @Autowired
+    private ScheduleCaching scheduleCaching;
+
     @Context
     private UriInfo uriInfo;
 
@@ -278,7 +295,8 @@ public class DoctorController {
             @QueryParam("lastName") @DefaultValue("") final String lastName,
             @QueryParam("consultPrice") @DefaultValue("0") final Integer consultPrice,
             @QueryParam("includeUnavailables") @DefaultValue("false") final Boolean includeUnavailable,
-            @QueryParam("prepaid") @DefaultValue("") final String prepaid) {
+            @QueryParam("prepaid") @DefaultValue("") final String prepaid,
+            @Context Request request) {
 
         page = (page < 0) ? 0 : page;
 
@@ -289,22 +307,31 @@ public class DoctorController {
         List<DoctorDto> doctors = doctorService.getPaginatedDoctors(licenses, page)
                 .stream().map(d -> DoctorDto.fromDoctor(d, uriInfo)).collect(Collectors.toList());
 
-        return Response.ok(new GenericEntity<List<DoctorDto>>(doctors) {})
+        return CacheHelper.handleResponse(doctors, doctorCaching, new GenericEntity<List<DoctorDto>>(doctors) {},
+                "doctors", request)
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxAvailablePage).build(),"last")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page - 1).build(),"prev")
                 .build();
+        /*return Response.ok(new GenericEntity<List<DoctorDto>>(doctors) {})
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxAvailablePage).build(),"last")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page - 1).build(),"prev")
+                .build(); */
     }
 
     @GET
     @Path("/{license}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getDoctor(@PathParam("license") final String license) {
+    public Response getDoctor(@PathParam("license") final String license,
+                              @Context Request request) {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor != null) {
             DoctorDto dto = DoctorDto.fromDoctor(doctor, uriInfo);
-            return Response.ok(dto).build();
+            return CacheHelper.handleResponse(dto, doctorCaching, "doctor", request).build();
+            //return Response.ok(dto).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
@@ -352,12 +379,14 @@ public class DoctorController {
     @GET
     @Path("/{license}/profileImage")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getProfileImage(@PathParam("license") final String license) {
+    public Response getProfileImage(@PathParam("license") final String license,
+                                    @Context Request request) {
         Doctor d = doctorService.getDoctorByLicense(license);
         if(d != null) {
             byte[] img = imageService.getProfileImage(d.getLicense()).getImage();
             ImageDto dto = ImageDto.fromImage(img);
-            return Response.ok(dto).build();
+            return CacheHelper.handleResponse(dto, imageCaching, "profileImage", request).build();
+            // return Response.ok(dto).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
@@ -410,13 +439,17 @@ public class DoctorController {
     @Path("/{license}/doctorsClinics")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getDoctorPage(@PathParam("license") final String license,
-                                  @QueryParam("week") @DefaultValue("1") final Integer week) {
+                                  @QueryParam("week") @DefaultValue("1") final Integer week,
+                                  @Context Request request) {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor != null) {
             final List<DoctorClinicDto> doctorClinics = doctorClinicService.getDoctorClinicsForDoctor(doctor)
                     .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo, getDoctorWeek(dc, week)))
                     .collect(Collectors.toList());
-            return Response.ok(new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {}).build();
+            return CacheHelper.handleResponse(doctorClinics, doctorClinicCaching,
+                    new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {},
+                    "doctorsClinics", request).build();
+            // return Response.ok(new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {}).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
@@ -452,14 +485,20 @@ public class DoctorController {
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getDoctorClinic(@PathParam("license") final String license,
                                     @PathParam("clinic") final Integer clinic,
-                                    @QueryParam("week") @DefaultValue("1") final Integer week) {
+                                    @QueryParam("week") @DefaultValue("1") final Integer week,
+                                    @Context Request request) {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
         if(dc != null) {
             List<List<DoctorHourDto>> doctorWeek = getDoctorWeek(dc, week);
-            return Response.ok(DoctorClinicDto.fromDoctorClinic(dc, uriInfo, doctorWeek))
+            DoctorClinicDto dto = DoctorClinicDto.fromDoctorClinic(dc, uriInfo, doctorWeek);
+            return CacheHelper.handleResponse(dto, doctorClinicCaching, "doctorsClinic", request)
                     .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week - 1).build(),"prev")
                     .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week + 1).build(),"next")
                     .build();
+            /*return Response.ok(DoctorClinicDto.fromDoctorClinic(dc, uriInfo, doctorWeek))
+                    .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week - 1).build(),"prev")
+                    .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week + 1).build(),"next")
+                    .build(); */
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
@@ -468,12 +507,15 @@ public class DoctorController {
     @Path("/{license}/doctorsClinics/{clinic}/schedules")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getDoctorClinicSchedules(@PathParam("license") final String license,
-                                             @PathParam("clinic") final Integer clinic) {
+                                             @PathParam("clinic") final Integer clinic,
+                                             @Context Request request) {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
         if(dc != null) {
             List<ScheduleDto> schedules = dc.getSchedule()
                     .stream().map(ScheduleDto::fromSchedule).collect(Collectors.toList());
-            return Response.ok(new GenericEntity<List<ScheduleDto>>(schedules) {}).build();
+            return CacheHelper.handleResponse(schedules, scheduleCaching,
+                    new GenericEntity<List<ScheduleDto>>(schedules) {},"schedules", request).build();
+            //return Response.ok(new GenericEntity<List<ScheduleDto>>(schedules) {}).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }

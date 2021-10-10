@@ -40,14 +40,13 @@ public class LocationController {
                 .map(LocationDto::fromLocation).collect(Collectors.toList());
         int maxPage = locationService.maxAvailablePage();
 
-        Response.ResponseBuilder test = CacheHelper.handleResponse(locations, locationCaching,
+        Response.ResponseBuilder ret = CacheHelper.handleResponse(locations, locationCaching,
                 new GenericEntity<List<LocationDto>>(locations) {}, "locations", request)
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(), "first")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page - 1).build(), "prev")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(), "next")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(), "last");
-        Response ret = test.build();
-        return ret;
+        return ret.build();
     }
 
     @DELETE

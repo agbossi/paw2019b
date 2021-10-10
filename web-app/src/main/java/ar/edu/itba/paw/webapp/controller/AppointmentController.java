@@ -99,8 +99,10 @@ import ar.edu.itba.paw.interfaces.service.ClinicService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.webapp.caching.AppointmentCaching;
 import ar.edu.itba.paw.webapp.dto.AppointmentDto;
 import ar.edu.itba.paw.webapp.form.AppointmentForm;
+import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
@@ -115,13 +117,16 @@ import java.util.stream.Collectors;
 public class AppointmentController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    AppointmentService appointmentService;
+    private AppointmentService appointmentService;
 
     @Autowired
-    ClinicService clinicService;
+    private ClinicService clinicService;
+
+    @Autowired
+    private AppointmentCaching appointmentCaching;
 
     @Context
     private UriInfo uriInfo;
@@ -131,12 +136,16 @@ public class AppointmentController {
     @Path("{userId}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#email, 'user')")
-    public Response getUserAppointments(@PathParam("userId") final String email) {
+    public Response getUserAppointments(@PathParam("userId") final String email,
+                                        @Context Request request) {
         User user = userService.findUserByEmail(email);
         if(user != null) {
             List<AppointmentDto> appointments = appointmentService.getUserAppointments(user)
                     .stream().map(AppointmentDto::fromAppointment).collect(Collectors.toList());
-            return Response.ok(new GenericEntity<List<AppointmentDto>>(appointments) {}).build();
+            return CacheHelper.handleResponse(appointments, appointmentCaching,
+                    new GenericEntity<List<AppointmentDto>>(appointments) {}, "appointments",
+                    request).build();
+            // return Response.ok(new GenericEntity<List<AppointmentDto>>(appointments) {}).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
@@ -161,13 +170,17 @@ public class AppointmentController {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#email, 'user')")
     public Response getUserAppointmentsForClinic(@PathParam("userId") final String email,
-                                                 @PathParam("clinicId") final Integer clinicId) {
+                                                 @PathParam("clinicId") final Integer clinicId,
+                                                 @Context Request request) {
         User user = userService.findUserByEmail(email);
         Clinic clinic = clinicService.getClinicById(clinicId);
         if(user != null && clinic != null) {
             List<AppointmentDto> appointments = appointmentService.getUserAppointmentsForClinic(user, clinic)
                     .stream().map(AppointmentDto::fromAppointment).collect(Collectors.toList());
-            return Response.ok(new GenericEntity<List<AppointmentDto>>(appointments) {}).build();
+            return CacheHelper.handleResponse(appointments, appointmentCaching,
+                    new GenericEntity<List<AppointmentDto>>(appointments) {},
+                    "appointments", request).build();
+            //return Response.ok(new GenericEntity<List<AppointmentDto>>(appointments) {}).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
