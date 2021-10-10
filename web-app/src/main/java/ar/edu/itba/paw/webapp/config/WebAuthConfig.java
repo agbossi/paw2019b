@@ -20,6 +20,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -77,7 +78,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/doctors/**").hasRole("DOCTOR")
                 .antMatchers(HttpMethod.DELETE, "/doctors/**").hasRole("DOCTOR")
                 .antMatchers("/appointments").hasAnyRole("USER", "DOCTOR")
-                .antMatchers(HttpMethod.GET).authenticated()
+                //.antMatchers(HttpMethod.GET).authenticated()
                 .antMatchers(HttpMethod.POST).authenticated()
                 .antMatchers(HttpMethod.DELETE).authenticated()
                 .antMatchers(HttpMethod.PUT).authenticated()
@@ -85,7 +86,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin().usernameParameter("email").passwordParameter("password")
                 .loginProcessingUrl("/login").successHandler(myAuthenticationSuccessHandler())
-                .failureHandler(new SimpleUrlAuthenticationFailureHandler())
+                .failureHandler(myAuthenticationFailureHandler())
                 .and()
                 .addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class)
                 .userDetailsService(userDetailsService)
@@ -127,5 +128,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationEntryPoint authEntryPoint() {
         return new JwtAuthenticationEntryPoint();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler myAuthenticationFailureHandler() {
+        return new PawAuthenticationFailureHandler();
     }
 }
