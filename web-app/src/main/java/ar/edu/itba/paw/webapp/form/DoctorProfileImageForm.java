@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 public class DoctorProfileImageForm {
     @FormDataParam("profileImage")
-    @ValidFileType(types = {"image/jpg", "image/png"}, message = "{doctor.photo.not.valid}")
+    @ValidFileType(types = {"image/jpg", "image/png"}, message = "doctor.photo.not.valid")
     @NotNull
     private FormDataBodyPart profileImage;
 

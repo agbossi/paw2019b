@@ -8,21 +8,21 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
-@UniqueSchedule(license = "license", clinic = "clinic", day = "day", hour = "hour")
+@UniqueSchedule(license = "license", clinic = "clinic", day = "day", hour = "hour", message = "schedule.registered")
 public class ScheduleForm {
-    @Min(1)
-    @Max(7)
+    @Min(value = 1, message = "schedule.min.day.constraint")
+    @Max(value = 7, message = "schedule.max.day.constraint")
     private int day;
 
     //TODO valores
-    @Min(9)
-    @Max(18)
+    @Min(value = 9, message = "schedule.min.hour.constraint")
+    @Max(value = 18, message = "schedule.max.hour.constraint")
     private int hour;
 
-    @Exists(field = "doctor")
+    @Exists(field = "doctor", message = "value.not.exists")
     private String license;
 
-    @ClinicExists
+    @ClinicExists(message = "value.not.exists")
     private int clinic;
 
     public int getDay() {

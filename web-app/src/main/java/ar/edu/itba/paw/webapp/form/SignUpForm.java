@@ -6,40 +6,40 @@ import ar.edu.itba.paw.webapp.helpers.validation.annotations.Unique;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@FieldMatch(field = "password",fieldMatch = "repeatPassword")
+@FieldMatch(field = "password",fieldMatch = "repeatPassword", message = "signup.password.not.matching")
 public class SignUpForm {
 
-    @Size(min = 1, max = 20)
-    @Pattern(regexp = "[a-zA-Z ]+")
+    @Size(min = 1, max = 20, message = "signup.size.between.constraint")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "alphabetic.constraint")
     private String firstName;
 
-    @Size(min = 1, max = 20)
-    @Pattern(regexp = "[a-zA-Z ]+")
+    @Size(min = 1, max = 20, message = "signup.size.between.constraint")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "alphabetic.constraint")
     private String lastName;
 
-    @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]+")
+    @Size(min = 8, max = 20, message = "signup.name.size.between.constraint")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+", message = "alphanumeric.constraint")
     private String password;
 
-    @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]+")
+    @Size(min = 8, max = 20, message = "signup.name.size.between.constraint")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+", message = "alphanumeric.constraint")
     private String repeatPassword;
 
-    @Size(min = 6, max = 25)
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
-    @Unique(field = "user",message = "{value.registered}")
+    @Size(min = 8, max = 25, message = "signup.name.size.between.constraint")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$", message = "signup.email.constraint")
+    @Unique(field = "user",message = "value.registered")
     private String email;
 
-    @Pattern(regexp = "[a-zA-Z0-9 ]*")
+    @Pattern(regexp = "[a-zA-Z0-9 ]*", message = "alphanumeric.constraint")
     private String prepaid;
 
-    @Size(max=20)
-    @Pattern(regexp = "[0-9 ]*")
+    @Size(max=20, message = "signup.prepaid.number.size.max.constraint")
+    @Pattern(regexp = "[0-9 ]*", message = "numeric.constraint")
     private String prepaidNumber;
 
-    @Size(min = 8,max = 8)
-    @Pattern(regexp = "[0-9]+")
-    @Unique(field = "patient",message = "{value.registered}")
+    @Size(min = 8,max = 8, message = "signup.id.size.equal.constraint")
+    @Pattern(regexp = "[0-9]+", message = "numeric.constraint")
+    @Unique(field = "patient",message = "value.registered")
     private String id;
 
     public String getFirstName() {

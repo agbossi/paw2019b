@@ -6,36 +6,31 @@ import ar.edu.itba.paw.webapp.helpers.validation.annotations.Unique;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@FieldMatch(field = "newPassword",fieldMatch = "repeatPassword")
+@FieldMatch(field = "newPassword",fieldMatch = "repeatPassword", message = "signup.password.not.matching")
 public class PersonalInformationForm {
 
-    @Size(max = 20)
-    @Pattern(regexp = "[a-zA-Z ]+")
+    @Size(max = 20, message = "signup.prepaid.number.size.max.constraint")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "message = alphabetic.constraint")
     private String firstName;
 
-    @Size(max = 20)
-    @Pattern(regexp = "[a-zA-Z ]+")
+    @Size(max = 20, message = "signup.prepaid.number.size.max.constraint")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "message = alphabetic.constraint")
     private String lastName;
 
-    @Size(max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]*")
-    @EditablePassword(message = "{user.password.too.short}")
+    @Size(max = 20, message = "signup.prepaid.number.size.max.constraint")
+    @Pattern(regexp = "[a-zA-Z0-9 ]*", message = "alphanumeric.constraint")
+    @EditablePassword(message = "user.password.too.short")
     private String newPassword;
 
-    @Size(max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]*")
+    @Size(max = 20, message = "signup.prepaid.number.size.max.constraint")
+    @Pattern(regexp = "[a-zA-Z0-9 ]*", message = "alphanumeric.constraint")
     private String repeatPassword;
 
     private String prepaid;
 
-    @Size(max = 20)
-    @Pattern(regexp = "[0-9 ]*")
+    @Size(max = 20, message = "signup.prepaid.number.size.max.constraint")
+    @Pattern(regexp = "[0-9 ]*", message = "numeric.constraint")
     private String prepaidNumber;
-
-//    @Size(min = 8,max = 8)
-//    @Pattern(regexp = "[0-9]+")
-//    @Unique(field = "patient",message = "{value.registered}")
-//    private String id;
 
 
     public String getFirstName() {
@@ -62,10 +57,6 @@ public class PersonalInformationForm {
         this.newPassword = password;
     }
 
-//    public void setId(String id) {
-//        this.id = id;
-//    }
-
     public String getRepeatPassword() {
         return repeatPassword;
     }
@@ -85,12 +76,4 @@ public class PersonalInformationForm {
     public String getPrepaidNumber() {
         return prepaidNumber;
     }
-
-    public void setPrepaidNumber(String prepaidNumber) {
-        this.prepaidNumber = prepaidNumber;
-    }
-
-//    public String getId() {
-//        return id;
-//    }
 }

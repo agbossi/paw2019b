@@ -5,13 +5,13 @@ import ar.edu.itba.paw.webapp.helpers.validation.annotations.UniqueDoctorClinic;
 
 import javax.validation.constraints.Min;
 
-@UniqueDoctorClinic(clinic = "clinic")
+@UniqueDoctorClinic(clinic = "clinic", message = "value.registered")
 public class DoctorClinicForm {
 
-    @ClinicExists
+    @ClinicExists(message = "value.not.exists")
     private int clinic;
 
-    @Min(0)
+    @Min(value = 0, message = "doctor.clinic.size.min.constraint")
     private int consultPrice;
 
     public int getClinic() {

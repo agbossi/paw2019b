@@ -7,36 +7,36 @@ import ar.edu.itba.paw.webapp.helpers.validation.annotations.Unique;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@FieldMatch(field = "password",fieldMatch = "repeatPassword")
+@FieldMatch(field = "password",fieldMatch = "repeatPassword", message = "signup.password.not.matching")
 public class DoctorForm {
 
-    @Pattern(regexp = "[a-zA-Z ]+")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "message = alphabetic.constraint")
     private String firstName;
 
-    @Pattern(regexp = "[a-zA-Z ]+")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "message = alphabetic.constraint")
     private String lastName;
 
-    @Pattern(regexp = "[a-zA-Z ]+")
-    @Exists(field = "specialty")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "message = alphabetic.constraint")
+    @Exists(field = "specialty", message = "value.not.exists")
     private String specialty;
 
-    @Pattern(regexp = "[0-9]+")
-    @Unique(field = "doctor",message = "{value.registered}")
+    @Pattern(regexp = "[0-9]+", message = "numeric.constraint")
+    @Unique(field = "doctor",message = "value.registered")
     private String license;
 
-    @Pattern(regexp = "[0-9 ]+")
+    @Pattern(regexp = "[0-9 ]+", message = "numeric.constraint")
     private String phoneNumber;
 
     @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+", message = "alphanumeric.constraint")
     private String password;
 
     @Size(min = 8, max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+", message = "alphanumeric.constraint")
     private String repeatPassword;
 
-    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")
-    @Unique(field = "user",message = "{value.registered}")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$", message = "signup.email.constraint")
+    @Unique(field = "user",message = "value.registered")
     private String email;
 
     public String getFirstName() {

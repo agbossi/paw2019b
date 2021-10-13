@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
-//TODO me chilla el autowired porque esto no esta anotado como componente
 @Component
 public class CustomPermissionEvaluator implements PermissionEvaluator {
 

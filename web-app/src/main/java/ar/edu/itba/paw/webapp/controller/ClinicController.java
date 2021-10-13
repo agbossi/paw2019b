@@ -15,11 +15,13 @@ import ar.edu.itba.paw.webapp.form.PrepaidForm;
 import ar.edu.itba.paw.webapp.form.PrepaidToClinicForm;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Component
@@ -41,6 +43,9 @@ public class ClinicController {
     @Autowired
     private PrepaidCaching prepaidCaching;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Context
     private UriInfo uriInfo;
 
@@ -50,15 +55,21 @@ public class ClinicController {
                                @Context Request request) {
         page = (page < 0) ? 0 : page;
 
+        String pageStr = messageSource.getMessage("page",null, Locale.getDefault());
+        String prev = messageSource.getMessage("previous",null, Locale.getDefault());
+        String next = messageSource.getMessage("next",null, Locale.getDefault());
+        String last = messageSource.getMessage("last",null, Locale.getDefault());
+        String first = messageSource.getMessage("first",null, Locale.getDefault());
+
         List<ClinicDto> clinics = clinicService.getPaginatedObjects(page).stream()
                 .map(c -> ClinicDto.fromClinic(c, uriInfo)).collect(Collectors.toList());
         int maxPage = clinicService.maxAvailablePage();
         Response.ResponseBuilder ret = CacheHelper.handleResponse(clinics, clinicCaching,
                 new GenericEntity<List<ClinicDto>>(clinics) {}, "clinics", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(), "first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page - 1).build(), "prev")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(), "next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(), "last");
+                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, 0).build(), first)
+                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, page - 1).build(), prev)
+                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, page + 1).build(), next)
+                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, maxPage).build(), last);
         return ret.build();
 
         /*return Response.ok(new GenericEntity<List<ClinicDto>>(clinics) {})

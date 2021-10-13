@@ -4,13 +4,13 @@ import ar.edu.itba.paw.webapp.helpers.validation.annotations.ClinicExists;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.Exists;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.UniquePrepaidToClinic;
 
-@UniquePrepaidToClinic(prepaid = "prepaid",clinic = "clinic")
+@UniquePrepaidToClinic(prepaid = "prepaid",clinic = "clinic", message = "value.registered")
 public class PrepaidToClinicForm {
 
-    @Exists(field = "prepaid")
+    @Exists(field = "prepaid", message = "value.not.exists")
     private String prepaid;
 
-    @ClinicExists
+    @ClinicExists(message = "value.not.exists")
     private int clinic;
 
     public String getPrepaid() {
