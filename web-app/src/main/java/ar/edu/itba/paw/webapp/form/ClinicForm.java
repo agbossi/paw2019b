@@ -6,18 +6,18 @@ import ar.edu.itba.paw.webapp.helpers.validation.annotations.UniqueClinic;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-@UniqueClinic(name = "name",address = "address",location = "location")
+@UniqueClinic(name = "name",address = "address",location = "location", message = "value.registered")
 public class ClinicForm {
 
     @NotNull
-    @Pattern(regexp = "[a-zA-Z0-9 ]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+", message = "alphanumeric.constraint")
     private String name;
 
     @NotNull
-    @Pattern(regexp = "[a-zA-Z0-9 ]+")
+    @Pattern(regexp = "[a-zA-Z0-9 ]+", message = "alphanumeric.constraint")
     private String address;
 
-    @Exists(field = "location")
+    @Exists(field = "location", message = "value.not.exists")
     private String location;
 
     public String getName() {

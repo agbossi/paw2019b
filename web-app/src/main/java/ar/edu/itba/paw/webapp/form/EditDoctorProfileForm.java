@@ -7,33 +7,33 @@ import ar.edu.itba.paw.webapp.helpers.validation.annotations.FieldMatch;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@FieldMatch(field = "newPassword",fieldMatch = "repeatPassword")
+@FieldMatch(field = "newPassword",fieldMatch = "repeatPassword", message = "signup.password.not.matching")
 public class EditDoctorProfileForm {
 
     // User information
 
-    @Size(max = 20)
-    @Pattern(regexp = "[a-zA-Z ]+")
+    @Size(max = 20, message = "signup.prepaid.number.size.max.constraint")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "message = alphabetic.constraint")
     private String firstName;
 
-    @Size(max = 20)
-    @Pattern(regexp = "[a-zA-Z ]+")
+    @Size(max = 20, message = "signup.prepaid.number.size.max.constraint")
+    @Pattern(regexp = "[a-zA-Z ]+", message = "message = alphabetic.constraint")
     private String lastName;
 
-    @Size(max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]*")
-    @EditablePassword(message = "{user.password.too.short}")
+    @Size(max = 20, message = "signup.prepaid.number.size.max.constraint")
+    @Pattern(regexp = "[a-zA-Z0-9 ]*", message = "alphanumeric.constraint")
+    @EditablePassword(message = "user.password.too.short")
     private String newPassword;
 
-    @Size(max = 20)
-    @Pattern(regexp = "[a-zA-Z0-9 ]*")
+    @Size(max = 20, message = "signup.prepaid.number.size.max.constraint")
+    @Pattern(regexp = "[a-zA-Z0-9 ]*", message = "alphanumeric.constraint")
     private String repeatPassword;
 
     // Doctor information
-    @Exists(field = "specialty")
+    @Exists(field = "specialty", message = "value.not.exists")
     private String specialty;
 
-    @Pattern(regexp = "[0-9]+")
+    @Pattern(regexp = "[0-9]+", message = "numeric.constraint")
     private String phoneNumber;
 
     public String getFirstName() {

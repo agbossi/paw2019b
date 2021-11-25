@@ -231,6 +231,7 @@ import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -238,6 +239,7 @@ import org.springframework.stereotype.Component;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 
@@ -281,6 +283,9 @@ public class DoctorController {
     @Autowired
     private ScheduleCaching scheduleCaching;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Context
     private UriInfo uriInfo;
 
@@ -307,12 +312,18 @@ public class DoctorController {
         List<DoctorDto> doctors = doctorService.getPaginatedDoctors(licenses, page)
                 .stream().map(d -> DoctorDto.fromDoctor(d, uriInfo)).collect(Collectors.toList());
 
+        String pageStr = messageSource.getMessage("page",null, Locale.getDefault());
+        String prev = messageSource.getMessage("previous",null, Locale.getDefault());
+        String next = messageSource.getMessage("next",null, Locale.getDefault());
+        String last = messageSource.getMessage("last",null, Locale.getDefault());
+        String first = messageSource.getMessage("first",null, Locale.getDefault());
+
         return CacheHelper.handleResponse(doctors, doctorCaching, new GenericEntity<List<DoctorDto>>(doctors) {},
                 "doctors", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxAvailablePage).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page - 1).build(),"prev")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, 0).build(),first)
+                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, maxAvailablePage).build(),last)
+                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, page + 1).build(),next)
+                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, page - 1).build(),prev)
                 .build();
         /*return Response.ok(new GenericEntity<List<DoctorDto>>(doctors) {})
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
@@ -488,12 +499,17 @@ public class DoctorController {
                                     @QueryParam("week") @DefaultValue("1") final Integer week,
                                     @Context Request request) {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
+
+        String prev = messageSource.getMessage("previous",null, Locale.getDefault());
+        String next = messageSource.getMessage("next",null, Locale.getDefault());
+        String weekStr = messageSource.getMessage("week", null, Locale.getDefault());
+
         if(dc != null) {
             List<List<DoctorHourDto>> doctorWeek = getDoctorWeek(dc, week);
             DoctorClinicDto dto = DoctorClinicDto.fromDoctorClinic(dc, uriInfo, doctorWeek);
             return CacheHelper.handleResponse(dto, doctorClinicCaching, "doctorsClinic", request)
-                    .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week - 1).build(),"prev")
-                    .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week + 1).build(),"next")
+                    .link(uriInfo.getAbsolutePathBuilder().queryParam(weekStr, week - 1).build(), prev)
+                    .link(uriInfo.getAbsolutePathBuilder().queryParam(weekStr, week + 1).build(), next)
                     .build();
             /*return Response.ok(DoctorClinicDto.fromDoctorClinic(dc, uriInfo, doctorWeek))
                     .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week - 1).build(),"prev")
