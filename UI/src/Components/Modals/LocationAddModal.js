@@ -32,7 +32,6 @@ class LocationAddModal extends Component {
     render() {
         return (
             <>
-                {}
                 <Button variant="outline-success" onClick={this.handleShow} size="lg">
                     Add location
                     <i className="fab fa-typo3"/>
