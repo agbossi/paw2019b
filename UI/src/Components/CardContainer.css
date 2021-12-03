@@ -1,0 +1,10 @@
+.admin-info-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(7, 1fr);
+    grid-gap: 0.5em;
+    height: 100vh;
+    overflow: auto;
+    padding-top: 1em;
+    column-gap: 2em;
+}
