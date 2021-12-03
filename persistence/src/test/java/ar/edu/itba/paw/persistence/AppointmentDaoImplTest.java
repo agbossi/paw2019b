@@ -1,23 +1,28 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.model.*;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.jdbc.JdbcTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.sql.DataSource;
-import java.util.Calendar;
+import javax.persistence.TypedQuery;
+import java.time.LocalDateTime;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -47,20 +52,11 @@ public class AppointmentDaoImplTest {
 
     private static final User user2 = new User("patFirstName2", "patLastName2", "password", "patient2@mail.com");
 
-    private static final Calendar cal = Calendar.getInstance();
+    private static final LocalDateTime cal = LocalDateTime.of(2019,10,1,8,0,0);
 
-//    @PersistenceContext
-//    private EntityManager entityManager;
 
     @Autowired
     private AppointmentDaoImpl appointmentDao;
-
-
-    @Before
-    public void setUp() {
-        cal.set(2019,9,1,8,0,0);
-        cal.set(Calendar.MILLISECOND, 0);
-    }
 
     @Test
     public void testCreate() {
@@ -75,6 +71,7 @@ public class AppointmentDaoImplTest {
 
     @Test
     public void testHasAppointment(){
+
         final Appointment appointment = appointmentDao.hasAppointment(doctorClinic, cal);
 
         assertNotNull(appointment);

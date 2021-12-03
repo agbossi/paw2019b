@@ -4,6 +4,7 @@ import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
@@ -11,8 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,32 +47,27 @@ public class AppointmentServiceImpl implements AppointmentService {
     private UserService userService;
 
     @Override
-    public Calendar createAppointmentCalendar(int year, int month, int day, int time) {
-        Calendar date = Calendar.getInstance();
-        // TODO cuando corri esto para bajar duplicados empezo a sumarme un mes
-        date.set(year, month-1, day, time, 0, 0);
-        date.set(Calendar.MILLISECOND, 0);
-        return date;
+    public LocalDateTime createAppointmentCalendar(int year, int month, int day, int time) {
+        return LocalDateTime.of(year, Month.of(month), day, time, 0);
+
     }
 
     @Transactional
     @Override
     public Appointment createAppointment(String license, int clinicId, String userEmail, int year, int month, int day, int time) {
-        Calendar today = Calendar.getInstance();
-
-        Calendar date = createAppointmentCalendar(year, month, day, time);
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime date = createAppointmentCalendar(year, month, day, time);
 
         Doctor doctor = doctorService.getDoctorByLicense(license);
         Clinic clinic = clinicService.getClinicById(clinicId);
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(doctor, clinic);
 
-
         User user = userService.findUserByEmail(userEmail);
 
-        if(!hasAppointment(license , userEmail ,date)) {
-            if (today.compareTo(date) < 0) {
+        if(!hasAppointment(license, userEmail, date)) {
+            if (today.isBefore(date)) {
                 for (Schedule schedule : doctorClinic.getSchedule()) {
-                    if (date.get(Calendar.DAY_OF_WEEK) == schedule.getDay() && date.get(Calendar.HOUR_OF_DAY) == schedule.getHour()) {
+                    if (date.getDayOfWeek().getValue() == schedule.getDay() && date.getHour() == schedule.getHour()) {
                         Locale locale = LocaleContextHolder.getLocale();
                         emailService.sendSimpleMail(
                                 userEmail,
@@ -103,7 +101,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     public void cancelAppointment(String license, int clinicId, int year, int month, int day, int time, boolean cancelledByDoctor) {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license, clinicId);
         if(dc != null) {
-            Calendar appointmentDate = createAppointmentCalendar(year, month, day, time);
+            LocalDateTime appointmentDate = createAppointmentCalendar(year, month, day, time);
             Appointment appointment = hasAppointment(dc, appointmentDate);
             if(appointment != null) {
                 String patientEmail = appointment.getPatient().getEmail();
@@ -122,7 +120,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void cancelAppointment(String license, int clinicId, String userEmail, int year, int month, int day, int time, boolean cancelledByDoctor) {
 
-        Calendar date = createAppointmentCalendar(year, month, day, time);
+        LocalDateTime date = createAppointmentCalendar(year, month, day, time);
 
         Doctor doctor = doctorService.getDoctorByLicense(license);
         Clinic clinic = clinicService.getClinicById(clinicId);
@@ -176,12 +174,12 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Appointment hasAppointment(DoctorClinic doctorClinic, Calendar date) {
+    public Appointment hasAppointment(DoctorClinic doctorClinic, LocalDateTime date) {
         return appointmentDao.hasAppointment(doctorClinic, date);
     }
 
     @Override
-    public boolean hasAppointment(String doctorLicense, String patientEmail, Calendar date) {
+    public boolean hasAppointment(String doctorLicense, String patientEmail, LocalDateTime date) {
         return appointmentDao.hasAppointment(doctorLicense,patientEmail,date);
     }
 
@@ -191,7 +189,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, Calendar beginning, Calendar end){
+    public List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, LocalDate beginning, LocalDate end){
         return appointmentDao.getDoctorAppointmentsWithinWeek(doctor, beginning, end);
     }
 
@@ -201,9 +199,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         appointmentDao.cancelAllAppointmentsOnSchedule(doctorClinic, day, hour);
     }
 
-    private String dateString(Calendar calendar){
-        Date date = calendar.getTime();
-        DateFormat dateFormat = new SimpleDateFormat("EEEE yyyy-MM-dd hh:mm:ss");
-        return dateFormat.format(date);
+    private String dateString(LocalDateTime calendar) {
+        return calendar.format(DateTimeFormatter.ofPattern("EEEE yyyy-MM-dd hh:mm:ss"));
     }
 }

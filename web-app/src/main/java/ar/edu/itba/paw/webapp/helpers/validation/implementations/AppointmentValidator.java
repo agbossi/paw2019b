@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 public class AppointmentValidator implements ConstraintValidator<ValidAppointment, Object> {
 
@@ -60,7 +60,7 @@ public class AppointmentValidator implements ConstraintValidator<ValidAppointmen
             DateFormat df = new SimpleDateFormat(DATE_FORMAT);
             df.setLenient(false);
             df.parse(date);
-            Calendar appointment = appointmentService.createAppointmentCalendar((int)scheduleYear, (int)scheduleMonth, (int)scheduleDay, (int)scheduleTime);
+            LocalDateTime appointment = appointmentService.createAppointmentCalendar((int)scheduleYear, (int)scheduleMonth, (int)scheduleDay, (int)scheduleTime);
             return appointmentService.hasAppointment(scheduleLicense.toString(), schedulePatient.toString(), appointment);
         } catch (ParseException e) {
             return false;

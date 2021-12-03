@@ -10,8 +10,10 @@ import ar.edu.itba.paw.model.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @Component
@@ -23,22 +25,13 @@ public class DoctorHourServiceImpl implements DoctorHourService {
     @Autowired
     private ScheduleService scheduleService;
 
-    private static final int DAYS_IN_A_WEEK = 7;
     private static final int START_TIME = 8;
     private static final int END_TIME = 19;
-    private static final int MONDAY = 0; // Monday according to Calendar rules
-    private static final int FRIDAY = 4; // Friday according to Calendar rules
-
 
     @Override
     public List<List<DoctorHour>> getDoctorsWeek(DoctorClinic doctorClinic, int week) {
-        Calendar first = getFirstWeekday(week);
-
-        Calendar weekBeginning = Calendar.getInstance();
-        weekBeginning.setTime(first.getTime());
-        Calendar weekEnd = Calendar.getInstance();
-        weekEnd.setTime(first.getTime());
-        weekEnd.add(Calendar.DATE, 4);
+        LocalDate weekBeginning = getFirstWeekday(week);
+        LocalDate weekEnd = weekBeginning.plusDays(4);
 
         List<Schedule> doctorClinicSchedule = scheduleService.getDoctorClinicSchedule(doctorClinic);
         List<Appointment> appointmentsWithinWeek = appointmentService.getDoctorAppointmentsWithinWeek(doctorClinic.getDoctor(),
@@ -46,19 +39,19 @@ public class DoctorHourServiceImpl implements DoctorHourService {
 
         List<List<DoctorHour>> doctorWeek = new ArrayList<>();
         for(int i=START_TIME; i<=END_TIME; i++) {
-            doctorWeek.add(new ArrayList<DoctorHour>());
+            doctorWeek.add(new ArrayList<>());
         }
 
         int sch = 0, app = 0;
-        for(int i=MONDAY; i<=FRIDAY; i++) {
+        for(int i= DayOfWeek.MONDAY.getValue(); i <= DayOfWeek.FRIDAY.getValue(); i++) {
             for(int j=START_TIME; j<=END_TIME; j++){
-                Calendar day = getDay(first, i, j);
+                LocalDateTime day = getDay(weekBeginning, i, j);
 
                 boolean isSchedule = false;
                 boolean isClinic = false;
                 Appointment appointment = null;
 
-                if(day.compareTo(Calendar.getInstance()) >= 0) {
+                if(!day.isBefore(LocalDateTime.now())) {
                     if(appointmentsWithinWeek.size() > 0 && app < appointmentsWithinWeek.size()) {
                         int cmp = day.compareTo(appointmentsWithinWeek.get(app).getAppointmentKey().getDate());
                         if(cmp == 0){
@@ -68,7 +61,7 @@ public class DoctorHourServiceImpl implements DoctorHourService {
                     }
                     if(doctorClinicSchedule.size() > 0 && sch < doctorClinicSchedule.size()) {
                         Schedule schedule = doctorClinicSchedule.get(sch);
-                        int cmp = day.compareTo(getDay(first, schedule.getDay()-2, schedule.getHour()));
+                        int cmp = day.compareTo(getDay(weekBeginning, schedule.getDay()-2, schedule.getHour()));
                         if(cmp == 0){
                             isSchedule = isClinic = true;
                             sch++;
@@ -81,34 +74,29 @@ public class DoctorHourServiceImpl implements DoctorHourService {
         return doctorWeek;
     }
 
-    private Calendar getDay(Calendar firstDay, int currentDay, int currentHour) {
-        Calendar day = Calendar.getInstance();
-        day.setTime(firstDay.getTime());
-        day.add(Calendar.DATE, currentDay);
-        day.set(Calendar.HOUR_OF_DAY, currentHour);
-        day.set(Calendar.MINUTE, 0);
-        day.set(Calendar.SECOND, 0);
-        day.set(Calendar.MILLISECOND, 0);
-        return day;
+    private LocalDateTime getDay(LocalDate firstDay, int currentDay, int currentHour) {
+        return firstDay.plusDays(currentDay).atTime(currentHour, 0);
     }
 
-    private Calendar getFirstWeekday(int week) {
-        Calendar date = Calendar.getInstance();
-        // sets date to be today
-        date.add(Calendar.DATE, DAYS_IN_A_WEEK * (week - 1));
-        Calendar first = date;
+    private LocalDate getFirstWeekday(int week) {
 
-        int weekDay = date.get(Calendar.DAY_OF_WEEK);
+        LocalDate date = LocalDate.now().plusWeeks(week);
+        LocalDate first;
 
-        if(weekDay == Calendar.SUNDAY){
-            // adds one day to the calendar in order for the day to be Monday
-            first.add(Calendar.DATE, 1);
-        }else if(weekDay == Calendar.SATURDAY){
-            // adds two days to the calendar in order for the day to be Monday
-            first.add(Calendar.DATE, 2);
-        }else{
-            first.add(Calendar.DATE, -(date.get(Calendar.DAY_OF_WEEK)) + 2);
+        DayOfWeek weekDay =  date.getDayOfWeek();
+
+        switch (weekDay) {
+            case SUNDAY:
+                first = date.plusDays(1);
+                break;
+            case SATURDAY:
+                first = date.plusDays(2);
+                break;
+            default:
+                first = date.minusDays(weekDay.getValue() - 1);
+                break;
         }
+
         return first;
     }
 }
