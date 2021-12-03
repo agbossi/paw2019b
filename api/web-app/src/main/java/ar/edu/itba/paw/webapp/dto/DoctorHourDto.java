@@ -1,13 +1,12 @@
 package ar.edu.itba.paw.webapp.dto;
 
-import ar.edu.itba.paw.model.Appointment;
 import ar.edu.itba.paw.model.DoctorHour;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 public class DoctorHourDto {
 
-    private Calendar date;
+    private LocalDateTime date;
 
     private boolean isScheduled;
 
@@ -30,11 +29,11 @@ public class DoctorHourDto {
         return doctorHourDto;
     }
 
-    public Calendar getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

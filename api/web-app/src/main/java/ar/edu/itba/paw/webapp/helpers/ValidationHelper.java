@@ -3,7 +3,7 @@ package ar.edu.itba.paw.webapp.helpers;
 import ar.edu.itba.paw.interfaces.service.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 public class ValidationHelper {
     private ValidationHelper() {
@@ -11,7 +11,7 @@ public class ValidationHelper {
     }
 
 
-    public static boolean appointmentValidate(String doctorLicense,String patientEmail,Calendar date,AppointmentService appointmentService){
+    public static boolean appointmentValidate(String doctorLicense, String patientEmail, LocalDateTime date, AppointmentService appointmentService){
        return appointmentService.hasAppointment(doctorLicense,patientEmail,date);
     }
 

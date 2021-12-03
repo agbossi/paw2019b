@@ -1,6 +1,8 @@
 package ar.edu.itba.paw.model;
 import javax.persistence.*;
-import java.util.Calendar;
+
+import java.time.LocalDateTime;
+
 
 @Entity
 @Table(name = "appointments")
@@ -27,7 +29,7 @@ public class Appointment {
     @JoinColumn(name = "patient", insertable = false, updatable = false)
     private User patient;
 
-    public Appointment(Calendar date, DoctorClinic doctorClinic, User patient) {
+    public Appointment(LocalDateTime date, DoctorClinic doctorClinic, User patient) {
         this.clinic = doctorClinic.getClinic().getId();
         this.doctorClinic = doctorClinic;
         this.patient = patient;

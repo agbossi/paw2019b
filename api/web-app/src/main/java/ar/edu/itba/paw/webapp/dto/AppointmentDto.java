@@ -2,12 +2,12 @@ package ar.edu.itba.paw.webapp.dto;
 
 import ar.edu.itba.paw.model.Appointment;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 public class AppointmentDto {
 
     private UserDto patient;
-    private Calendar date;
+    private LocalDateTime date;
 
     /*
     * No dejo info de doctor o clinic porque esta modelado como entidad debil que
@@ -29,11 +29,11 @@ public class AppointmentDto {
         this.patient = patient;
     }
 
-    public Calendar getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 }

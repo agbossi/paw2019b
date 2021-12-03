@@ -4,7 +4,6 @@ import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Schedule;
 
-import java.util.Calendar;
 import java.util.List;
 
 public interface ScheduleDao {
