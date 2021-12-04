@@ -99,9 +99,7 @@ import ar.edu.itba.paw.interfaces.service.ClinicService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.User;
-import ar.edu.itba.paw.model.exceptions.AppointmentAlreadyScheduledException;
-import ar.edu.itba.paw.model.exceptions.DateInPastException;
-import ar.edu.itba.paw.model.exceptions.OutOfScheduleException;
+import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.webapp.caching.AppointmentCaching;
 import ar.edu.itba.paw.webapp.dto.AppointmentDto;
 import ar.edu.itba.paw.webapp.form.AppointmentForm;
@@ -150,7 +148,8 @@ public class AppointmentController {
                     request).build();
             // return Response.ok(new GenericEntity<List<AppointmentDto>>(appointments) {}).build();
         }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        // TODO no se si llega alguna vez aca, solo un user puede buscarse a el mismo
+        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
     }
 
     @DELETE
@@ -164,8 +163,13 @@ public class AppointmentController {
                                       @QueryParam("month") final Integer month,
                                       @QueryParam("day") final Integer day,
                                       @QueryParam("time") final Integer time) {
-        appointmentService.cancelUserAppointment(email, license, clinic, year, month, day, time);
-        return Response.noContent().build();
+        try {
+            appointmentService.cancelUserAppointment(email, license, clinic, year, month, day, time);
+            return Response.noContent().build();
+        } catch (DoctorClinicNotFoundException | NoAppointmentFountException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+
     }
 
     @GET
@@ -185,7 +189,7 @@ public class AppointmentController {
                     "appointments", request).build();
             //return Response.ok(new GenericEntity<List<AppointmentDto>>(appointments) {}).build();
         }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
     }
 
     @DELETE
@@ -199,8 +203,13 @@ public class AppointmentController {
                                       @QueryParam("month") final Integer month,
                                       @QueryParam("day") final Integer day,
                                       @QueryParam("time") final Integer time) {
-        appointmentService.cancelUserAppointment(email, license, clinic, year, month, day, time);
-        return Response.noContent().build();
+        try {
+            appointmentService.cancelUserAppointment(email, license, clinic, year, month, day, time);
+            return Response.noContent().build();
+        } catch (DoctorClinicNotFoundException | NoAppointmentFountException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+
     }
 
 

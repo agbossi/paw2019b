@@ -1,10 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.webapp.dto.ErrorMessage;
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -74,5 +76,11 @@ public class RestControllerAdvice {
                 LocalDate.now(), ex.getMessage(),
                 messageSource.getMessage("something.went.wrong", null, Locale.getDefault()));
     }
+
+    @ExceptionHandler(value = {JwtException.class})
+    public Response unauthorized(Exception ex) {
+       return Response.status(Response.Status.UNAUTHORIZED).build();
+    }
+
 
 }

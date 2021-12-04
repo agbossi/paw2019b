@@ -3,9 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.model.exceptions.AppointmentAlreadyScheduledException;
-import ar.edu.itba.paw.model.exceptions.DateInPastException;
-import ar.edu.itba.paw.model.exceptions.OutOfScheduleException;
+import ar.edu.itba.paw.model.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.context.MessageSource;
@@ -105,20 +103,24 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public void cancelAppointment(String license, int clinicId, int year, int month, int day, int time, boolean cancelledByDoctor) {
+    public void cancelAppointment(String license, int clinicId, int year, int month, int day, int time, boolean cancelledByDoctor)
+    throws DoctorClinicNotFoundException, NoAppointmentFountException {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license, clinicId);
-        if(dc != null) {
-            LocalDateTime appointmentDate = createAppointmentCalendar(year, month, day, time);
-            Appointment appointment = hasAppointment(dc, appointmentDate);
-            if(appointment != null) {
-                String patientEmail = appointment.getPatient().getEmail();
-                cancelAppointment(license, clinicId, patientEmail, year, month, day, time, cancelledByDoctor);
-            }
-        }
+        if(dc == null) throw new DoctorClinicNotFoundException();
+
+        LocalDateTime appointmentDate = createAppointmentCalendar(year, month, day, time);
+        Appointment appointment = hasAppointment(dc, appointmentDate);
+
+        if(appointment == null) throw new NoAppointmentFountException();
+
+        String patientEmail = appointment.getPatient().getEmail();
+        cancelAppointment(license, clinicId, patientEmail, year, month, day, time, cancelledByDoctor);
+
     }
 
     @Override
-    public void cancelUserAppointment(String userEmail, String license, int clinicId, int year, int month, int day, int time) {
+    public void cancelUserAppointment(String userEmail, String license, int clinicId, int year, int month, int day, int time)
+            throws DoctorClinicNotFoundException, NoAppointmentFountException {
         boolean canceledByDoctor = userService.isDoctor(userEmail);
         cancelAppointment(license, clinicId, year, month, day, time, canceledByDoctor);
     }
