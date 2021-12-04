@@ -99,6 +99,9 @@ import ar.edu.itba.paw.interfaces.service.ClinicService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.exceptions.AppointmentAlreadyScheduledException;
+import ar.edu.itba.paw.model.exceptions.DateInPastException;
+import ar.edu.itba.paw.model.exceptions.OutOfScheduleException;
 import ar.edu.itba.paw.webapp.caching.AppointmentCaching;
 import ar.edu.itba.paw.webapp.dto.AppointmentDto;
 import ar.edu.itba.paw.webapp.form.AppointmentForm;
@@ -206,10 +209,16 @@ public class AppointmentController {
     @Consumes(MediaType.APPLICATION_JSON)
     @PreAuthorize("hasPermission(#form.patient, 'user')")
     public Response createAppointment(final AppointmentForm form) {
-        appointmentService.createAppointment(form.getLicense(), form.getClinic(),
-                form.getPatient(), form.getYear(), form.getMonth(), form.getDay(),
-                form.getTime());
-        return Response.created(uriInfo.getAbsolutePathBuilder().path(form.getPatient())
-                .path(String.valueOf(form.getClinic())).build()).build();
+        try {
+            appointmentService.createAppointment(form.getLicense(), form.getClinic(),
+                    form.getPatient(), form.getYear(), form.getMonth(), form.getDay(),
+                    form.getTime());
+            return Response.created(uriInfo.getAbsolutePathBuilder().path(form.getPatient())
+                    .path(String.valueOf(form.getClinic())).build()).build();
+        } catch (AppointmentAlreadyScheduledException e) {
+            return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+        } catch (DateInPastException | OutOfScheduleException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
     }
 }

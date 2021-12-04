@@ -1,6 +1,9 @@
 package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.AppointmentAlreadyScheduledException;
+import ar.edu.itba.paw.model.exceptions.DateInPastException;
+import ar.edu.itba.paw.model.exceptions.OutOfScheduleException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,7 +17,8 @@ public interface AppointmentService {
 
     void cancelUserAppointment(String userEmail, String license, int clinicId, int year, int month, int day, int time);
 
-    Appointment createAppointment(String license, int clinicId, String patientEmail, int year, int month, int day, int time);
+    Appointment createAppointment(String license, int clinicId, String patientEmail, int year, int month, int day, int time)
+            throws DateInPastException, AppointmentAlreadyScheduledException, OutOfScheduleException;
 
     List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic);
 

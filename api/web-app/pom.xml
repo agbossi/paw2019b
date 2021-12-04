@@ -19,6 +19,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <org.eclipse.persistance.moxy>2.7.2</org.eclipse.persistance.moxy>
   </properties>
 
   <dependencies>
@@ -74,6 +75,18 @@
     <dependency>
       <groupId>org.glassfish.jersey.media</groupId>
       <artifactId>jersey-media-moxy</artifactId>
+      <exclusions>
+        <!-- Not Java 10 compliant -->
+        <exclusion>
+          <groupId>org.eclipse.persistence</groupId>
+          <artifactId>org.eclipse.persistence.moxy</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.persistence</groupId>
+      <artifactId>org.eclipse.persistence.moxy</artifactId>
+      <version>${org.eclipse.persistance.moxy}</version>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.media</groupId>

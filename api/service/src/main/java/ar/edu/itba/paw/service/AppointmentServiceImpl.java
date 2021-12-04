@@ -3,6 +3,9 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.AppointmentAlreadyScheduledException;
+import ar.edu.itba.paw.model.exceptions.DateInPastException;
+import ar.edu.itba.paw.model.exceptions.OutOfScheduleException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
 import org.springframework.context.MessageSource;
@@ -54,7 +57,8 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Transactional
     @Override
-    public Appointment createAppointment(String license, int clinicId, String userEmail, int year, int month, int day, int time) {
+    public Appointment createAppointment(String license, int clinicId, String userEmail, int year, int month, int day, int time)
+    throws DateInPastException, AppointmentAlreadyScheduledException, OutOfScheduleException {
         LocalDateTime today = LocalDateTime.now();
         LocalDateTime date = createAppointmentCalendar(year, month, day, time);
 
@@ -64,22 +68,25 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         User user = userService.findUserByEmail(userEmail);
 
-        if(!hasAppointment(license, userEmail, date)) {
-            if (today.isBefore(date)) {
-                for (Schedule schedule : doctorClinic.getSchedule()) {
-                    if (date.getDayOfWeek().getValue() == schedule.getDay() && date.getHour() == schedule.getHour()) {
-                        Locale locale = LocaleContextHolder.getLocale();
-                        emailService.sendSimpleMail(
-                                userEmail,
-                                messageSource.getMessage("appointment.created.subject", null, locale),
-                                messageSource.getMessage("appointment.created.text", null, locale) + " " + dateString(date));
-                        return appointmentDao.createAppointment(doctorClinic, user, date);
-                    }
-                }
-            }
-            return null;
+        if(!today.isBefore(date)) {
+            throw new DateInPastException();
         }
-        return null;
+        if(hasAppointment(license, userEmail, date)) {
+            throw new AppointmentAlreadyScheduledException();
+        }
+
+        for (Schedule schedule : doctorClinic.getSchedule()) {
+            if (date.getDayOfWeek().getValue() == schedule.getDay() && date.getHour() == schedule.getHour()) {
+                Locale locale = LocaleContextHolder.getLocale();
+                emailService.sendSimpleMail(
+                        userEmail,
+                        messageSource.getMessage("appointment.created.subject", null, locale),
+                        messageSource.getMessage("appointment.created.text", null, locale) + " " + dateString(date));
+                return appointmentDao.createAppointment(doctorClinic, user, date);
+            }
+        }
+
+        throw new OutOfScheduleException();
     }
 
     @Override
