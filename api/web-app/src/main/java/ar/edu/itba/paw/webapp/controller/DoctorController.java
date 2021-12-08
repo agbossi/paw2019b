@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -200,9 +199,9 @@ public class DoctorController {
         List<List<DoctorHour>> doctorsWeek = doctorHourService.getDoctorsWeek(doctorClinic, week);
 
         final ModelAndView mav = new ModelAndView("doctor/clinicPage");
-        List<Calendar> month = ViewModifierHelper.getMonth(week);
+        List<> month = ViewModifierHelper.getMonth(week);
         mav.addObject("days", month);
-        mav.addObject("today", Calendar.getInstance());
+        mav.addObject("today", .getInstance());
         mav.addObject("week", doctorsWeek);
         mav.addObject("weekNum", week);
         mav.addObject("doctorClinic", doctorClinic);
@@ -232,6 +231,7 @@ import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -337,14 +337,15 @@ public class DoctorController {
     @Path("/{license}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getDoctor(@PathParam("license") final String license,
-                              @Context Request request) {
+                              @Context Request request) throws NotFoundException {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor != null) {
             DoctorDto dto = DoctorDto.fromDoctor(doctor, uriInfo);
             return CacheHelper.handleResponse(dto, doctorCaching, "doctor", request).build();
             //return Response.ok(dto).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
     @DELETE

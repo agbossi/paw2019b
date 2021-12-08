@@ -2,10 +2,8 @@ package ar.edu.itba.paw.model;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.io.Serializable;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Embeddable
@@ -18,21 +16,20 @@ public class AppointmentKey implements Serializable {
     private String patient;
 
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private Calendar date;
+    private LocalDateTime date;
 
     // DO NOT DELETE
     public AppointmentKey(){
 
     }
 
-    public AppointmentKey(String doctor,String clinic,Calendar date){
+    public AppointmentKey(String doctor,String clinic, LocalDateTime date){
         this.doctor = doctor;
         this.patient = clinic;
         this.date = date;
     }
 
-    public Calendar getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
@@ -52,7 +49,7 @@ public class AppointmentKey implements Serializable {
         this.patient = patient;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

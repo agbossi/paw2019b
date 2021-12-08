@@ -1,10 +1,10 @@
 package ar.edu.itba.paw.model;
 
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 public class DoctorHour {
 
-    private Calendar date;
+    private LocalDateTime date;
 
     private boolean isScheduled;
 
@@ -12,14 +12,14 @@ public class DoctorHour {
 
     private Appointment appointment;
 
-    public DoctorHour(Calendar date, boolean isScheduled, boolean isClinic, Appointment appointment) {
+    public DoctorHour(LocalDateTime date, boolean isScheduled, boolean isClinic, Appointment appointment) {
         this.date = date;
         this.isScheduled = isScheduled;
         this.appointment = appointment;
         this.isClinic = isClinic;
     }
 
-    public Calendar getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 

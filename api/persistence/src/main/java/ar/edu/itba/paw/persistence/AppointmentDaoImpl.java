@@ -9,6 +9,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
@@ -18,8 +20,8 @@ public class AppointmentDaoImpl implements AppointmentDao {
     private EntityManager entityManager;
 
     @Override
-    public Appointment createAppointment(DoctorClinic doctorClinic, User patient, Calendar date){
-        Appointment appointment = new Appointment(date,doctorClinic,patient);
+    public Appointment createAppointment(DoctorClinic doctorClinic, User patient, LocalDateTime date){
+        Appointment appointment = new Appointment(date, doctorClinic, patient);
         entityManager.persist(appointment);
         return appointment;
     }
@@ -67,7 +69,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
     @Transactional
     @Override
-    public void cancelAppointment(DoctorClinic doctorClinic, User patient, Calendar date){
+    public void cancelAppointment(DoctorClinic doctorClinic, User patient, LocalDateTime date){
         final Query query = entityManager.createQuery(
                 "delete from Appointment as ap where ap.appointmentKey.patient = :email and " +
                         "ap.appointmentKey.doctor = :doctor and ap.clinic = :clinic " +
@@ -80,13 +82,13 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    public Appointment hasAppointment(DoctorClinic doctorClinic, Calendar date){
+    public Appointment hasAppointment(DoctorClinic doctorClinic, LocalDateTime date){
         TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
                 " where ap.doctorClinic.doctor.license = :doctor and ap.clinic = :clinic " +
-                "and ap.appointmentKey.date = :date",Appointment.class);
-        query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
-        query.setParameter("clinic",doctorClinic.getClinic().getId());
-        query.setParameter("date",date);
+                "and ap.appointmentKey.date = :date", Appointment.class);
+        query.setParameter("doctor", doctorClinic.getDoctor().getLicense());
+        query.setParameter("clinic", doctorClinic.getClinic().getId());
+        query.setParameter("date", date);
         List<Appointment> list = query.getResultList();
         return list.isEmpty() ? null : list.get(0);
     }
@@ -101,7 +103,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    public List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, Calendar weekBeginning, Calendar weekEnd){
+    public List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, LocalDate weekBeginning, LocalDate weekEnd){
         TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
                 " where ap.doctorClinic.doctor.license = :doctor and" +
                 " ap.appointmentKey.date between :startDate and :endDate" +
@@ -114,7 +116,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    public boolean hasAppointment(String doctorLicense, String patientEmail, Calendar date){
+    public boolean hasAppointment(String doctorLicense, String patientEmail, LocalDateTime date){
         TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
                 " where ap.doctorClinic.doctor.license = :doctor and ap.patient.email = :email " +
                 "and ap.appointmentKey.date = :date",Appointment.class);

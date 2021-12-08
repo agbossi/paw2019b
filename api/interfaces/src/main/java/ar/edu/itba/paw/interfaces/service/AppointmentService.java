@@ -2,12 +2,13 @@ package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.model.*;
 
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AppointmentService {
 
-    Calendar createAppointmentCalendar(int year, int month, int day, int time);
+    LocalDateTime createAppointmentCalendar(int year, int month, int day, int time);
 
     void cancelAppointment(String license, int clinicId, int year, int month, int day, int time, boolean cancelledByDoctor);
 
@@ -27,13 +28,13 @@ public interface AppointmentService {
 
     void cancelAppointment(String license, int clinicId, String userEmail, int year, int month, int day, int time, boolean cancelledByDoctor);
 
-    Appointment hasAppointment(DoctorClinic doctorClinic,Calendar date);
+    Appointment hasAppointment(DoctorClinic doctorClinic, LocalDateTime date);
 
-    boolean hasAppointment(String doctorLicense,String patientEmail,Calendar date);
+    boolean hasAppointment(String doctorLicense,String patientEmail, LocalDateTime date);
 
     List<Appointment> getAllDoctorsAppointments(Doctor doctor);
 
-    List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, Calendar beginning, Calendar end);
+    List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, LocalDate beginning, LocalDate end);
 
     void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour);
 }
