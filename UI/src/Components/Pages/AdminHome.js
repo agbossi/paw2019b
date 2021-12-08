@@ -70,18 +70,7 @@ class AdminHome extends Component {
                                 </Card.Body>
                             </Card>
                         </Col>
-                        <Col>
-                            <Card className="mb-3" style={{color: "#000", width: '20rem', height: '27rem', marginLeft: '1rem'}}>
-                                <Card.Img variant="top" src="http://localhost:3000/src/Resources/prepaidsToClinics.jpg" />
-                                <Card.Body>
-                                    <Card.Title>prepaids to clinics</Card.Title>
-                                    <Link className="btn btn-outline-dark btn-lg"
-                                          role="button"
-                                          to="/prepaidsToClinics">See prepaids to clinics
-                                    </Link>
-                                </Card.Body>
-                            </Card>
-                        </Col>
+                        <Col></Col>
                     </Row>
                 </container>
             </>

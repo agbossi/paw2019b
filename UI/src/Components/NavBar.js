@@ -24,7 +24,7 @@ class NavBar extends Component {
                         {this.props.items.map((item) => {
                             return (
                                 <Nav.Item>
-                                    <Nav.Link href={item.link}>{item.text}</Nav.Link>
+                                    <Nav.Link href={item.link} style={{color: "white"}}>{item.text}</Nav.Link>
                                 </Nav.Item>
                             )
                         })}

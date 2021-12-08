@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import {Button, Modal, Form} from "react-bootstrap";
 
-class SpecialtyAddModal extends Component {
+class SinglePropertyAddModal extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             show: false,
-            newSpecialty: ''
+            newProperty: ''
         }
     }
 
@@ -19,37 +19,34 @@ class SpecialtyAddModal extends Component {
     }
 
     handleAdd = () => {
-        this.props.handleAdd(this.state.newSpecialty)
+        this.props.handleAdd(this.state.newProperty)
         this.handleShow()
     }
 
     onChange = (event) => {
         this.setState({
-            newSpecialty: event.target.value
+            newProperty: event.target.value
         })
     }
 
     render() {
         return (
             <>
-                <Button variant="outline-success"
-                        onClick={this.handleShow}
-                        size="lg">
-                    Add specialty
+                <Button variant="outline-success" onClick={this.handleShow} size="lg">
+                    {'Add ' +  this.props.property}
                     <i className="fab fa-typo3"/>
                 </Button>
                 <Modal show={this.state.show} onHide={this.handleShow}>
                     <Modal.Header closeButton>
-                        <Modal.Title>Add specialty</Modal.Title>
+                        <Modal.Title>{'Add ' +  this.props.property}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <Form.Label>Specialty name</Form.Label>
-                        <input
-                            name="specialty"
-                            type="text"
-                            placeholder="Write a specialty name"
-                            onChange={this.onChange}
-                            value={this.state.newSpecialty}/>
+                        <Form.Group className="mb-3" controlId="name">
+                            <Form.Label>{this.props.property + ' name'}</Form.Label>
+                            <Form.Control value={this.state.newProperty}
+                                      placeholder={'Write a ' + this.props.property + ' name'}
+                                      onChange={this.onChange}/>
+                        </Form.Group>
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={this.handleShow}>
@@ -65,4 +62,4 @@ class SpecialtyAddModal extends Component {
     }
 }
 
-export default SpecialtyAddModal;
+export default SinglePropertyAddModal;

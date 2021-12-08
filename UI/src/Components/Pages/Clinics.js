@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Button, Card, Container} from "react-bootstrap";
 import '../CardContainer.css'
 import ClinicEditModal from "../Modals/ClinicEditModal";
+import {Link} from "react-router-dom";
 
 class Clinics extends Component {
 
@@ -13,7 +14,8 @@ class Clinics extends Component {
             editableClinic: {id: '', name: '', address: '', location: ''},
             editIndex: -1,
             handleFunction: this.handleAdd,
-            action: "Add"
+            action: "Add",
+            locations: []
         }
     }
 
@@ -22,10 +24,10 @@ class Clinics extends Component {
             clinics: [
                 {
                     "id": 1,
-                    "address": "Larrea 853",
-                    "name": "desgraciada",
+                    "address": "calle falsa 853",
+                    "name": "asdf",
                     "location": "moron",
-                    "prepaids": ""
+                    "prepaids": "URL"
                 },
                 {
                     "id": 2,
@@ -37,31 +39,30 @@ class Clinics extends Component {
                 {
                     "id": 3,
                     "address": "Panamericana 10000",
-                    "name": "esperancienta",
+                    "name": "clinica abandonada",
                     "location": "Martinez",
                     "prepaids": ""
                 },
                 {
                     "id": 4,
-                    "address": "Blanco Encalada 3477",
-                    "name": "desgraciado",
+                    "address": "ningun lugar 0",
+                    "name": "qwert",
                     "location": "Belgrano",
                     "prepaids": ""
                 }
-            ]
+            ],
+            locations: ['Moron', 'Centro', 'Quilmes', 'Belgrano']
         })
     }
 
-    deleteClinic = (index) => {
-        let deleted = this.state.clinics.splice(index, 1)
+
+    deleteClinic = (id) => {
         this.setState({
-            clinics: deleted
+            clinics: this.state.clinics.filter(clinic => clinic.id !== id)
         })
     }
 
     handleAdd = (newClinic) => {
-        console.log('lo que voy a agregar')
-        console.log(newClinic)
         this.setState({
             clinics: [...this.state.clinics, newClinic],
             show: false
@@ -69,7 +70,6 @@ class Clinics extends Component {
     }
 
     handleEdit = (editedClinic) => {
-        console.log('llego aca?')
         let index = this.state.editIndex
         let clinics = this.state.clinics
         clinics[index] = editedClinic
@@ -118,6 +118,7 @@ class Clinics extends Component {
                                  handleFunction={this.state.handleFunction}
                                  action={this.state.action}
                                  hideModal={this.hideModal}
+                                 locations={this.state.locations}
                 /> }
                 <Container>
                     <div className="admin-info-container">
@@ -130,7 +131,11 @@ class Clinics extends Component {
                                             {clinic.address + ' (' + clinic.location + ')'}
                                         </Card.Text>
                                     </Card.Body>
-                                    <Button variant="danger" onClick={() => this.deleteClinic(index)}>
+                                    <Link className="btn btn-outline-dark btn-lg"
+                                          role="button"
+                                          to={'admin/clinics/' + clinic.id + '/prepaids'}>See Prepaids
+                                    </Link>
+                                    <Button variant="danger" onClick={() => this.deleteClinic(clinic.id)}>
                                         X
                                     </Button>
                                     <Button className="btn btn-outline-dark btn-lg"
