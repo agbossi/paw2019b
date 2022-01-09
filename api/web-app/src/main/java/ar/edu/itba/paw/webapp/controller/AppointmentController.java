@@ -162,13 +162,12 @@ public class AppointmentController {
                                       @QueryParam("year") final Integer year,
                                       @QueryParam("month") final Integer month,
                                       @QueryParam("day") final Integer day,
-                                      @QueryParam("time") final Integer time) {
-        try {
-            appointmentService.cancelUserAppointment(email, license, clinic, year, month, day, time);
-            return Response.noContent().build();
-        } catch (DoctorClinicNotFoundException | NoAppointmentFountException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
-        }
+                                      @QueryParam("time") final Integer time) throws EntityNotFoundException,
+            RequestEntityNotFoundException {
+
+        appointmentService.cancelUserAppointment(email, license, clinic, year, month, day, time);
+        return Response.noContent().build();
+
 
     }
 
@@ -202,13 +201,12 @@ public class AppointmentController {
                                       @QueryParam("year") final Integer year,
                                       @QueryParam("month") final Integer month,
                                       @QueryParam("day") final Integer day,
-                                      @QueryParam("time") final Integer time) {
-        try {
-            appointmentService.cancelUserAppointment(email, license, clinic, year, month, day, time);
-            return Response.noContent().build();
-        } catch (DoctorClinicNotFoundException | NoAppointmentFountException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
-        }
+                                      @QueryParam("time") final Integer time) throws EntityNotFoundException,
+            RequestEntityNotFoundException {
+
+        appointmentService.cancelUserAppointment(email, license, clinic, year, month, day, time);
+        return Response.noContent().build();
+
 
     }
 

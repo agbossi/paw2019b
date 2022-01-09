@@ -86,7 +86,10 @@ public class ClinicController {
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response createClinic(final ClinicForm clinicForm) {
         Location location = locationService.getLocationByName(clinicForm.getLocation());
+        if (location == null) return Response.status(Response.Status.BAD_REQUEST).entity("location-not-found").build();
+
         Clinic clinic = clinicService.createClinic(clinicForm.getName(), clinicForm.getAddress(), location);
+
         return Response.created(uriInfo.getAbsolutePathBuilder()
                 .path(String.valueOf(clinic.getId())).build()).build();
     }
@@ -143,7 +146,7 @@ public class ClinicController {
                     "prepaids", request).build();
             //return Response.ok(new GenericEntity<List<PrepaidDto>>(prepaids) {}).build();
         }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("clinic-not-found").build();
     }
 
     @POST

@@ -1,12 +1,16 @@
 package ar.edu.itba.paw.webapp.config;
 
 import ar.edu.itba.paw.webapp.auth.*;
+import ar.edu.itba.paw.webapp.auth.jwt.JwtAuthenticationEntryPoint;
+import ar.edu.itba.paw.webapp.auth.jwt.PawAuthenticationFailureHandler;
+import ar.edu.itba.paw.webapp.auth.jwt.PawUrlStatelessAuthenticationSuccessHandler;
+import ar.edu.itba.paw.webapp.auth.jwt.StatelessAuthenticationFilter;
+import ar.edu.itba.paw.webapp.auth.login.LoginAuthenticationFailureHandler;
+import ar.edu.itba.paw.webapp.auth.login.LoginAuthenticationFilter;
+import ar.edu.itba.paw.webapp.auth.login.LoginAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
@@ -20,30 +24,37 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.filter.GenericFilterBean;
-
-import java.util.Base64;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled=true)
-@PropertySource(value = "classpath:authKey.properties")
+@PropertySources({
+        @PropertySource(value = "classpath:authKey.properties"),
+        @PropertySource(value = "classpath:env/secret.properties", ignoreResourceNotFound = false)
+})
+
 @ComponentScan("ar.edu.itba.paw.webapp.auth")
 public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     public static final BCryptPasswordEncoder B_CRYPT_PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     @Autowired
+    private Environment environment;
+
+    @Autowired
     private PawUserDetailsService userDetailsService;
 
-    /* @Value("${key}")
-     private String rememberMeKey; */
+    @Autowired
+    private LoginAuthenticationSuccessHandler loginAuthenticationSuccessHandler;
 
-    @Value("${secret}")
-    private String authTokenSecretKey;
+    @Autowired
+    private LoginAuthenticationFailureHandler loginAuthenticationFailureHandler;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -77,7 +88,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/doctors/**").hasRole("DOCTOR")
                 .antMatchers(HttpMethod.PUT, "/doctors/**").hasRole("DOCTOR")
                 .antMatchers(HttpMethod.DELETE, "/doctors/**").hasRole("DOCTOR")
-                .antMatchers("/appointments").hasAnyRole("USER", "DOCTOR")
+                .antMatchers("/appointments/**").hasAnyRole("USER", "DOCTOR")
                 //.antMatchers(HttpMethod.GET).authenticated()
                 .antMatchers(HttpMethod.POST).authenticated()
                 .antMatchers(HttpMethod.DELETE).authenticated()
@@ -88,10 +99,12 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login").successHandler(myAuthenticationSuccessHandler())
                 .failureHandler(myAuthenticationFailureHandler())
                 .and()
+                .addFilterBefore(loginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class)
                 .userDetailsService(userDetailsService)
                 .exceptionHandling().authenticationEntryPoint(authEntryPoint())
                 .and()
+                .exceptionHandling().accessDeniedHandler(myAccessDeniedHandler()).and()
                 .csrf().disable();
     }
 
@@ -116,13 +129,33 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public String authTokenSecretKey() {
-        return Base64.getEncoder().encodeToString(authTokenSecretKey.getBytes()); //TODO que va aca?
+    public StatelessAuthenticationFilter authFilter() {
+        StatelessAuthenticationFilter filter = new StatelessAuthenticationFilter();
+        filter.setAuthenticationSuccessHandler(new PawUrlStatelessAuthenticationSuccessHandler());
+        filter.setAuthenticationFailureHandler(new PawAuthenticationFailureHandler());
+        return filter;
     }
 
     @Bean
-    public GenericFilterBean authFilter() {
-        return new StatelessAuthenticationFilter();
+        public LoginAuthenticationFilter loginFilter() throws Exception {
+        LoginAuthenticationFilter filter = new LoginAuthenticationFilter();
+        filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login",
+                "POST"));
+        filter.setAuthenticationManager(authenticationManager());
+        filter.setAuthenticationSuccessHandler(loginAuthenticationSuccessHandler);
+        filter.setAuthenticationFailureHandler(loginAuthenticationFailureHandler);
+        return filter;
+    }
+
+    @Bean
+    public RequestMatcher protectedEndpointsMatcher() {
+        return new OrRequestMatcher(
+                new AntPathRequestMatcher("/**", "GET"),
+                new AntPathRequestMatcher("/**", "POST"),
+                new AntPathRequestMatcher("/**", "PUT"),
+                new AntPathRequestMatcher("/**", "DELETE"),
+                new AntPathRequestMatcher("/**", "PATCH")
+        );
     }
 
     @Bean
@@ -133,5 +166,10 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthenticationFailureHandler myAuthenticationFailureHandler() {
         return new PawAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public AccessDeniedHandler myAccessDeniedHandler() {
+        return new PawAccessDeniedHandler();
     }
 }

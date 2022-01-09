@@ -1,7 +1,9 @@
 package ar.edu.itba.paw.webapp.auth;
 
+import ar.edu.itba.paw.webapp.auth.exceptions.InvalidTokenException;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -15,8 +17,12 @@ public class TokenHandler {
     @Autowired
     private PawUserDetailsService userService;
 
+    private final String secret;
+
     @Autowired
-    private String secret;
+    public TokenHandler(Environment environment) {
+        this.secret = environment.getRequiredProperty("JWT.secret");
+    }
 
     public UserDetails parseUserFromToken(String token) {
         String email = Jwts.parser()
@@ -51,7 +57,8 @@ public class TokenHandler {
 
             return !claims.getBody().getExpiration().before(new Date());
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtException("Expired or invalid JWT token");
+            throw new InvalidTokenException("Expired or invalid JWT token") {
+            };
         }
     }
 }

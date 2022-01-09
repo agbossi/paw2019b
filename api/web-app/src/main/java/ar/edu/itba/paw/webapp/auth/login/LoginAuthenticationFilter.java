@@ -1,0 +1,83 @@
+package ar.edu.itba.paw.webapp.auth.login;
+
+import ar.edu.itba.paw.webapp.auth.exceptions.AlreadyLoggedInException;
+import ar.edu.itba.paw.webapp.auth.TokenAuthenticationService;
+import ar.edu.itba.paw.webapp.auth.exceptions.InvalidRequestEcxeption;
+import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    private static final String EMAIL = "email";
+    private static final String PASSWORD = "password";
+
+    @Autowired
+    private TokenAuthenticationService tokenAuthenticationService;
+    @Override
+    @Autowired
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        super.setAuthenticationManager(authenticationManager);
+    }
+
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
+
+        if (tokenAuthenticationService.getAuthentication(request) != null) {
+            throw new AlreadyLoggedInException("already-logged-in");
+        }
+
+        Map<String, String> body = null;
+        try {
+             body = readBodyForm(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (body == null) throw new InvalidRequestEcxeption("invalid-body");
+
+        String email = body.get(EMAIL);
+        String password = body.get(PASSWORD);
+
+        if (email == null || password == null) throw new InvalidRequestEcxeption("invalid-body");
+
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email,
+                password);
+
+        this.setDetails(request, token);
+        return this.getAuthenticationManager().authenticate(token);
+
+    }
+
+    private Map<String, String> readBodyForm(HttpServletRequest request) throws IOException {
+        String body = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
+        body = java.net.URLDecoder.decode(body, request.getCharacterEncoding());
+        Map<String, String> map = new HashMap<>();
+
+        while (!body.isEmpty()) {
+            int index = body.indexOf('=');
+            String key = body.substring(0, index);
+            int index2 = body.indexOf('&');
+            String value;
+            if (index2 != -1) {
+                value = body.substring(index + 1, index2);
+                body = body.substring(index2 + 1);
+            } else {
+                value = body.substring(index + 1);
+                body = "";
+            }
+            map.put(key, value);
+        }
+
+        return map;
+    }
+}

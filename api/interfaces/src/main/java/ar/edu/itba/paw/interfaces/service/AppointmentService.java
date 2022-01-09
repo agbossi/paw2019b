@@ -12,10 +12,10 @@ public interface AppointmentService {
     LocalDateTime createAppointmentCalendar(int year, int month, int day, int time);
 
     void cancelAppointment(String license, int clinicId, int year, int month, int day, int time, boolean cancelledByDoctor)
-            throws DoctorClinicNotFoundException, NoAppointmentFountException;
+            throws EntityNotFoundException, RequestEntityNotFoundException;
 
     void cancelUserAppointment(String userEmail, String license, int clinicId, int year, int month, int day, int time)
-            throws DoctorClinicNotFoundException, NoAppointmentFountException;
+            throws EntityNotFoundException, RequestEntityNotFoundException;
 
     Appointment createAppointment(String license, int clinicId, String patientEmail, int year, int month, int day, int time)
             throws DateInPastException, AppointmentAlreadyScheduledException, OutOfScheduleException;

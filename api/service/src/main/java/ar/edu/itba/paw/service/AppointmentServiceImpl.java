@@ -5,14 +5,11 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -104,14 +101,14 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void cancelAppointment(String license, int clinicId, int year, int month, int day, int time, boolean cancelledByDoctor)
-    throws DoctorClinicNotFoundException, NoAppointmentFountException {
+            throws EntityNotFoundException, RequestEntityNotFoundException {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license, clinicId);
-        if(dc == null) throw new DoctorClinicNotFoundException();
+        if(dc == null) throw new RequestEntityNotFoundException("doctor-clinic");
 
         LocalDateTime appointmentDate = createAppointmentCalendar(year, month, day, time);
         Appointment appointment = hasAppointment(dc, appointmentDate);
 
-        if(appointment == null) throw new NoAppointmentFountException();
+        if(appointment == null) throw new EntityNotFoundException("appointment");
 
         String patientEmail = appointment.getPatient().getEmail();
         cancelAppointment(license, clinicId, patientEmail, year, month, day, time, cancelledByDoctor);
@@ -120,7 +117,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public void cancelUserAppointment(String userEmail, String license, int clinicId, int year, int month, int day, int time)
-            throws DoctorClinicNotFoundException, NoAppointmentFountException {
+            throws EntityNotFoundException, RequestEntityNotFoundException {
         boolean canceledByDoctor = userService.isDoctor(userEmail);
         cancelAppointment(license, clinicId, year, month, day, time, canceledByDoctor);
     }
