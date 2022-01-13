@@ -63,19 +63,11 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         body = java.net.URLDecoder.decode(body, request.getCharacterEncoding());
         Map<String, String> map = new HashMap<>();
 
-        while (!body.isEmpty()) {
-            int index = body.indexOf('=');
-            String key = body.substring(0, index);
-            int index2 = body.indexOf('&');
-            String value;
-            if (index2 != -1) {
-                value = body.substring(index + 1, index2);
-                body = body.substring(index2 + 1);
-            } else {
-                value = body.substring(index + 1);
-                body = "";
-            }
-            map.put(key, value);
+        String[] pairs = body.split("&");
+
+        for(String pair: pairs) {
+            String[] split = pair.split("=");
+            map.put(split[0], split[1]);
         }
 
         return map;
