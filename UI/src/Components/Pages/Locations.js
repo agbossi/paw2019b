@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Card, Container, Modal} from "react-bootstrap";
 import '../CardContainer.css'
-import LocationAddModal from "../Modals/LocationAddModal";
+import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
 
 class Locations extends Component {
 
@@ -33,7 +33,7 @@ class Locations extends Component {
     render() {
         return (
             <>
-                <LocationAddModal handleAdd={this.handleAdd}/>
+                <SinglePropertyAddModal handleAdd={this.handleAdd} property="Location"/>
                 <Container>
                     <div className="admin-info-container">
                         {this.state.locations.map(location => {

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Button, Modal, Form} from "react-bootstrap";
+import {Button, Modal, Form, Dropdown} from "react-bootstrap";
+import DropDownList from "../DropDownList";
 
 class ClinicEditModal extends Component {
 
@@ -9,13 +10,20 @@ class ClinicEditModal extends Component {
             id: this.props.clinic.id,
             address: this.props.clinic.address,
             name: this.props.clinic.name,
-            location: this.props.clinic.location
+            location: this.props.clinic.location,
+            locations: this.props.locations
         }
     }
 
     onChange = (event) => {
         this.setState({
             [event.target.id]: event.target.value
+        })
+    }
+
+    handleSelect = (location) => {
+        this.setState({
+            location: location
         })
     }
 
@@ -44,9 +52,11 @@ class ClinicEditModal extends Component {
 
                             <Form.Group className="mb-3" controlId="location">
                                 <Form.Label>Clinic location</Form.Label>
-                                <Form.Control value={this.state.location}
-                                              placeholder="Enter clinic location"
-                                              onChange={this.onChange}/>
+                                <DropDownList iterable={this.state.locations}
+                                              selectedElement={this.state.location}
+                                              handleSelect={this.handleSelect}
+                                              elementType='Location'
+                                              id='location'/>
                             </Form.Group>
                         </Form>
                     </Modal.Body>

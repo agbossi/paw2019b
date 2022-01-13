@@ -3,46 +3,48 @@ import {Button, Card, Container, Modal} from "react-bootstrap";
 import '../CardContainer.css'
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
 
-class Specialties extends Component {
+class Prepaids extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            specialties: [],
+            prepaids: []
         }
     }
 
     componentDidMount() {
         this.setState({
-            specialties: ['Clinica', 'Cardiologia', 'Neurologia', 'miau']
+            prepaids: ['OSDE', 'Simeco']
         })
     }
 
-    deleteSpecialty = (name) => {
+    deletePrepaids = (name) => {
         this.setState({
-            specialties: this.state.specialties.filter(specialty => specialty !== name)
+            prepaids: this.state.prepaids.filter(prepaid => prepaid !== name)
         })
     }
 
-    handleAdd = (newSpecialty) => {
+    handleAdd = (newPrepaid) => {
         this.setState({
-            specialties: [...this.state.specialties, newSpecialty]
+            prepaids: [...this.state.prepaids, newPrepaid]
         })
     }
 
     render() {
         return (
             <>
-                <SinglePropertyAddModal handleAdd={this.handleAdd} property="Specialty"/>
+                <SinglePropertyAddModal handleAdd={this.handleAdd} property={"Prepaid"}/>
                 <Container>
                     <div className="admin-info-container">
-                        {this.state.specialties.map(specialty => {
+                        {this.state.prepaids.map((prepaid, index) => {
                             return (
-                                <Card className="mb-3" style={{color: "#000", width: '20rem', height: '7rem'}} key={specialty}>
+                                <Card className="mb-3"
+                                      style={{color: "#000", width: '20rem', height: '7rem'}}
+                                      key={prepaid}>
                                     <Card.Body>
-                                        <Card.Title>{specialty}</Card.Title>
+                                        <Card.Title>{prepaid}</Card.Title>
                                     </Card.Body>
-                                    <Button variant="danger" onClick={() => this.deleteSpecialty(specialty)}>
+                                    <Button variant="danger" onClick={() => this.deletePrepaids(prepaid)}>
                                         X
                                     </Button>
                                 </Card>
@@ -55,4 +57,4 @@ class Specialties extends Component {
     }
 }
 
-export default Specialties
+export default Prepaids
