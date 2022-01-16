@@ -55,7 +55,7 @@ function Doctors() {
             <DoctorAddModal handleAdd={handleAdd} specialties={specialties}/>
             <Container>
                 <div className="admin-info-container">
-                    {doctors.map((doctor, index) => {
+                    {doctors.map((doctor) => {
                         return (
                             <Card className="mb-3"
                                   style={{color: "#000", width: '20rem', height: '7rem'}}
