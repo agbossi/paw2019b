@@ -1,17 +1,17 @@
 .admin_row {
-    background-color: whitesmoke;
+    background-color: #d9d9d9;
 }
 
 .admin_card {
     margin-top: 1rem;
-    color: #000000;
+    background-color: whitesmoke;
     width: 20rem;
-    height: 27rem;
+    height: 20rem;
     display: flex;
 }
 
 .card_img {
-    width: 18rem;
+    width: 10rem;
     display: block;
     margin-left: auto;
     margin-right: auto;

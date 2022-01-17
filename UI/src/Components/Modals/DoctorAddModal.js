@@ -57,9 +57,8 @@ function DoctorAddModal(props) {
 
     return (
         <>
-            <Button variant="outline-success" onClick={() => handleShow()} size="lg">
+            <Button variant="outline-secondary" onClick={() => handleShow()} size="lg" className="add-doc">
                 Add Doctor
-                <i className="fab fa-typo3"/>
             </Button>
             <Modal show={show} onHide={() => handleShow()}>
                 <Modal.Header closeButton>

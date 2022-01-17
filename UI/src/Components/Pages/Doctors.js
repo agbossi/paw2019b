@@ -51,30 +51,30 @@ function Doctors() {
     }
 
     return (
-        <>
-            <DoctorAddModal handleAdd={handleAdd} specialties={specialties}/>
+        <div className="background">
+            <DoctorAddModal handleAdd={handleAdd} specialties={specialties} />
             <Container>
                 <div className="admin-info-container">
                     {doctors.map((doctor) => {
                         return (
-                            <Card className="mb-3"
-                                  style={{color: "#000", width: '20rem', height: '7rem'}}
+                            <Card className="mb-3 doc-card shadow"
                                   key={doctor.license}>
                                 <Card.Body>
                                     <Card.Title>{doctor.firstName + ' ' + doctor.lastName}</Card.Title>
                                     <Card.Text>
-                                        {doctor.license}
+                                       Licence: {doctor.license}
                                     </Card.Text>
                                 </Card.Body>
-                                <Button variant="danger" onClick={() => deleteDoctors(doctor.license)}>
-                                    X
+                                <Button className="doc-remove-button"
+                                        onClick={() => deleteDoctors(doctor.license)}>
+                                    Delete
                                 </Button>
                             </Card>
                         )
                     })}
                 </div>
             </Container>
-        </>
+        </div>
     )
 }
 

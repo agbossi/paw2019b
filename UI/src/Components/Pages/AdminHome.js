@@ -12,8 +12,8 @@ class AdminHome extends Component {
                 <container>
                     <Row className="admin_row">
                         <Col>
-                            <Card className="admin_card" style={{marginLeft: '3.5rem', marginRight: '1rem'}}>
-                                <Card.Img variant="top" className="card_img" src="/images/doctors.jpg" />
+                            <Card className="admin_card shadow" style={{marginLeft: '3.5rem', marginRight: '1rem'}}>
+                                <Card.Img variant="top" className="card_img" src="/images/doctor.png" />
                                 <Card.Body className="card_body">
                                     <Card.Title style={{verticalAlign: "bottom"}}>Doctors</Card.Title>
                                     <Link className="btn btn-outline-dark btn-lg"
@@ -24,8 +24,8 @@ class AdminHome extends Component {
                             </Card>
                         </Col>
                         <Col>
-                            <Card className="mb-3 admin_card" style={{marginLeft: '2.5rem', marginRight: '1rem'}}>
-                                <Card.Img variant="top" className="card_img" src="/images/clinics.jpeg" />
+                            <Card className="mb-3 admin_card shadow" style={{marginLeft: '2.5rem', marginRight: '1rem'}}>
+                                <Card.Img variant="top" className="card_img" src="/images/clinic.png" />
                                 <Card.Body className="card_body">
                                     <Card.Title>Clinics</Card.Title>
                                     <Link className="btn btn-outline-dark btn-lg"
@@ -36,8 +36,8 @@ class AdminHome extends Component {
                             </Card>
                         </Col>
                         <Col>
-                            <Card className="mb-3 admin_card" style={{ marginLeft: '1rem'}}>
-                                <Card.Img variant="top" className="card_img" src="/images/locations.jpeg" />
+                            <Card className="mb-3 admin_card shadow" style={{ marginLeft: '1rem'}}>
+                                <Card.Img variant="top" className="card_img" src="/images/location.png" />
                                 <Card.Body className="card_body">
                                     <Card.Title>Locations</Card.Title>
                                     <Link className="btn btn-outline-dark btn-lg"
@@ -50,8 +50,8 @@ class AdminHome extends Component {
                     </Row>
                     <Row className="admin_row">
                         <Col>
-                            <Card className="mb-3 admin_card" style={{marginLeft: '3.5rem', marginRight: '1rem'}}>
-                                <Card.Img className="card_img" variant="top" src="/images/specialties.jpg" />
+                            <Card className="mb-3 admin_card shadow" style={{marginLeft: '3.5rem', marginRight: '1rem'}}>
+                                <Card.Img className="card_img" variant="top" src="/images/specialty.png" />
                                 <Card.Body className="card_body">
                                     <Card.Title>Specialties</Card.Title>
                                     <Link className="btn btn-outline-dark btn-lg"
@@ -62,8 +62,8 @@ class AdminHome extends Component {
                             </Card>
                         </Col>
                         <Col>
-                            <Card className="mb-3 admin_card" style={{marginLeft: '2.5rem', marginRight: '1rem'}}>
-                                <Card.Img variant="top" className="card_img" src="/images/prepaids.jpeg" />
+                            <Card className="mb-3 admin_card shadow" style={{marginLeft: '2.5rem', marginRight: '1rem'}}>
+                                <Card.Img variant="top" className="card_img" src="/images/prepaid.png" />
                                 <Card.Body className="card_body">
                                     <Card.Title>Prepaids</Card.Title>
                                     <Link className="btn btn-outline-dark btn-lg"
