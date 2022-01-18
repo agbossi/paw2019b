@@ -1,5 +1,6 @@
 package ar.edu.itba.paw.webapp.auth;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,6 +8,9 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class TokenAuthenticationService {
@@ -32,5 +36,20 @@ public class TokenAuthenticationService {
 
     public String createTokenForUser(String email) {
         return tokenHandler.createTokenForUser(email);
+    }
+
+    public Map<String, String> readBodyForm(HttpServletRequest request) throws IOException {
+        String body = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
+        body = java.net.URLDecoder.decode(body, request.getCharacterEncoding());
+        Map<String, String> map = new HashMap<>();
+
+        String[] pairs = body.split("&");
+
+        for(String pair: pairs) {
+            String[] split = pair.split("=");
+            map.put(split[0], split[1]);
+        }
+
+        return map;
     }
 }

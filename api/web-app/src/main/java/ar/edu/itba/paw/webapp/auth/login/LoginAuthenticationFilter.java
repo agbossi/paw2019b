@@ -2,8 +2,7 @@ package ar.edu.itba.paw.webapp.auth.login;
 
 import ar.edu.itba.paw.webapp.auth.exceptions.AlreadyLoggedInException;
 import ar.edu.itba.paw.webapp.auth.TokenAuthenticationService;
-import ar.edu.itba.paw.webapp.auth.exceptions.InvalidRequestEcxeption;
-import org.apache.commons.io.IOUtils;
+import ar.edu.itba.paw.webapp.auth.exceptions.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,7 +13,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -39,16 +37,16 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
 
         Map<String, String> body = null;
         try {
-             body = readBodyForm(request);
+             body = tokenAuthenticationService.readBodyForm(request);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (body == null) throw new InvalidRequestEcxeption("invalid-body");
+        if (body == null) throw new InvalidRequestException("invalid-body");
 
         String email = body.get(EMAIL);
         String password = body.get(PASSWORD);
 
-        if (email == null || password == null) throw new InvalidRequestEcxeption("invalid-body");
+        if (email == null || password == null) throw new InvalidRequestException("invalid-body");
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email,
                 password);
@@ -58,18 +56,4 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
 
     }
 
-    private Map<String, String> readBodyForm(HttpServletRequest request) throws IOException {
-        String body = IOUtils.toString(request.getInputStream(), request.getCharacterEncoding());
-        body = java.net.URLDecoder.decode(body, request.getCharacterEncoding());
-        Map<String, String> map = new HashMap<>();
-
-        String[] pairs = body.split("&");
-
-        for(String pair: pairs) {
-            String[] split = pair.split("=");
-            map.put(split[0], split[1]);
-        }
-
-        return map;
-    }
 }
