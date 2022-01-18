@@ -64,7 +64,7 @@ class ClinicEditModal extends Component {
                         <Button variant="secondary" onClick={this.props.hideModal}>
                             Close
                         </Button>
-                        <Button variant="primary" onClick={() => this.props.handleFunction({id: this.state.id,
+                        <Button className="doc-button-color" onClick={() => this.props.handleFunction({id: this.state.id,
                             name: this.state.name,
                             address: this.state.address,
                             location: this.state.location})

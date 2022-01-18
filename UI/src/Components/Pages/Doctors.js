@@ -65,7 +65,7 @@ function Doctors() {
                                        Licence: {doctor.license}
                                     </Card.Text>
                                 </Card.Body>
-                                <Button className="doc-remove-button"
+                                <Button className="remove-button doc-button-color shadow-sm"
                                         onClick={() => deleteDoctors(doctor.license)}>
                                     Delete
                                 </Button>

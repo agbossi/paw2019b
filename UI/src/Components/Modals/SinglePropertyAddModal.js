@@ -32,9 +32,8 @@ class SinglePropertyAddModal extends Component {
     render() {
         return (
             <>
-                <Button variant="outline-success" onClick={this.handleShow} size="lg">
+                <Button variant="outline-secondary" onClick={this.handleShow} size="lg" className="add-margin">
                     {'Add ' +  this.props.property}
-                    <i className="fab fa-typo3"/>
                 </Button>
                 <Modal show={this.state.show} onHide={this.handleShow}>
                     <Modal.Header closeButton>

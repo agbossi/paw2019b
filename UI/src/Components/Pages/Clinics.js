@@ -106,12 +106,12 @@ class Clinics extends Component {
 
     render() {
         return (
-            <>
-                <Button variant="outline-success"
+            <div className="background">
+                <Button variant="outline-secondary"
                         onClick={() => this.handleShow(-1, this.handleAdd)}
-                        size="lg">
+                        size="lg"
+                        className="add-margin">
                     Add Clinic
-                    <i className="fab fa-typo3"/>
                 </Button>
                 {this.state.show && <ClinicEditModal show={this.state.show}
                                  clinic={this.state.editableClinic}
@@ -124,30 +124,34 @@ class Clinics extends Component {
                     <div className="admin-info-container">
                         {this.state.clinics.map(( clinic, index) => {
                             return (
-                                <Card className="mb-3" style={{color: "#000", width: '20rem', height: '15rem'}} key={clinic.id}>
+                                <Card className="mb-3 shadow" style={{color: "#000", width: '20rem', height: '15rem'}} key={clinic.id}>
                                     <Card.Body>
                                         <Card.Title>{clinic.name}</Card.Title>
                                         <Card.Text>
                                             {clinic.address + ' (' + clinic.location + ')'}
                                         </Card.Text>
                                     </Card.Body>
-                                    <Link className="btn btn-outline-dark btn-lg"
+                                    <Link className="btn btn-outline-dark btn-lg see-prepaid-button shadow-sm"
                                           role="button"
                                           to={'admin/clinics/' + clinic.id + '/prepaids'}>See Prepaids
                                     </Link>
-                                    <Button variant="danger" onClick={() => this.deleteClinic(clinic.id)}>
-                                        X
-                                    </Button>
-                                    <Button className="btn btn-outline-dark btn-lg"
-                                    onClick={() => this.handleShow(index, this.handleEdit)}>
-                                        <i className="far fa-edit"/>
-                                    </Button>
+                                    <div className="buttons-div">
+                                        <Button className="edit-remove-button doc-button-color shadow-sm"
+                                                onClick={() => this.deleteClinic(clinic.id)}>
+                                        Delete
+                                        </Button>
+                                        <Button className="btn edit-remove-button doc-button-color shadow-sm"
+                                                onClick={() => this.handleShow(index, this.handleEdit)}>
+                                            <i className="far fa-edit"/>
+                                        </Button>
+                                    </div>
+
                                 </Card>
                             )
                         })}
                     </div>
                 </Container>
-            </>
+            </div>
         )
     }
 }

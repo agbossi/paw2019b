@@ -57,7 +57,7 @@ function DoctorAddModal(props) {
 
     return (
         <>
-            <Button variant="outline-secondary" onClick={() => handleShow()} size="lg" className="add-doc">
+            <Button variant="outline-secondary" onClick={() => handleShow()} size="lg" className="add-margin">
                 Add Doctor
             </Button>
             <Modal show={show} onHide={() => handleShow()}>
@@ -132,7 +132,7 @@ function DoctorAddModal(props) {
                     <Button variant="secondary" onClick={() => handleShow()}>
                         Close
                     </Button>
-                    <Button variant="primary" onClick={() => handleAdd({
+                    <Button className="doc-button-color" onClick={() => handleAdd({
                         firstName: firstName,
                         lastName: lastName,
                         email: email,

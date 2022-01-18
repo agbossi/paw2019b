@@ -32,25 +32,27 @@ class Locations extends Component {
 
     render() {
         return (
-            <>
+            <div className="background">
                 <SinglePropertyAddModal handleAdd={this.handleAdd} property="Location"/>
                 <Container>
                     <div className="admin-info-container">
                         {this.state.locations.map(location => {
                             return (
-                                <Card className="mb-3" style={{color: "#000", width: '20rem', height: '7rem'}} key={location}>
+                                <Card className="mb-3 shadow"
+                                      style={{color: "#000", width: '20rem', height: '7rem'}} key={location}>
                                     <Card.Body>
                                         <Card.Title>{location}</Card.Title>
                                     </Card.Body>
-                                    <Button variant="danger" onClick={() => this.deleteLocation(location)}>
-                                        X
+                                    <Button className="remove-button doc-button-color shadow-sm"
+                                            onClick={() => this.deleteLocation(location)}>
+                                        Delete
                                     </Button>
                                 </Card>
                             )
                         })}
                     </div>
                 </Container>
-            </>
+            </div>
         )
     }
 }

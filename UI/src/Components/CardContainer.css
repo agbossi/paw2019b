@@ -14,7 +14,7 @@
     background-color: #d9d9d9;
 }
 
-.add-doc {
+.add-margin {
     margin: 1rem;
 }
 
@@ -24,19 +24,37 @@
     height: 8.5rem;
 }
 
-.doc-remove-button {
+.remove-button {
     width: 5rem;
     align-self: flex-end;
     margin-right: 1rem;
     margin-bottom: 0.5rem;
+}
+
+.edit-remove-button {
+    width: 5rem;
+    align-self: center;
+    margin: 0.5rem;
+}
+
+.doc-button-color {
     background-color: #3c677e;
     border-color: #3c677e;
     color: whitesmoke;
 }
 
-.doc-remove-button:hover {
+.doc-button-color:hover {
     background-color: whitesmoke;
     color: #3c677e;
     border-color: #3c677e;
+}
 
+.buttons-div {
+    margin: 0.5rem;
+    align-content: center;
+}
+
+.see-prepaid-button {
+    width: 18rem;
+    align-self: center;
 }

@@ -32,27 +32,28 @@ class Prepaids extends Component {
 
     render() {
         return (
-            <>
+            <div className="background">
                 <SinglePropertyAddModal handleAdd={this.handleAdd} property={"Prepaid"}/>
                 <Container>
                     <div className="admin-info-container">
                         {this.state.prepaids.map((prepaid, index) => {
                             return (
-                                <Card className="mb-3"
+                                <Card className="mb-3 shadow"
                                       style={{color: "#000", width: '20rem', height: '7rem'}}
                                       key={prepaid}>
                                     <Card.Body>
                                         <Card.Title>{prepaid}</Card.Title>
                                     </Card.Body>
-                                    <Button variant="danger" onClick={() => this.deletePrepaids(prepaid)}>
-                                        X
+                                    <Button className="remove-button doc-button-color shadow-sm"
+                                            onClick={() => this.deletePrepaids(prepaid)}>
+                                        Delete
                                     </Button>
                                 </Card>
                             )
                         })}
                     </div>
                 </Container>
-            </>
+            </div>
         )
     }
 }
