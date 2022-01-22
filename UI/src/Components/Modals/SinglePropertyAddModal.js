@@ -19,7 +19,7 @@ class SinglePropertyAddModal extends Component {
     }
 
     handleAdd = () => {
-        this.props.handleAdd(this.state.newProperty)
+        this.props.handleAdd({"name": this.state.newProperty})
         this.handleShow()
     }
 

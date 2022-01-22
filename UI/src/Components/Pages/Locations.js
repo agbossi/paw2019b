@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {Button, Card, Container, Modal} from "react-bootstrap";
+import {Button, Card, Container} from "react-bootstrap";
 import '../CardContainer.css'
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
+import ApiCalls from "../../api/apiCalls"
 
 class Locations extends Component {
 
@@ -12,15 +13,19 @@ class Locations extends Component {
         }
     }
 
-    componentDidMount() {
-        this.setState({
-            locations: ['moron', 'moreno', 'belgrano', 'centro', 'liniers', 'san telmo', 'quilmes', 'almagro', 'batman']
-        })
+    async componentDidMount() {
+        // this.setState({
+        //     locations: ['moron', 'moreno', 'belgrano', 'centro', 'liniers', 'san telmo', 'quilmes', 'almagro', 'batman']
+        // })
+        // })
+        const response = await ApiCalls.getLocations()
+        if (response && response.ok)
+            this.setState({locations: response.data})
     }
 
     deleteLocation = (name) => {
         this.setState({
-            locations: this.state.locations.filter(location => location !== name)
+            locations: this.state.locations.filter(location => location.name !== name)
         })
     }
 
@@ -39,12 +44,12 @@ class Locations extends Component {
                         {this.state.locations.map(location => {
                             return (
                                 <Card className="mb-3 shadow"
-                                      style={{color: "#000", width: '20rem', height: '7rem'}} key={location}>
+                                      style={{color: "#000", width: '20rem', height: '7rem'}} key={location.name}>
                                     <Card.Body>
-                                        <Card.Title>{location}</Card.Title>
+                                        <Card.Title>{location.name}</Card.Title>
                                     </Card.Body>
                                     <Button className="remove-button doc-button-color shadow-sm"
-                                            onClick={() => this.deleteLocation(location)}>
+                                            onClick={() => this.deleteLocation(location.name)}>
                                         Delete
                                     </Button>
                                 </Card>
