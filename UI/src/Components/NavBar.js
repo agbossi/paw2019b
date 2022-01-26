@@ -41,13 +41,6 @@ function NavBar(props) {
                         <Nav.Item class="ml-auto">
                             <Nav.Link href="/login" style={{color: "white"}}>Login</Nav.Link>
                         </Nav.Item>}
-                    {/*{this.props.logItems.map((item) =>{*/}
-                    {/*    return (*/}
-                    {/*        <Nav.Item class="ml-auto">*/}
-                    {/*            <Nav.Link href={item.link} style={{color: "white"}}>{item.text}</Nav.Link>*/}
-                    {/*        </Nav.Item>*/}
-                    {/*    )*/}
-                    {/*})}*/}
                     <ButtonGroup aria-label="Basic example">
                         <Button className="lang-buttons">EN</Button>
                         <Button className="lang-buttons">ES</Button>
@@ -61,7 +54,6 @@ function NavBar(props) {
 
 NavBar.propTypes = {
     items: PropTypes.array.isRequired,
-    loggedIn: PropTypes.bool.isRequired,
     test: PropTypes.string.isRequired
 
 }

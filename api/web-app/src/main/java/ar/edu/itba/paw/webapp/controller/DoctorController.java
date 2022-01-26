@@ -311,18 +311,10 @@ public class DoctorController {
         List<DoctorDto> doctors = doctorService.getPaginatedDoctors(licenses, page)
                 .stream().map(d -> DoctorDto.fromDoctor(d, uriInfo)).collect(Collectors.toList());
 
-        String pageStr = messageSource.getMessage("page",null, Locale.getDefault());
-        String prev = messageSource.getMessage("previous",null, Locale.getDefault());
-        String next = messageSource.getMessage("next",null, Locale.getDefault());
-        String last = messageSource.getMessage("last",null, Locale.getDefault());
-        String first = messageSource.getMessage("first",null, Locale.getDefault());
-
         return CacheHelper.handleResponse(doctors, doctorCaching, new GenericEntity<List<DoctorDto>>(doctors) {},
                 "doctors", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, 0).build(),first)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, maxAvailablePage).build(),last)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, page + 1).build(),next)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, page - 1).build(),prev)
+                .header("Access-Control-Expose-Headers", "X-max-page")
+                .header("X-max-page", maxAvailablePage)
                 .build();
         /*return Response.ok(new GenericEntity<List<DoctorDto>>(doctors) {})
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")

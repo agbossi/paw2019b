@@ -20,7 +20,7 @@ public class DoctorDaoImpl implements DoctorDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private static final int MAX_DOCTORS_PER_PAGE_ADMIN = 24;
+    private static final int MAX_DOCTORS_PER_PAGE_ADMIN = 12;
     private static final int MAX_DOCTORS_PER_PAGE_USER = 10;
 
     @Override

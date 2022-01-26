@@ -28,9 +28,6 @@ const userNavbarItems = [
     }
 ]
 
-const loginNavbarItems = [ {link: '/login', text: 'Login'}]
-const logoutNavbarItems = [ {link: '/login', text: 'Logout'}]
-
 function App() {
 
     const isAuth = () => localStorage.getItem('role') !== null;
@@ -39,6 +36,7 @@ function App() {
         if (!isAuth()) return [];
         switch (localStorage.getItem('role')) {
             case "ROLE_ADMIN":
+                return [];
             case "ROLE_DOCTOR":
             case "ROLE_USER":
                 return userNavbarItems;
@@ -49,7 +47,7 @@ function App() {
     <div className="App">
         <div className="App-header">
             <Router>
-                <Navbar items={getItems()} logItems={isAuth()} />
+                <Navbar items={getItems()} />
                 <Routes>
                     <Route path='/' exact element={<Home/>}/>
                     <Route path='/:license/doctorClinics' element={<DoctorClinics />}/>

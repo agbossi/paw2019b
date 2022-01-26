@@ -5,6 +5,7 @@ const PAGE_QUERY = 'page=';
 const LOGIN_PATH = '/login';
 const LOCATIONS_PATH = '/locations?'
 const SPECIALTIES_PATH = '/specialties?';
+const DOCTORS_PATH = '/doctors?';
 
 const getLocations = async (pag) => api.get(LOCATIONS_PATH + PAGE_QUERY + pag);
 const addLocation = async (data) => api.post(
@@ -14,6 +15,8 @@ const addLocation = async (data) => api.post(
 );
 
 const getSpecialties = async (pag) => api.get(SPECIALTIES_PATH + PAGE_QUERY + pag);
+
+const getDoctors = async (pag) => api.get(DOCTORS_PATH + PAGE_QUERY + pag);
 
 const login = async (email, password) => {
     const params = new URLSearchParams();
@@ -40,5 +43,6 @@ export default {
     logout,
     getLocations,
     addLocation,
-    getSpecialties
+    getSpecialties,
+    getDoctors
 }
