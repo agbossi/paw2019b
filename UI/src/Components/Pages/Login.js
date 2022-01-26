@@ -76,10 +76,12 @@ class Login extends Component {
                         switch (localStorage.getItem('role')) {
                             case "ROLE_ADMIN":
                                 this.props.navigate("/admin");
+                                window.location.reload()
                                 break;
                             case "ROLE_DOCTOR":
                             case "ROLE_USER":
                                 this.props.navigate("/");
+                                window.location.reload()
                                 break;
                         }
                     }

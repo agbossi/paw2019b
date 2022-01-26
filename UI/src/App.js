@@ -13,7 +13,7 @@ import DoctorClinics from "./Components/Pages/DoctorClinics";
 import Login from "./Components/Pages/Login";
 import WrappedLogin from "./Components/Pages/Login";
 
-const navbarItems = [
+const userNavbarItems = [
     {
         link: '/favorites',
         text: 'Favorites'
@@ -28,15 +28,28 @@ const navbarItems = [
     }
 ]
 
+const loginNavbarItems = [ {link: '/login', text: 'Login'}]
+const logoutNavbarItems = [ {link: '/login', text: 'Logout'}]
+
 function App() {
 
-    const isAuth = () => localStorage.getItem('role') !== null
+    const isAuth = () => localStorage.getItem('role') !== null;
+
+    const getItems = () => {
+        if (!isAuth()) return [];
+        switch (localStorage.getItem('role')) {
+            case "ROLE_ADMIN":
+            case "ROLE_DOCTOR":
+            case "ROLE_USER":
+                return userNavbarItems;
+        }
+    }
 
   return (
     <div className="App">
         <div className="App-header">
             <Router>
-                <Navbar items={navbarItems} />
+                <Navbar items={getItems()} logItems={isAuth()} />
                 <Routes>
                     <Route path='/' exact element={<Home/>}/>
                     <Route path='/:license/doctorClinics' element={<DoctorClinics />}/>
