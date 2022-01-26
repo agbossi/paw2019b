@@ -18,7 +18,7 @@ public class LocationDaoImpl implements LocationDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final static int MAX_LOCATIONS_PER_PAGE = 20;
+    private final static int MAX_LOCATIONS_PER_PAGE = 15;
 
     @Override
     public Location getLocationByName(String locationName){
@@ -41,22 +41,18 @@ public class LocationDaoImpl implements LocationDao {
     @Override
     public List<Location> getPaginatedObjects(int page){
 
-        Query nativeQuery = entityManager.createNativeQuery("SELECT name FROM locations");
-        @SuppressWarnings("unchecked")
-        List<String> ids = nativeQuery.setFirstResult(page * MAX_LOCATIONS_PER_PAGE)
-                .setMaxResults(MAX_LOCATIONS_PER_PAGE)
-                .getResultList();
-
-        if(ids.isEmpty()) {
-            return Collections.emptyList();
-        }
+//        Query nativeQuery = entityManager.createNativeQuery("SELECT name FROM locations ORDER BY name");
+//        @SuppressWarnings("unchecked")
+//        List<String> ids = nativeQuery.setFirstResult(page * MAX_LOCATIONS_PER_PAGE)
+//                .setMaxResults(MAX_LOCATIONS_PER_PAGE)
+//                .getResultList();
 
         TypedQuery<Location> query = entityManager.createQuery("from Location as location " +
-                "where location.name IN (:filteredLocations) ORDER BY location.name",Location.class);
-        query.setParameter("filteredLocations", ids);
+                "ORDER BY location.name", Location.class);
+
         List<Location> list = query.setFirstResult(page * MAX_LOCATIONS_PER_PAGE)
                                    .setMaxResults(MAX_LOCATIONS_PER_PAGE)
-                                   .getResultList();
+                                   .getResultList();;
         return list;
     }
 

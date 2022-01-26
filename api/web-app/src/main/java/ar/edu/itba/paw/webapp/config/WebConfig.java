@@ -25,6 +25,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.LocaleResolver;
@@ -38,6 +41,8 @@ import org.springframework.web.servlet.view.JstlView;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
@@ -57,6 +62,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     private String dbPassword = "root";
 
     private String jdbcPath = "jdbc:postgresql://localhost/paw";
+
+    private List<String> allowedOrigins = new ArrayList<>();
 
 
     @Value("classpath:schema.sql")
@@ -191,5 +198,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**");
     }
 }

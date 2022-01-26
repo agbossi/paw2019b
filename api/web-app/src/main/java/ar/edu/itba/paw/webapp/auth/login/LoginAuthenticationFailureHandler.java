@@ -19,6 +19,7 @@ public class LoginAuthenticationFailureHandler implements AuthenticationFailureH
     @Override
     public void onAuthenticationFailure(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                         AuthenticationException e) {
+        httpServletResponse.addHeader("Access-Control-Allow-Origin", "*");
         if (e instanceof AlreadyLoggedInException) {
             httpServletResponse.setStatus(404);
         }if (e instanceof BadCredentialsException) {

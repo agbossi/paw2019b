@@ -10,17 +10,20 @@ class Locations extends Component {
         super(props);
         this.state = {
             locations: [],
+            page: 0,
+            maxPage: 0
         }
     }
 
     async componentDidMount() {
-        // this.setState({
-        //     locations: ['moron', 'moreno', 'belgrano', 'centro', 'liniers', 'san telmo', 'quilmes', 'almagro', 'batman']
-        // })
-        // })
-        const response = await ApiCalls.getLocations()
+        const response = await ApiCalls.getLocations(this.state.page)
         if (response && response.ok)
-            this.setState({locations: response.data})
+            this.setState(
+                {
+                    locations: response.data,
+                    page: this.state.page,
+                    maxPage: response.headers.xMaxPage
+                })
     }
 
     deleteLocation = (name) => {
@@ -29,11 +32,55 @@ class Locations extends Component {
         })
     }
 
-    handleAdd = (newLocation) => {
-        this.setState({
-            locations: [...this.state.locations, newLocation]
-        })
+    handleAdd = async (newLocation) => {
+        const response = await ApiCalls.addLocation(newLocation);
+        if (response && response.ok)
+            this.setState({
+                locations: [...this.state.locations, newLocation],
+                page: this.state.page,
+                maxPage: this.state.maxPage
+            })
+        else
+            console.error("could not add: ", response.status)
     }
+
+    nextPage = async () => {
+        const pag = this.state.page + 1
+        const response = await ApiCalls.getLocations(pag);
+        if (response && response.ok)
+            this.setState({
+                locations: response.data,
+                page: pag,
+                maxPage: response.headers.xMaxPage
+            })
+
+    }
+    prevPage = async () => {
+        const pag = this.state.page - 1
+        const response = await ApiCalls.getLocations(pag);
+        if (response && response.ok)
+            this.setState({
+                locations: response.data,
+                page: pag,
+                maxPage: response.headers.xMaxPage
+            })
+
+    }
+
+    renderPrevButton() {
+        if (this.state.page !== 0) {
+            return <Button className="remove-button doc-button-color shadow-sm"
+                           onClick={() => this.prevPage()}>Prev</Button>
+        }
+    }
+
+    renderNextButton() {
+        if (this.state.page < this.state.maxPage) {
+            return <Button className="remove-button doc-button-color shadow-sm"
+                           onClick={() => this.nextPage()}>Next</Button>
+        }
+    }
+
 
     render() {
         return (
@@ -57,6 +104,8 @@ class Locations extends Component {
                         })}
                     </div>
                 </Container>
+                {this.renderPrevButton()}
+                {this.renderNextButton()}
             </div>
         )
     }

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Button, Card, Container, Modal} from "react-bootstrap";
 import '../CardContainer.css'
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
+import ApiCalls from "../../api/apiCalls";
 
 class Specialties extends Component {
 
@@ -9,13 +10,21 @@ class Specialties extends Component {
         super(props);
         this.state = {
             specialties: [],
+            page: 0,
+            maxPage: 0
         }
     }
 
-    componentDidMount() {
-        this.setState({
-            specialties: ['Clinica', 'Cardiologia', 'Neurologia', 'miau']
-        })
+    async componentDidMount() {
+        const response = await ApiCalls.getSpecialties(this.state.page)
+        if (response && response.ok) {
+            this.setState(
+                {
+                    specialties: response.data,
+                    page: this.state.page,
+                    maxPage: response.headers.xMaxPage
+                })
+        }
     }
 
     deleteSpecialty = (name) => {
@@ -30,6 +39,43 @@ class Specialties extends Component {
         })
     }
 
+    nextPage = async () => {
+        const pag = this.state.page + 1
+        const response = await ApiCalls.getSpecialties(pag);
+        if (response && response.ok)
+            this.setState({
+                specialties: response.data,
+                page: pag,
+                maxPage: response.headers.xMaxPage
+            })
+
+    }
+    prevPage = async () => {
+        const pag = this.state.page - 1
+        const response = await ApiCalls.getSpecialties(pag);
+        if (response && response.ok)
+            this.setState({
+                specialties: response.data,
+                page: pag,
+                maxPage: response.headers.xMaxPage
+            })
+
+    }
+
+    renderPrevButton() {
+        if (this.state.page !== 0) {
+            return <Button className="remove-button doc-button-color shadow-sm"
+                           onClick={() => this.prevPage()}>Prev</Button>
+        }
+    }
+
+    renderNextButton() {
+        if (this.state.page < this.state.maxPage) {
+            return <Button className="remove-button doc-button-color shadow-sm"
+                    onClick={() => this.nextPage()}>Next</Button>
+        }
+    }
+
     render() {
         return (
             <div className="background">
@@ -38,12 +84,12 @@ class Specialties extends Component {
                     <div className="admin-info-container">
                         {this.state.specialties.map(specialty => {
                             return (
-                                <Card className="mb-3 shadow" style={{color: "#000", width: '20rem', height: '7rem'}} key={specialty}>
+                                <Card className="mb-3 shadow" style={{color: "#000", width: '20rem', height: '7rem'}} key={specialty.name}>
                                     <Card.Body>
-                                        <Card.Title>{specialty}</Card.Title>
+                                        <Card.Title>{specialty.name}</Card.Title>
                                     </Card.Body>
                                     <Button className="remove-button doc-button-color shadow-sm"
-                                            onClick={() => this.deleteSpecialty(specialty)}>
+                                            onClick={() => this.deleteSpecialty(specialty.name)}>
                                         Delete
                                     </Button>
                                 </Card>
@@ -51,6 +97,8 @@ class Specialties extends Component {
                         })}
                     </div>
                 </Container>
+                {this.renderPrevButton()}
+                {this.renderNextButton()}
             </div>
         )
     }

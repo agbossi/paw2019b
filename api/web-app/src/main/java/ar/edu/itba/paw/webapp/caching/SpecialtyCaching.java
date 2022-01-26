@@ -11,6 +11,6 @@ public class SpecialtyCaching implements Caching<SpecialtyDto> {
         if(element == null) {
             return 0;
         }
-        return element.getSpecialty().hashCode();
+        return element.getName().hashCode();
     }
 }

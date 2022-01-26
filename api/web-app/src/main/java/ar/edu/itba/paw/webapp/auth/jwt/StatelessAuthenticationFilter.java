@@ -38,10 +38,36 @@ public class StatelessAuthenticationFilter extends AbstractAuthenticationProcess
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) req;
-        Authentication authentication = authenticationService.getAuthentication(httpRequest);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        chain.doFilter(req, res);
-        SecurityContextHolder.getContext().setAuthentication(null);
+        HttpServletResponse httpResponse = (HttpServletResponse) res;
+        System.out.println("WebConfig; "+ httpRequest.getRequestURI());
+        httpResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpResponse.setHeader("Access-Control-Allow-Methods", "POST, PUT, GET, OPTIONS, DELETE");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, X-AUTH-TOKEN, X-Requested-With, X-ROLE");
+        httpResponse.setHeader("Access-Control-Max-Age", "3600");
+        httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
+        httpResponse.setHeader("Access-Control-Expose-Headers", "X-AUTH-TOKEN");
+        httpResponse.addHeader("Access-Control-Expose-Headers", "X-ROLE");
+        //httpResponse.addHeader("Access-Control-Expose-Headers", "observe");
+        System.out.println("Request Method: "+httpRequest.getMethod());
+        if (!(httpRequest.getMethod().equalsIgnoreCase("OPTIONS"))) {
+            try {
+                Authentication authentication = authenticationService.getAuthentication(httpRequest);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                chain.doFilter(req, res);
+                SecurityContextHolder.getContext().setAuthentication(null);
+            } catch(Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Pre-flight");
+            httpResponse.setHeader("Access-Control-Allow-Origin", "*");
+            httpResponse.setHeader("Access-Control-Allow-Methods", "POST,GET,DELETE,PUT");
+            //httpResponse.setHeader("Access-Control-Max-Age", "3600");
+            httpResponse.setHeader("Access-Control-Allow-Headers", "Access-Control-Expose-Headers, "+"X-AUTH-TOKEN, content-type," +
+                    "access-control-request-headers,access-control-request-method,accept,origin,x-auth-token,x-requested-with,responseType,x-role,token-header");
+            httpResponse.setStatus(HttpServletResponse.SC_OK);
+        }
+
     }
 
     @Override
@@ -59,4 +85,5 @@ public class StatelessAuthenticationFilter extends AbstractAuthenticationProcess
         chain.doFilter(request, response);
         SecurityContextHolder.getContext().setAuthentication(null);
     }
+
 }

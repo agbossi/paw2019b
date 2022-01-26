@@ -7,8 +7,10 @@ import ar.edu.itba.paw.webapp.dto.SpecialtyDto;
 import ar.edu.itba.paw.webapp.form.SpecialtyForm;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -30,9 +32,6 @@ public class SpecialtyController {
     @Autowired
     private SpecialtyCaching specialtyCaching;
 
-    @Autowired
-    private MessageSource messageSource;
-
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getSpecialties(@QueryParam("page") @DefaultValue("0") Integer page,
@@ -41,20 +40,12 @@ public class SpecialtyController {
 
         List<SpecialtyDto> specialties = specialtyService.getPaginatedObjects(page).stream()
                 .map(SpecialtyDto::fromSpecialty).collect(Collectors.toList());
-        int maxPage = specialtyService.maxAvailablePage();
-
-        String pageStr = messageSource.getMessage("page",null, Locale.getDefault());
-        String prev = messageSource.getMessage("previous",null, Locale.getDefault());
-        String next = messageSource.getMessage("next",null, Locale.getDefault());
-        String last = messageSource.getMessage("last",null, Locale.getDefault());
-        String first = messageSource.getMessage("first",null, Locale.getDefault());
+        int maxPage = specialtyService.maxAvailablePage() - 1;
 
         return CacheHelper.handleResponse(specialties, specialtyCaching,
                 new GenericEntity<List<SpecialtyDto>>(specialties) {}, "specialties", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, 0).build(), first)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, page - 1).build(), prev)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, page + 1).build(), next)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, maxPage).build(), last)
+                .header("Access-Control-Expose-Headers", "X-max-page")
+                .header("X-max-page", maxPage)
                 .build();
 
         /*return Response.ok(new GenericEntity<List<SpecialtyDto>>(specialties) {})
