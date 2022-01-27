@@ -8,15 +8,12 @@ import ar.edu.itba.paw.webapp.form.SpecialtyForm;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Component
@@ -54,6 +51,18 @@ public class SpecialtyController {
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(), "next")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(), "last")
                 .build(); */
+    }
+
+    @GET()
+    @Path("/all")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getAllSpecialties(@Context Request request) {
+        List<SpecialtyDto> specialties = specialtyService.getSpecialties().stream()
+                .map(SpecialtyDto::fromSpecialty).collect(Collectors.toList());
+
+        return CacheHelper.handleResponse(specialties, specialtyCaching,
+                        new GenericEntity<List<SpecialtyDto>>(specialties) {}, "specialties", request)
+                .build();
     }
 
     @DELETE

@@ -51,6 +51,19 @@ public class LocationController {
         return ret.build();
     }
 
+    @GET
+    @Path("/all")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getAllLocations(@Context Request request) {
+        List<LocationDto> locations = locationService.getLocations().stream()
+                .map(LocationDto::fromLocation).collect(Collectors.toList());
+
+        Response.ResponseBuilder ret = CacheHelper.handleResponse(locations, locationCaching,
+                        new GenericEntity<List<LocationDto>>(locations) {}, "locations", request);
+        return ret.build();
+    }
+
+
     @DELETE
     @Path("/{name}")
     @Produces(value = { MediaType.APPLICATION_JSON })

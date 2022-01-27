@@ -221,6 +221,7 @@ public class DoctorController {
 
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
 import ar.edu.itba.paw.webapp.caching.DoctorCaching;
 import ar.edu.itba.paw.webapp.caching.DoctorClinicCaching;
 import ar.edu.itba.paw.webapp.caching.ImageCaching;
@@ -370,7 +371,7 @@ public class DoctorController {
     @POST
     @Produces(value = { MediaType.APPLICATION_JSON, })
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createDoctor(final DoctorForm form) {
+    public Response createDoctor(final DoctorForm form) throws DuplicateEntityException {
         String encodedPassword = passwordEncoder.encode(form.getPassword());
         Specialty specialty = specialtyService.getSpecialtyByName(form.getSpecialty());
 

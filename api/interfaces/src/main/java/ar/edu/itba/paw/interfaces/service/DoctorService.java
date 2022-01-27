@@ -1,12 +1,13 @@
 package ar.edu.itba.paw.interfaces.service;
 
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface DoctorService extends PaginationService<Doctor> {
-    Doctor createDoctor(Specialty specialty, String license, String phoneNumber, String firstName, String lastName, String password, String email);
+    Doctor createDoctor(Specialty specialty, String license, String phoneNumber, String firstName, String lastName, String password, String email) throws DuplicateEntityException;
 
     List<Doctor> getDoctors();
 

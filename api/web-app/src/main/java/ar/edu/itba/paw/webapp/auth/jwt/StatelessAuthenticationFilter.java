@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.webapp.auth.jwt;
 
 import ar.edu.itba.paw.webapp.auth.TokenAuthenticationService;
+import ar.edu.itba.paw.webapp.auth.exceptions.InvalidTokenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -55,8 +56,8 @@ public class StatelessAuthenticationFilter extends AbstractAuthenticationProcess
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 chain.doFilter(req, res);
                 SecurityContextHolder.getContext().setAuthentication(null);
-            } catch(Exception e) {
-                e.printStackTrace();
+            } catch(InvalidTokenException e) {
+                ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
             }
         } else {
             System.out.println("Pre-flight");

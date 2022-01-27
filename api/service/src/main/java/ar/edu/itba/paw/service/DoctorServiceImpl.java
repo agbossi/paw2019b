@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.interfaces.service.ImageService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +32,11 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Transactional
     @Override
-    public Doctor createDoctor(Specialty specialty, String license, String phoneNumber, String firstName, String lastName, String password, String email) {
+    public Doctor createDoctor(Specialty specialty, String license, String phoneNumber,
+                               String firstName, String lastName, String password, String email)
+            throws DuplicateEntityException {
+        Doctor isDoctor = getDoctorByLicense(license);
+        if (isDoctor != null) throw new DuplicateEntityException("Doctor");
         User user = userService.createUser(firstName, lastName, password, email);
         return doctorDao.createDoctor(specialty, license, phoneNumber, user);
     }

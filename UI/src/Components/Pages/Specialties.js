@@ -1,107 +1,94 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {Button, Card, Container, Modal} from "react-bootstrap";
 import '../CardContainer.css'
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
 import ApiCalls from "../../api/apiCalls";
+import {useNavigate} from "react-router-dom";
 
-class Specialties extends Component {
+function Specialties(props){
+    const [specialties, setSpecialties] = useState([])
+    const [page, setPage] = useState(0)
+    const [maxPage, setMaxPage] = useState(0)
+    const navigate = useNavigate()
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            specialties: [],
-            page: 0,
-            maxPage: 0
-        }
-    }
-
-    async componentDidMount() {
-        const response = await ApiCalls.getSpecialties(this.state.page)
+    const fetchSpecialties = async () => {
+        const response = await ApiCalls.getSpecialties(page);
         if (response && response.ok) {
-            this.setState(
-                {
-                    specialties: response.data,
-                    page: this.state.page,
-                    maxPage: response.headers.xMaxPage
-                })
+            setSpecialties(response.data);
+            setMaxPage(response.headers.xMaxPage);
         }
     }
 
-    deleteSpecialty = (name) => {
-        this.setState({
-            specialties: this.state.specialties.filter(specialty => specialty !== name)
-        })
+    useEffect(async () => {
+        await fetchSpecialties()
+    }, [])
+
+    const deleteSpecialty = (name) => {
+        setSpecialties(specialties.filter(specialty => specialty !== name));
     }
 
-    handleAdd = (newSpecialty) => {
-        this.setState({
-            specialties: [...this.state.specialties, newSpecialty]
-        })
+    const handleAdd = (newSpecialty) => {
+        setSpecialties([...specialties, newSpecialty]);
     }
 
-    nextPage = async () => {
-        const pag = this.state.page + 1
+    const nextPage = async () => {
+        const pag = page + 1;
         const response = await ApiCalls.getSpecialties(pag);
-        if (response && response.ok)
-            this.setState({
-                specialties: response.data,
-                page: pag,
-                maxPage: response.headers.xMaxPage
-            })
-
+        if (response && response.ok) {
+            setSpecialties(response.data);
+            setPage(pag);
+            setMaxPage(response.headers.xMaxPage);
+        }
     }
-    prevPage = async () => {
-        const pag = this.state.page - 1
+    const prevPage = async () => {
+        const pag = page - 1;
         const response = await ApiCalls.getSpecialties(pag);
-        if (response && response.ok)
-            this.setState({
-                specialties: response.data,
-                page: pag,
-                maxPage: response.headers.xMaxPage
-            })
-
-    }
-
-    renderPrevButton() {
-        if (this.state.page !== 0) {
-            return <Button className="remove-button doc-button-color shadow-sm"
-                           onClick={() => this.prevPage()}>Prev</Button>
+        if (response && response.ok) {
+            setSpecialties(response.data);
+            setPage(pag);
+            setMaxPage(response.headers.xMaxPage);
         }
     }
 
-    renderNextButton() {
-        if (this.state.page < this.state.maxPage) {
+    const renderPrevButton = () => {
+        if (page !== 0) {
             return <Button className="remove-button doc-button-color shadow-sm"
-                    onClick={() => this.nextPage()}>Next</Button>
+                           onClick={() => prevPage()}>Prev</Button>
         }
     }
 
-    render() {
-        return (
-            <div className="background">
-                <SinglePropertyAddModal handleAdd={this.handleAdd} property="Specialty"/>
-                <Container>
-                    <div className="admin-info-container">
-                        {this.state.specialties.map(specialty => {
-                            return (
-                                <Card className="mb-3 shadow" style={{color: "#000", width: '20rem', height: '7rem'}} key={specialty.name}>
-                                    <Card.Body>
-                                        <Card.Title>{specialty.name}</Card.Title>
-                                    </Card.Body>
-                                    <Button className="remove-button doc-button-color shadow-sm"
-                                            onClick={() => this.deleteSpecialty(specialty.name)}>
-                                        Delete
-                                    </Button>
-                                </Card>
-                            )
-                        })}
-                    </div>
-                </Container>
-                {this.renderPrevButton()}
-                {this.renderNextButton()}
-            </div>
-        )
+    const renderNextButton = () => {
+        if (page < maxPage) {
+            return <Button className="remove-button doc-button-color shadow-sm"
+                    onClick={() => nextPage()}>Next</Button>
+        }
     }
+
+    return (
+        <div className="background">
+            <SinglePropertyAddModal handleAdd={handleAdd} property="Specialty"/>
+            <Container>
+                <div className="admin-info-container">
+                    {specialties.map(specialty => {
+                        return (
+                            <Card className="mb-3 shadow" style={{color: "#000", width: '20rem', height: '7rem'}} key={specialty.name}>
+                                <Card.Body>
+                                    <Card.Title>{specialty.name}</Card.Title>
+                                </Card.Body>
+                                <Button className="remove-button doc-button-color shadow-sm"
+                                        onClick={() => deleteSpecialty(specialty.name)}>
+                                    Delete
+                                </Button>
+                            </Card>
+                        )
+                    })}
+                </div>
+            </Container>
+            {renderPrevButton()}
+            {renderNextButton()}
+        </div>
+    )
+
 }
 
 export default Specialties
