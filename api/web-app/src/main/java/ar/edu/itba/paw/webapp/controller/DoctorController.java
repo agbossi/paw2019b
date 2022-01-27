@@ -309,14 +309,7 @@ public class DoctorController {
                 firstName,lastName, new Prepaid(prepaid), consultPrice, includeUnavailable);
         int maxAvailablePage = doctorService.getMaxAvailableDoctorsPage(licenses);
 
-        List<DoctorDto> doctors = doctorService.getPaginatedDoctors(licenses, page)
-                .stream().map(d -> DoctorDto.fromDoctor(d, uriInfo)).collect(Collectors.toList());
-
-        return CacheHelper.handleResponse(doctors, doctorCaching, new GenericEntity<List<DoctorDto>>(doctors) {},
-                "doctors", request)
-                .header("Access-Control-Expose-Headers", "X-max-page")
-                .header("X-max-page", maxAvailablePage)
-                .build();
+        return getPaginatedDoctorsResponse(licenses, page, request, maxAvailablePage);
         /*return Response.ok(new GenericEntity<List<DoctorDto>>(doctors) {})
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxAvailablePage).build(),"last")
@@ -325,6 +318,17 @@ public class DoctorController {
                 .build(); */
     }
 
+    @GET
+    @Path("/all")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getAllDoctors(@QueryParam("page") @DefaultValue("0") Integer page, @Context Request request) {
+        page = (page < 0) ? 0 : page;
+
+        List<String> licenses = doctorService.getDoctors().stream().map(Doctor::getLicense).collect(Collectors.toList());
+        int maxAvailablePage = doctorService.getMaxAvailableDoctorsPage(licenses);
+
+        return getPaginatedDoctorsResponse(licenses, page, request, maxAvailablePage);
+    }
     @GET
     @Path("/{license}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -592,5 +596,17 @@ public class DoctorController {
         return doctorHours.stream().map(l ->
                 l.stream().map(DoctorHourDto::fromDoctorHour).collect(Collectors.toList()))
                 .collect(Collectors.toList());
+    }
+
+    private Response getPaginatedDoctorsResponse(List<String> licenses, int page, Request request, int max) {
+
+        List<DoctorDto> doctors = doctorService.getPaginatedDoctors(licenses, page)
+                .stream().map(d -> DoctorDto.fromDoctor(d, uriInfo)).collect(Collectors.toList());
+
+        return CacheHelper.handleResponse(doctors, doctorCaching, new GenericEntity<List<DoctorDto>>(doctors) {},
+                        "doctors", request)
+                .header("Access-Control-Expose-Headers", "X-max-page")
+                .header("X-max-page", max)
+                .build();
     }
 }

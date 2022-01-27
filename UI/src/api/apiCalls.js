@@ -1,6 +1,7 @@
 import api from "./index";
 
 const PAGE_QUERY = 'page=';
+const UNAVAILABLE_QUERY = 'includeUnavailables='
 
 const LOGIN_PATH = '/login';
 const LOCATIONS_PATH = '/locations'
@@ -18,12 +19,17 @@ const addLocation = async (data) => api.post(
 const getSpecialties = async (pag) => api.get(SPECIALTIES_PATH + "?" + PAGE_QUERY + pag);
 const getAllSpecialties = async () => api.get(SPECIALTIES_PATH + ALL_PATH)
 
-const getDoctors = async (pag) => api.get(DOCTORS_PATH + "?" + PAGE_QUERY + pag);
+const getDoctorsAdmin = async (pag) => api.get(
+    DOCTORS_PATH + ALL_PATH + "?" + PAGE_QUERY + pag);
 const addDoctor = async (data) => api.post(
     DOCTORS_PATH,
     data,
     {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
     );
+const deleteDoctor = async (license) => api.delete(
+    DOCTORS_PATH + '/' + license,
+    {},
+    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}})
 
 const login = async (email, password) => {
     const params = new URLSearchParams();
@@ -32,6 +38,7 @@ const login = async (email, password) => {
     return api.post(LOGIN_PATH, params)
         .then(resp => {
             if(resp.status === 200) {
+                console.log(resp.headers)
                 localStorage.setItem('token', resp.headers.xAuthToken)
                 localStorage.setItem('role', resp.headers.xRole)
             }
@@ -52,6 +59,7 @@ export default {
     addLocation,
     getSpecialties,
     getAllSpecialties,
-    getDoctors,
+    getDoctorsAdmin,
+    deleteDoctor,
     addDoctor
 }

@@ -171,6 +171,7 @@ public class DoctorServiceImpl implements DoctorService {
         if (page < 0 || licenses.isEmpty()) {
             return Collections.emptyList();
         }
+
         //not inline for debugging purposes
         List<Doctor> doctors = doctorDao.getPaginatedDoctorsInList(licenses, page);
         return doctors;

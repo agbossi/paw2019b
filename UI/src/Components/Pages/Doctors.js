@@ -14,10 +14,10 @@ function Doctors() {
     const navigate = useNavigate()
 
     const fetchDoctors = async () => {
-        const response = await ApiCalls.getDoctors(page)
+        const response = await ApiCalls.getDoctorsAdmin(page)
         if (response && response.ok) {
             setDoctors(response.data)
-            setMaxPage(parseInt(response.headers.xMaxPage))
+            setMaxPage(parseInt(response.headers['X-max-page']))
         }
 
     }
@@ -58,17 +58,21 @@ function Doctors() {
         } else if (response.status === 409) {
             setMessage("Licence already registered")
         } else {
-            console.error("could not add: ", response.status)
+            console.error("could not add doctor: ", response.status)
         }
     }
 
-    const deleteDoctors = (license) => {
-        setDoctors(doctors.filter(doctor => doctor.license !== license))
+    const deleteDoctors = async (license) => {
+        const response = await ApiCalls.deleteDoctor(license)
+        if (response && response.status === 204)
+            setDoctors(doctors.filter(doctor => doctor.license !== license))
+        else
+            console.error("could not delete doctor: ", response.status)
     }
 
     const nextPage = async () => {
         const pag = page + 1
-        const response = await ApiCalls.getDoctors(pag);
+        const response = await ApiCalls.getDoctorsAdmin(pag);
         if (response && response.ok) {
             setDoctors(response.data)
             setPage(pag)
@@ -78,7 +82,7 @@ function Doctors() {
     }
     const prevPage = async () => {
         const pag = page - 1
-        const response = await ApiCalls.getDoctors(pag);
+        const response = await ApiCalls.getDoctorsAdmin(pag);
         if (response && response.ok) {
             setDoctors(response.data)
             setPage(pag)

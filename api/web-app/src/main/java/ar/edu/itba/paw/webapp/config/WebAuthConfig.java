@@ -87,7 +87,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/doctors").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/doctors/**").hasRole("DOCTOR")
                 .antMatchers(HttpMethod.PUT, "/doctors/**").hasRole("DOCTOR")
-                .antMatchers(HttpMethod.DELETE, "/doctors/**").hasRole("DOCTOR")
+                .antMatchers(HttpMethod.DELETE, "/doctors/**").hasAnyRole("DOCTOR", "ADMIN")
                 .antMatchers("/appointments/**").hasAnyRole("USER", "DOCTOR")
                 //.antMatchers(HttpMethod.GET).authenticated()
                 .antMatchers(HttpMethod.POST).authenticated()

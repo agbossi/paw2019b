@@ -119,23 +119,26 @@ public class DoctorDaoImpl implements DoctorDao {
     @Override
     public List<Doctor> getPaginatedDoctorsInList(List<String> licenses, int page) {
 
-        Query nativeQuery = entityManager.createNativeQuery("SELECT license FROM doctors where license IN (:filteredLicenses)");
-        nativeQuery.setParameter("filteredLicenses", licenses);
-        @SuppressWarnings("unchecked")
-        List<String> ids = nativeQuery.setFirstResult(page * MAX_DOCTORS_PER_PAGE_USER)
-                .setMaxResults(MAX_DOCTORS_PER_PAGE_USER)
-                .getResultList();
-
-        if(ids.isEmpty()) {
-            return Collections.emptyList();
-        }
+//        Query nativeQuery = entityManager.createNativeQuery("SELECT license FROM doctors where license IN (:filteredLicenses)");
+//        nativeQuery.setParameter("filteredLicenses", licenses);
+//        @SuppressWarnings("unchecked")
+//        List<String> ids = nativeQuery.setFirstResult(page * MAX_DOCTORS_PER_PAGE_USER)
+//                .setMaxResults(MAX_DOCTORS_PER_PAGE_USER)
+//                .getResultList();
+//
+//        if(ids.isEmpty()) {
+//            return Collections.emptyList();
+//        }
 
         final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor where doctor.license " +
                 "IN (:filteredLicenses) order by " +
                 "doctor.user.firstName, doctor.user.lastName, doctor.license",Doctor.class);
-        query.setParameter("filteredLicenses", ids);
+        query.setParameter("filteredLicenses", licenses);
 
-        return query.getResultList();
+        return query
+                .setFirstResult(page * MAX_DOCTORS_PER_PAGE_USER)
+                .setMaxResults(MAX_DOCTORS_PER_PAGE_USER)
+                .getResultList();
     }
 
     @Override
