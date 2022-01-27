@@ -13,7 +13,7 @@ public class Clinic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "clinics_id_seq")
-    @SequenceGenerator(sequenceName = "clinics_id_seq", name = "clinics_id_seq")
+    @SequenceGenerator(sequenceName = "clinics_id_seq", name = "clinics_id_seq", allocationSize = 1)
     private int id;
 
     @Column(name = "address")

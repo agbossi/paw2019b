@@ -83,12 +83,13 @@ function DoctorAddModal(props) {
                         <Row>
                             <Col>
                                 <Form.Group className="mb-3" controlId="specialty">
-                                    <Form.Label>Specialty</Form.Label>
+                                    <Form.Label>Specialty: {selectedSpecialty}</Form.Label>
                                     <DropDownList iterable={props.specialties}
                                                   selectedElement=''
                                                   handleSelect={handleSelect}
                                                   elementType='Specialty'
-                                                  id='specialty'/>
+                                                  id='specialty'
+                                    />
                                 </Form.Group>
                             </Col>
                             <Col>

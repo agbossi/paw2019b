@@ -38,7 +38,7 @@
     margin: 0.5rem;
 }
 
-.doc-button-color {
+.doc-button-color, .doc-button-color:focus {
     background-color: #3c677e;
     border-color: #3c677e;
     color: whitesmoke;

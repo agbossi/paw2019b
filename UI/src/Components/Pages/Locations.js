@@ -2,7 +2,7 @@ import React, {Component, useEffect, useState} from 'react';
 import {Button, Card, Container} from "react-bootstrap";
 import '../CardContainer.css'
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
-import ApiCalls from "../../api/apiCalls"
+import LocationCalls from "../../api/LocationCalls";
 import {useNavigate} from "react-router-dom";
 
 function Locations(props){
@@ -11,8 +11,8 @@ function Locations(props){
     const [maxPage, setMaxPage] = useState(0)
     const navigate = useNavigate()
 
-    const fetchLocations = async () => {
-        const response = await ApiCalls.getLocations(page)
+    const fetchLocations = async (pag) => {
+        const response = await LocationCalls.getLocations(pag)
         if (response && response.ok){
             setLocations(response.data)
             setMaxPage(response.headers.xMaxPage)
@@ -20,7 +20,7 @@ function Locations(props){
     }
 
      useEffect(async () => {
-        await fetchLocations()
+        await fetchLocations(page)
     }, [])
 
     const deleteLocation = (name) => {
@@ -28,7 +28,7 @@ function Locations(props){
     }
 
     const handleAdd = async (newLocation) => {
-        const response = await ApiCalls.addLocation(newLocation);
+        const response = await LocationCalls.addLocation(newLocation);
         if (response && response.ok) {
             setLocations([...locations, newLocation])
         } else if (response.status === 401) {
@@ -42,12 +42,14 @@ function Locations(props){
     }
 
     const nextPage = async () => {
-        setPage(page + 1)
-        await fetchLocations()
+        const newPage = page + 1
+        setPage(newPage)
+        await fetchLocations(newPage)
     }
     const prevPage = async () => {
-        setPage(page - 1)
-        await fetchLocations()
+        const newPage = page - 1
+        setPage(newPage)
+        await fetchLocations(newPage)
     }
 
     const renderPrevButton = () => {

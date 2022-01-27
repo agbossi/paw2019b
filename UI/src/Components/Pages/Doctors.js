@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {Button, Card, Container} from "react-bootstrap";
 import '../CardContainer.css'
 import DoctorAddModal from "../Modals/DoctorAddModal";
-import ApiCalls from "../../api/apiCalls";
+import DoctorCalls from "../../api/DoctorCalls";
+import SpecialtyCalls from "../../api/SpecialtyCalls";
 import {useNavigate} from "react-router-dom";
 
 function Doctors() {
@@ -13,29 +14,29 @@ function Doctors() {
     const [message, setMessage] = useState("")
     const navigate = useNavigate()
 
-    const fetchDoctors = async () => {
-        const response = await ApiCalls.getDoctorsAdmin(page)
+    const fetchDoctors = async (pag) => {
+        const response = await DoctorCalls.getDoctorsAdmin(pag)
         if (response && response.ok) {
             setDoctors(response.data)
-            setMaxPage(parseInt(response.headers['X-max-page']))
+            setMaxPage(Number(response.headers.xMaxPage))
         }
 
     }
 
     const fetchSpecialties = async () => {
-        const response = await ApiCalls.getAllSpecialties()
+        const response = await SpecialtyCalls.getAllSpecialties()
         if (response && response.ok) {
             setSpecialties(response.data)
         }
     }
 
     useEffect(async () => {
-        await fetchDoctors()
+        await fetchDoctors(page)
         await fetchSpecialties()
     }, [])
 
     const handleAdd = async (newDoctor) => {
-        const response = await ApiCalls.addDoctor(newDoctor);
+        const response = await DoctorCalls.addDoctor(newDoctor);
         if (response && response.ok) {
             const doc = {
                 license: newDoctor.license,
@@ -63,7 +64,7 @@ function Doctors() {
     }
 
     const deleteDoctors = async (license) => {
-        const response = await ApiCalls.deleteDoctor(license)
+        const response = await DoctorCalls.deleteDoctor(license)
         if (response && response.status === 204)
             setDoctors(doctors.filter(doctor => doctor.license !== license))
         else
@@ -71,13 +72,15 @@ function Doctors() {
     }
 
     const nextPage = async () => {
-        setPage(page + 1)
-        await fetchDoctors()
+        const newPage = page + 1
+        setPage(newPage)
+        await fetchDoctors(newPage)
 
     }
     const prevPage = async () => {
-        setPage(page - 1)
-        await fetchDoctors()
+        const newPage = page - 1
+        setPage(newPage)
+        await fetchDoctors(newPage)
     }
 
     const renderPrevButton = () => {

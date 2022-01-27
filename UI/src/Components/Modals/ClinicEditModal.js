@@ -70,7 +70,7 @@ function ClinicEditModal(props) {
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="location">
-                            <Form.Label>Clinic location</Form.Label>
+                            <Form.Label>Clinic location: {location}</Form.Label>
                             <DropDownList iterable={props.locations}
                                           selectedElement={location}
                                           handleSelect={handleSelect}

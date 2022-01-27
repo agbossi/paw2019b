@@ -18,7 +18,7 @@ public class ClinicDaoImpl implements ClinicDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final static int MAX_CLINICS_PER_PAGE = 20;
+    private final static int MAX_CLINICS_PER_PAGE = 6;
 
     @Override
     public Clinic createClinic(String name, String address, Location location){

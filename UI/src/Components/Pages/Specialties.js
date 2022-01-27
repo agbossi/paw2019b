@@ -11,8 +11,8 @@ function Specialties(props){
     const [maxPage, setMaxPage] = useState(0)
     const navigate = useNavigate()
 
-    const fetchSpecialties = async () => {
-        const response = await ApiCalls.getSpecialties(page);
+    const fetchSpecialties = async (pag) => {
+        const response = await ApiCalls.getSpecialties(pag);
         if (response && response.ok) {
             setSpecialties(response.data);
             setMaxPage(response.headers.xMaxPage);
@@ -20,7 +20,7 @@ function Specialties(props){
     }
 
     useEffect(async () => {
-        await fetchSpecialties()
+        await fetchSpecialties(page)
     }, [])
 
     const deleteSpecialty = (name) => {
@@ -32,12 +32,14 @@ function Specialties(props){
     }
 
     const nextPage = async () => {
-        setPage(page + 1)
-        await fetchSpecialties()
+        const newPage = page + 1
+        setPage(newPage)
+        await fetchSpecialties(newPage)
     }
     const prevPage = async () => {
-        setPage(page - 1)
-        await fetchSpecialties()
+        const newPage = page - 1
+        setPage(newPage)
+        await fetchSpecialties(newPage)
     }
 
     const renderPrevButton = () => {

@@ -3,7 +3,8 @@ import {Button, Card, Container} from "react-bootstrap";
 import '../CardContainer.css'
 import ClinicEditModal from "../Modals/ClinicEditModal";
 import {Link, useNavigate} from "react-router-dom";
-import ApiCalls from "../../api/apiCalls";
+import ClinicCalls from "../../api/ClinicCalls";
+import LocationCalls from "../../api/LocationCalls";
 
 function Clinics(props) {
 
@@ -11,7 +12,6 @@ function Clinics(props) {
     const [show, setShow] = useState(false)
     const [editableClinic, setEditableClinic] = useState( {id: ' ', name: ' ', address: ' ', location: ' '})
     const [editIndex, setEditIndex] = useState(-1)
-    const [handleFunction, setHandleFunction] = useState(null)
     const [action, setAction] = useState("Add")
     const [locations, setLocations] = useState([])
     const [page, setPage] = useState(0)
@@ -19,23 +19,23 @@ function Clinics(props) {
     const [message, setMessage] = useState("")
     const navigate = useNavigate()
 
-    const fetchClinics = async () => {
-        const response = await ApiCalls.getClinics(page)
+    const fetchClinics = async (pag) => {
+        const response = await ClinicCalls.getClinics(pag)
         if (response && response.ok) {
             setClinics(response.data)
-            setMaxPage(parseInt(response.headers['X-max-page']))
+            setMaxPage(Number(response.headers.xMaxPage))
         }
     }
 
     const fetchLocation = async () => {
-        const response = await ApiCalls.getAllLocations()
+        const response = await LocationCalls.getAllLocations()
         if (response && response.ok) {
             setLocations(response.data)
         }
     }
 
     useEffect( async () => {
-        await fetchClinics()
+        await fetchClinics(page)
         await fetchLocation()
     }, [])
 
@@ -43,18 +43,34 @@ function Clinics(props) {
         setClinics(clinics.filter(clinic => clinic.id !== id))
     }
 
-    const handleAdd = (newClinic) => {
-        setClinics([...clinics, newClinic])
+    const handleAdd = async (newClinic) => {
+        console.log("adding clinic")
+        const response = await ClinicCalls.addClinic(newClinic);
         setShow(false)
+        if (response && response.ok)
+            await fetchClinics(page);
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/login')
+        }
     }
 
-    const handleEdit = (editedClinic) => {
-        let index = editIndex
-        let clinicList = clinics
-        clinicList[index] = editedClinic
-
-        setClinics(clinicList)
-        setShow(false)
+    const handleEdit = async (editedClinic) => {
+        const response = await ClinicCalls.editClinic(editedClinic.id, editedClinic)
+        if (response && response.ok){
+            await fetchClinics(page);
+            let index = editIndex
+            let clinicList = clinics
+            clinicList[index] = editedClinic
+            setClinics(clinicList)
+            setShow(false)
+        }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/login')
+        }
     }
 
     const handleShow = (index) => {
@@ -79,13 +95,15 @@ function Clinics(props) {
     }
 
     const nextPage = async () => {
-        setPage(page + 1)
-        await fetchClinics()
+        const newPage = page + 1
+        await setPage(newPage)
+        await fetchClinics(newPage)
 
     }
     const prevPage = async () => {
-        setPage(page - 1)
-        await fetchClinics()
+        const newPage = page - 1
+        await setPage(newPage)
+        await fetchClinics(newPage)
     }
 
     const renderPrevButton = () => {
@@ -96,7 +114,7 @@ function Clinics(props) {
     }
 
     const renderNextButton = () => {
-        if (page < maxPage - 1) {
+        if (page < maxPage) {
             return <Button className="remove-button doc-button-color shadow-sm"
                            onClick={() => nextPage()}>Next</Button>
         }
