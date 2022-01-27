@@ -32,22 +32,12 @@ function Specialties(props){
     }
 
     const nextPage = async () => {
-        const pag = page + 1;
-        const response = await ApiCalls.getSpecialties(pag);
-        if (response && response.ok) {
-            setSpecialties(response.data);
-            setPage(pag);
-            setMaxPage(response.headers.xMaxPage);
-        }
+        setPage(page + 1)
+        await fetchSpecialties()
     }
     const prevPage = async () => {
-        const pag = page - 1;
-        const response = await ApiCalls.getSpecialties(pag);
-        if (response && response.ok) {
-            setSpecialties(response.data);
-            setPage(pag);
-            setMaxPage(response.headers.xMaxPage);
-        }
+        setPage(page - 1)
+        await fetchSpecialties()
     }
 
     const renderPrevButton = () => {

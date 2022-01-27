@@ -36,7 +36,7 @@ public class DoctorServiceImpl implements DoctorService {
                                String firstName, String lastName, String password, String email)
             throws DuplicateEntityException {
         Doctor isDoctor = getDoctorByLicense(license);
-        if (isDoctor != null) throw new DuplicateEntityException("Doctor");
+        if (isDoctor != null) throw new DuplicateEntityException("license-in-use");
         User user = userService.createUser(firstName, lastName, password, email);
         return doctorDao.createDoctor(specialty, license, phoneNumber, user);
     }

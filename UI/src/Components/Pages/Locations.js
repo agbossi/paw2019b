@@ -42,22 +42,12 @@ function Locations(props){
     }
 
     const nextPage = async () => {
-        const pag = page + 1
-        const response = await ApiCalls.getLocations(pag);
-        if (response && response.ok) {
-            setLocations(response.data)
-            setPage(pag)
-            setMaxPage(response.headers.xMaxPage)
-        }
+        setPage(page + 1)
+        await fetchLocations()
     }
     const prevPage = async () => {
-        const pag = page - 1
-        const response = await ApiCalls.getLocations(pag);
-        if (response && response.ok) {
-            setLocations(response.data)
-            setPage(pag)
-            setMaxPage(response.headers.xMaxPage)
-        }
+        setPage(page - 1)
+        await fetchLocations()
     }
 
     const renderPrevButton = () => {

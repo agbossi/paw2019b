@@ -1,159 +1,158 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {Button, Card, Container} from "react-bootstrap";
 import '../CardContainer.css'
 import ClinicEditModal from "../Modals/ClinicEditModal";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import ApiCalls from "../../api/apiCalls";
 
-class Clinics extends Component {
+function Clinics(props) {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            clinics: [],
-            show: false,
-            editableClinic: {id: '', name: '', address: '', location: ''},
-            editIndex: -1,
-            handleFunction: this.handleAdd,
-            action: "Add",
-            locations: []
+    const [clinics, setClinics] = useState([])
+    const [show, setShow] = useState(false)
+    const [editableClinic, setEditableClinic] = useState( {id: ' ', name: ' ', address: ' ', location: ' '})
+    const [editIndex, setEditIndex] = useState(-1)
+    const [handleFunction, setHandleFunction] = useState(null)
+    const [action, setAction] = useState("Add")
+    const [locations, setLocations] = useState([])
+    const [page, setPage] = useState(0)
+    const [maxPage, setMaxPage] = useState(0)
+    const [message, setMessage] = useState("")
+    const navigate = useNavigate()
+
+    const fetchClinics = async () => {
+        const response = await ApiCalls.getClinics(page)
+        if (response && response.ok) {
+            setClinics(response.data)
+            setMaxPage(parseInt(response.headers['X-max-page']))
         }
     }
 
-    componentDidMount() {
-        this.setState({
-            clinics: [
-                {
-                    "id": 1,
-                    "address": "calle falsa 853",
-                    "name": "asdf",
-                    "location": "moron",
-                    "prepaids": "URL"
-                },
-                {
-                    "id": 2,
-                    "address": "calle falsa 123",
-                    "name": "clinica falsa",
-                    "location": "mordor",
-                    "prepaids": ""
-                },
-                {
-                    "id": 3,
-                    "address": "Panamericana 10000",
-                    "name": "clinica abandonada",
-                    "location": "Martinez",
-                    "prepaids": ""
-                },
-                {
-                    "id": 4,
-                    "address": "ningun lugar 0",
-                    "name": "qwert",
-                    "location": "Belgrano",
-                    "prepaids": ""
-                }
-            ],
-            locations: ['Moron', 'Centro', 'Quilmes', 'Belgrano']
-        })
+    const fetchLocation = async () => {
+        const response = await ApiCalls.getAllLocations()
+        if (response && response.ok) {
+            setLocations(response.data)
+        }
     }
 
+    useEffect( async () => {
+        await fetchClinics()
+        await fetchLocation()
+    }, [])
 
-    deleteClinic = (id) => {
-        this.setState({
-            clinics: this.state.clinics.filter(clinic => clinic.id !== id)
-        })
+    const deleteClinic = (id) => {
+        setClinics(clinics.filter(clinic => clinic.id !== id))
     }
 
-    handleAdd = (newClinic) => {
-        this.setState({
-            clinics: [...this.state.clinics, newClinic],
-            show: false
-        })
+    const handleAdd = (newClinic) => {
+        setClinics([...clinics, newClinic])
+        setShow(false)
     }
 
-    handleEdit = (editedClinic) => {
-        let index = this.state.editIndex
-        let clinics = this.state.clinics
-        clinics[index] = editedClinic
-        this.setState({
-            clinics: clinics,
-            show: false
-        })
+    const handleEdit = (editedClinic) => {
+        let index = editIndex
+        let clinicList = clinics
+        clinicList[index] = editedClinic
+
+        setClinics(clinicList)
+        setShow(false)
     }
 
-    handleShow = (index, func) => {
+    const handleShow = (index) => {
         let action
         let clinic
         if (index === -1) {
             action = "Add"
-            clinic = {id: '', name: '', address: '', location: ''}
+            clinic = {id: ' ', name: ' ', address: ' ', location: ' '}
         } else {
             action = "Edit"
-            clinic = this.state.clinics[index]
+            clinic = clinics[index]
         }
-        this.setState({
-            editableClinic: clinic,
-            editIndex: index,
-            handleFunction: func,
-            show: true,
-            action: action
-        })
+
+        setEditableClinic(clinic)
+        setEditIndex(index)
+        setShow(true)
+        setAction(action)
     }
 
-    hideModal = () => {
-        this.setState({
-            show: false
-        })
+    const hideModal = () => {
+        setShow(false)
     }
 
-    render() {
-        return (
-            <div className="background">
-                <Button variant="outline-secondary"
-                        onClick={() => this.handleShow(-1, this.handleAdd)}
-                        size="lg"
-                        className="add-margin">
-                    Add Clinic
-                </Button>
-                {this.state.show && <ClinicEditModal show={this.state.show}
-                                 clinic={this.state.editableClinic}
-                                 handleFunction={this.state.handleFunction}
-                                 action={this.state.action}
-                                 hideModal={this.hideModal}
-                                 locations={this.state.locations}
-                /> }
-                <Container>
-                    <div className="admin-info-container">
-                        {this.state.clinics.map(( clinic, index) => {
-                            return (
-                                <Card className="mb-3 shadow" style={{color: "#000", width: '20rem', height: '15rem'}} key={clinic.id}>
-                                    <Card.Body>
-                                        <Card.Title>{clinic.name}</Card.Title>
-                                        <Card.Text>
-                                            {clinic.address + ' (' + clinic.location + ')'}
-                                        </Card.Text>
-                                    </Card.Body>
-                                    <Link className="btn btn-outline-dark btn-lg see-prepaid-button shadow-sm"
-                                          role="button"
-                                          to={'admin/clinics/' + clinic.id + '/prepaids'}>See Prepaids
-                                    </Link>
-                                    <div className="buttons-div">
-                                        <Button className="edit-remove-button doc-button-color shadow-sm"
-                                                onClick={() => this.deleteClinic(clinic.id)}>
-                                        Delete
-                                        </Button>
-                                        <Button className="btn edit-remove-button doc-button-color shadow-sm"
-                                                onClick={() => this.handleShow(index, this.handleEdit)}>
-                                            <i className="far fa-edit"/>
-                                        </Button>
-                                    </div>
+    const nextPage = async () => {
+        setPage(page + 1)
+        await fetchClinics()
 
-                                </Card>
-                            )
-                        })}
-                    </div>
-                </Container>
-            </div>
-        )
     }
+    const prevPage = async () => {
+        setPage(page - 1)
+        await fetchClinics()
+    }
+
+    const renderPrevButton = () => {
+        if (page !== 0) {
+            return <Button className="remove-button doc-button-color shadow-sm"
+                           onClick={() => prevPage()}>Prev</Button>
+        }
+    }
+
+    const renderNextButton = () => {
+        if (page < maxPage - 1) {
+            return <Button className="remove-button doc-button-color shadow-sm"
+                           onClick={() => nextPage()}>Next</Button>
+        }
+    }
+
+    return (
+        <div className="background">
+            <Button variant="outline-secondary"
+                    onClick={() => handleShow(-1)}
+                    size="lg"
+                    className="add-margin">
+                Add Clinic
+            </Button>
+            {show && <ClinicEditModal show={show}
+                             clinic={editableClinic}
+                             handleAdd={handleAdd}
+                             handleEdit={handleEdit}
+                             action={action}
+                             hideModal={hideModal}
+                             locations={locations.map(location => location.name)}
+            /> }
+            <Container>
+                <div className="admin-info-container">
+                    {clinics.map(( clinic, index) => {
+                        return (
+                            <Card className="mb-3 shadow" style={{color: "#000", width: '20rem', height: '15rem'}} key={clinic.id}>
+                                <Card.Body>
+                                    <Card.Title>{clinic.name}</Card.Title>
+                                    <Card.Text>
+                                        {clinic.address + ' (' + clinic.location + ')'}
+                                    </Card.Text>
+                                </Card.Body>
+                                <Link className="btn btn-outline-dark btn-lg see-prepaid-button shadow-sm"
+                                      role="button"
+                                      to={'admin/clinics/' + clinic.id + '/prepaids'}>See Prepaids
+                                </Link>
+                                <div className="buttons-div">
+                                    <Button className="edit-remove-button doc-button-color shadow-sm"
+                                            onClick={() => deleteClinic(clinic.id)}>
+                                    Delete
+                                    </Button>
+                                    <Button className="btn edit-remove-button doc-button-color shadow-sm"
+                                            onClick={() => handleShow(index)}>
+                                        <i className="far fa-edit"/>
+                                    </Button>
+                                </div>
+
+                            </Card>
+                        )
+                    })}
+                </div>
+            </Container>
+            {renderPrevButton()}
+            {renderNextButton()}
+        </div>
+    )
 }
 
 export default Clinics

@@ -55,7 +55,7 @@ function Doctors() {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
             navigate('/login')
-        } else if (response.status === 409) {
+        } else if (response.status === 409 && response.data === 'license-in-use') {
             setMessage("Licence already registered")
         } else {
             console.error("could not add doctor: ", response.status)
@@ -71,23 +71,13 @@ function Doctors() {
     }
 
     const nextPage = async () => {
-        const pag = page + 1
-        const response = await ApiCalls.getDoctorsAdmin(pag);
-        if (response && response.ok) {
-            setDoctors(response.data)
-            setPage(pag)
-            setMaxPage(response.headers.xMaxPage)
-        }
+        setPage(page + 1)
+        await fetchDoctors()
 
     }
     const prevPage = async () => {
-        const pag = page - 1
-        const response = await ApiCalls.getDoctorsAdmin(pag);
-        if (response && response.ok) {
-            setDoctors(response.data)
-            setPage(pag)
-            setMaxPage(response.headers.xMaxPage)
-        }
+        setPage(page - 1)
+        await fetchDoctors()
     }
 
     const renderPrevButton = () => {

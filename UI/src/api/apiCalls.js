@@ -7,9 +7,11 @@ const LOGIN_PATH = '/login';
 const LOCATIONS_PATH = '/locations'
 const SPECIALTIES_PATH = '/specialties';
 const DOCTORS_PATH = '/doctors';
+const CLINICS_PATH = 'clinics';
 const ALL_PATH = '/all';
 
 const getLocations = async (pag) => api.get(LOCATIONS_PATH + "?" + PAGE_QUERY + pag);
+const getAllLocations = async () => api.get(LOCATIONS_PATH + ALL_PATH)
 const addLocation = async (data) => api.post(
     LOCATIONS_PATH,
     data,
@@ -18,6 +20,8 @@ const addLocation = async (data) => api.post(
 
 const getSpecialties = async (pag) => api.get(SPECIALTIES_PATH + "?" + PAGE_QUERY + pag);
 const getAllSpecialties = async () => api.get(SPECIALTIES_PATH + ALL_PATH)
+
+const getClinics = async (pag) => api.get(CLINICS_PATH+ "?" + PAGE_QUERY + pag);
 
 const getDoctorsAdmin = async (pag) => api.get(
     DOCTORS_PATH + ALL_PATH + "?" + PAGE_QUERY + pag);
@@ -56,9 +60,11 @@ export default {
     login,
     logout,
     getLocations,
+    getAllLocations,
     addLocation,
     getSpecialties,
     getAllSpecialties,
+    getClinics,
     getDoctorsAdmin,
     deleteDoctor,
     addDoctor

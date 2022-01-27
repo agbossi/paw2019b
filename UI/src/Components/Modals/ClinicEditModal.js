@@ -1,81 +1,96 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {Button, Modal, Form, Dropdown} from "react-bootstrap";
 import DropDownList from "../DropDownList";
 
-class ClinicEditModal extends Component {
+function ClinicEditModal(props) {
+    const [id, setId] = useState(props.clinic.id);
+    const [address, setAddress] = useState(props.clinic.address);
+    const [name, setName] = useState(props.clinic.name);
+    const [location, setLocation] = useState(props.clinic.location);
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            id: this.props.clinic.id,
-            address: this.props.clinic.address,
-            name: this.props.clinic.name,
-            location: this.props.clinic.location,
-            locations: this.props.locations
+
+    const onChange = (event) => {
+        switch(event.target.id) {
+            case "name":
+                setName(event.target.value);
+                break;
+            case "address":
+                setAddress(event.target.value);
+                break;
+            case "location":
+                setLocation(event.target.value);
+                break;
         }
     }
 
-    onChange = (event) => {
-        this.setState({
-            [event.target.id]: event.target.value
-        })
+    const handleSelect = (location) => {
+        setLocation(location)
     }
 
-    handleSelect = (location) => {
-        this.setState({
-            location: location
-        })
+    const handleClick = () => {
+        if (props.action === "Add") {
+            props.handleAdd(
+                {
+                    id: id,
+                    name: name,
+                    address: address,
+                    location: location
+                })
+        } else {
+            props.handleEdit(
+                {
+                    id: id,
+                    name: name,
+                    address: address,
+                    location: location
+                })
+        }
     }
 
-    render() {
-        return (
-            <>
-                <Modal show={this.props.show} onHide={this.props.hideModal}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{this.props.action + " clinic"}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form>
-                            <Form.Group className="mb-3" controlId="name">
-                                <Form.Label>Clinic name</Form.Label>
-                                <Form.Control value={this.state.name}
-                                              placeholder="Enter clinic name"
-                                              onChange={this.onChange}/>
-                            </Form.Group>
+    return (
+        <>
+            <Modal show={props.show} onHide={props.hideModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{props.action + " clinic"}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group className="mb-3" controlId="name">
+                            <Form.Label>Clinic name</Form.Label>
+                            <Form.Control value={name}
+                                          placeholder="Enter clinic name"
+                                          onChange={onChange}/>
+                        </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="address">
-                                <Form.Label>Clinic address</Form.Label>
-                                <Form.Control value={this.state.address}
-                                              placeholder="Enter clinic address"
-                                              onChange={this.onChange}/>
-                            </Form.Group>
+                        <Form.Group className="mb-3" controlId="address">
+                            <Form.Label>Clinic address</Form.Label>
+                            <Form.Control value={address}
+                                          placeholder="Enter clinic address"
+                                          onChange={onChange}/>
+                        </Form.Group>
 
-                            <Form.Group className="mb-3" controlId="location">
-                                <Form.Label>Clinic location</Form.Label>
-                                <DropDownList iterable={this.state.locations}
-                                              selectedElement={this.state.location}
-                                              handleSelect={this.handleSelect}
-                                              elementType='Location'
-                                              id='location'/>
-                            </Form.Group>
-                        </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={this.props.hideModal}>
-                            Close
-                        </Button>
-                        <Button className="doc-button-color" onClick={() => this.props.handleFunction({id: this.state.id,
-                            name: this.state.name,
-                            address: this.state.address,
-                            location: this.state.location})
-                        }>
-                            {this.props.action}
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            </>
-        )
-    }
+                        <Form.Group className="mb-3" controlId="location">
+                            <Form.Label>Clinic location</Form.Label>
+                            <DropDownList iterable={props.locations}
+                                          selectedElement={location}
+                                          handleSelect={handleSelect}
+                                          elementType='Location'
+                                          id='location'/>
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={props.hideModal}>
+                        Close
+                    </Button>
+                    <Button className="doc-button-color" onClick={handleClick} >
+                        {props.action}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+
 }
 
 export default ClinicEditModal;
