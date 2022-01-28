@@ -1,6 +1,5 @@
 .admin-info-container {
     display: grid;
-
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(7, 1fr);
     grid-gap: 0.5em;
@@ -8,6 +7,18 @@
     overflow: auto;
     background-color: #d9d9d9;
     justify-items: center;
+}
+
+.admin-doctor-container {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    height: 75vh;
+}
+
+.admin-clinic-container {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    height: 75vh;
 }
 
 .background {
@@ -58,4 +69,11 @@
 .see-prepaid-button {
     width: 18rem;
     align-self: center;
+}
+
+.clinic-prepaid-title {
+    color: #000;
+    justify-content: flex-start;
+    display: flex;
+    margin: 1rem 1rem 0;
 }

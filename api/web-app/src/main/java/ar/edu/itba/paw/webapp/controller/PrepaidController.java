@@ -42,17 +42,9 @@ public class PrepaidController {
                 .map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
         int maxPage = prepaidService.maxAvailablePage();
 
-        String pageStr = messageSource.getMessage("page",null, Locale.getDefault());
-        String prev = messageSource.getMessage("previous",null, Locale.getDefault());
-        String next = messageSource.getMessage("next",null, Locale.getDefault());
-        String last = messageSource.getMessage("last",null, Locale.getDefault());
-        String first = messageSource.getMessage("first",null, Locale.getDefault());
-
         return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {}, "prepaids", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, 0).build(), first)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, page - 1).build(), prev)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, page + 1).build(), next)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam(pageStr, maxPage).build(), last)
+                .header("Access-Control-Expose-Headers", "X-max-page")
+                .header("X-max-page", maxPage)
                 .build();
         /*return Response.ok(new GenericEntity<List<PrepaidDto>>(prepaids) {})
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(), "first")
@@ -60,6 +52,17 @@ public class PrepaidController {
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(), "next")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(), "last")
                 .build(); */
+    }
+
+    @GET
+    @Path("/all")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getAllPrepaids(@Context Request request) {
+        List<PrepaidDto> prepaids = prepaidService.getPrepaids().stream()
+                .map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
+
+        return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {}, "prepaids", request)
+                .build();
     }
 
     @DELETE

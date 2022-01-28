@@ -39,8 +39,10 @@ function Clinics(props) {
         await fetchLocation()
     }, [])
 
-    const deleteClinic = (id) => {
-        setClinics(clinics.filter(clinic => clinic.id !== id))
+    const deleteClinic = async (id) => {
+        const response = await ClinicCalls.deleteClinic(id)
+        if (response && response.ok)
+            setClinics(clinics.filter(clinic => clinic.id !== id))
     }
 
     const handleAdd = async (newClinic) => {
@@ -57,7 +59,12 @@ function Clinics(props) {
     }
 
     const handleEdit = async (editedClinic) => {
-        const response = await ClinicCalls.editClinic(editedClinic.id, editedClinic)
+        const data = {
+            name: editedClinic.name,
+            address: editedClinic.address,
+            location: editedClinic.location
+        }
+        const response = await ClinicCalls.editClinic(editedClinic.id, data)
         if (response && response.ok){
             await fetchClinics(page);
             let index = editIndex
@@ -137,7 +144,7 @@ function Clinics(props) {
                              locations={locations.map(location => location.name)}
             /> }
             <Container>
-                <div className="admin-info-container">
+                <div className="admin-info-container admin-clinic-container">
                     {clinics.map(( clinic, index) => {
                         return (
                             <Card className="mb-3 shadow" style={{color: "#000", width: '20rem', height: '15rem'}} key={clinic.id}>
@@ -149,7 +156,7 @@ function Clinics(props) {
                                 </Card.Body>
                                 <Link className="btn btn-outline-dark btn-lg see-prepaid-button shadow-sm"
                                       role="button"
-                                      to={'admin/clinics/' + clinic.id + '/prepaids'}>See Prepaids
+                                      to={'/admin/clinics/' + clinic.id + '/prepaids'}>See Prepaids
                                 </Link>
                                 <div className="buttons-div">
                                     <Button className="edit-remove-button doc-button-color shadow-sm"

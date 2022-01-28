@@ -1,80 +1,73 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect, useState} from 'react';
 import {Button, Modal, Form, Dropdown} from "react-bootstrap";
 import DropDownList from "../DropDownList";
+import '../CardContainer.css'
+import PrepaidCalls from "../../api/PrepaidCalls";
+import ClinicCalls from "../../api/ClinicCalls";
+import {element} from "prop-types";
+import {useNavigate} from "react-router-dom";
 
-class ClinicPrepaidAddModal extends Component {
+ function ClinicPrepaidAddModal(props) {
+    const [show, setShow] = useState(false);
+    const [newPrepaid, setNewPrepaid] = useState('');
+    const [prepaids, setPrepaids] = useState([]);
+    const [property, setProperty] = useState("");
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            show: false,
-            newPrepaid: '',
-            prepaids: []
-        }
+    const handleSelect = (prepaid) => {
+        setNewPrepaid(prepaid)
     }
 
-    componentDidMount() {
-        this.setState({
-            prepaids: ['OSDE', 'Simeco', 'Swiss medical', 'wiwiwi']
-        })
+    const handleShow = () => {
+        setShow(!show)
     }
 
-    handleSelect = (prepaid) => {
-        this.setState({
-            newPrepaid: prepaid
-        })
+    const handleAdd = async () => {
+        setNewPrepaid("")
+        await props.handleAdd(newPrepaid)
+        handleShow()
+
     }
 
-    handleShow = () => {
-        this.setState({
-            show: !this.state.show
-        })
+    const remainingPrepaids = () => {
+        return props.allPrepaids.filter(prepaid => !props.prepaids.includes(prepaid));
     }
 
-    handleAdd = () => {
-        this.props.handleAdd(this.state.newPrepaid)
-        this.handleShow()
+    const onChange = (event) => {
+        setProperty(event.target.value)
     }
 
-    onChange = (event) => {
-        this.setState({
-            newProperty: event.target.value
-        })
-    }
 
-    render() {
-        return (
-            <>
-                <Button variant="outline-success" onClick={this.handleShow} size="lg">
-                    Add prepaid to clinic
-                    <i className="fab fa-typo3"/>
-                </Button>
-                <Modal show={this.state.show} onHide={this.handleShow}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Add prepaid to clinic</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form.Group className="mb-3" controlId="name">
-                            <Form.Label>Prepaid name</Form.Label>
-                            <DropDownList iterable={this.state.prepaids}
-                                          selectedElement=''
-                                          handleSelect={this.handleSelect}
-                                          elementType='Prepaid'
-                                          id='prepaid'/>
-                        </Form.Group>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={this.handleShow}>
-                            Close
-                        </Button>
-                        <Button variant="primary" onClick={this.handleAdd}>
-                            Add
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            </>
-        )
-    }
+    return (
+        <>
+            <Button variant="outline-secondary add-margin" onClick={handleShow} size="lg">
+                Add prepaid to clinic
+            </Button>
+            <Modal show={show} onHide={handleShow}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Add prepaid to clinic</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form.Group className="mb-3" controlId="name">
+                        <Form.Label>Prepaid name: {newPrepaid}</Form.Label>
+                        <DropDownList iterable={remainingPrepaids()}
+                                      selectedElement=''
+                                      handleSelect={handleSelect}
+                                      elementType='Prepaid'
+                                      id='prepaid'/>
+                    </Form.Group>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleShow}>
+                        Close
+                    </Button>
+                    <Button className="doc-button-color" onClick={handleAdd}>
+                        Add
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+
 }
 
 export default ClinicPrepaidAddModal;

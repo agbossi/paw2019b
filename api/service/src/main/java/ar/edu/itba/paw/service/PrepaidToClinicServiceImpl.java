@@ -2,10 +2,12 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.PrepaidToClinicDao;
 import ar.edu.itba.paw.interfaces.service.ClinicService;
+import ar.edu.itba.paw.interfaces.service.PrepaidService;
 import ar.edu.itba.paw.interfaces.service.PrepaidToClinicService;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Prepaid;
 import ar.edu.itba.paw.model.PrepaidToClinic;
+import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,9 @@ public class PrepaidToClinicServiceImpl implements PrepaidToClinicService {
     private PrepaidToClinicDao prepaidToClinicDao;
 
     @Autowired
+    private PrepaidService prepaidService;
+
+    @Autowired
     private ClinicService clinicService;
 
     @Override
@@ -29,9 +34,11 @@ public class PrepaidToClinicServiceImpl implements PrepaidToClinicService {
 
     @Transactional
     @Override
-    public PrepaidToClinic addPrepaidToClinic(String prepaidName, int clinicId) {
-        Prepaid prepaid = new Prepaid(prepaidName);
+    public PrepaidToClinic addPrepaidToClinic(String prepaidName, int clinicId) throws EntityNotFoundException {
+        Prepaid prepaid = prepaidService.getPrepaidByName(prepaidName);
         Clinic clinic = clinicService.getClinicById(clinicId);
+        if (clinic == null) throw new EntityNotFoundException("clinic");
+        if (prepaid == null) throw new EntityNotFoundException("prepaid");
         return prepaidToClinicDao.addPrepaidToClinic(prepaid,clinic);
     }
 
@@ -42,8 +49,12 @@ public class PrepaidToClinicServiceImpl implements PrepaidToClinicService {
 
     @Transactional
     @Override
-    public long deletePrepaidFromClinic(String prepaid, int clinic) {
-        return prepaidToClinicDao.deletePrepaidFromClinic(prepaid, clinic);
+    public long deletePrepaidFromClinic(String prepaidName, int clinicId) throws EntityNotFoundException {
+        Prepaid prepaid = prepaidService.getPrepaidByName(prepaidName);
+        Clinic clinic = clinicService.getClinicById(clinicId);
+        if (clinic == null) throw new EntityNotFoundException("clinic");
+        if (prepaid == null) throw new EntityNotFoundException("prepaid");
+        return prepaidToClinicDao.deletePrepaidFromClinic(prepaidName, clinicId);
     }
 
     @Override

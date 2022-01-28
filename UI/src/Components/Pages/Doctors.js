@@ -111,7 +111,7 @@ function Doctors() {
                 </div>
             )}
             <Container>
-                <div className="admin-info-container">
+                <div className="admin-info-container admin-doctor-container">
                     {doctors.map((doctor) => {
                         return (
                             <Card className="mb-3 doc-card shadow"
