@@ -135,6 +135,26 @@ public class ClinicController {
         if(clinic != null) {
             List<PrepaidDto> prepaids = prepaidToClinicService.getPrepaidsForClinic(clinicId, page)
                     .stream().map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
+            int maxPage = prepaidToClinicService.maxAvailablePage();
+            return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {},
+                    "prepaids", request)
+                    .header("Access-Control-Expose-Headers", "X-max-page")
+                    .header("X-max-page", maxPage).build();
+            //return Response.ok(new GenericEntity<List<PrepaidDto>>(prepaids) {}).build();
+        }
+        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("clinic-not-found").build();
+    }
+
+    @GET
+    @Path("{clinicId}/prepaids/all")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getAllClinicPrepaids(@PathParam("clinicId") final Integer clinicId,
+                                      @Context Request request) throws EntityNotFoundException {
+
+        Clinic clinic = clinicService.getClinicById(clinicId);
+        if(clinic != null) {
+            List<PrepaidDto> prepaids = prepaidToClinicService.getPrepaidsForClinic(clinicId)
+                    .stream().map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
             return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {},
                     "prepaids", request).build();
             //return Response.ok(new GenericEntity<List<PrepaidDto>>(prepaids) {}).build();

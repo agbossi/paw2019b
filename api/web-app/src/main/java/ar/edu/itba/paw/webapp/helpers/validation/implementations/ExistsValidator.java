@@ -21,6 +21,6 @@ public class ExistsValidator implements ConstraintValidator<Exists, String> {
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return !existenceService.exists(value,field);
+        return !existenceService.exists(value, field);
     }
 }

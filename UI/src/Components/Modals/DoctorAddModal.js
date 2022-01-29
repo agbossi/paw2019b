@@ -14,6 +14,7 @@ function DoctorAddModal(props) {
     const [repeatPassword, setRepeatPassword] = useState('')
     const [license, setLicense] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
+    const [message, setMessage] = useState('')
 
     const handleSelect = (specialty) => {
         setSelectedSpecialty(specialty)
@@ -24,8 +25,14 @@ function DoctorAddModal(props) {
     }
 
     const handleAdd = (doctor) => {
-        props.handleAdd(doctor)
-        handleShow()
+        if (password !== repeatPassword)
+            setMessage("Passwords don't match")
+        else {
+            setMessage('')
+            setSelectedSpecialty("")
+            props.handleAdd(doctor)
+            handleShow()
+        }
     }
 
     const onChange = (event) => {
@@ -108,7 +115,7 @@ function DoctorAddModal(props) {
                             </Col>
                             <Col>
                                 <Form.Group className="mb-3" controlId="email">
-                                    <Form.Label>License</Form.Label>
+                                    <Form.Label>Email</Form.Label>
                                     <Form.Control type="email" placeholder="Enter email" onChange={onChange}/>
                                 </Form.Group>
                             </Col>
@@ -127,6 +134,13 @@ function DoctorAddModal(props) {
                                 </Form.Group>
                             </Col>
                         </Row>
+                        {message && (
+                            <div className="form-group">
+                                <div className="alert alert-danger" role="alert">
+                                    {message}
+                                </div>
+                            </div>
+                        )}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

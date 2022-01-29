@@ -10,8 +10,6 @@ import {useNavigate} from "react-router-dom";
  function ClinicPrepaidAddModal(props) {
     const [show, setShow] = useState(false);
     const [newPrepaid, setNewPrepaid] = useState('');
-    const [prepaids, setPrepaids] = useState([]);
-    const [property, setProperty] = useState("");
 
     const handleSelect = (prepaid) => {
         setNewPrepaid(prepaid)
@@ -30,10 +28,6 @@ import {useNavigate} from "react-router-dom";
 
     const remainingPrepaids = () => {
         return props.allPrepaids.filter(prepaid => !props.prepaids.includes(prepaid));
-    }
-
-    const onChange = (event) => {
-        setProperty(event.target.value)
     }
 
 

@@ -21,6 +21,12 @@
     height: 75vh;
 }
 
+.admin-clinic-prepaid-container {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    height: 65vh;
+}
+
 .background {
     background-color: #d9d9d9;
     border-color: #d9d9d9;
@@ -36,17 +42,36 @@
     height: 8.5rem;
 }
 
-.remove-button {
+.remove-button, .remove-button:focus {
     width: 5rem;
     align-self: flex-end;
     margin-right: 1rem;
     margin-bottom: 0.5rem;
 }
 
+.remove-button-color, .remove-button-color:focus {
+    background-color: white;
+    color: #ad3f3f;
+    border-color: #ad3f3f;
+}
+
+.remove-button-color:hover {
+    background-color: #ad3f3f;
+    border-color: #ad3f3f;
+    color: white;
+}
+
 .edit-remove-button {
     width: 5rem;
     align-self: center;
     margin: 0.5rem;
+}
+
+.doc-button {
+    width: 5rem;
+    align-self: flex-end;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .doc-button-color, .doc-button-color:focus {

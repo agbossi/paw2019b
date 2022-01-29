@@ -53,6 +53,7 @@ public class SpecialtyController {
                 .build(); */
     }
 
+    // TODO: Use: for adding doctor
     @GET()
     @Path("/all")
     @Produces(value = { MediaType.APPLICATION_JSON })

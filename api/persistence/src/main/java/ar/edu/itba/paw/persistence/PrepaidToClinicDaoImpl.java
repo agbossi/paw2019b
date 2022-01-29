@@ -22,8 +22,8 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final static int MAX_PREPAID_TO_CLINICS_PER_PAGE = 20;
-    private final static int MAX_PREPAID_FOR_CLINIC_PER_PAGE = 10;
+    private final static int MAX_PREPAID_TO_CLINICS_PER_PAGE = 12;
+
 
     @Override
     public List<PrepaidToClinic> getPrepaidToClinics(){
@@ -37,11 +37,24 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
 
     @Override
     public List<Prepaid> getPrepaidsForClinic(int clinic, int page) {
-        Query nativeQuery = entityManager.createNativeQuery("SELECT prepaid FROM clinicPrepaids where clinicid = ?1");
+        Query nativeQuery = entityManager
+                .createNativeQuery("SELECT prepaid FROM clinicPrepaids where clinicid = ?1");
         nativeQuery.setParameter(1, clinic);
         @SuppressWarnings("unchecked")
-        List<String> ids = nativeQuery.setFirstResult(page * MAX_PREPAID_FOR_CLINIC_PER_PAGE)
-                .setMaxResults(MAX_PREPAID_FOR_CLINIC_PER_PAGE)
+        List<String> ids = nativeQuery.setFirstResult(page * MAX_PREPAID_TO_CLINICS_PER_PAGE)
+                .setMaxResults(MAX_PREPAID_TO_CLINICS_PER_PAGE)
+                .getResultList();
+
+        return ids.stream().map(Prepaid::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Prepaid> getPrepaidsForClinic(int clinic) {
+        Query nativeQuery = entityManager
+                .createNativeQuery("SELECT prepaid FROM clinicPrepaids where clinicid = ?1");
+        nativeQuery.setParameter(1, clinic);
+        @SuppressWarnings("unchecked")
+        List<String> ids = nativeQuery
                 .getResultList();
 
         return ids.stream().map(Prepaid::new).collect(Collectors.toList());
@@ -50,7 +63,8 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     @Override
     public List<PrepaidToClinic> getPaginatedObjects(int page){
 
-        TypedQuery<PrepaidToClinicKey> idsQuery = entityManager.createQuery("select cp.prepaidToClinicKey from PrepaidToClinic as cp", PrepaidToClinicKey.class);
+        TypedQuery<PrepaidToClinicKey> idsQuery = entityManager
+                .createQuery("select cp.prepaidToClinicKey from PrepaidToClinic as cp", PrepaidToClinicKey.class);
 
         List<PrepaidToClinicKey> ids = idsQuery.setFirstResult(page * MAX_PREPAID_TO_CLINICS_PER_PAGE)
                 .setMaxResults(MAX_PREPAID_TO_CLINICS_PER_PAGE)
@@ -82,7 +96,9 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
 
     @Override
     public boolean clinicHasPrepaid(String prepaid, int clinic){
-        TypedQuery<PrepaidToClinic> query = entityManager.createQuery("from PrepaidToClinic as p where p.clinic.id = :clinic and p.prepaid.name = :prepaid",PrepaidToClinic.class);
+        TypedQuery<PrepaidToClinic> query = entityManager
+                .createQuery("from PrepaidToClinic as p where p.clinic.id = :clinic and p.prepaid.name = :prepaid",
+                        PrepaidToClinic.class);
         query.setParameter("clinic",clinic);
         query.setParameter("prepaid",prepaid);
         List<PrepaidToClinic> list = query.getResultList();

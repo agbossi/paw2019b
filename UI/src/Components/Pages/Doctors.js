@@ -38,27 +38,27 @@ function Doctors() {
     const handleAdd = async (newDoctor) => {
         const response = await DoctorCalls.addDoctor(newDoctor);
         if (response && response.ok) {
-            const doc = {
-                license: newDoctor.license,
-                phoneNumber: newDoctor.phoneNumber,
-                profileImage: null,
-                specialty: newDoctor.specialty,
-                user: {
-                    email: newDoctor.email,
-                    firstName: newDoctor.firstName,
-                    lastName: newDoctor.lastName
-                }
-            }
-            const d = [...doctors, doc]
-            setDoctors(d)
+            await fetchDoctors(page)
             setMessage("")
         } else if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
             navigate('/login')
-        } else if (response.status === 409 && response.data === 'license-in-use') {
-            setMessage("Licence already registered")
-        } else {
+        } else if (response.status === 409) {
+            if (response.data === 'license-in-use')
+                setMessage("Licence already registered")
+            if (response.data === 'emain-in-use')
+                setMessage("Email already registered")
+        } else if (response.status === 404) {
+            if (response.data === "specialty-not-found") {
+                setMessage("Specialty chosen does not exist")
+            }
+        } else if (response.status === 400) {
+            if (response.data === "password-mismatch") {
+                setMessage("Passwords where mismatched")
+            }
+        }
+        else {
             console.error("could not add doctor: ", response.status)
         }
     }
@@ -66,8 +66,12 @@ function Doctors() {
     const deleteDoctors = async (license) => {
         const response = await DoctorCalls.deleteDoctor(license)
         if (response && response.status === 204)
-            setDoctors(doctors.filter(doctor => doctor.license !== license))
-        else
+            await fetchDoctors(page)
+        else if (response.status === 404) {
+            if (response.data === "doctor-not-found") {
+                setMessage("No doctor found to delete")
+            }
+        }
             console.error("could not delete doctor: ", response.status)
     }
 
@@ -85,14 +89,14 @@ function Doctors() {
 
     const renderPrevButton = () => {
         if (page !== 0) {
-            return <Button className="remove-button doc-button-color shadow-sm"
+            return <Button className="doc-button doc-button-color shadow-sm"
                            onClick={() => prevPage()}>Prev</Button>
         }
     }
 
     const renderNextButton = () => {
         if (page < maxPage - 1) {
-            return <Button className="remove-button doc-button-color shadow-sm"
+            return <Button className="doc-button doc-button-color shadow-sm"
                            onClick={() => nextPage()}>Next</Button>
         }
     }
@@ -122,7 +126,7 @@ function Doctors() {
                                         <b>License</b>: {doctor.license}
                                     </Card.Text>
                                 </Card.Body>
-                                <Button className="remove-button doc-button-color shadow-sm"
+                                <Button className="remove-button remove-button-color shadow-sm"
                                         onClick={() => deleteDoctors(doctor.license)}>
                                     Delete
                                 </Button>

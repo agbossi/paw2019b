@@ -221,7 +221,9 @@ public class DoctorController {
 
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.ConflictException;
 import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
+import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import ar.edu.itba.paw.webapp.caching.DoctorCaching;
 import ar.edu.itba.paw.webapp.caching.DoctorClinicCaching;
 import ar.edu.itba.paw.webapp.caching.ImageCaching;
@@ -283,9 +285,6 @@ public class DoctorController {
     @Autowired
     private ScheduleCaching scheduleCaching;
 
-    @Autowired
-    private MessageSource messageSource;
-
     @Context
     private UriInfo uriInfo;
 
@@ -306,22 +305,18 @@ public class DoctorController {
         page = (page < 0) ? 0 : page;
 
         List<String> licenses = doctorService.getFilteredLicenses(new Location(location), new Specialty(specialty),
-                firstName,lastName, new Prepaid(prepaid), consultPrice, includeUnavailable);
+                firstName, lastName, new Prepaid(prepaid), consultPrice, includeUnavailable);
         int maxAvailablePage = doctorService.getMaxAvailableDoctorsPage(licenses);
 
         return getPaginatedDoctorsResponse(licenses, page, request, maxAvailablePage);
-        /*return Response.ok(new GenericEntity<List<DoctorDto>>(doctors) {})
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxAvailablePage).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page - 1).build(),"prev")
-                .build(); */
     }
 
+    // TODO: Use: in admin doctors page
     @GET
     @Path("/all")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getAllDoctors(@QueryParam("page") @DefaultValue("0") Integer page, @Context Request request) {
+    public Response getAllDoctorsPaginated(@QueryParam("page") @DefaultValue("0") Integer page,
+                                           @Context Request request) {
         page = (page < 0) ? 0 : page;
 
         List<String> licenses = doctorService.getDoctors().stream().map(Doctor::getLicense).collect(Collectors.toList());
@@ -329,6 +324,7 @@ public class DoctorController {
 
         return getPaginatedDoctorsResponse(licenses, page, request, maxAvailablePage);
     }
+
     @GET
     @Path("/{license}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -344,10 +340,11 @@ public class DoctorController {
         }
     }
 
+    // TODO: Use: admin deletes doctor
     @DELETE
     @Path("/{license}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response deleteDoctor(@PathParam("license") final String license) {
+    public Response deleteDoctor(@PathParam("license") final String license) throws EntityNotFoundException {
         doctorService.deleteDoctor(license);
         return Response.noContent().build();
     }
@@ -372,13 +369,18 @@ public class DoctorController {
 
     }
 
+    // TODO: Use: admin adds doctor
     @POST
     @Produces(value = { MediaType.APPLICATION_JSON, })
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createDoctor(final DoctorForm form) throws DuplicateEntityException {
+    public Response createDoctor(final DoctorForm form)
+            throws DuplicateEntityException, EntityNotFoundException,
+            ar.edu.itba.paw.model.exceptions.BadRequestException {
+        if (!form.getPassword().equals(form.getRepeatPassword()))
+            throw new ar.edu.itba.paw.model.exceptions.BadRequestException("password-mismatch");
         String encodedPassword = passwordEncoder.encode(form.getPassword());
         Specialty specialty = specialtyService.getSpecialtyByName(form.getSpecialty());
-
+        if (specialty == null) throw new EntityNotFoundException("specialty");
         doctorService.createDoctor(specialty, form.getLicense(), form.getPhoneNumber()
                 ,form.getFirstName(), form.getLastName(), encodedPassword, form.getEmail());
         return Response.created(uriInfo.getAbsolutePathBuilder().path(form.getLicense()).build()).build();
@@ -444,7 +446,7 @@ public class DoctorController {
     }
 
     @GET
-    @Path("/{license}/doctorsClinics")
+    @Path("/{license}/clinics")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getDoctorPage(@PathParam("license") final String license,
                                   @QueryParam("week") @DefaultValue("1") final Integer week,
@@ -464,7 +466,7 @@ public class DoctorController {
 
 
     @POST
-    @Path("/{license}/doctorsClinics")
+    @Path("/{license}/clinics")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#license, 'doctor')")
     public Response createDoctorClinic(@PathParam("license") final String license,
@@ -478,7 +480,7 @@ public class DoctorController {
     }
 
     @DELETE
-    @Path("/{license}/doctorsClinics/{clinic}")
+    @Path("/{license}/clinics/{clinic}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#license, 'doctor')")
     public Response deleteDoctorClinic(@PathParam("license") final String license,
@@ -489,7 +491,7 @@ public class DoctorController {
 
     //TODO preguntar a xime como era el tema de la semana inicial a mostrar y hasta donde se podia avanzar
     @GET
-    @Path("/{license}/doctorsClinics/{clinic}")
+    @Path("/{license}/clinics/{clinic}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getDoctorClinic(@PathParam("license") final String license,
                                     @PathParam("clinic") final Integer clinic,
@@ -497,16 +499,11 @@ public class DoctorController {
                                     @Context Request request) {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
 
-        String prev = messageSource.getMessage("previous",null, Locale.getDefault());
-        String next = messageSource.getMessage("next",null, Locale.getDefault());
-        String weekStr = messageSource.getMessage("week", null, Locale.getDefault());
 
         if(dc != null) {
             List<List<DoctorHourDto>> doctorWeek = getDoctorWeek(dc, week);
             DoctorClinicDto dto = DoctorClinicDto.fromDoctorClinic(dc, uriInfo, doctorWeek);
             return CacheHelper.handleResponse(dto, doctorClinicCaching, "doctorsClinic", request)
-                    .link(uriInfo.getAbsolutePathBuilder().queryParam(weekStr, week - 1).build(), prev)
-                    .link(uriInfo.getAbsolutePathBuilder().queryParam(weekStr, week + 1).build(), next)
                     .build();
             /*return Response.ok(DoctorClinicDto.fromDoctorClinic(dc, uriInfo, doctorWeek))
                     .link(uriInfo.getAbsolutePathBuilder().queryParam("week", week - 1).build(),"prev")
@@ -517,7 +514,7 @@ public class DoctorController {
     }
 
     @GET
-    @Path("/{license}/doctorsClinics/{clinic}/schedules")
+    @Path("/{license}/clinics/{clinic}/schedules")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getDoctorClinicSchedules(@PathParam("license") final String license,
                                              @PathParam("clinic") final Integer clinic,
@@ -534,7 +531,7 @@ public class DoctorController {
     }
 
     @DELETE
-    @Path("/{license}/doctorsClinics/{clinic}/schedules")
+    @Path("/{license}/clinics/{clinic}/schedules")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#license, 'doctor')")
     public Response deleteDoctorClinicSchedule(@PathParam("license") final String license,

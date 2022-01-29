@@ -10,16 +10,34 @@ function ClinicPrepaids() {
 
     let {id} = useParams()
     const [prepaidClinics, setPrepaidClinics] = useState([])
+    const [allPrepaidClinics, setAllPrepaidClinics] = useState([])
     const [allPrepaids, setAllPrepaids] = useState([])
     const [clinic, setClinic] = useState({})
     const [message, setMessage] = useState("")
+    const [page, setPage] = useState(0)
+    const [maxPage, setMaxPage] = useState(0)
+
     const navigate = useNavigate()
+
+    const fetchAllClinicPrepaids = async () => {
+        const response = await ClinicCalls.getAllClinicPrepaids(id);
+        if (response && response.ok) {
+            setAllPrepaidClinics(response.data)
+            setMessage("")
+        }
+        if(response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/login')
+        }
+    }
 
     const fetchClinicPrepaids = async () => {
         const response = await ClinicCalls.getClinicPrepaids(id);
         if (response && response.ok) {
             setPrepaidClinics(response.data)
             setMessage("")
+            setMaxPage(response.headers.xMaxPage)
         }
         if(response.status === 401) {
             localStorage.removeItem('token')
@@ -60,6 +78,7 @@ function ClinicPrepaids() {
 
     useEffect(async () => {
         await fetchClinicPrepaids()
+        await fetchAllClinicPrepaids()
         await fetchPrepaids()
         await fetchClinic(id)
     }, [])
@@ -68,6 +87,7 @@ function ClinicPrepaids() {
         const response = await ClinicCalls.addClinicPrepaid(id, newPrepaid)
         if (response && response.ok) {
             setPrepaidClinics([...prepaidClinics, {name: newPrepaid}])
+            setAllPrepaidClinics([...allPrepaidClinics, {name: newPrepaid}])
         }
         if(response.status === 401) {
             localStorage.removeItem('token')
@@ -80,6 +100,7 @@ function ClinicPrepaids() {
         const response = await ClinicCalls.deleteClinicPrepaid(id, name)
         if (response && response.ok) {
             setPrepaidClinics(prepaidClinics.filter(prepaid => prepaid.name !== name))
+            setAllPrepaidClinics(allPrepaidClinics.filter(prepaid => prepaid.name !== name))
         }
 
         if(response.status === 401) {
@@ -89,6 +110,31 @@ function ClinicPrepaids() {
         }
 
     }
+
+    // const nextPage = async () => {
+    //     const newPage = page + 1
+    //     setPage(newPage)
+    //     await fetchLocations(newPage)
+    // }
+    // const prevPage = async () => {
+    //     const newPage = page - 1
+    //     setPage(newPage)
+    //     await fetchLocations(newPage)
+    // }
+    //
+    // const renderPrevButton = () => {
+    //     if (page !== 0) {
+    //         return <Button className="remove-button doc-button-color shadow-sm"
+    //                        onClick={() => prevPage()}>Prev</Button>
+    //     }
+    // }
+    //
+    // const renderNextButton = () => {
+    //     if (page < maxPage) {
+    //         return <Button className="remove-button doc-button-color shadow-sm"
+    //                        onClick={() => nextPage()}>Next</Button>
+    //     }
+    // }
 
     return (
         <>
@@ -102,13 +148,13 @@ function ClinicPrepaids() {
             )}
             <ClinicPrepaidAddModal
                 handleAdd={handleAdd}
-                prepaids={prepaidClinics.map(prepaid => prepaid.name)}
+                prepaids={allPrepaidClinics.map(prepaid => prepaid.name)}
                 allPrepaids={allPrepaids.map(prepaid => prepaid.name)}
                 id={id}
                 navigate={{navigate}}
             />
             <Container>
-                <div className="admin-info-container">
+                <div className="admin-info-container admin-clinic-prepaid-container">
                     {prepaidClinics.map((prepaidClinics, index) => {
                         return (
                             <Card className="mb-3 shadow"

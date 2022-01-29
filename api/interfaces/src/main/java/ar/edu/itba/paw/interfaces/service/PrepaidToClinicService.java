@@ -16,5 +16,7 @@ public interface PrepaidToClinicService extends PaginationService<PrepaidToClini
 
     List<Prepaid> getPrepaidsForClinic(int clinic, int page);
 
+    List<Prepaid> getPrepaidsForClinic(int clinic);
+
     long deletePrepaidFromClinic(String prepaid, int clinic) throws EntityNotFoundException;
 }

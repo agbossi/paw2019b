@@ -6,6 +6,7 @@ import {PREPAIDS_PATH} from "./Constants.js";
 const getClinics = async (pag) => api.get(cons.CLINICS_PATH + "?" + cons.PAGE_QUERY + pag);
 const getClinic = async (id) => api.get(cons.CLINICS_PATH + "/" + id)
 const getClinicPrepaids = async (id) => api.get(cons.CLINICS_PATH + "/" + id + PREPAIDS_PATH)
+const getAllClinicPrepaids = async (id) => api.get(cons.CLINICS_PATH + "/" + id + PREPAIDS_PATH + cons.ALL_PATH )
 const addClinic = async (data) => api.post(
     cons.CLINICS_PATH,
     data,
@@ -32,6 +33,7 @@ export default {
     getClinics,
     getClinic,
     getClinicPrepaids,
+    getAllClinicPrepaids,
     addClinic,
     addClinicPrepaid,
     editClinic,

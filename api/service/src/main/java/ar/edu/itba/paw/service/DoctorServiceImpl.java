@@ -7,6 +7,7 @@ import ar.edu.itba.paw.interfaces.service.ImageService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
+import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +38,7 @@ public class DoctorServiceImpl implements DoctorService {
             throws DuplicateEntityException {
         Doctor isDoctor = getDoctorByLicense(license);
         if (isDoctor != null) throw new DuplicateEntityException("license-in-use");
+        if (userService.findUserByEmail(email) != null) throw new DuplicateEntityException("email-in-use");
         User user = userService.createUser(firstName, lastName, password, email);
         return doctorDao.createDoctor(specialty, license, phoneNumber, user);
     }
@@ -90,8 +92,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Transactional
     @Override
-    public long deleteDoctor(String license) {
+    public long deleteDoctor(String license) throws EntityNotFoundException {
         Doctor doc = getDoctorByLicense(license);
+        if (doc == null) throw new EntityNotFoundException("doctor");
         return userService.deleteUser(doc.getEmail());
     }
 
