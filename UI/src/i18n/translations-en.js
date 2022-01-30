@@ -82,5 +82,6 @@ export const TRANSLATION_EN = {
     deleteButton: "Delete",
     prevButton: "Prev",
     nextButton: "Next",
-    closeButton: "Close"
+    closeButton: "Close",
+    fieldRequired: "Field Required"
 }

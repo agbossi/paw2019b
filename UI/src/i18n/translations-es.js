@@ -81,6 +81,7 @@ export const TRANSLATION_ES = {
     deleteButton: "Eliminar",
     prevButton: "Anterior",
     nextButton: "Siguiente",
-    closeButton: "Cerrar"
+    closeButton: "Cerrar",
+    fieldRequired: "Campo obligatorio"
 
 }

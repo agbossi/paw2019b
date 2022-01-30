@@ -8,9 +8,12 @@ import ApiCalls from "../../api/apiCalls"
 import "./Login.css"
 import './AdminHome.css';
 import '../CardContainer.css'
+import '../../i18n/i18n'
 
 import {useLocation, useNavigate} from "react-router-dom";
-import alert from "bootstrap/js/src/alert";
+import {useTranslation} from "react-i18next";
+import {getMessage} from "@testing-library/jest-dom/dist/utils";
+
 
 const required = (value) => {
     if (!value) {
@@ -25,8 +28,9 @@ const required = (value) => {
 const WrappedLogin = props => {
     const navigate = useNavigate()
     const location = useLocation()
+    const {t} = useTranslation()
 
-    return <Login navigate={navigate} location={location} {...props} />
+    return <Login navigate={navigate} t={t} location={location} {...props} />
 }
 
 class Login extends Component {
@@ -45,7 +49,6 @@ class Login extends Component {
         };
 
     }
-
 
     onChangeEmail(e) {
         this.setState({
@@ -125,7 +128,7 @@ class Login extends Component {
                         }}
                     >
                         <div className="form-group" className="labels mb-4">
-                            <label htmlFor="email" >Email</label>
+                            <label htmlFor="email" >{this.props.t("FORM.email")}</label>
                             <Input
                                 type="email"
                                 className="form-contro text-fields"
@@ -137,7 +140,7 @@ class Login extends Component {
                         </div>
 
                         <div className="form-group" className="labels">
-                            <label htmlFor="password">Password</label>
+                            <label htmlFor="password">{this.props.t("FORM.password")}</label>
                             <Input
                                 type="password"
                                 className="form-control text-fields"
@@ -156,7 +159,7 @@ class Login extends Component {
                                 {this.state.loading && (
                                     <span className="spinner-border spinner-border-sm"/>
                                 )}
-                                <span>Login</span>
+                                <span>{this.props.t("NAVBAR.login")}</span>
                             </button>
                         </div>
 
