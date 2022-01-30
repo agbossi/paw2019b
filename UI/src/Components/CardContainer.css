@@ -24,8 +24,9 @@
 .admin-clinic-prepaid-container {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(4, 1fr);
-    height: 65vh;
+    height: 75vh;
 }
+
 
 .background {
     background-color: #d9d9d9;

@@ -3,6 +3,8 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.LocationDao;
 import ar.edu.itba.paw.interfaces.service.LocationService;
 import ar.edu.itba.paw.model.Location;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
+import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +20,9 @@ public class LocationServiceImpl implements LocationService {
 
     @Transactional
     @Override
-    public Location createLocation(String name) {
+    public Location createLocation(String name) throws DuplicateEntityException {
+        Location location = getLocationByName(name);
+        if (location != null) throw new DuplicateEntityException("location-exists");
         return locationDao.createLocation(name);
     }
 
@@ -51,7 +55,9 @@ public class LocationServiceImpl implements LocationService {
 
     @Transactional
     @Override
-    public long deleteLocation(String name) {
+    public long deleteLocation(String name) throws EntityNotFoundException {
+        Location location = getLocationByName(name);
+        if (location == null) throw new EntityNotFoundException("location");
         return locationDao.deleteLocation(name);
     }
 }

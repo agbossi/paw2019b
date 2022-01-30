@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.LocationService;
 import ar.edu.itba.paw.model.Location;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
+import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import ar.edu.itba.paw.webapp.caching.LocationCaching;
 import ar.edu.itba.paw.webapp.dto.LocationDto;;
 import ar.edu.itba.paw.webapp.form.LocationForm;
@@ -33,6 +35,7 @@ public class LocationController {
     @Context
     private UriInfo uriInfo;
 
+    //TODO: Use: for admin locations
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getLocations(@QueryParam("page") @DefaultValue("0") Integer page,
@@ -65,18 +68,20 @@ public class LocationController {
     }
 
 
+    //TODO: Use: for admin to delete location
     @DELETE
     @Path("/{name}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response deleteLocation(@PathParam("name") final String name) {
+    public Response deleteLocation(@PathParam("name") final String name) throws EntityNotFoundException {
         locationService.deleteLocation(name);
         return Response.noContent().build();
     }
 
+    // TODO: Use: for admin to add loaction
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createLocation(@Valid final LocationForm form) {
+    public Response createLocation(@Valid final LocationForm form) throws DuplicateEntityException {
         Location location = locationService.createLocation(form.getName());
         return Response.created(uriInfo.getAbsolutePathBuilder().
                 path(location.getLocationName()).build()).build();

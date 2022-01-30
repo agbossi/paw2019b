@@ -1,5 +1,6 @@
 import {Dropdown} from "react-bootstrap";
 import React, {useState} from "react";
+import './DropDownList.css'
 
 function DropDownList(props) {
 
@@ -10,7 +11,7 @@ function DropDownList(props) {
             <Dropdown.Toggle  id={props.id} variant="secondary">
                 {'Select ' + props.elementType}
             </Dropdown.Toggle>
-            <Dropdown.Menu variant="dark">
+            <Dropdown.Menu variant="dark" className="dropdown-list">
                 {props.iterable.map(element => {
                     if(element === selectedElement) {
                         return <Dropdown.Item

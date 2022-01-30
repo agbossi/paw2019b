@@ -2,7 +2,7 @@ import api from "./index";
 import * as cons from './Constants.js'
 import {PREPAIDS_PATH} from "./Constants.js";
 
-
+// Clinic calls and clinic prepaids
 const getClinics = async (pag) => api.get(cons.CLINICS_PATH + "?" + cons.PAGE_QUERY + pag);
 const getClinic = async (id) => api.get(cons.CLINICS_PATH + "/" + id)
 const getClinicPrepaids = async (id, pag) =>

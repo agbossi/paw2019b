@@ -1,64 +1,52 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {Button, Modal, Form} from "react-bootstrap";
 
-class SinglePropertyAddModal extends Component {
+function SinglePropertyAddModal(props) {
+    const [show, setShow] = useState(false);
+    const [newProperty, setNewProperty] = useState('');
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            show: false,
-            newProperty: ''
-        }
+    const handleShow = () => {
+        setShow(!show)
     }
 
-
-    handleShow = () => {
-        this.setState({
-            show: !this.state.show
-        })
+    const handleAdd = (newProp) => {
+        props.handleAdd(newProp)
+        setNewProperty("")
+        handleShow()
     }
 
-    handleAdd = () => {
-        this.props.handleAdd({"name": this.state.newProperty})
-        this.handleShow()
+    const onChange = (event) => {
+        setNewProperty(event.target.value)
     }
 
-    onChange = (event) => {
-        this.setState({
-            newProperty: event.target.value
-        })
-    }
-
-    render() {
-        return (
-            <>
-                <Button variant="outline-secondary" onClick={this.handleShow} size="lg" className="add-margin">
-                    {'Add ' +  this.props.property}
-                </Button>
-                <Modal show={this.state.show} onHide={this.handleShow}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{'Add ' +  this.props.property}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form.Group className="mb-3" controlId="name">
-                            <Form.Label>{this.props.property + ' name'}</Form.Label>
-                            <Form.Control value={this.state.newProperty}
-                                      placeholder={'Write a ' + this.props.property + ' name'}
-                                      onChange={this.onChange}/>
-                        </Form.Group>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={this.handleShow}>
-                            Close
-                        </Button>
-                        <Button variant="primary" onClick={this.handleAdd}>
-                            Add
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            </>
-        )
-    }
+    return (
+        <>
+            <Button variant="outline-secondary" onClick={handleShow} size="lg" className="add-margin">
+                {'Add ' +  props.property}
+            </Button>
+            <Modal show={show} onHide={handleShow}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{'Add ' + props.property}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form.Group className="mb-3" controlId="name">
+                        <Form.Label>{props.property + ' name'}</Form.Label>
+                        <Form.Control value={newProperty}
+                                  placeholder={'Write a ' + props.property + ' name'}
+                                  onChange={onChange}/>
+                    </Form.Group>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleShow}>
+                        Close
+                    </Button>
+                    <Button className="doc-button-color" onClick={() => handleAdd({name: newProperty})}>
+                        Add
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
 }
 
 export default SinglePropertyAddModal;
