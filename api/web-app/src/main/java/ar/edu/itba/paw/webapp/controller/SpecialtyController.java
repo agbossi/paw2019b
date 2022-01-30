@@ -2,6 +2,9 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.SpecialtyService;
 import ar.edu.itba.paw.model.Specialty;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
+import ar.edu.itba.paw.model.exceptions.EntityDependencyException;
+import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import ar.edu.itba.paw.webapp.caching.SpecialtyCaching;
 import ar.edu.itba.paw.webapp.dto.SpecialtyDto;
 import ar.edu.itba.paw.webapp.form.SpecialtyForm;
@@ -29,6 +32,7 @@ public class SpecialtyController {
     @Autowired
     private SpecialtyCaching specialtyCaching;
 
+    //TODO: Use: for admin to see specialties
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getSpecialties(@QueryParam("page") @DefaultValue("0") Integer page,
@@ -44,13 +48,6 @@ public class SpecialtyController {
                 .header("Access-Control-Expose-Headers", "X-max-page")
                 .header("X-max-page", maxPage)
                 .build();
-
-        /*return Response.ok(new GenericEntity<List<SpecialtyDto>>(specialties) {})
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(), "first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page - 1).build(), "prev")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(), "next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(), "last")
-                .build(); */
     }
 
     // TODO: Use: for adding doctor
@@ -66,18 +63,21 @@ public class SpecialtyController {
                 .build();
     }
 
+    // TODO: Use: for admin to delete specialty
     @DELETE
     @Path("/{specialty}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response deleteSpecialty(@PathParam("specialty") final String specialty) {
+    public Response deleteSpecialty(@PathParam("specialty") final String specialty)
+            throws EntityNotFoundException, EntityDependencyException {
         specialtyService.deleteSpecialty(specialty);
         return Response.noContent().build();
     }
 
+    //TODO: Use: for admin to add specialty
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createSpecialty(@Valid final SpecialtyForm form) {
+    public Response createSpecialty(@Valid final SpecialtyForm form) throws DuplicateEntityException {
         Specialty specialty = specialtyService.createSpecialty(form.getName());
         return Response.created(uriInfo.getAbsolutePathBuilder().
                 path(specialty.getSpecialtyName()).build()).build();

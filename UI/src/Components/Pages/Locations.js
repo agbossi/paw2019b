@@ -40,6 +40,11 @@ function Locations(props){
             localStorage.removeItem('role')
             navigate('/login')
         }
+        if (response.status === 409) {
+            if (response.data === "clinics-dependency") {
+                setMessage("Could not delete location: One or more clinics are still in this location")
+            }
+        }
     }
 
     const handleAdd = async (newLocation) => {

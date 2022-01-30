@@ -47,7 +47,7 @@ function Doctors() {
         } else if (response.status === 409) {
             if (response.data === 'license-in-use')
                 setMessage("Licence already registered")
-            if (response.data === 'emain-in-use')
+            if (response.data === 'email-in-use')
                 setMessage("Email already registered")
         } else if (response.status === 404) {
             if (response.data === "specialty-not-found") {

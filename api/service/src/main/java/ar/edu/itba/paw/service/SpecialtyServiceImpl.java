@@ -1,9 +1,14 @@
 package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.SpecialtyDao;
+import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.interfaces.service.PaginationService;
 import ar.edu.itba.paw.interfaces.service.SpecialtyService;
+import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Specialty;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
+import ar.edu.itba.paw.model.exceptions.EntityDependencyException;
+import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,9 +22,14 @@ public class SpecialtyServiceImpl implements SpecialtyService {
     @Autowired
     private SpecialtyDao specialtyDao;
 
+    @Autowired
+    private DoctorService doctorService;
+
     @Transactional
     @Override
-    public Specialty createSpecialty(String name){
+    public Specialty createSpecialty(String name) throws DuplicateEntityException {
+        Specialty specialty = getSpecialtyByName(name);
+        if (specialty != null) throw new DuplicateEntityException("specialty-exists");
         return specialtyDao.createSpecialty(name);
     }
 
@@ -54,7 +64,11 @@ public class SpecialtyServiceImpl implements SpecialtyService {
 
     @Transactional
     @Override
-    public long deleteSpecialty(String name) {
+    public long deleteSpecialty(String name) throws EntityNotFoundException, EntityDependencyException {
+        Specialty specialty = getSpecialtyByName(name);
+        if (specialty == null) throw new EntityNotFoundException("specialty");
+        List<Doctor> doctorsWithSpecialty = doctorService.getDoctorBySpecialty(specialty);
+        if (!doctorsWithSpecialty.isEmpty()) throw new EntityDependencyException("doctors");
         return specialtyDao.deleteSpecialty(name);
     }
 }

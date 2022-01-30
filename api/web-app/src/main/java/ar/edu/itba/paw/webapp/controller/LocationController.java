@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.LocationService;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
+import ar.edu.itba.paw.model.exceptions.EntityDependencyException;
 import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import ar.edu.itba.paw.webapp.caching.LocationCaching;
 import ar.edu.itba.paw.webapp.dto.LocationDto;;
@@ -72,7 +73,8 @@ public class LocationController {
     @DELETE
     @Path("/{name}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response deleteLocation(@PathParam("name") final String name) throws EntityNotFoundException {
+    public Response deleteLocation(@PathParam("name") final String name)
+            throws EntityNotFoundException, EntityDependencyException {
         locationService.deleteLocation(name);
         return Response.noContent().build();
     }
