@@ -58,32 +58,36 @@ function Doctors() {
                 setMessage("Passwords where mismatched")
             }
         }
-        else {
-            console.error("could not add doctor: ", response.status)
-        }
     }
 
     const deleteDoctors = async (license) => {
         const response = await DoctorCalls.deleteDoctor(license)
-        if (response && response.status === 204)
+        if (response && response.status === 204) {
             await fetchDoctors(page)
+            setMessage("")
+        }
         else if (response.status === 404) {
             if (response.data === "doctor-not-found") {
                 setMessage("No doctor found to delete")
             }
+        } else if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/login')
         }
-            console.error("could not delete doctor: ", response.status)
     }
 
     const nextPage = async () => {
         const newPage = page + 1
         setPage(newPage)
+        setMessage("")
         await fetchDoctors(newPage)
 
     }
     const prevPage = async () => {
         const newPage = page - 1
         setPage(newPage)
+        setMessage("")
         await fetchDoctors(newPage)
     }
 

@@ -4,6 +4,8 @@ import ar.edu.itba.paw.interfaces.dao.ClinicDao;
 import ar.edu.itba.paw.interfaces.service.ClinicService;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
+import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,8 @@ public class ClinicServiceImpl implements ClinicService {
 
     @Transactional
     @Override
-    public Clinic createClinic(String name, String address, Location location) {
+    public Clinic createClinic(String name, String address, Location location) throws DuplicateEntityException {
+        if (clinicExists(name, address, location.getLocationName())) throw new DuplicateEntityException("clinic-exists");
         return clinicDao.createClinic(name, address, location);
     }
 
@@ -45,7 +48,7 @@ public class ClinicServiceImpl implements ClinicService {
 
     @Override
     public boolean clinicExists(String name, String address, String location) {
-        return clinicDao.clinicExists(name,address, new Location(location));
+        return clinicDao.clinicExists(name, address, new Location(location));
     }
 
     @Transactional
@@ -69,7 +72,9 @@ public class ClinicServiceImpl implements ClinicService {
 
     @Transactional
     @Override
-    public long deleteClinic(int id) {
+    public long deleteClinic(int id) throws EntityNotFoundException {
+        Clinic clinic = getClinicById(id);
+        if(clinic == null) throw new EntityNotFoundException("clinic");
         return clinicDao.deleteClinic(id);
     }
 

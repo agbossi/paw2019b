@@ -40,21 +40,45 @@ function Clinics(props) {
     }, [])
 
     const deleteClinic = async (id) => {
-        const response = await ClinicCalls.deleteClinic(id)
+        const response = await ClinicCalls.deleteClinic(id);
         if (response && response.ok)
-            setClinics(clinics.filter(clinic => clinic.id !== id))
+            await fetchClinics(page);
+        if (response.status === 404) {
+            if (response.data === "clinic=not-found")
+                setMessage("No clinic found to delete")
+        } else if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/login')
+        }
     }
 
     const handleAdd = async (newClinic) => {
-        console.log("adding clinic")
-        const response = await ClinicCalls.addClinic(newClinic);
+        const data = {
+            name: newClinic.name,
+            address: newClinic.address,
+            location: newClinic.location
+        }
+        const response = await ClinicCalls.addClinic(data);
         setShow(false)
-        if (response && response.ok)
+        if (response && response.ok) {
             await fetchClinics(page);
+            setMessage("")
+        }
         if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
             navigate('/login')
+        }
+        if (response.status === 404) {
+            if (response.data === "location-not-found") {
+                setMessage("Location chosen does not exist")
+            }
+        }
+        if (response.status === 409) {
+            if (response.data === "clinic-exists") {
+                setMessage("Clinic already exists")
+            }
         }
     }
 
@@ -65,18 +89,20 @@ function Clinics(props) {
             location: editedClinic.location
         }
         const response = await ClinicCalls.editClinic(editedClinic.id, data)
-        if (response && response.ok){
+        if (response && response.ok) {
             await fetchClinics(page);
-            let index = editIndex
-            let clinicList = clinics
-            clinicList[index] = editedClinic
-            setClinics(clinicList)
             setShow(false)
+            setMessage("")
         }
         if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
             navigate('/login')
+        }
+        if (response.status === 404) {
+            if (response.data === "clinic-not-found") {
+                setMessage("No clinic found to edit")
+            }
         }
     }
 
@@ -104,12 +130,14 @@ function Clinics(props) {
     const nextPage = async () => {
         const newPage = page + 1
         await setPage(newPage)
+        setMessage("")
         await fetchClinics(newPage)
 
     }
     const prevPage = async () => {
         const newPage = page - 1
         await setPage(newPage)
+        setMessage("")
         await fetchClinics(newPage)
     }
 
@@ -135,6 +163,13 @@ function Clinics(props) {
                     className="add-margin">
                 Add Clinic
             </Button>
+            {message && (
+                <div className="form-group">
+                    <div className="alert alert-danger" role="alert">
+                        {message}
+                    </div>
+                </div>
+            )}
             {show && <ClinicEditModal show={show}
                              clinic={editableClinic}
                              handleAdd={handleAdd}
@@ -159,7 +194,7 @@ function Clinics(props) {
                                       to={'/admin/clinics/' + clinic.id + '/prepaids'}>See Prepaids
                                 </Link>
                                 <div className="buttons-div">
-                                    <Button className="edit-remove-button doc-button-color shadow-sm"
+                                    <Button className="edit-remove-button remove-button-color shadow-sm"
                                             onClick={() => deleteClinic(clinic.id)}>
                                     Delete
                                     </Button>

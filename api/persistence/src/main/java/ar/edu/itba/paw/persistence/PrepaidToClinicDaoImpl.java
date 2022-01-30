@@ -88,6 +88,11 @@ public class PrepaidToClinicDaoImpl implements PrepaidToClinicDao {
     }
 
     @Override
+    public int maxAvailablePagePerClinic(int id) {
+        return (int) (Math.ceil(( ((double)getPrepaidsForClinic(id).size()) / (double)MAX_PREPAID_TO_CLINICS_PER_PAGE)));
+    }
+
+    @Override
     public PrepaidToClinic addPrepaidToClinic(Prepaid prepaid, Clinic clinic){
         PrepaidToClinic prepaidToClinic = new PrepaidToClinic(clinic, prepaid);
         entityManager.persist(prepaidToClinic);

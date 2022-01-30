@@ -51,6 +51,7 @@ public class LocationController {
         return ret.build();
     }
 
+    // TODO: Use: In admin clinics
     @GET
     @Path("/all")
     @Produces(value = { MediaType.APPLICATION_JSON })

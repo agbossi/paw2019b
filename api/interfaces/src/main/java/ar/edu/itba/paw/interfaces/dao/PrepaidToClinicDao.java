@@ -18,4 +18,6 @@ public interface PrepaidToClinicDao extends PaginationDao<PrepaidToClinic> {
     List<Prepaid> getPrepaidsForClinic(int clinic);
 
     long deletePrepaidFromClinic(String prepaid, int clinic);
+
+    int maxAvailablePagePerClinic(int id);
 }

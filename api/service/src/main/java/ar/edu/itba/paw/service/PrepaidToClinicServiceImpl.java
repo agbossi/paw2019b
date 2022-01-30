@@ -54,7 +54,13 @@ public class PrepaidToClinicServiceImpl implements PrepaidToClinicService {
         Clinic clinic = clinicService.getClinicById(clinicId);
         if (clinic == null) throw new EntityNotFoundException("clinic");
         if (prepaid == null) throw new EntityNotFoundException("prepaid");
+        if (!clinicHasPrepaid(prepaidName, clinicId)) throw new EntityNotFoundException("clinic-prepaid");
         return prepaidToClinicDao.deletePrepaidFromClinic(prepaidName, clinicId);
+    }
+
+    @Override
+    public int maxAvailablePagePerClinic(int id) {
+        return prepaidToClinicDao.maxAvailablePagePerClinic(id);
     }
 
     @Override

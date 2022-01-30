@@ -54,6 +54,7 @@ public class PrepaidController {
                 .build(); */
     }
 
+    //TODO: Use: admin for adding prepaid to clinic
     @GET
     @Path("/all")
     @Produces(value = { MediaType.APPLICATION_JSON })

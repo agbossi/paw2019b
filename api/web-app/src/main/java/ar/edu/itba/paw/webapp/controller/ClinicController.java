@@ -8,6 +8,7 @@ import ar.edu.itba.paw.interfaces.service.PrepaidToClinicService;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
 import ar.edu.itba.paw.model.Prepaid;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
 import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import ar.edu.itba.paw.webapp.caching.ClinicCaching;
 import ar.edu.itba.paw.webapp.caching.PrepaidCaching;
@@ -50,6 +51,7 @@ public class ClinicController {
     @Context
     private UriInfo uriInfo;
 
+    // TODO: Use: admin clinics
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getClinics(@QueryParam("page") @DefaultValue("0") Integer page,
@@ -73,33 +75,33 @@ public class ClinicController {
                 .build(); */
     }
 
-    //TODO me esta devolviendo ids negativos wtf
+    //TODO: Use: admin adds clinic
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response createClinic(final ClinicForm clinicForm) {
+    public Response createClinic(final ClinicForm clinicForm) throws EntityNotFoundException, DuplicateEntityException {
         Location location = locationService.getLocationByName(clinicForm.getLocation());
-        if (location == null) return Response.status(Response.Status.BAD_REQUEST).entity("location-not-found").build();
-
+        if (location == null) throw new EntityNotFoundException("location");
         Clinic clinic = clinicService.createClinic(clinicForm.getName(), clinicForm.getAddress(), location);
 
         return Response.created(uriInfo.getAbsolutePathBuilder()
                 .path(String.valueOf(clinic.getId())).build()).build();
     }
 
+    // TODO: Use: admin edits clinic
     @PUT
     @Path("{clinicId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response updateClinic(@PathParam("clinicId") final Integer clinicId, final ClinicForm clinicForm) {
+    public Response updateClinic(@PathParam("clinicId") final Integer clinicId, final ClinicForm clinicForm)
+            throws EntityNotFoundException {
         Clinic clinic = clinicService.getClinicById(clinicId);
-        if(clinic != null) {
-            clinicService.updateClinic(clinicId, clinicForm.getName(), clinicForm.getAddress(), clinicForm.getLocation());
-            return Response.noContent().build();
-        }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        if(clinic == null) throw new EntityNotFoundException("clinic");
+        clinicService.updateClinic(clinicId, clinicForm.getName(), clinicForm.getAddress(), clinicForm.getLocation());
+        return Response.noContent().build();
     }
 
+    // TODO: Use: admin to get clinic's prepaids.
     @GET
     @Path("{clinicId}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -115,36 +117,37 @@ public class ClinicController {
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
+    //TODO: Use: admin delete clinic
     @DELETE
     @Path("{clinicId}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response deleteClinic(@PathParam("clinicId") final Integer clinicId) {
+    public Response deleteClinic(@PathParam("clinicId") final Integer clinicId) throws EntityNotFoundException {
         clinicService.deleteClinic(clinicId);
         return Response.noContent().build();
     }
 
+    //TODO: Use: admin get paginated clinic's prepaids
     @GET
     @Path("{clinicId}/prepaids")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getClinicPrepaids(@PathParam("clinicId") final Integer clinicId,
                                       @QueryParam("page") @DefaultValue("0") Integer page,
-                                      @Context Request request) {
+                                      @Context Request request) throws EntityNotFoundException {
         page = (page < 0) ? 0 : page;
 
         Clinic clinic = clinicService.getClinicById(clinicId);
-        if(clinic != null) {
-            List<PrepaidDto> prepaids = prepaidToClinicService.getPrepaidsForClinic(clinicId, page)
-                    .stream().map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
-            int maxPage = prepaidToClinicService.maxAvailablePage();
-            return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {},
-                    "prepaids", request)
-                    .header("Access-Control-Expose-Headers", "X-max-page")
-                    .header("X-max-page", maxPage).build();
-            //return Response.ok(new GenericEntity<List<PrepaidDto>>(prepaids) {}).build();
-        }
-        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("clinic-not-found").build();
+        if(clinic == null) throw new EntityNotFoundException("clinic");
+        List<PrepaidDto> prepaids = prepaidToClinicService.getPrepaidsForClinic(clinicId, page)
+                .stream().map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
+        int maxPage = prepaidToClinicService.maxAvailablePagePerClinic(clinicId);
+        return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {},
+                "prepaids", request)
+                .header("Access-Control-Expose-Headers", "X-max-page")
+                .header("X-max-page", maxPage).build();
+
     }
 
+    // TODO: Use: admin get all prepaids for clinic's prepaids
     @GET
     @Path("{clinicId}/prepaids/all")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -152,16 +155,15 @@ public class ClinicController {
                                       @Context Request request) throws EntityNotFoundException {
 
         Clinic clinic = clinicService.getClinicById(clinicId);
-        if(clinic != null) {
-            List<PrepaidDto> prepaids = prepaidToClinicService.getPrepaidsForClinic(clinicId)
-                    .stream().map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
-            return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {},
-                    "prepaids", request).build();
-            //return Response.ok(new GenericEntity<List<PrepaidDto>>(prepaids) {}).build();
-        }
-        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).entity("clinic-not-found").build();
+        if(clinic == null) throw new EntityNotFoundException("clinic");
+        List<PrepaidDto> prepaids = prepaidToClinicService.getPrepaidsForClinic(clinicId)
+                .stream().map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
+        return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {},
+                "prepaids", request).build();
+
     }
 
+    //TODO: Use: admin adding prepaid to clinic
     @POST
     @Path("{clinicId}/prepaids/{prepaidId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -179,7 +181,8 @@ public class ClinicController {
     @Path("{clinicId}/prepaids/{prepaidId}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response removePrepaidFromClinic(@PathParam("clinicId") final Integer clinicId,
-                                            @PathParam("prepaidId") final String prepaid) throws EntityNotFoundException {
+                                            @PathParam("prepaidId") final String prepaid)
+            throws EntityNotFoundException {
         prepaidToClinicService.deletePrepaidFromClinic(prepaid, clinicId);
         return Response.noContent().build();
 
