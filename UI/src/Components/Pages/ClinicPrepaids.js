@@ -5,6 +5,8 @@ import React, { useState, useEffect } from 'react';
 import ClinicPrepaidAddModal from "../Modals/ClinicPrepaidAddModal";
 import ClinicCalls from "../../api/ClinicCalls";
 import PrepaidCalls from "../../api/PrepaidCalls";
+import {useTranslation} from "react-i18next";
+import "../../i18n/i18n"
 
 function ClinicPrepaids() {
 
@@ -16,6 +18,7 @@ function ClinicPrepaids() {
     const [message, setMessage] = useState("")
     const [page, setPage] = useState(0)
     const [maxPage, setMaxPage] = useState(0)
+    const { t } = useTranslation();
 
     const navigate = useNavigate()
 
@@ -26,7 +29,7 @@ function ClinicPrepaids() {
         }
         if (response.status === 404) {
             if (response.data === "clinic-not-found") {
-                setMessage("Clinic does not exist")
+                setMessage("errors.clinicNotFound")
             }
         }
 
@@ -40,7 +43,7 @@ function ClinicPrepaids() {
         }
         if (response.status === 404) {
             if (response.data === "clinic-not-found") {
-                setMessage("Clinic does not exist")
+                setMessage("errors.clinicNotFound")
             }
         }
 
@@ -60,7 +63,7 @@ function ClinicPrepaids() {
             setMessage("")
         }
         if (response.status === 404) {
-            setMessage("Clinic does not exists")
+            setMessage("errors.clinicNotFound")
         }
     }
 
@@ -85,10 +88,10 @@ function ClinicPrepaids() {
         }
         if (response.status === 404) {
             if (response.data === "prepaid-not-found") {
-                setMessage("Prepaid chosen does not exist")
+                setMessage("errors.prepaidNotFound")
             }
             if (response.data === "clinic-not-found") {
-                setMessage("Clinic does not exist")
+                setMessage("errors.clinicNotFound")
             }
         }
     }
@@ -102,13 +105,13 @@ function ClinicPrepaids() {
         }
         if (response.status === 404) {
             if (response.data === "prepaid-not-found") {
-                setMessage("Prepaid chosen does not exist")
+                setMessage("errors.prepaidNotFound")
             }
             if (response.data === "clinic-not-found") {
-                setMessage("Clinic does not exist")
+                setMessage("errors.clinicNotFound")
             }
             if (response.data === "clinic-prepaid-not-found") {
-                setMessage("No prepaid in clinic found to delete")
+                setMessage("errors.clinicPrepaidNotFoundDelete")
             }
         }
         if(response.status === 401) {
@@ -133,24 +136,24 @@ function ClinicPrepaids() {
     const renderPrevButton = () => {
         if (page !== 0) {
             return <Button className="remove-button doc-button-color shadow-sm"
-                           onClick={() => prevPage()}>Prev</Button>
+                           onClick={() => prevPage()}>{t("prevButton")}</Button>
         }
     }
 
     const renderNextButton = () => {
         if (page < maxPage - 1) {
             return <Button className="remove-button doc-button-color shadow-sm"
-                           onClick={() => nextPage()}>Next</Button>
+                           onClick={() => nextPage()}>{t("nextButton")}</Button>
         }
     }
 
     return (
         <>
-            <h3 className="clinic-prepaid-title">{'Clinic ' + clinic.name}</h3>
+            <h3 className="clinic-prepaid-title">{t("CLINIC.clinic")} {clinic.name}</h3>
             {message && (
                 <div className="form-group">
                     <div className="alert alert-danger" role="alert">
-                        {message}
+                        {t(message)}
                     </div>
                 </div>
             )}
@@ -173,7 +176,7 @@ function ClinicPrepaids() {
                                 </Card.Body>
                                 <Button className="remove-button-color remove-button shadow-sm"
                                         onClick={() => deletePrepaid(prepaidClinics.name)}>
-                                    Delete
+                                    {t("deleteButton")}
                                 </Button>
                             </Card>
                         )

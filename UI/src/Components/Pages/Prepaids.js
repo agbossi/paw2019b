@@ -3,9 +3,10 @@ import {Button, Card, Container, Modal} from "react-bootstrap";
 import '../CardContainer.css'
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
 import {useNavigate} from "react-router-dom";
-import LocationCalls from "../../api/LocationCalls";
 import PrepaidCalls from "../../api/PrepaidCalls";
-import SpecialtyCalls from "../../api/SpecialtyCalls";
+import "../../i18n/i18n"
+import {useTranslation} from "react-i18next";
+
 
 function Prepaids(props) {
     const [prepaids, setPrepaids] = useState([]);
@@ -13,6 +14,7 @@ function Prepaids(props) {
     const [maxPage, setMaxPage] = useState(0)
     const navigate = useNavigate()
     const [message, setMessage] = useState("")
+    const { t } = useTranslation();
 
     const fetchPrepaids = async (pag) => {
         const response = await PrepaidCalls.getPrepaids(pag);
@@ -34,7 +36,7 @@ function Prepaids(props) {
         }
         if (response.status === 404) {
             if (response.data === "prepaid-not-found") {
-                setMessage("No prepaid found to delete")
+                setMessage("errors.prepaidNotFoundDelete")
             }
         }
         if (response.status === 401) {
@@ -55,7 +57,7 @@ function Prepaids(props) {
             navigate('/login')
         } else if (response.status === 409) {
             if (response.data === "prepaid-exists") {
-                setMessage("Prepaid already exists")
+                setMessage("errors.prepaidExists")
             }
         }
     }
@@ -76,24 +78,24 @@ function Prepaids(props) {
     const renderPrevButton = () => {
         if (page !== 0) {
             return <Button className="remove-button doc-button-color shadow-sm"
-                           onClick={() => prevPage()}>Prev</Button>
+                           onClick={() => prevPage()}>{t("prevButton")}</Button>
         }
     }
 
     const renderNextButton = () => {
         if (page < maxPage - 1) {
             return <Button className="remove-button doc-button-color shadow-sm"
-                           onClick={() => nextPage()}>Next</Button>
+                           onClick={() => nextPage()}>{t("nextButton")}</Button>
         }
     }
 
     return (
         <div className="background">
-            <SinglePropertyAddModal handleAdd={handleAdd} property={"Prepaid"}/>
+            <SinglePropertyAddModal handleAdd={handleAdd} property={t("ADMIN.prepaid")}/>
             {message && (
                 <div className="form-group">
                     <div className="alert alert-danger" role="alert">
-                        {message}
+                        {t(message)}
                     </div>
                 </div>
             )}
@@ -109,7 +111,7 @@ function Prepaids(props) {
                                 </Card.Body>
                                 <Button className="remove-button remove-button-color shadow-sm"
                                         onClick={() => deletePrepaids(prepaid.name)}>
-                                    Delete
+                                    {t("deleteButton")}
                                 </Button>
                             </Card>
                         )

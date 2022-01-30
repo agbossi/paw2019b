@@ -5,6 +5,8 @@ import ClinicEditModal from "../Modals/ClinicEditModal";
 import {Link, useNavigate} from "react-router-dom";
 import ClinicCalls from "../../api/ClinicCalls";
 import LocationCalls from "../../api/LocationCalls";
+import {useTranslation} from "react-i18next";
+import "../../i18n/i18n";
 
 function Clinics(props) {
 
@@ -18,6 +20,7 @@ function Clinics(props) {
     const [maxPage, setMaxPage] = useState(0)
     const [message, setMessage] = useState("")
     const navigate = useNavigate()
+    const { t } = useTranslation();
 
     const fetchClinics = async (pag) => {
         const response = await ClinicCalls.getClinics(pag)
@@ -44,8 +47,8 @@ function Clinics(props) {
         if (response && response.ok)
             await fetchClinics(page);
         if (response.status === 404) {
-            if (response.data === "clinic=not-found")
-                setMessage("No clinic found to delete")
+            if (response.data === "clinic-not-found")
+                setMessage("errors.clinicNotFoundDelete")
         } else if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
@@ -72,12 +75,12 @@ function Clinics(props) {
         }
         if (response.status === 404) {
             if (response.data === "location-not-found") {
-                setMessage("Location chosen does not exist")
+                setMessage("errors.locationNotFound")
             }
         }
         if (response.status === 409) {
             if (response.data === "clinic-exists") {
-                setMessage("Clinic already exists")
+                setMessage("errors.clinicsExists")
             }
         }
     }
@@ -101,7 +104,7 @@ function Clinics(props) {
         }
         if (response.status === 404) {
             if (response.data === "clinic-not-found") {
-                setMessage("No clinic found to edit")
+                setMessage("errors.clinicNotFoundEdit")
             }
         }
     }
@@ -110,10 +113,10 @@ function Clinics(props) {
         let action
         let clinic
         if (index === -1) {
-            action = "Add"
+            action = "add"
             clinic = {id: ' ', name: ' ', address: ' ', location: ' '}
         } else {
-            action = "Edit"
+            action = "edit"
             clinic = clinics[index]
         }
 
@@ -144,14 +147,14 @@ function Clinics(props) {
     const renderPrevButton = () => {
         if (page !== 0) {
             return <Button className="remove-button doc-button-color shadow-sm"
-                           onClick={() => prevPage()}>Prev</Button>
+                           onClick={() => prevPage()}>{t("prevButton")}</Button>
         }
     }
 
     const renderNextButton = () => {
         if (page < maxPage) {
             return <Button className="remove-button doc-button-color shadow-sm"
-                           onClick={() => nextPage()}>Next</Button>
+                           onClick={() => nextPage()}>{t("nextButton")}</Button>
         }
     }
 
@@ -161,12 +164,12 @@ function Clinics(props) {
                     onClick={() => handleShow(-1)}
                     size="lg"
                     className="add-margin">
-                Add Clinic
+                {t("CLINIC.addClinic")}
             </Button>
             {message && (
                 <div className="form-group">
                     <div className="alert alert-danger" role="alert">
-                        {message}
+                        {t(message)}
                     </div>
                 </div>
             )}
@@ -191,14 +194,14 @@ function Clinics(props) {
                                 </Card.Body>
                                 <Link className="btn btn-outline-dark btn-lg see-prepaid-button shadow-sm"
                                       role="button"
-                                      to={'/admin/clinics/' + clinic.id + '/prepaids'}>See Prepaids
+                                      to={'/admin/clinics/' + clinic.id + '/prepaids'}>{t("ADMIN.seePrepaids")}
                                 </Link>
                                 <div className="buttons-div">
                                     <Button className="edit-remove-button remove-button-color shadow-sm"
                                             onClick={() => deleteClinic(clinic.id)}>
-                                    Delete
+                                        {t("deleteButton")}
                                     </Button>
-                                    <Button className="btn edit-remove-button doc-button-color shadow-sm"
+                                    <Button className="btn edit-remove-button edit-button doc-button-color shadow-sm"
                                             onClick={() => handleShow(index)}>
                                         <i className="far fa-edit"/>
                                     </Button>

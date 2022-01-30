@@ -44,7 +44,6 @@
 }
 
 .remove-button, .remove-button:focus {
-    width: 5rem;
     align-self: flex-end;
     margin-right: 1rem;
     margin-bottom: 0.5rem;
@@ -63,13 +62,15 @@
 }
 
 .edit-remove-button {
-    width: 5rem;
     align-self: center;
     margin: 0.5rem;
 }
 
-.doc-button {
+.edit-button {
     width: 5rem;
+}
+
+.doc-button {
     align-self: flex-end;
     margin-right: 1rem;
     margin-bottom: 0.5rem;

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import '../CardContainer.css'
 import DropDownList from "../DropDownList";
+import {useTranslation} from "react-i18next";
 
 
 function DoctorAddModal(props) {
@@ -15,6 +16,7 @@ function DoctorAddModal(props) {
     const [license, setLicense] = useState('')
     const [phoneNumber, setPhoneNumber] = useState('')
     const [message, setMessage] = useState('')
+    const { t } = useTranslation();
 
     const handleSelect = (specialty) => {
         setSelectedSpecialty(specialty)
@@ -26,7 +28,7 @@ function DoctorAddModal(props) {
 
     const handleAdd = (doctor) => {
         if (password !== repeatPassword)
-            setMessage("Passwords don't match")
+            setMessage("errors.passwordMismatch")
         else {
             setMessage('')
             setSelectedSpecialty("")
@@ -65,79 +67,79 @@ function DoctorAddModal(props) {
     return (
         <>
             <Button variant="outline-secondary" onClick={() => handleShow()} size="lg" className="add-margin">
-                Add Doctor
+                {t("DOC.addDoc")}
             </Button>
             <Modal show={show} onHide={() => handleShow()}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add Doctor</Modal.Title>
+                    <Modal.Title>{t("DOC.addDoc")}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
                         <Row>
                             <Col>
                                 <Form.Group className="mb-3" controlId="firstName">
-                                    <Form.Label>First Name</Form.Label>
-                                    <Form.Control placeholder="Enter first name" onChange={onChange}/>
+                                    <Form.Label>{t("FORM.firstName")}</Form.Label>
+                                    <Form.Control placeholder={t("FORM.enterFirstName")} onChange={onChange}/>
                                 </Form.Group>
                             </Col>
                             <Col>
                                 <Form.Group className="mb-3" controlId="lastName">
-                                    <Form.Label>Last Name</Form.Label>
-                                    <Form.Control placeholder="Enter last name" onChange={onChange}/>
+                                    <Form.Label>{t("FORM.lastName")}</Form.Label>
+                                    <Form.Control placeholder={t("FORM.enterLastName")} onChange={onChange}/>
                                 </Form.Group>
                             </Col>
                         </Row>
                         <Row>
                             <Col>
                                 <Form.Group className="mb-3" controlId="specialty">
-                                    <Form.Label>Specialty: {selectedSpecialty}</Form.Label>
+                                    <Form.Label>{t("FORM.specialty")} {selectedSpecialty}</Form.Label>
                                     <DropDownList iterable={props.specialties}
                                                   selectedElement=''
                                                   handleSelect={handleSelect}
-                                                  elementType='Specialty'
+                                                  elementType={t("FORM.selectSpecialty")}
                                                   id='specialty'
                                     />
                                 </Form.Group>
                             </Col>
                             <Col>
                                 <Form.Group className="mb-3" controlId="license">
-                                    <Form.Label>License</Form.Label>
-                                    <Form.Control placeholder="Enter license" onChange={onChange}/>
+                                    <Form.Label>{t("DOC.license")}</Form.Label>
+                                    <Form.Control placeholder={t("FORM.enterLicense")} onChange={onChange}/>
                                 </Form.Group>
                             </Col>
                         </Row>
                         <Row>
                             <Col>
                                 <Form.Group className="mb-3" controlId="phoneNumber">
-                                    <Form.Label>Phone Number</Form.Label>
-                                    <Form.Control placeholder="Enter phone number" onChange={onChange}/>
+                                    <Form.Label>{t("FORM.phoneNumber")}</Form.Label>
+                                    <Form.Control placeholder={t("FORM.enterPhone")} onChange={onChange}/>
                                 </Form.Group>
                             </Col>
                             <Col>
                                 <Form.Group className="mb-3" controlId="email">
-                                    <Form.Label>Email</Form.Label>
-                                    <Form.Control type="email" placeholder="Enter email" onChange={onChange}/>
+                                    <Form.Label>{t("FORM.email")}</Form.Label>
+                                    <Form.Control type="email" placeholder={t("FORM.enterEmail")} onChange={onChange}/>
                                 </Form.Group>
                             </Col>
                         </Row>
                         <Row>
                             <Col>
                                 <Form.Group className="mb-3" controlId="password">
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control type="password" placeholder="Password" onChange={onChange}/>
+                                    <Form.Label>{t("FORM.password")}</Form.Label>
+                                    <Form.Control type="password" placeholder={t("FORM.password")} onChange={onChange}/>
                                 </Form.Group>
                             </Col>
                             <Col>
                                 <Form.Group className="mb-3" controlId="repeatPassword">
-                                    <Form.Label>Repeat Password</Form.Label>
-                                    <Form.Control type="password" placeholder="Repeat password" onChange={onChange}/>
+                                    <Form.Label>{t("FORM.repeatPassword")}</Form.Label>
+                                    <Form.Control type="password" placeholder={t("FORM.repeatPassword")} onChange={onChange}/>
                                 </Form.Group>
                             </Col>
                         </Row>
                         {message && (
                             <div className="form-group">
                                 <div className="alert alert-danger" role="alert">
-                                    {message}
+                                    {t(message)}
                                 </div>
                             </div>
                         )}
@@ -145,7 +147,7 @@ function DoctorAddModal(props) {
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => handleShow()}>
-                        Close
+                        {t("closeButton")}
                     </Button>
                     <Button className="doc-button-color" onClick={() => handleAdd({
                         firstName: firstName,
@@ -158,7 +160,7 @@ function DoctorAddModal(props) {
                         phoneNumber: phoneNumber
                     })
                     }>
-                        Add Doctor
+                        {t("DOC.addDoc")}
                     </Button>
                 </Modal.Footer>
             </Modal>

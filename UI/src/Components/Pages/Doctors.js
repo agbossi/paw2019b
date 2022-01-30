@@ -5,6 +5,8 @@ import DoctorAddModal from "../Modals/DoctorAddModal";
 import DoctorCalls from "../../api/DoctorCalls";
 import SpecialtyCalls from "../../api/SpecialtyCalls";
 import {useNavigate} from "react-router-dom";
+import "../../i18n/i18n";
+import {useTranslation} from "react-i18next";
 
 function Doctors() {
     const [doctors, setDoctors] = useState([])
@@ -13,6 +15,7 @@ function Doctors() {
     const [maxPage, setMaxPage] = useState(0)
     const [message, setMessage] = useState("")
     const navigate = useNavigate()
+    const { t } = useTranslation();
 
     const fetchDoctors = async (pag) => {
         const response = await DoctorCalls.getDoctorsAdmin(pag)
@@ -46,16 +49,16 @@ function Doctors() {
             navigate('/login')
         } else if (response.status === 409) {
             if (response.data === 'license-in-use')
-                setMessage("Licence already registered")
+                setMessage("errors.licenseInUse")
             if (response.data === 'email-in-use')
-                setMessage("Email already registered")
+                setMessage("errors.emailInUse")
         } else if (response.status === 404) {
             if (response.data === "specialty-not-found") {
-                setMessage("Specialty chosen does not exist")
+                setMessage("errors.specialtyNotFound")
             }
         } else if (response.status === 400) {
             if (response.data === "password-mismatch") {
-                setMessage("Passwords where mismatched")
+                setMessage("errors.passwordMismatch")
             }
         }
     }
@@ -68,7 +71,7 @@ function Doctors() {
         }
         else if (response.status === 404) {
             if (response.data === "doctor-not-found") {
-                setMessage("No doctor found to delete")
+                setMessage("errors.doctorsNotFound")
             }
         } else if (response.status === 401) {
             localStorage.removeItem('token')
@@ -94,14 +97,14 @@ function Doctors() {
     const renderPrevButton = () => {
         if (page !== 0) {
             return <Button className="doc-button doc-button-color shadow-sm"
-                           onClick={() => prevPage()}>Prev</Button>
+                           onClick={() => prevPage()}>{t('prevButton')}</Button>
         }
     }
 
     const renderNextButton = () => {
         if (page < maxPage - 1) {
             return <Button className="doc-button doc-button-color shadow-sm"
-                           onClick={() => nextPage()}>Next</Button>
+                           onClick={() => nextPage()}>{t('nextButton')}</Button>
         }
     }
 
@@ -114,7 +117,7 @@ function Doctors() {
             {message && (
                 <div className="form-group">
                     <div className="alert alert-danger" role="alert">
-                        {message}
+                        {t(message)}
                     </div>
                 </div>
             )}
@@ -127,12 +130,12 @@ function Doctors() {
                                 <Card.Body>
                                     <Card.Title><b>{doctor.user.firstName + ' ' + doctor.user.lastName}</b></Card.Title>
                                     <Card.Text>
-                                        <b>License</b>: {doctor.license}
+                                        <b>{t('DOC.license')}</b>: {doctor.license}
                                     </Card.Text>
                                 </Card.Body>
                                 <Button className="remove-button remove-button-color shadow-sm"
                                         onClick={() => deleteDoctors(doctor.license)}>
-                                    Delete
+                                    {t('deleteButton')}
                                 </Button>
                             </Card>
                         )

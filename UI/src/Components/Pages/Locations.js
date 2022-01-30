@@ -4,6 +4,8 @@ import '../CardContainer.css'
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
 import LocationCalls from "../../api/LocationCalls";
 import {useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
+import "../../i18n/i18n"
 
 function Locations(props){
     const [locations, setLocations] = useState([])
@@ -11,6 +13,7 @@ function Locations(props){
     const [maxPage, setMaxPage] = useState(0)
     const navigate = useNavigate()
     const [message, setMessage] = useState("")
+    const { t } = useTranslation();
 
     const fetchLocations = async (pag) => {
         const response = await LocationCalls.getLocations(pag)
@@ -32,7 +35,7 @@ function Locations(props){
         }
         if (response.status === 404) {
             if (response.data === "location-not-found") {
-                setMessage("No location found to delete")
+                setMessage("errors.LocationNotFoundDelete")
             }
         }
         if (response.status === 401) {
@@ -42,7 +45,7 @@ function Locations(props){
         }
         if (response.status === 409) {
             if (response.data === "clinics-dependency") {
-                setMessage("Could not delete location: One or more clinics are still in this location")
+                setMessage("errors.clinicDependency")
             }
         }
     }
@@ -58,7 +61,7 @@ function Locations(props){
             navigate('/login')
         } else if (response.status === 409) {
             if (response.data === "location-exists") {
-                setMessage("Location already exists")
+                setMessage("errors.locationExists")
             }
         }
     }
@@ -79,24 +82,24 @@ function Locations(props){
     const renderPrevButton = () => {
         if (page !== 0) {
             return <Button className="remove-button doc-button-color shadow-sm"
-                           onClick={() => prevPage()}>Prev</Button>
+                           onClick={() => prevPage()}>{t("prevButton")}</Button>
         }
     }
 
     const renderNextButton = () => {
         if (page < maxPage) {
             return <Button className="remove-button doc-button-color shadow-sm"
-                           onClick={() => nextPage()}>Next</Button>
+                           onClick={() => nextPage()}>{t("nextButton")}</Button>
         }
     }
 
     return (
         <div className="background">
-            <SinglePropertyAddModal handleAdd={handleAdd} property="Location"/>
+            <SinglePropertyAddModal handleAdd={handleAdd} property={t("ADMIN.location")}/>
             {message && (
                 <div className="form-group">
                     <div className="alert alert-danger" role="alert">
-                        {message}
+                        {t(message)}
                     </div>
                 </div>
             )}
@@ -111,7 +114,7 @@ function Locations(props){
                                 </Card.Body>
                                 <Button className="remove-button remove-button-color shadow-sm"
                                         onClick={() => deleteLocation(location.name)}>
-                                    Delete
+                                    {t("deleteButton")}
                                 </Button>
                             </Card>
                         )

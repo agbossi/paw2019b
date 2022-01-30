@@ -2,7 +2,7 @@
     background-color: #345a6e;
 }
 
-.lang-buttons {
+.lang-buttons, .lang-buttons:focus {
     background-color: #3c677e;
     border-color: #3c677e;
     color: whitesmoke;

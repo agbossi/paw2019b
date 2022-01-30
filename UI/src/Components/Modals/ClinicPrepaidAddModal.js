@@ -1,15 +1,14 @@
-import React, {Component, useEffect, useState} from 'react';
-import {Button, Modal, Form, Dropdown} from "react-bootstrap";
+import React, { useState} from 'react';
+import {Button, Modal, Form} from "react-bootstrap";
 import DropDownList from "../DropDownList";
 import '../CardContainer.css'
-import PrepaidCalls from "../../api/PrepaidCalls";
-import ClinicCalls from "../../api/ClinicCalls";
-import {element} from "prop-types";
-import {useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
+import "../../i18n/i18n"
 
  function ClinicPrepaidAddModal(props) {
     const [show, setShow] = useState(false);
     const [newPrepaid, setNewPrepaid] = useState('');
+     const { t } = useTranslation();
 
     const handleSelect = (prepaid) => {
         setNewPrepaid(prepaid)
@@ -34,28 +33,28 @@ import {useNavigate} from "react-router-dom";
     return (
         <>
             <Button variant="outline-secondary add-margin" onClick={handleShow} size="lg">
-                Add prepaid to clinic
+                {t("CLINIC.addPrepaid")}
             </Button>
             <Modal show={show} onHide={handleShow}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add prepaid to clinic</Modal.Title>
+                    <Modal.Title>{t("CLINIC.addPrepaid")}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group className="mb-3" controlId="name">
-                        <Form.Label>Prepaid name: {newPrepaid}</Form.Label>
+                        <Form.Label>{t("FORM.name")}: {newPrepaid}</Form.Label>
                         <DropDownList iterable={remainingPrepaids()}
                                       selectedElement=''
                                       handleSelect={handleSelect}
-                                      elementType='Prepaid'
+                                      elementType={t("FORM.selectPrepaid")}
                                       id='prepaid'/>
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleShow}>
-                        Close
+                        {t("closeButton")}
                     </Button>
                     <Button className="doc-button-color" onClick={handleAdd}>
-                        Add
+                        {t("actions.add")}
                     </Button>
                 </Modal.Footer>
             </Modal>

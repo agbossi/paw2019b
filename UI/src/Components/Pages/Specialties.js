@@ -4,6 +4,8 @@ import '../CardContainer.css'
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
 import {useNavigate} from "react-router-dom";
 import SpecialtyCalls from "../../api/SpecialtyCalls";
+import {useTranslation} from "react-i18next";
+import "../../i18n/i18n"
 
 function Specialties(props){
     const [specialties, setSpecialties] = useState([])
@@ -11,6 +13,7 @@ function Specialties(props){
     const [maxPage, setMaxPage] = useState(0)
     const navigate = useNavigate()
     const [message, setMessage] = useState("")
+    const { t } = useTranslation();
 
     const fetchSpecialties = async (pag) => {
         const response = await SpecialtyCalls.getSpecialties(pag);
@@ -32,12 +35,12 @@ function Specialties(props){
         }
         if (response.status === 404) {
             if (response.data === "specialty-not-found") {
-                setMessage("No specialty found to delete")
+                setMessage("errors.specialtyNotFoundDelete")
             }
         }
         if (response.status === 409) {
             if (response.data === "doctors-dependency") {
-                setMessage("Could not delete specialty: One or more doctors still have this specialty")
+                setMessage("errors.doctorDependency")
             }
         }
         if (response.status === 401) {
@@ -58,7 +61,7 @@ function Specialties(props){
             navigate('/login')
         } else if (response.status === 409) {
             if (response.data === "specialty-exists") {
-                setMessage("Specialty already exists")
+                setMessage("errors.specialtyExists")
             }
         }
     }
@@ -79,24 +82,24 @@ function Specialties(props){
     const renderPrevButton = () => {
         if (page !== 0) {
             return <Button className="remove-button doc-button-color shadow-sm"
-                           onClick={() => prevPage()}>Prev</Button>
+                           onClick={() => prevPage()}>{t("prevButton")}</Button>
         }
     }
 
     const renderNextButton = () => {
         if (page < maxPage) {
             return <Button className="remove-button doc-button-color shadow-sm"
-                    onClick={() => nextPage()}>Next</Button>
+                    onClick={() => nextPage()}>{t("nextButton")}</Button>
         }
     }
 
     return (
         <div className="background">
-            <SinglePropertyAddModal handleAdd={handleAdd} property="Specialty"/>
+            <SinglePropertyAddModal handleAdd={handleAdd} property={t("ADMIN.specialty")}/>
             {message && (
                 <div className="form-group">
                     <div className="alert alert-danger" role="alert">
-                        {message}
+                        {t(message)}
                     </div>
                 </div>
             )}
@@ -111,7 +114,7 @@ function Specialties(props){
                                 </Card.Body>
                                 <Button className="remove-button remove-button-color shadow-sm"
                                         onClick={() => deleteSpecialty(specialty.name)}>
-                                    Delete
+                                    {t("deleteButton")}
                                 </Button>
                             </Card>
                         )

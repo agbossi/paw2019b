@@ -1,5 +1,5 @@
 import './App.css';
-import {BrowserRouter as Router, Routes, Route, Redirect} from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import Home from './Components/Pages/Home'
 import Navbar from "./Components/NavBar";
 import AdminHome from "./Components/Pages/AdminHome";
@@ -10,44 +10,19 @@ import Prepaids from "./Components/Pages/Prepaids";
 import ClinicPrepaids from './Components/Pages/ClinicPrepaids';
 import Doctors from "./Components/Pages/Doctors";
 import DoctorClinics from "./Components/Pages/DoctorClinics";
-import Login from "./Components/Pages/Login";
 import WrappedLogin from "./Components/Pages/Login";
-
-const userNavbarItems = [
-    {
-        link: '/favorites',
-        text: 'Favorites'
-    },
-    {
-        link: '/appointments',
-        text: 'Appointments'
-    },
-    {
-        link: '/profile',
-        text: 'Profile'
-    }
-]
+import { useTranslation } from "react-i18next";
+import "../src/i18n/i18n"
 
 function App() {
 
     const isAuth = () => localStorage.getItem('role') !== null;
 
-    const getItems = () => {
-        if (!isAuth()) return [];
-        switch (localStorage.getItem('role')) {
-            case "ROLE_ADMIN":
-                return [];
-            case "ROLE_DOCTOR":
-            case "ROLE_USER":
-                return userNavbarItems;
-        }
-    }
-
   return (
     <div className="App">
         <div className="App-header">
             <Router>
-                <Navbar items={getItems()} />
+                <Navbar isAuth={isAuth}/>
                 <Routes>
                     <Route path='/' exact element={<Home/>}/>
                     <Route path='/:license/doctorClinics' element={<DoctorClinics />}/>
