@@ -42,7 +42,7 @@ public class SpecialtyDaoImpl implements SpecialtyDao {
     @Override
     public List<Specialty> getPaginatedObjects(int page){
 
-        Query nativeQuery = entityManager.createNativeQuery("SELECT name FROM specialties");
+        Query nativeQuery = entityManager.createNativeQuery("SELECT name FROM specialties ORDER BY name");
 
         @SuppressWarnings("unchecked")
         List<String> ids = nativeQuery.setFirstResult(page * MAX_SPECIALTIES_PER_PAGE)

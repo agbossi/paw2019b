@@ -5,6 +5,8 @@ import ar.edu.itba.paw.interfaces.service.PatientService;
 import ar.edu.itba.paw.interfaces.service.PrepaidService;
 import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.Prepaid;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
+import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +34,9 @@ public class PrepaidServiceImpl implements PrepaidService {
 
     @Transactional
     @Override
-    public Prepaid createPrepaid(String name) {
+    public Prepaid createPrepaid(String name) throws DuplicateEntityException {
+        Prepaid prepaid = getPrepaidByName(name);
+        if (prepaid != null) throw new DuplicateEntityException("prepaid-exists");
         return prepaidDao.createPrepaid(name);
     }
 
@@ -44,7 +48,9 @@ public class PrepaidServiceImpl implements PrepaidService {
 
     @Transactional
     @Override
-    public long deletePrepaid(String name) {
+    public long deletePrepaid(String name) throws EntityNotFoundException {
+        Prepaid prepaid = getPrepaidByName(name);
+        if (prepaid == null) throw new EntityNotFoundException("prepaid");
         List<Patient> patients = patientService.getPatientsByPrepaid(name);
         long result = prepaidDao.deletePrepaid(name);
         for(Patient patient : patients) {

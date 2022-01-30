@@ -17,7 +17,7 @@ public class PrepaidDaoImpl implements PrepaidDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private final static int MAX_PREPAIDS_PER_PAGE = 20;
+    private final static int MAX_PREPAIDS_PER_PAGE = 12;
 
     @Override
     public Prepaid createPrepaid(String name){
@@ -41,7 +41,7 @@ public class PrepaidDaoImpl implements PrepaidDao {
     @Override
     public List<Prepaid> getPaginatedObjects(int page){
 
-        Query nativeQuery = entityManager.createNativeQuery("SELECT name FROM prepaids");
+        Query nativeQuery = entityManager.createNativeQuery("SELECT name FROM prepaids ORDER BY name");
         @SuppressWarnings("unchecked")
         List<String> ids = nativeQuery.setFirstResult(page * MAX_PREPAIDS_PER_PAGE)
                 .setMaxResults(MAX_PREPAIDS_PER_PAGE)

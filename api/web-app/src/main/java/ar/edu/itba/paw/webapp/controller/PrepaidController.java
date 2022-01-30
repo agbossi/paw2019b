@@ -2,6 +2,8 @@ package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.PrepaidService;
 import ar.edu.itba.paw.model.Prepaid;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
+import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import ar.edu.itba.paw.webapp.caching.PrepaidCaching;
 import ar.edu.itba.paw.webapp.dto.PrepaidDto;
 import ar.edu.itba.paw.webapp.form.PrepaidForm;
@@ -33,6 +35,7 @@ public class PrepaidController {
     @Autowired
     private MessageSource messageSource;
 
+    //TODO: Use: for admin to see all prepaids paginated
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getPrepaids(@QueryParam("page") @DefaultValue("0") Integer page,
@@ -46,12 +49,6 @@ public class PrepaidController {
                 .header("Access-Control-Expose-Headers", "X-max-page")
                 .header("X-max-page", maxPage)
                 .build();
-        /*return Response.ok(new GenericEntity<List<PrepaidDto>>(prepaids) {})
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(), "first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page - 1).build(), "prev")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(), "next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(), "last")
-                .build(); */
     }
 
     //TODO: Use: admin for adding prepaid to clinic
@@ -66,18 +63,20 @@ public class PrepaidController {
                 .build();
     }
 
+    //TODO: Use: for admin to delete prepaid
     @DELETE
     @Path("/{name}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response deleteLocation(@PathParam("name") final String name) {
+    public Response deleteLocation(@PathParam("name") final String name) throws EntityNotFoundException {
         prepaidService.deletePrepaid(name);
         return Response.noContent().build();
     }
 
+    //TODO: Use: for admin to add prepaid
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createPrepaid(@Valid PrepaidForm form) {
+    public Response createPrepaid(@Valid PrepaidForm form) throws DuplicateEntityException {
         Prepaid prepaid = prepaidService.createPrepaid(form.getName());
         return Response.created(uriInfo.getAbsolutePathBuilder()
                 .path(prepaid.getName()).build()).build();
