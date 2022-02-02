@@ -20,9 +20,9 @@ public class DoctorClinicCaching implements Caching<DoctorClinicDto> {
             return 0;
         }
 
-        DoctorDto doctor = dc.getDoctorDto();
+        DoctorDto doctor = dc.getDoctor();
         UserDto userData = doctor.getUser();
-        ClinicDto clinic = dc.getClinicDto();
+        ClinicDto clinic = dc.getClinic();
 
         return Objects.hash(doctor.getLicense(),doctor.getPhoneNumber(), doctor.getSpecialty(),
                 userData.getEmail(), userData.getFirstName(), userData.getLastName(),

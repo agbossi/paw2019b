@@ -340,6 +340,18 @@ public class DoctorController {
         }
     }
 
+    // TODO: Use: When doctor is logged in, to get it's license
+    @GET
+    @Path("email/{email}")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getDoctorByEmail(@PathParam("email") final String email,
+                                     @Context Request request) throws EntityNotFoundException {
+        Doctor doctor = doctorService.getDoctorByEmail(email);
+        if (doctor == null) throw new EntityNotFoundException("doctor");
+        DoctorDto dto = DoctorDto.fromDoctor(doctor, uriInfo);
+        return CacheHelper.handleResponse(dto, doctorCaching, "doctor", request).build();
+    }
+
     // TODO: Use: admin deletes doctor
     @DELETE
     @Path("/{license}")
@@ -445,38 +457,58 @@ public class DoctorController {
         }
     }
 
+    //TODO: Use: for doctor to see his clinics
     @GET
     @Path("/{license}/clinics")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getDoctorPage(@PathParam("license") final String license,
+                                  @QueryParam("page") @DefaultValue("0") Integer page,
                                   @QueryParam("week") @DefaultValue("1") final Integer week,
-                                  @Context Request request) {
+                                  @Context Request request) throws EntityNotFoundException {
+        page = (page < 0) ? 0 : page;
+
         Doctor doctor = doctorService.getDoctorByLicense(license);
-        if(doctor != null) {
-            final List<DoctorClinicDto> doctorClinics = doctorClinicService.getDoctorClinicsForDoctor(doctor)
-                    .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo, getDoctorWeek(dc, week)))
-                    .collect(Collectors.toList());
-            return CacheHelper.handleResponse(doctorClinics, doctorClinicCaching,
-                    new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {},
-                    "doctorsClinics", request).build();
-            // return Response.ok(new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {}).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        if(doctor == null) throw new EntityNotFoundException("doctor");
+        final List<DoctorClinicDto> doctorClinics = doctorClinicService.getPaginatedDoctorsClinics(doctor, page)
+                .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo, null))
+                .collect(Collectors.toList());
+        int max = doctorClinicService.maxAvailablePage();
+        return CacheHelper.handleResponse(doctorClinics, doctorClinicCaching,
+                new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {},
+                "doctorsClinics", request)
+                .header("Access-Control-Expose-Headers", "X-max-page")
+                .header("X-max-page", max)
+                .build();
     }
 
+    // TODO: Use: for doctor to add clinic
+    @GET
+    @Path("/{license}/clinics/all")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getAllDoctorsClinics(@PathParam("license") final String license,
+                                         @QueryParam("week") @DefaultValue("1") final Integer week,
+                                         @Context Request request) throws EntityNotFoundException {
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+        if(doctor == null) throw new EntityNotFoundException("doctor");
+        final List<DoctorClinicDto> doctorClinics = doctorClinicService.getDoctorClinicsForDoctor(doctor)
+                .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo, null))
+                .collect(Collectors.toList());
+        return CacheHelper.handleResponse(doctorClinics, doctorClinicCaching,
+                new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {},
+                "doctorsClinics", request).build();
+    }
 
+    // TODO: Use: for doctor to add himself to clinic
     @POST
     @Path("/{license}/clinics")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#license, 'doctor')")
     public Response createDoctorClinic(@PathParam("license") final String license,
-                                       final DoctorClinicForm form) {
+                                       final DoctorClinicForm form) throws EntityNotFoundException {
         Doctor doctor = doctorService.getDoctorByLicense(license);
-        if(doctor != null) {
-            doctorClinicService.createDoctorClinic(doctor.getEmail(), form.getClinic(), form.getConsultPrice());
-            return Response.created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(form.getClinic())).build()).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        if(doctor == null) throw new EntityNotFoundException("doctor");
+        doctorClinicService.createDoctorClinic(doctor.getEmail(), form.getClinic(), form.getConsultPrice());
+        return Response.created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(form.getClinic())).build()).build();
     }
 
     @DELETE

@@ -4,6 +4,7 @@ import {PREPAIDS_PATH} from "./Constants.js";
 
 // Clinic calls and clinic prepaids
 const getClinics = async (pag) => api.get(cons.CLINICS_PATH + "?" + cons.PAGE_QUERY + pag);
+const getAllClinics = async () => api.get(cons.CLINICS_PATH  + cons.ALL_PATH);
 const getClinic = async (id) => api.get(cons.CLINICS_PATH + "/" + id)
 const getClinicPrepaids = async (id, pag) =>
     api.get(cons.CLINICS_PATH + "/" + id + PREPAIDS_PATH + "?" + cons.PAGE_QUERY + pag)
@@ -32,6 +33,7 @@ const deleteClinicPrepaid = async (clinicId, prepaidId) => api.delete(
     {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}})
 export default {
     getClinics,
+    getAllClinics,
     getClinic,
     getClinicPrepaids,
     getAllClinicPrepaids,

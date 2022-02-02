@@ -1,10 +1,11 @@
 export const TRANSLATION_ES = {
     NAVBAR : {
         favourites: "Favoritos",
-        appointments: "Turnos",
+        appointments: "Mis Turnos",
         profile: "Perfil",
         logout: "Cerrar Sesión",
-        login: "Iniciar Sesión"
+        login: "Iniciar Sesión",
+        clinics: "Mis Clínicas"
     },
     ADMIN: {
         doctors: "Doctores",
@@ -24,11 +25,13 @@ export const TRANSLATION_ES = {
     DOC: {
         license: "Licencia",
         addDoc: "Agregar doctor",
+        price: "Precio",
+        subscribeClinic: "Suscribirse a Clínica",
     },
     CLINIC: {
         addClinic: "Agregar Clínica",
         clinic: "Clínica",
-        addPrepaid: "Agregar Prepaga a Clínica"
+        addPrepaid: "Agregar Prepaga a Clínica",
     },
     FORM: {
         firstName: "Nombre",
@@ -50,7 +53,9 @@ export const TRANSLATION_ES = {
         enterAddress: "Ingrese dirección",
         location: "Localidad: ",
         selectLocation: "Seleccione localidad",
-        selectPrepaid: "Seleccione prepaga"
+        selectPrepaid: "Seleccione prepaga",
+        selectClinic: "Seleccione clínica",
+        enterPrice: "Ingrese precio"
     },
     actions: {
         add: "Agregar",
@@ -76,12 +81,18 @@ export const TRANSLATION_ES = {
         prepaidExists: "Prepaga ya existe",
         clinicNotFound: "La clínica no existe",
         prepaidNotFound: "La prepaga elegida no existe",
-        clinicPrepaidNotFoundDelete: "No se encontró la prepaga a eliminar en clínica"
+        clinicPrepaidNotFoundDelete: "No se encontró la prepaga a eliminar en clínica",
+        docLoggedNotFound: "No se encontró el doctor en sesión",
+
     },
     deleteButton: "Eliminar",
     prevButton: "Anterior",
     nextButton: "Siguiente",
     closeButton: "Cerrar",
-    fieldRequired: "Campo obligatorio"
+    fieldRequired: "Campo obligatorio",
+    scheduleButton: "Horarios",
+    welcome: "Bienvenido/a",
+    editProfileButton: "Editar Perfil",
+    changeImgButton: "Cambiar Imagen"
 
 }

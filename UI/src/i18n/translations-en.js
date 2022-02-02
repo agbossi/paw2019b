@@ -4,7 +4,8 @@ export const TRANSLATION_EN = {
         appointments: "Appointments",
         profile: "Profile",
         logout: "Logout",
-        login: "Login"
+        login: "Login",
+        clinics: "Clinics"
     },
     ADMIN: {
         doctors: "Doctors",
@@ -24,6 +25,8 @@ export const TRANSLATION_EN = {
     DOC: {
         license: "License",
         addDoc: "Add doctor",
+        price: "Price",
+        subscribeClinic: "Subscribe to Clinic",
     },
     CLINIC: {
         addClinic: "Add Clinic",
@@ -50,7 +53,9 @@ export const TRANSLATION_EN = {
         enterAddress: "Enter address",
         location: "Location: ",
         selectLocation: "Select location",
-        selectPrepaid: "Select prepaid"
+        selectPrepaid: "Select prepaid",
+        selectClinic: "Select clinic",
+        enterPrice: "Enter price"
     },
     errors: {
         licenseInUse: "Licence already registered",
@@ -72,7 +77,8 @@ export const TRANSLATION_EN = {
         prepaidExists: "Prepaid already exists",
         clinicNotFound: "Clinic does not exist",
         prepaidNotFound: "Prepaid chosen does not exist",
-        clinicPrepaidNotFoundDelete: "No prepaid in clinic found to delete"
+        clinicPrepaidNotFoundDelete: "No prepaid in clinic found to delete",
+        docLoggedNotFound: "No logged in doctor found"
 
     },
     actions: {
@@ -83,5 +89,9 @@ export const TRANSLATION_EN = {
     prevButton: "Prev",
     nextButton: "Next",
     closeButton: "Close",
-    fieldRequired: "Field Required"
+    fieldRequired: "Field Required",
+    scheduleButton: "Schedule",
+    welcome: "Welcome",
+    editProfileButton: "Edit Profile",
+    changeImgButton: "Change Image"
 }

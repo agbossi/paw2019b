@@ -6,5 +6,6 @@ export const PREPAIDS_PATH = '/prepaids';
 export const LOCATIONS_PATH = '/locations';
 export const SPECIALTIES_PATH = '/specialties';
 export const DOCTORS_PATH = '/doctors';
-export const CLINICS_PATH = 'clinics';
+export const CLINICS_PATH = '/clinics';
 export const ALL_PATH = '/all';
+export const EMAIL_PATH = '/email';

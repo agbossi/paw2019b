@@ -3,6 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,9 +41,11 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
 
     @Transactional
     @Override
-    public DoctorClinic createDoctorClinic(String email, int clinicId, int consultPrice) {
+    public DoctorClinic createDoctorClinic(String email, int clinicId, int consultPrice) throws EntityNotFoundException {
         Doctor doctor = doctorService.getDoctorByEmail(email);
         Clinic clinic = clinicService.getClinicById(clinicId);
+        if (doctor == null) throw new EntityNotFoundException("doctor");
+        if (clinic == null) throw new EntityNotFoundException("clinic");
 
         return doctorClinicDao.createDoctorClinic(doctor, clinic, consultPrice);
     }
@@ -112,6 +115,16 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
                 lastName, prepaid, consultPrice);
         setScheduleAndAppointments(doctorClinics);
         return doctorClinics;
+    }
+
+    @Override
+    public List<DoctorClinic> getPaginatedDoctorsClinics(Doctor doctor, int page) {
+        return doctorClinicDao.getDoctorClinicPaginatedByList(doctor, page);
+    }
+
+    @Override
+    public int maxAvailablePage() {
+        return doctorClinicDao.maxPageAvailable();
     }
 
 }

@@ -75,7 +75,7 @@ function Home() {
                                     <Card className="mb-3"
                                           style={{color: "#000", width: '20rem', height: '30rem'}}
                                           key={doctor.license}>
-                                        <Card.Img variant="top" src="http://localhost:3000/src/Resources/docpic.jpg" />
+                                        <Card.Img variant="top" src="/images/docpic.jpg" />
                                         <Card.Body>
                                             <Card.Title>{doctor.firstName + ' ' + doctor.lastName}</Card.Title>
                                             <Card.Text>

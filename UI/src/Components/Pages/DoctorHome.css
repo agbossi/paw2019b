@@ -1,0 +1,18 @@
+.info-label {
+    margin-bottom: 0.5rem;
+    justify-self: center;
+}
+
+.img-size {
+    height: 20rem;
+}
+
+.edit-button {
+    width: fit-content;
+    justify-self: center;
+}
+
+.info-col {
+    display: grid;
+    align-content: center;
+}

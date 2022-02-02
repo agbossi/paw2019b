@@ -13,8 +13,22 @@ const deleteDoctor = async (license) => api.delete(
     {},
     {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}})
 
+const getClinics = async (license, pag) =>
+    api.get (cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "?" + cons.PAGE_QUERY + pag)
+const getAllClinics = async (license) =>
+    api.get (cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + cons.ALL_PATH)
+const getDocByEmail = async (email) => api.get (cons.DOCTORS_PATH + cons.EMAIL_PATH + "/" + email)
+const addDoctorToClinic = async (data, license) => api.post(
+    cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH,
+    data,
+    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}})
+
 export default {
     getDoctorsAdmin,
     addDoctor,
-    deleteDoctor
+    deleteDoctor,
+    getClinics,
+    getAllClinics,
+    getDocByEmail,
+    addDoctorToClinic
 }

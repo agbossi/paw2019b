@@ -1,103 +1,120 @@
-import {Card, Container, ListGroup, Row, Col} from "react-bootstrap";
-import '../CardContainer.css'
-import {Link, useParams} from "react-router-dom";
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from "react";
+import DoctorCalls from "../../api/DoctorCalls";
+import ClinicCalls from "../../api/ClinicCalls";
+import {Button, Card, Container, Row} from "react-bootstrap";
+import {useTranslation} from "react-i18next";
+import {Link} from "react-router-dom";
+import DoctorClinicAddModal from "../Modals/DoctorClinicAddModal";
 
-function DoctorClinics() {
+function DoctorClinics(props) {
+    const [clinics, setClinics] = useState([]);
+    const [allClinics, setAllClinics] = useState([])
+    const [allDoctorClinics, setAllDoctorClinics] = useState([])
+    const [page, setPage] = useState(0);
+    const [maxPage, setMaxPage] = useState(0);
+    const [message, setMessage] = useState("")
+    const license = localStorage.getItem('license');
+    const {t} = useTranslation()
 
-    const fetchDoctorClinics = (license) => {
-        return [
-            {
-                doctor: {
-                    "firstName": "Cecilia",
-                    "lastName": "Rodriguez",
-                    "license": "123313213166",
-                    "email": "cecilia@doctor.com",
-                    "phoneNumber":  "1565676787",
-                    "specialty": "Dermatology",
-                },
-                clinic: {
-                    "id": 1,
-                    "address": "calle falsa 853",
-                    "name": "asdf",
-                    "location": "moron",
-                    "prepaids": "URL"
-                },
-                consultPrice: 3,
-                schedules: 'URI',
-                appointments: 'URI',
-                week: [[]]
-            },
-        ]
-    }
-
-    const fetchDoctor = () => {
-        return {
-            "firstName": "Cecilia",
-            "lastName": "Rodriguez",
-            "license": "123313213166",
-            "email": "cecilia@doctor.com",
-            "phoneNumber":  "1565676787",
-            "specialty": "Dermatology",
+    const fetchDoctorsClinics = async (pag) => {
+        const response = await DoctorCalls.getClinics(license, pag)
+        if (response && response.ok) {
+            setClinics(response.data)
+            setMaxPage(Number(response.headers.xMaxPage))
+            setMessage("")
+            console.log(response.data)
+        }
+        if(response.status === 404) {
+            setMessage("docLoggedNotFound")
         }
     }
 
-    let {license} = useParams()
-    const [doctorClinics, setDoctorClinics] = useState(fetchDoctorClinics(license))
-    const [doctor, setDoctor] = useState(fetchDoctor())
-    const [favorite, setFavorite] = useState(false)
-
-    const handleFavoriteClick = () => {
-        console.log('favorite handler')
-        console.log(favorite)
-        setFavorite(!favorite)
+    const fetchAllDoctorClinics = async () => {
+        const response = await DoctorCalls.getAllClinics(license)
+        if (response && response.ok) {
+            setAllDoctorClinics(response.data)
+            setMessage("")
+        }
+        if(response.status === 404) {
+            setMessage("docLoggedNotFound")
+        }
     }
+
+    const fetchAllClinics = async () => {
+        const response = await ClinicCalls.getAllClinics();
+        if (response && response.ok) {
+            setAllClinics(response.data);
+        }
+
+    }
+
+    const handleAdd = async (newDocClinic) => {
+        const response = await DoctorCalls.addDoctorToClinic(newDocClinic, license);
+        if (response && response.ok) {
+            await fetchDoctorsClinics(page)
+        }
+        if (response.status === 404) {
+            if (response.data === "doctor-not-found") {
+                setMessage("docLoggedNotFound")
+            }
+            if (response.data === "clinic-not-found") {
+                setMessage("clinicNotFound")
+            }
+        }
+    }
+
+    useEffect(async () => {
+        await fetchDoctorsClinics(page);
+        await fetchAllClinics();
+        await fetchAllDoctorClinics();
+    },[])
 
     return (
         <>
-            <Row>
-                <Col>
-                    <Card style={{ width: '18rem' }}>
-                        <Card.Header>
-                            {doctor.firstName + ' ' + doctor.lastName + '  '}
-                            <i className={favorite ? "fas fa-heart" : "far fa-heart"} onClick={() => handleFavoriteClick()}/>
-                        </Card.Header>
-                        <ListGroup variant="flush">
-                            <ListGroup.Item>{'License: ' + doctor.license}</ListGroup.Item>
-                            <ListGroup.Item>{'Specialty: ' + doctor.specialty}</ListGroup.Item>
-                            <ListGroup.Item>{'Phone Number: ' + doctor.phoneNumber}</ListGroup.Item>
-                            <ListGroup.Item>{'email: ' + doctor.email}</ListGroup.Item>
-                        </ListGroup>
-                        <Card.Footer className="text-muted">
-                            Click on any clinic to check out the doctor's schedule and book an appointment
-                        </Card.Footer>
-                    </Card>
-                </Col>
-                <Col>
-                    <Container>
-                        <div className="admin-info-container">
-                            {doctorClinics.map(( doctorClinic, index) => {
-                                return (
-                                    <Card className="mb-3" style={{color: "#000", width: '20rem', height: '15rem'}}
-                                          key={doctorClinic.clinic.id}>
-                                        <Card.Body>
-                                            <Card.Title>{doctorClinic.clinic.name}</Card.Title>
-                                            <Card.Text>
-                                                {doctorClinic.clinic.address + ' (' + doctorClinic.clinic.location + ')'}
-                                            </Card.Text>
-                                        </Card.Body>
-                                        <Link className="btn btn-outline-dark btn-lg"
-                                              role="button"
-                                              to={'home/' + doctor.license + '/doctorClinics/' + doctorClinic.clinic.id}>
-                                            See Appointments
-                                        </Link>
-                                    </Card>
-                                )
-                            })}
-                        </div>
-                    </Container>
-                </Col>
-            </Row>
+            <DoctorClinicAddModal
+                handleAdd={handleAdd}
+                allClinics={allClinics}
+                clinics={allDoctorClinics.map(clinic => clinic.id)}
+            />
+            {message && (
+                <div className="form-group">
+                    <div className="alert alert-danger" role="alert">
+                        {t(message)}
+                    </div>
+                </div>
+            )}
+            <Container>
+                <div className="admin-info-container admin-clinic-container">
+                    {clinics.map((dc) => {
+                        return (
+                            <Card className="mb-3 shadow" style={{color: "#000", width: '20rem', height: '16.5rem'}} key={dc.id}>
+                                <Card.Body>
+                                    <Card.Title>{dc.clinic.name}</Card.Title>
+                                    <Card.Text>
+                                        {dc.clinic.address + ' (' + dc.clinic.location + ')'}
+                                    </Card.Text>
+                                    <Card.Text>
+                                        {t('DOC.price')}: {String(dc.consultPrice)}
+                                        <Button className="mx-3 shadow-sm doc-button-color">
+                                            <i className="far fa-edit"/>
+                                        </Button>
+                                    </Card.Text>
+                                    <Link className="btn btn-outline-dark btn-lg see-prepaid-button shadow-sm"
+                                          role="button"
+                                          to={'/doctor/clinics/' + dc.clinic.id + '/schedule'}>{t('scheduleButton')}
+                                    </Link>
+                                </Card.Body>
+                                <div className="buttons-div">
+                                    <Button className="edit-remove-button remove-button-color shadow-sm">
+                                        {t("deleteButton")}
+                                    </Button>
+                                </div>
+
+                            </Card>
+                        )
+                    })}
+                </div>
+            </Container>
         </>
     )
 }

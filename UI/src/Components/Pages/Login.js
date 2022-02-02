@@ -12,7 +12,6 @@ import '../../i18n/i18n'
 
 import {useLocation, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
-import {getMessage} from "@testing-library/jest-dom/dist/utils";
 
 
 const required = (value) => {
@@ -82,6 +81,9 @@ class Login extends Component {
                                 window.location.reload()
                                 break;
                             case "ROLE_DOCTOR":
+                                this.props.navigate("/doctor");
+                                window.location.reload()
+                                break;
                             case "ROLE_USER":
                                 this.props.navigate("/");
                                 window.location.reload()

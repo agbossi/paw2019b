@@ -17,6 +17,8 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     @PersistenceContext
     private EntityManager entityManager;
 
+    private static final int MAX_DOCTORS_CLINICS_PER_PAGE = 6;
+
     @Override
     public DoctorClinic createDoctorClinic(Doctor doctor, Clinic clinic, int consultPrice){
         DoctorClinic doctorClinic = new DoctorClinic(doctor,clinic,consultPrice);
@@ -88,6 +90,22 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
         }
         List<DoctorClinic> list = query.getResultList();
         return list;
+    }
+
+    @Override
+    public List<DoctorClinic> getDoctorClinicPaginatedByList(Doctor doctor, int page) {
+        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc "  +
+                " where dc.doctor.license = :doctorLicense",DoctorClinic.class);
+        query.setParameter("doctorLicense", doctor.getLicense());
+        return query
+                .setFirstResult(page * MAX_DOCTORS_CLINICS_PER_PAGE)
+                .setMaxResults(MAX_DOCTORS_CLINICS_PER_PAGE)
+                .getResultList();
+    }
+
+    @Override
+    public int maxPageAvailable() {
+        return MAX_DOCTORS_CLINICS_PER_PAGE;
     }
 
     @Override

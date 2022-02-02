@@ -9,10 +9,12 @@ import Clinics from "./Components/Pages/Clinics";
 import Prepaids from "./Components/Pages/Prepaids";
 import ClinicPrepaids from './Components/Pages/ClinicPrepaids';
 import Doctors from "./Components/Pages/Doctors";
-import DoctorClinics from "./Components/Pages/DoctorClinics";
+import userDoctorClinics from "./Components/Pages/UserDoctorClinics";
 import WrappedLogin from "./Components/Pages/Login";
 import { useTranslation } from "react-i18next";
 import "../src/i18n/i18n"
+import DoctorHome from "./Components/Pages/DoctorHome";
+import DoctorClinics from "./Components/Pages/DoctorClinics";
 
 function App() {
 
@@ -25,7 +27,9 @@ function App() {
                 <Navbar isAuth={isAuth}/>
                 <Routes>
                     <Route path='/' exact element={<Home/>}/>
-                    <Route path='/:license/doctorClinics' element={<DoctorClinics />}/>
+                    {/*<Route path='/:license/doctorClinics' element={<userDoctorClinics />}/>*/}
+                    <Route path="/doctor" element={<DoctorHome />} />
+                    <Route path="/doctor/clinics" element={<DoctorClinics/>} />
                     <Route path='admin/' exact element={<AdminHome />}/>
                     <Route path='admin/locations' element={<Locations />}/>
                     <Route path='admin/specialties' element={<Specialties />}/>

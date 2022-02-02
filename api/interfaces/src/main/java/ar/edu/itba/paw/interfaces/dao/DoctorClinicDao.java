@@ -21,4 +21,8 @@ public interface DoctorClinicDao {
 
         List<DoctorClinic> getFilteredDoctors(Location location, Specialty specialty,
                                               String firstName,String lastName,Prepaid prepaid,int consultPrice);
+
+        List<DoctorClinic> getDoctorClinicPaginatedByList(Doctor doctor, int page);
+
+        int maxPageAvailable();
 }

@@ -2,6 +2,7 @@ import api from "./index";
 import * as cons from './Constants.js'
 
 const login = async (email, password) => {
+    localStorage.setItem('email', email)
     const params = new URLSearchParams();
     params.append('email', email);
     params.append('password', password);
@@ -20,6 +21,8 @@ const login = async (email, password) => {
 const logout = async () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role')
+    localStorage.removeItem('email')
+    localStorage.removeItem('license')
 }
 
 export default {

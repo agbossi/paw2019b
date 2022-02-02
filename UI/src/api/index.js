@@ -3,7 +3,7 @@ import { create } from 'apisauce';
 import applyCaseMiddleware from 'axios-case-converter';
 
 const options = {
-    preservedKeys: ['firstName', 'lastName', 'repeatPassword', 'phoneNumber', 'X-AUTH-TOKEN']
+    preservedKeys: ['firstName', 'lastName', 'repeatPassword', 'phoneNumber', 'X-AUTH-TOKEN', 'consultPrice']
 }
 const api = applyCaseMiddleware(axios.create({
     baseURL: "http://localhost:8080"

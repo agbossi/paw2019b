@@ -31,12 +31,23 @@ function NavBar(props) {
         }
     ]
 
+    const docNavBarItems = [
+        {
+            link: 'doctor/clinics',
+            text: "clinics"
+        },
+        {
+            link: 'doctor/appointments',
+            text: 'appointments'
+        }
+    ]
     const getItems = () => {
         if (!props.isAuth()) return [];
         switch (localStorage.getItem('role')) {
             case "ROLE_ADMIN":
                 return [];
             case "ROLE_DOCTOR":
+                return docNavBarItems;
             case "ROLE_USER":
                 return userNavbarItems;
         }
@@ -54,11 +65,23 @@ function NavBar(props) {
 
     }
 
+    const getRoleHome = () => {
+        if (!props.isAuth()) return "/";
+        switch (localStorage.getItem('role')) {
+            case "ROLE_ADMIN":
+                return '/admin';
+            case "ROLE_DOCTOR":
+                return '/doctor';
+            case "ROLE_USER":
+                return '/';
+        }
+    }
+
     return (
         <>
             <Navbar variant="dark" expand="lg" sticky="top" className="container-fluid nav-bar shadow-sm">
                 <Container style={{justifyContent: "flex-start"}}>
-                    <Navbar.Brand href="/">DoctorSearch</Navbar.Brand>
+                    <Navbar.Brand href={getRoleHome()}>DoctorSearch</Navbar.Brand>
                     {items.map((item) => {
                         return (
                             <Nav.Item class="ml-auto">

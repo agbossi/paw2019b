@@ -75,6 +75,17 @@ public class ClinicController {
                 .build(); */
     }
 
+    //TODO: Use: For doctor to get all clinics to add himself to one
+    @GET
+    @Path("/all")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getAllClinics(@Context Request request) {
+        List<ClinicDto> clinics = clinicService.getClinics().stream()
+                .map(c -> ClinicDto.fromClinic(c, uriInfo)).collect(Collectors.toList());
+        return CacheHelper.handleResponse(clinics, clinicCaching,
+                        new GenericEntity<List<ClinicDto>>(clinics) {}, "clinics", request).build();
+    }
+
     //TODO: Use: admin adds clinic
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
