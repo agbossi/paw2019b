@@ -27,6 +27,7 @@ export const TRANSLATION_ES = {
         addDoc: "Agregar doctor",
         price: "Precio",
         subscribeClinic: "Suscribirse a Clínica",
+        editPrice: "Editar Precio"
     },
     CLINIC: {
         addClinic: "Agregar Clínica",
@@ -83,6 +84,10 @@ export const TRANSLATION_ES = {
         prepaidNotFound: "La prepaga elegida no existe",
         clinicPrepaidNotFoundDelete: "No se encontró la prepaga a eliminar en clínica",
         docLoggedNotFound: "No se encontró el doctor en sesión",
+        doctorNotFoundEdit: "No se encontró el doctor a editar",
+        noLoggedDoc: "No se encontró el email en sesión, intente cerrando sesión y volviendo a entrar",
+        noDocEmail: "No se encontró doctor con el email en sesión",
+        docClinicNotFound: "No se encontró doctor en clínica"
 
     },
     deleteButton: "Eliminar",

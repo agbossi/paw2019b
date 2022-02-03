@@ -27,11 +27,13 @@ export const TRANSLATION_EN = {
         addDoc: "Add doctor",
         price: "Price",
         subscribeClinic: "Subscribe to Clinic",
+        editPrice: "Editar Precio"
     },
     CLINIC: {
         addClinic: "Add Clinic",
         clinic: "Clinic",
-        addPrepaid: "Add Prepaid to Clinic"
+        addPrepaid: "Add Prepaid to Clinic",
+        edit: "Edit Profile"
     },
     FORM: {
         firstName: "First Name",
@@ -78,7 +80,11 @@ export const TRANSLATION_EN = {
         clinicNotFound: "Clinic does not exist",
         prepaidNotFound: "Prepaid chosen does not exist",
         clinicPrepaidNotFoundDelete: "No prepaid in clinic found to delete",
-        docLoggedNotFound: "No logged in doctor found"
+        docLoggedNotFound: "No logged in doctor found",
+        doctorNotFoundEdit: "No doctor found to edit",
+        noLoggedDoc: "No logged email found, try logging out and logging in again",
+        noDocEmail: "No doctor found with logged email",
+        docClinicNotFound: "No doctor in clinic found"
 
     },
     actions: {

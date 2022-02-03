@@ -50,7 +50,7 @@ public class SpecialtyController {
                 .build();
     }
 
-    // TODO: Use: for adding doctor
+    // TODO: Use: for adding doctor and for doctor to edit profile
     @GET()
     @Path("/all")
     @Produces(value = { MediaType.APPLICATION_JSON })

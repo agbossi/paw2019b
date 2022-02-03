@@ -362,23 +362,22 @@ public class DoctorController {
     }
 
 
+    //TODO: Use: For doctor to edit profile
     @PUT
     @Path("/{license}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Consumes(MediaType.APPLICATION_JSON)
     @PreAuthorize("hasPermission(#license, 'doctor')")
-    public Response updateDoctor(@PathParam("license") final String license, @Valid EditDoctorProfileForm form) {
+    public Response updateDoctor(@PathParam("license") final String license, @Valid EditDoctorProfileForm form)
+            throws EntityNotFoundException {
         Doctor doctor = doctorService.getDoctorByLicense(license);
-        if(doctor != null) {
+        if(doctor == null) throw new EntityNotFoundException("doctor");
             doctorService.updateDoctorProfile(
                     doctor.getEmail(),
                     SecurityHelper.processNewPassword(form.getNewPassword(), passwordEncoder, userService, doctor.getEmail()),
                     form.getFirstName(),form.getLastName(),
                     form.getPhoneNumber(),form.getSpecialty());
             return Response.noContent().build();
-        }
-        return Response.status(Response.Status.NOT_FOUND).build();
-
     }
 
     // TODO: Use: admin adds doctor
@@ -511,13 +510,26 @@ public class DoctorController {
         return Response.created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(form.getClinic())).build()).build();
     }
 
+    //TODO: Use: for doctor to unsubscribe clinics
     @DELETE
     @Path("/{license}/clinics/{clinic}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#license, 'doctor')")
     public Response deleteDoctorClinic(@PathParam("license") final String license,
-                                       @PathParam("clinic") final Integer clinic) {
+                                       @PathParam("clinic") final Integer clinic) throws EntityNotFoundException {
+
         doctorClinicService.deleteDoctorClinic(license, clinic);
+        return Response.noContent().build();
+    }
+
+    @PUT
+    @Path("/{license}/clinics/{clinic}")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @PreAuthorize("hasPermission(#license, 'doctor')")
+    public Response editDoctorClinicPrice (@PathParam("license") final String license,
+                                           @PathParam("clinic") final Integer clinic,
+                                           @QueryParam("price") final Integer price) throws EntityNotFoundException {
+        doctorClinicService.editPrice(license, clinic, price);
         return Response.noContent().build();
     }
 

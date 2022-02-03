@@ -15,6 +15,8 @@ public class EditablePasswordValidator implements ConstraintValidator<EditablePa
 
     @Override
     public boolean isValid(String password, ConstraintValidatorContext cxt) {
+        if (password == null)
+            return true;
         return password.equals("") || password.length() >= MIN_SIZE;
     }
 }

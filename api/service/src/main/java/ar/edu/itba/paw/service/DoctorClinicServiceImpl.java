@@ -52,7 +52,11 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
 
     @Transactional
     @Override
-    public long deleteDoctorClinic(String license, int clinicid) {
+    public long deleteDoctorClinic(String license, int clinicid) throws EntityNotFoundException {
+        Doctor doc = doctorService.getDoctorByLicense(license);
+        if (doc == null) throw new EntityNotFoundException("doctor");
+        Clinic clinic = clinicService.getClinicById(clinicid);
+        if (clinic == null) throw new EntityNotFoundException("clinic");
         return doctorClinicDao.deleteDoctorClinic(license, clinicid);
     }
 
@@ -120,6 +124,14 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     @Override
     public List<DoctorClinic> getPaginatedDoctorsClinics(Doctor doctor, int page) {
         return doctorClinicDao.getDoctorClinicPaginatedByList(doctor, page);
+    }
+
+    @Transactional
+    @Override
+    public void editPrice(String license, int clinicId, int price) throws EntityNotFoundException {
+        DoctorClinic dc = getDoctorInClinic(license, clinicId);
+        if (dc == null) throw new EntityNotFoundException("doctor-clinic");
+        doctorClinicDao.editPrice(dc, price);
     }
 
     @Override

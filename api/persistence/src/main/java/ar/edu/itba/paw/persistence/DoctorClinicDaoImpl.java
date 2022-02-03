@@ -109,6 +109,18 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     }
 
     @Override
+    public void editPrice(DoctorClinic dc, int price) {
+//        DoctorClinic doctorClinic = entityManager.merge(dc);
+//        doctorClinic.setConsultPrice(price);
+        Query query = entityManager.createQuery("update DoctorClinic dc set dc.consultPrice = :newPrice " +
+                "where dc.clinic.id = :id and dc.doctor.license = :license");
+        query.setParameter("newPrice", price);
+        query.setParameter("id", dc.getClinic().getId());
+        query.setParameter("license", dc.getDoctor().getLicense());
+        query.executeUpdate();
+    }
+
+    @Override
    public long deleteDoctorClinic(String license, int clinicid) {
         //String deleteQuery = "DELETE FROM doctorClinics WHERE doctorLicense = ? and clinicid = ?";
         //return jdbcTemplate.update(deleteQuery, license, clinicid);

@@ -5,6 +5,7 @@ import {Button, Card, Container, Row} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
 import {Link} from "react-router-dom";
 import DoctorClinicAddModal from "../Modals/DoctorClinicAddModal";
+import EditPriceModal from "../Modals/EditPriceModal";
 
 function DoctorClinics(props) {
     const [clinics, setClinics] = useState([]);
@@ -25,7 +26,7 @@ function DoctorClinics(props) {
             console.log(response.data)
         }
         if(response.status === 404) {
-            setMessage("docLoggedNotFound")
+            setMessage("errors.docLoggedNotFound")
         }
     }
 
@@ -36,7 +37,7 @@ function DoctorClinics(props) {
             setMessage("")
         }
         if(response.status === 404) {
-            setMessage("docLoggedNotFound")
+            setMessage("errors.docLoggedNotFound")
         }
     }
 
@@ -55,11 +56,40 @@ function DoctorClinics(props) {
         }
         if (response.status === 404) {
             if (response.data === "doctor-not-found") {
-                setMessage("docLoggedNotFound")
+                setMessage("errors.docLoggedNotFound")
             }
             if (response.data === "clinic-not-found") {
-                setMessage("clinicNotFound")
+                setMessage("errors.clinicNotFound")
             }
+        }
+    }
+
+    const handleEditPrice = async (clinicId, price) => {
+        const response = await DoctorCalls.editPrice(license, clinicId, price)
+        if (response && response.ok) {
+            await fetchDoctorsClinics(page)
+            await fetchAllDoctorClinics()
+            setMessage('')
+        }
+        if (response.status === 404) {
+            if (response.data === "doctor-clinic-not-found")
+                setMessage("errors.docClinicNotFound")
+        }
+    }
+
+
+    const handleDelete = async (clinicId) => {
+        const response = await DoctorCalls.deleteDoctorsClinic(license, clinicId)
+        if (response && response.ok) {
+            await fetchDoctorsClinics(page)
+            await fetchAllDoctorClinics()
+            setMessage('')
+        }
+        if (response.status === 404) {
+            if (response.data === "doctor-not-found")
+                setMessage("errors.docLoggedNotFound")
+            if (response.data === "clinic-not-found")
+                setMessage("errors.clinicNotFound")
         }
     }
 
@@ -95,9 +125,9 @@ function DoctorClinics(props) {
                                     </Card.Text>
                                     <Card.Text>
                                         {t('DOC.price')}: {String(dc.consultPrice)}
-                                        <Button className="mx-3 shadow-sm doc-button-color">
-                                            <i className="far fa-edit"/>
-                                        </Button>
+                                        <EditPriceModal handleEdit={(newPrice) => handleEditPrice(dc.clinic.id, newPrice)}
+                                                        price={dc.consultPrice}
+                                        />
                                     </Card.Text>
                                     <Link className="btn btn-outline-dark btn-lg see-prepaid-button shadow-sm"
                                           role="button"
@@ -105,7 +135,9 @@ function DoctorClinics(props) {
                                     </Link>
                                 </Card.Body>
                                 <div className="buttons-div">
-                                    <Button className="edit-remove-button remove-button-color shadow-sm">
+                                    <Button className="edit-remove-button remove-button-color shadow-sm"
+                                            onClick={() => handleDelete(dc.clinic.id)}
+                                    >
                                         {t("deleteButton")}
                                     </Button>
                                 </div>

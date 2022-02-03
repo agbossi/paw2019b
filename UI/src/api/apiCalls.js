@@ -23,6 +23,8 @@ const logout = async () => {
     localStorage.removeItem('role')
     localStorage.removeItem('email')
     localStorage.removeItem('license')
+    localStorage.removeItem('firstName')
+    localStorage.removeItem('lastName')
 }
 
 export default {

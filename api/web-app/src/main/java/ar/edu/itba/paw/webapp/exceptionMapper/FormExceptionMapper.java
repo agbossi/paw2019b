@@ -27,10 +27,10 @@ public class FormExceptionMapper implements ExceptionMapper<ConstraintViolationE
     private String prepareMessage(ConstraintViolationException exception) {
         StringBuilder message = new StringBuilder();
         for (ConstraintViolation<?> cv : exception.getConstraintViolations()) {
-            String msg = messageSource.getMessage(cv.getMessage(), null, Locale.getDefault());
-            String connector = messageSource.getMessage("connector.invalid", null, Locale.getDefault());
-            message.append(cv.getInvalidValue().toString()).append(" ").append(connector).append(" ")
-                    .append(msg).append("\n");
+//            String msg = messageSource.getMessage(cv.getMessage(), null, Locale.getDefault());
+//            String connector = messageSource.getMessage("connector.invalid", null, Locale.getDefault());
+//            message.append(cv.getInvalidValue().toString()).append(" ").append(connector).append(" ")
+//                    .append(msg).append("\n");
         }
         return message.toString();
     }

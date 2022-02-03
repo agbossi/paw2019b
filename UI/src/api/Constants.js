@@ -1,5 +1,6 @@
 export const PAGE_QUERY = 'page=';
 export const UNAVAILABLE_QUERY = 'includeUnavailables='
+export const PRICE_QUERY = 'price='
 
 export const LOGIN_PATH = '/login';
 export const PREPAIDS_PATH = '/prepaids';

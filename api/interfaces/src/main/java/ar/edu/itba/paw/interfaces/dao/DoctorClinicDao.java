@@ -25,4 +25,6 @@ public interface DoctorClinicDao {
         List<DoctorClinic> getDoctorClinicPaginatedByList(Doctor doctor, int page);
 
         int maxPageAvailable();
+
+        void editPrice(DoctorClinic dc, int price);
 }

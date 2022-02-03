@@ -9,7 +9,7 @@ import java.util.Set;
 public interface DoctorClinicService {
     DoctorClinic createDoctorClinic(String email, int clinicId, int consultPrice) throws EntityNotFoundException;
 
-    long deleteDoctorClinic(String license, int clinicid);
+    long deleteDoctorClinic(String license, int clinicid) throws EntityNotFoundException;
 
     void setSchedule(DoctorClinic doctorClinic, int day, int hour);
 
@@ -27,6 +27,8 @@ public interface DoctorClinicService {
                     String firstName, String lastName, Prepaid prepaid, int consultPrice);
 
     List<DoctorClinic> getPaginatedDoctorsClinics(Doctor doctor, int page);
+
+    void editPrice(String license, int clinicId, int price) throws EntityNotFoundException;
 
     int maxAvailablePage();
 

@@ -12,6 +12,11 @@ const deleteDoctor = async (license) => api.delete(
     cons.DOCTORS_PATH + '/' + license,
     {},
     {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}})
+const editDoctor = async (license, data) => api.put(
+    cons.DOCTORS_PATH + "/" + license,
+    data,
+    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
+    )
 
 const getClinics = async (license, pag) =>
     api.get (cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "?" + cons.PAGE_QUERY + pag)
@@ -22,13 +27,28 @@ const addDoctorToClinic = async (data, license) => api.post(
     cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH,
     data,
     {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}})
+const deleteDoctorsClinic = async (license, clinic) => api.delete(
+    cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinic,
+    {},
+    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
+)
+
+const editPrice = async (license, clinicId, price) => api.put(
+    cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinicId + "?" + cons.PRICE_QUERY + price,
+    {},
+    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
+)
+
 
 export default {
     getDoctorsAdmin,
     addDoctor,
     deleteDoctor,
+    editDoctor,
     getClinics,
     getAllClinics,
     getDocByEmail,
-    addDoctorToClinic
+    addDoctorToClinic,
+    deleteDoctorsClinic,
+    editPrice
 }
