@@ -3,9 +3,10 @@ import DoctorCalls from "../../api/DoctorCalls";
 import ClinicCalls from "../../api/ClinicCalls";
 import {Button, Card, Container, Row} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import DoctorClinicAddModal from "../Modals/DoctorClinicAddModal";
 import EditPriceModal from "../Modals/EditPriceModal";
+import {loadLanguages} from "i18next";
 
 function DoctorClinics(props) {
     const [clinics, setClinics] = useState([]);
@@ -16,6 +17,7 @@ function DoctorClinics(props) {
     const [message, setMessage] = useState("")
     const license = localStorage.getItem('license');
     const {t} = useTranslation()
+    const navigate = useNavigate()
 
     const fetchDoctorsClinics = async (pag) => {
         const response = await DoctorCalls.getClinics(license, pag)
@@ -62,6 +64,15 @@ function DoctorClinics(props) {
                 setMessage("errors.clinicNotFound")
             }
         }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            localStorage.removeItem('license')
+            localStorage.removeItem('firstName')
+            localStorage.removeItem('lastName')
+            localStorage.removeItem('specialty')
+            navigate('/login')
+        }
     }
 
     const handleEditPrice = async (clinicId, price) => {
@@ -74,6 +85,15 @@ function DoctorClinics(props) {
         if (response.status === 404) {
             if (response.data === "doctor-clinic-not-found")
                 setMessage("errors.docClinicNotFound")
+        }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            localStorage.removeItem('license')
+            localStorage.removeItem('firstName')
+            localStorage.removeItem('lastName')
+            localStorage.removeItem('specialty')
+            navigate('/login')
         }
     }
 
@@ -90,6 +110,15 @@ function DoctorClinics(props) {
                 setMessage("errors.docLoggedNotFound")
             if (response.data === "clinic-not-found")
                 setMessage("errors.clinicNotFound")
+        }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            localStorage.removeItem('license')
+            localStorage.removeItem('firstName')
+            localStorage.removeItem('lastName')
+            localStorage.removeItem('specialty')
+            navigate('/login')
         }
     }
 

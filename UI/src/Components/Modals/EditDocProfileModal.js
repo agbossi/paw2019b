@@ -8,7 +8,7 @@ function EditDocProfileModal(props) {
     const [lastName, setLastName] = useState(localStorage.getItem('lastName'))
     const [newPassword, setNewPassword] = useState('')
     const [repeatPassword, setRepeatPassword] = useState('')
-    const [selectedSpecialty, setSelectedSpecialty] = useState(props.specialty())
+    const [selectedSpecialty, setSelectedSpecialty] = useState(localStorage.getItem('specialty'))
     const [phoneNumber, setPhoneNumber] = useState(props.phoneNumber)
     const [show, setShow] = useState(false)
     const [message, setMessage] = useState('')
@@ -44,6 +44,9 @@ function EditDocProfileModal(props) {
     }
 
     const handleClick = () => {
+        if (selectedSpecialty === '')
+            console.log(localStorage.getItem('specialty'))
+            setSelectedSpecialty(localStorage.getItem('specialty'))
         const doctor = {
             firstName: firstName,
             lastName: lastName,
@@ -56,7 +59,6 @@ function EditDocProfileModal(props) {
             setMessage("errors.passwordMismatch")
         else {
             setMessage('')
-            setSelectedSpecialty("")
             props.handleEdit(doctor)
             handleShow()
         }
@@ -106,7 +108,7 @@ function EditDocProfileModal(props) {
                                           onChange={onChange}/>
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="password">
+                        <Form.Group className="mb-3" controlId="newPassword">
                             <Form.Label>{t("FORM.password")}</Form.Label>
                             <Form.Control type="password"
                                           placeholder={t("FORM.password")}

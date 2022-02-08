@@ -1,11 +1,6 @@
 package ar.edu.itba.paw.model;
 
-import javax.imageio.ImageIO;
 import javax.persistence.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 
 @Entity
 @Table(name = "images")
@@ -16,15 +11,14 @@ public class Image {
     @SequenceGenerator(sequenceName = "images_id_seq", name = "images_id_seq")
     private int id;
 
-    @OneToOne
+    @OneToOne(targetEntity = Doctor.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "doctor")
     private Doctor doctor;
 
     @Column(name = "image")
     private byte[] image;
 
-    public Image(int id, Doctor doctor, byte[] image) {
-        this.id = id;
+    public Image(Doctor doctor, byte[] image) {
         this.doctor = doctor;
         this.image = image;
     }
@@ -53,5 +47,9 @@ public class Image {
 
     public void setLicense(String license) {
         this.doctor.setLicense(license);
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 }

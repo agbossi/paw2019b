@@ -7,12 +7,17 @@ import '../CardContainer.css'
 import {useTranslation} from "react-i18next";
 import EditDocProfileModal from "../Modals/EditDocProfileModal";
 import SpecialtyCalls from "../../api/SpecialtyCalls";
+import {useNavigate} from "react-router-dom";
+import ImageSelectModal from "../Modals/ImageSelectModal";
+import ImageCalls from "../../api/ImageCalls";
 
 function DoctorHome(props) {
     const [doctor, setDoctor] = useState({})
     const [message, setMessage] = useState("")
     const [specialties, setSpecialties] = useState([])
     const {t} = useTranslation()
+    const navigate = useNavigate()
+    const [image, setImage] = useState(null)
 
     const fetchDoctor = async () => {
         const email = localStorage.getItem('email')
@@ -23,6 +28,7 @@ function DoctorHome(props) {
                 localStorage.setItem('license', response.data.license)
                 localStorage.setItem('firstName', response.data.userData.firstName)
                 localStorage.setItem('lastName', response.data.userData.lastName)
+                localStorage.setItem('specialty', response.data.specialty)
             }
             if (response.status === 404)
                 setMessage("errors.noDocEmail")
@@ -33,16 +39,28 @@ function DoctorHome(props) {
 
     }
 
+    const fetchImage = async () => {
+        const license = localStorage.getItem('license');
+        const response = await ImageCalls.getImage(license)
+        if (response && response.ok) {
+           //
+        }
+        if (response.status === 404) {
+            if (response.data === "image-not-found") {
+                setImage(null)
+            }
+            if (response.data === "doctor-not-found") {
+                setMessage("errors.docLoggedNotFound")
+            }
+        }
+    }
+
     const fetchSpecialties = async () => {
         const response = await SpecialtyCalls.getAllSpecialties();
         if (response && response.ok) {
             setSpecialties(response.data)
             setMessage("")
         }
-    }
-
-    const getSpecialty = () => {
-        return doctor.specialty
     }
 
     const getDoctorsFirstName = () => {
@@ -68,11 +86,25 @@ function DoctorHome(props) {
         if (response.status === 404) {
             setMessage('errors.doctorNotFoundEdit')
         }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            localStorage.removeItem('license')
+            localStorage.removeItem('firstName')
+            localStorage.removeItem('lastName')
+            localStorage.removeItem('specialty')
+            navigate('/login')
+        }
+    }
+
+    const handleUpload = async (formData) => {
+        const response = await ImageCalls.uploadImage(localStorage.getItem("license"), formData)
     }
 
     useEffect(async () => {
         await fetchDoctor();
-        await fetchSpecialties()
+        await fetchSpecialties();
+        await fetchImage();
     }, [])
 
     return (
@@ -115,16 +147,13 @@ function DoctorHome(props) {
                         </div>
                         <EditDocProfileModal specialties={specialties.map(specialty=> specialty.name)}
                                              handleEdit={handleEdit}
-                                             specialty={getSpecialty}
                                              phoneNumber={doctor.phoneNumber}
                         />
                     </Col>
                     <Col>
-                        <Image className="img-size" src="/images/docpic.jpg" />
+                        <Image className="img-size" src={image === null? "/images/docpic.jpg": image.home[0].image} />
                         <div className="mt-3">
-                            <Button className="edit-remove-button doc-button-color shadow-sm">
-                                {t('changeImgButton')}
-                            </Button>
+                            <ImageSelectModal handleUpload={handleUpload} />
                         </div>
                     </Col>
                 </Row>

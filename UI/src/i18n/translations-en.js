@@ -27,7 +27,8 @@ export const TRANSLATION_EN = {
         addDoc: "Add doctor",
         price: "Price",
         subscribeClinic: "Subscribe to Clinic",
-        editPrice: "Editar Precio"
+        editPrice: "Edit Price",
+        image: "Image"
     },
     CLINIC: {
         addClinic: "Add Clinic",
@@ -89,7 +90,8 @@ export const TRANSLATION_EN = {
     },
     actions: {
         add: "Add",
-        edit: "Edit"
+        edit: "Edit",
+        upload: "Upload"
     },
     deleteButton: "Delete",
     prevButton: "Prev",

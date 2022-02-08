@@ -18,26 +18,26 @@ public class ImageServiceImpl implements ImageService {
 
     @Transactional
     @Override
-    public Image createProfileImage(byte[] image, Doctor doctor) {
-        return imageDao.createProfileImage(image, doctor.getLicense());
+    public void createProfileImage(byte[] image, Doctor doctor) {
+        imageDao.createProfileImage(image, doctor);
     }
 
     @Transactional
     @Override
     public void updateProfileImage(byte[] image, Doctor doctor) {
-        imageDao.updateProfileImage(image, doctor.getLicense());
+        imageDao.updateProfileImage(image, doctor);
     }
 
 
     @Transactional
     @Override
     // TODO: check if there's an more elegant way of doing this
-    public Image createProfileImage(MultipartFile file, Doctor doctor) {
+    public void createProfileImage(MultipartFile file, Doctor doctor) {
         try {
-             return imageDao.createProfileImage(file.getBytes(), doctor.getLicense());
+            imageDao.createProfileImage(file.getBytes(), doctor);
         }
         catch (IOException e){
-            return null; // means wrong id for image (error)
+            return; // means wrong id for image (error)
         }
     }
 
@@ -56,7 +56,7 @@ public class ImageServiceImpl implements ImageService {
         if(file.isEmpty()) return 0;
         if(imageDao.getProfileImage(doctor.getLicense()) != null) {
             try {
-                return imageDao.updateProfileImage(file.getBytes(), doctor.getLicense());
+                return imageDao.updateProfileImage(file.getBytes(), doctor);
             }
             catch (IOException e){
                 return -1; // means wrong id for image (error)

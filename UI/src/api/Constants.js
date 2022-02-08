@@ -10,3 +10,4 @@ export const DOCTORS_PATH = '/doctors';
 export const CLINICS_PATH = '/clinics';
 export const ALL_PATH = '/all';
 export const EMAIL_PATH = '/email';
+export const IMAGE_PATH = '/image';

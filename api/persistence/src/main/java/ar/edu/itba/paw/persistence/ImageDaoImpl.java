@@ -1,6 +1,7 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.ImageDao;
+import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Image;
 import org.springframework.stereotype.Repository;
 
@@ -17,12 +18,10 @@ public class ImageDaoImpl implements ImageDao {
     private EntityManager entityManager;
 
     @Override
-    public Image createProfileImage(byte[] image, String doctor) {
-        Image im = new Image();
-        im.setImage(image);
-        im.setLicense(doctor);
+    public void createProfileImage(byte[] image, Doctor doctor) {
+        Doctor doc = entityManager.find(Doctor.class, doctor.getLicense());
+        Image im = new Image(doc, image);
         entityManager.persist(image); //TODO esto funciona??
-        return im;
     }
 
     @Override
@@ -39,10 +38,10 @@ public class ImageDaoImpl implements ImageDao {
     }
 
     @Override
-    public long updateProfileImage(byte[] image, String doctor){
+    public long updateProfileImage(byte[] image, Doctor doctor){
         Query query = entityManager.createQuery("update Image as im set im.image = :image where im.doctor.license = :doctor");
         query.setParameter("image",image);
-        query.setParameter("doctor",doctor);
+        query.setParameter("doctor",doctor.getLicense());
         return query.executeUpdate();
     }
 

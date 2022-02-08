@@ -27,7 +27,8 @@ export const TRANSLATION_ES = {
         addDoc: "Agregar doctor",
         price: "Precio",
         subscribeClinic: "Suscribirse a Clínica",
-        editPrice: "Editar Precio"
+        editPrice: "Editar Precio",
+        image: "Imagen"
     },
     CLINIC: {
         addClinic: "Agregar Clínica",
@@ -60,7 +61,8 @@ export const TRANSLATION_ES = {
     },
     actions: {
         add: "Agregar",
-        edit: "Editar"
+        edit: "Editar",
+        upload: "Subir"
     },
     errors: {
         licenseInUse: "Licencia ya registrada",

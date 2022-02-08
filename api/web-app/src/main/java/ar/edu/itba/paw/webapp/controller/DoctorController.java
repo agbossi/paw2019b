@@ -221,9 +221,7 @@ public class DoctorController {
 
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
-import ar.edu.itba.paw.model.exceptions.ConflictException;
-import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
-import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
+import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.webapp.caching.DoctorCaching;
 import ar.edu.itba.paw.webapp.caching.DoctorClinicCaching;
 import ar.edu.itba.paw.webapp.caching.ImageCaching;
@@ -232,16 +230,26 @@ import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
+import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.BodyPart;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.glassfish.jersey.media.multipart.MultiPart;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.ws.rs.*;
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
 
@@ -288,6 +296,9 @@ public class DoctorController {
     @Context
     private UriInfo uriInfo;
 
+    private static final long MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 megas
+
+    private static final List<String> SUPPORTED_IMAGES_TYPES = Arrays.asList(".jpg", ".jpeg", ".png");
 
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -398,62 +409,63 @@ public class DoctorController {
     }
 
     @GET
-    @Path("/{license}/profileImage")
-    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path("/{license}/image")
+    @Produces(value = { MediaType.MULTIPART_FORM_DATA })
     public Response getProfileImage(@PathParam("license") final String license,
-                                    @Context Request request) {
+                                    @Context Request request) throws EntityNotFoundException {
         Doctor d = doctorService.getDoctorByLicense(license);
-        if(d != null) {
-            byte[] img = imageService.getProfileImage(d.getLicense()).getImage();
-            ImageDto dto = ImageDto.fromImage(img);
-            return CacheHelper.handleResponse(dto, imageCaching, "profileImage", request).build();
-            // return Response.ok(dto).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        if(d == null) throw new EntityNotFoundException("doctor");
+
+        Image img = imageService.getProfileImage(d.getLicense());
+        if (img == null) throw new EntityNotFoundException("image");
+
+        ImageDto dto = ImageDto.fromImage(img.getImage());
+        return CacheHelper.handleResponse(dto, imageCaching, "profileImage", request).build();
+        // return Response.ok(dto).build();
+
+
     }
 
     @DELETE
-    @Path("/{license}/profileImage")
+    @Path("/{license}/image")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#license, 'doctor')")
-    public Response deleteProfileImage(@PathParam("license") final String license) {
+    public Response deleteProfileImage(@PathParam("license") final String license) throws EntityNotFoundException {
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+        if(doctor == null) throw new EntityNotFoundException("doctor");
         imageService.deleteProfileImage(license);
         return Response.noContent().build();
     }
 
-    @PUT
-    @Path("/{license}/profileImage")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    @PreAuthorize("hasPermission(#license, 'doctor')")
-    public Response updateProfileImage(@PathParam("license") final String license,
-                                       @BeanParam final DoctorProfileImageForm profileImageForm) {
-        Doctor doctor = doctorService.getDoctorByLicense(license);
-        if(doctor != null) {
-            imageService.updateProfileImage(profileImageForm.getProfilePictureBytes(), doctor);
-            return Response.noContent().build();
-        }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
-    }
-
     @POST
-    @Path("/{license}/profileImage")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Path("/{license}/image")
+    @Consumes("multipart/form-data")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#license, 'doctor')")
     public Response uploadProfileImage(@PathParam("license") final String license,
-                                       @BeanParam final DoctorProfileImageForm profileImageForm) {
+                                       @FormDataParam("profileImage") InputStream fileInputStream,
+                                       @FormDataParam("profileImage") FormDataContentDisposition fileMetaData)
+            throws EntityNotFoundException, ar.edu.itba.paw.model.exceptions.BadRequestException,
+            ImageTooLargeException, UnsupportedMediaTypeException, IOException {
         Doctor doctor = doctorService.getDoctorByLicense(license);
-        if(doctor != null) {
-            if(imageService.getProfileImage(doctor.getLicense()) != null) {
-                imageService.createProfileImage(profileImageForm.getProfilePictureBytes(), doctor);
-                return Response.created(uriInfo.getAbsolutePath()).build();
-            } else {
-                return Response.status(Response.Status.CONFLICT.getStatusCode()).build();
-            }
-        } else {
-            return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        if (doctor == null) throw new EntityNotFoundException("doctor");
+        if (fileInputStream == null || fileMetaData == null) throw new ImageInfoMissingException();
+        String extension = fileMetaData.getFileName().substring(fileMetaData.getFileName().lastIndexOf('.'));
+        if (!SUPPORTED_IMAGES_TYPES.contains(extension))
+            throw new UnsupportedMediaTypeException("image-type-not-supported");
+
+        byte[] array = IOUtils.toByteArray(fileInputStream);
+
+        if (array.length > MAX_FILE_SIZE) throw new ImageTooLargeException();
+
+        if (imageService.getProfileImage(doctor.getLicense()) == null)
+            imageService.createProfileImage(array, doctor);
+        else {
+            imageService.deleteProfileImage(license);
+            imageService.createProfileImage(array, doctor);
         }
+        return Response.created(uriInfo.getAbsolutePath()).build();
+
     }
 
     //TODO: Use: for doctor to see his clinics

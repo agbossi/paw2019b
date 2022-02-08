@@ -8,11 +8,11 @@ import javax.print.Doc;
 
 public interface ImageService {
 
-    Image createProfileImage(MultipartFile file, Doctor doctor);
+    void createProfileImage(MultipartFile file, Doctor doctor);
 
     long updateProfileImage(MultipartFile file, Doctor doctor);
 
-    Image createProfileImage(byte[] image, Doctor doctor);
+    void createProfileImage(byte[] image, Doctor doctor);
 
     void updateProfileImage(byte[] image, Doctor doctor);
 
