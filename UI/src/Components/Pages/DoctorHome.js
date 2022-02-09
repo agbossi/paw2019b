@@ -88,13 +88,7 @@ function DoctorHome(props) {
             setMessage('errors.doctorNotFoundEdit')
         }
         if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            localStorage.removeItem('license')
-            localStorage.removeItem('firstName')
-            localStorage.removeItem('lastName')
-            localStorage.removeItem('specialty')
-            navigate('/login')
+            handleUnauth()
         }
     }
 
@@ -106,13 +100,7 @@ function DoctorHome(props) {
             window.location.reload()
         }
         if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            localStorage.removeItem('license')
-            localStorage.removeItem('firstName')
-            localStorage.removeItem('lastName')
-            localStorage.removeItem('specialty')
-            navigate('/login')
+            handleUnauth();
         }
         if (response.status === 404) {
             if (response.data === "doctor-not-found") {
@@ -131,6 +119,33 @@ function DoctorHome(props) {
         }
 
     }
+
+    const handleDeleteImage = async () => {
+        const response = await ImageCalls.deleteImage(localStorage.getItem("license"));
+        if (response && response.ok) {
+            setImage(null)
+            setMessage("")
+        }
+        if (response.status === 401) {
+            handleUnauth()
+        }
+        if (response.status === 404) {
+            if (response.data === "doctor-not-found") {
+                setMessage("errors.docLoggedNotFound")
+            }
+        }
+    }
+
+    const handleUnauth = () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('role')
+        localStorage.removeItem('license')
+        localStorage.removeItem('firstName')
+        localStorage.removeItem('lastName')
+        localStorage.removeItem('specialty')
+        navigate('/login')
+    }
+
 
     useEffect(async () => {
         await fetchDoctor();
@@ -187,7 +202,7 @@ function DoctorHome(props) {
                                  "/images/docpic.jpg": BASE_URL + "/doctors/" + localStorage.getItem('license') +"/image"} />
                         <div className="mt-3">
                             <ImageSelectModal handleUpload={handleUpload} />
-                            <Button className="mx-3 shadow-sm doc-button-color"> {t('deleteImgButton')}</Button>
+                            <Button className="mx-3 shadow-sm doc-button-color" onClick={handleDeleteImage}> {t('deleteImgButton')}</Button>
                         </div>
                     </Col>
                 </Row>
