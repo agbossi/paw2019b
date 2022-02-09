@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 @Component
-public class ImageCaching implements Caching<ImageDto> {
+public class ImageCaching implements Caching<byte[]> {
 
     @Override
-    public int calculateHash(ImageDto element) {
+    public int calculateHash(byte[] element) {
         if(element == null) {
             return 0;
         }
-        return Arrays.hashCode(element.getImage());
+        return Arrays.hashCode(element);
     }
 }

@@ -85,7 +85,9 @@ export const TRANSLATION_EN = {
         doctorNotFoundEdit: "No doctor found to edit",
         noLoggedDoc: "No logged email found, try logging out and logging in again",
         noDocEmail: "No doctor found with logged email",
-        docClinicNotFound: "No doctor in clinic found"
+        docClinicNotFound: "No doctor in clinic found",
+        imageBroken: "Image or image data missing, try uploading the image again",
+        notSupported: "Image type not supported. Supported types: JPEG, JPG, PNG"
 
     },
     actions: {
@@ -101,5 +103,6 @@ export const TRANSLATION_EN = {
     scheduleButton: "Schedule",
     welcome: "Welcome",
     editProfileButton: "Edit Profile",
-    changeImgButton: "Change Image"
+    changeImgButton: "Change Image",
+    deleteImgButton: "Delete Image"
 }

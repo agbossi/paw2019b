@@ -419,8 +419,10 @@ public class DoctorController {
         Image img = imageService.getProfileImage(d.getLicense());
         if (img == null) throw new EntityNotFoundException("image");
 
+//        return Response.ok(img.getImage()).build();
+
         ImageDto dto = ImageDto.fromImage(img.getImage());
-        return CacheHelper.handleResponse(dto, imageCaching, "profileImage", request).build();
+        return CacheHelper.handleResponse(dto.getImage(), imageCaching, "profileImage", request).build();
         // return Response.ok(dto).build();
 
 

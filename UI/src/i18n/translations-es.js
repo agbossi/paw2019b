@@ -89,7 +89,9 @@ export const TRANSLATION_ES = {
         doctorNotFoundEdit: "No se encontró el doctor a editar",
         noLoggedDoc: "No se encontró el email en sesión, intente cerrando sesión y volviendo a entrar",
         noDocEmail: "No se encontró doctor con el email en sesión",
-        docClinicNotFound: "No se encontró doctor en clínica"
+        docClinicNotFound: "No se encontró doctor en clínica",
+        imageBroken: "Faltan datos de la imagen, intente subir la imagen de vuelta",
+        notSupported: "Tipo de imagen no soportada. Tipos soportados: JPEG, JPG, PNG"
 
     },
     deleteButton: "Eliminar",
@@ -100,6 +102,7 @@ export const TRANSLATION_ES = {
     scheduleButton: "Horarios",
     welcome: "Bienvenido/a",
     editProfileButton: "Editar Perfil",
-    changeImgButton: "Cambiar Imagen"
+    changeImgButton: "Cambiar Imagen",
+    deleteImgButton: "Eliminar Imagen"
 
 }
