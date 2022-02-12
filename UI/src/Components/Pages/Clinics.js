@@ -34,6 +34,7 @@ function Clinics(props) {
         const response = await LocationCalls.getAllLocations()
         if (response && response.ok) {
             setLocations(response.data)
+            setMessage("")
         }
     }
 

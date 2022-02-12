@@ -11,8 +11,15 @@
 
 .admin-doctor-container {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
     height: 75vh;
+}
+
+.search-doctor-container {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height: 75vh;
+    margin-top: 1rem;
 }
 
 .admin-clinic-container {

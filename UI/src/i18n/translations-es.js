@@ -7,6 +7,9 @@ export const TRANSLATION_ES = {
         login: "Iniciar Sesión",
         clinics: "Mis Clínicas"
     },
+    USER: {
+        seeProfile: "Ver Perfil"
+    },
     ADMIN: {
         doctors: "Doctores",
         seeDocs: "Ver doctores",
@@ -62,7 +65,9 @@ export const TRANSLATION_ES = {
         hour: "Hora: ",
         schedule: "Horario",
         daySelect: "Seleccione día",
-        hourSelect: "Seleccione hora"
+        hourSelect: "Seleccione hora",
+        none: "Ninguna",
+        maxPrice: "Máximo Precio de Consulta"
     },
     actions: {
         add: "Agregar",

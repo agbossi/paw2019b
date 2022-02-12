@@ -7,6 +7,9 @@ export const TRANSLATION_EN = {
         login: "Login",
         clinics: "Clinics"
     },
+    USER: {
+        seeProfile: "See Profile"
+    },
     ADMIN: {
         doctors: "Doctors",
         seeDocs: "See doctors",
@@ -63,7 +66,9 @@ export const TRANSLATION_EN = {
         hour: "Hour: ",
         schedule: "Schedule",
         daySelect: "Select day",
-        hourSelect: "Select hour"
+        hourSelect: "Select hour",
+        none: "None",
+        maxPrice: "Maximum Consult Price"
     },
     errors: {
         licenseInUse: "Licence already registered",

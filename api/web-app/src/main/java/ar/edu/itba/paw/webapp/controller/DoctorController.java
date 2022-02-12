@@ -301,7 +301,7 @@ public class DoctorController {
     private static final List<String> SUPPORTED_IMAGES_TYPES = Arrays.asList(".jpg", ".jpeg", ".png");
 
     /**
-     * Returns a list of doctors (who are subscribed to clinic and their schedule on that clinic is
+     * Returns a list of doctors (who are subscribed to a clinic and their schedule on that clinic is
      * not empty) optionally filtered by the params: location, specialty, firstName, lastName, price,
      * prepaid
      * @param page

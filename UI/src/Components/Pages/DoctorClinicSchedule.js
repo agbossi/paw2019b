@@ -162,11 +162,11 @@ function DoctorClinicSchedule(props) {
                                 }
                                 if (clinic.id === Number(id)) {
                                     return (
-                                        <td className="current-clinic"><b>{clinic.name}</b></td>
+                                        <td className="current-clinic"><b>{clinic.name} ({clinic.location})</b></td>
                                     )
                                 } else {
                                     return (
-                                        <td className="other-clinic">{clinic.name}</td>
+                                        <td className="other-clinic">{clinic.name} ({clinic.location})</td>
                                     )
                                 }
 
