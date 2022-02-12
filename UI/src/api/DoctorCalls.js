@@ -32,13 +32,27 @@ const deleteDoctorsClinic = async (license, clinic) => api.delete(
     {},
     {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
 )
-
 const editPrice = async (license, clinicId, price) => api.put(
     cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinicId + "?" + cons.PRICE_QUERY + price,
     {},
     {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
 )
-
+const getSchedule = async (license) => api.get(
+    cons.DOCTORS_PATH + "/" + license + "/schedules")
+const addSchedule = async (license, clinicId, day, hour) => api.post(
+    cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinicId + "/schedules",
+    {
+        day: day,
+        hour: hour
+    },
+    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
+)
+const deleteSchedule = async (license, clinicId, day, hour) => api.delete(
+    cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinicId + "/schedules"
+    + "?" + cons.DAY_QUERY + day + "&" + cons.HOUR_QUERY + hour,
+    {},
+    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
+)
 
 export default {
     getDoctorsAdmin,
@@ -50,5 +64,8 @@ export default {
     getDocByEmail,
     addDoctorToClinic,
     deleteDoctorsClinic,
-    editPrice
+    editPrice,
+    getSchedule,
+    addSchedule,
+    deleteSchedule
 }

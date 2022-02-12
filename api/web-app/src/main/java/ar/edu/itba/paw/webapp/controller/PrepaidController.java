@@ -32,10 +32,11 @@ public class PrepaidController {
     @Autowired
     private PrepaidCaching prepaidCaching;
 
-    @Autowired
-    private MessageSource messageSource;
-
-    //TODO: Use: for admin to see all prepaids paginated
+    /**
+     * Returns paginated list of prepaids for ADMIN to manage
+     * @param page
+     * @return list of Prepaids
+     */
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getPrepaids(@QueryParam("page") @DefaultValue("0") Integer page,
@@ -51,7 +52,10 @@ public class PrepaidController {
                 .build();
     }
 
-    //TODO: Use: admin for adding prepaid to clinic
+    /**
+     * Return list of all prepaids for ADMIN to edit/add clinic.
+     * @return list of Prepaids
+     */
     @GET
     @Path("/all")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -63,7 +67,12 @@ public class PrepaidController {
                 .build();
     }
 
-    //TODO: Use: for admin to delete prepaid
+    /**
+     * Lets ADMIN delete a prepaid
+     * @param name
+     * @return
+     * @throws EntityNotFoundException
+     */
     @DELETE
     @Path("/{name}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -72,7 +81,12 @@ public class PrepaidController {
         return Response.noContent().build();
     }
 
-    //TODO: Use: for admin to add prepaid
+    /**
+     * Lets ADMIN add prepaid to application
+     * @param form
+     * @return
+     * @throws DuplicateEntityException
+     */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

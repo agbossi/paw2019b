@@ -29,10 +29,24 @@ public class ScheduleDaoImpl implements ScheduleDao {
     public List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic){
         final TypedQuery<Schedule> query = entityManager.createQuery(
                 "from Schedule as schedule where schedule.doctorClinic.doctor.license = :doctor " +
-                "and schedule.doctorClinic.clinic.id = :clinic ORDER BY schedule.scheduleKey.day, schedule.scheduleKey.hour",Schedule.class);
+                "and schedule.doctorClinic.clinic.id = :clinic ORDER BY schedule.scheduleKey.hour, " +
+                        "schedule.scheduleKey.day",Schedule.class);
 
         query.setParameter("doctor",doctorClinic.getDoctor().getLicense());
         query.setParameter("clinic",doctorClinic.getClinic().getId());
+
+        final List<Schedule> list = query.getResultList();
+        return list;
+    }
+
+    @Override
+    public List<Schedule> getDoctorsSchedule(Doctor doctor) {
+        final TypedQuery<Schedule> query = entityManager.createQuery(
+                "from Schedule as schedule where schedule.doctorClinic.doctor.license = :doctor " +
+                        "ORDER BY schedule.scheduleKey.hour, " +
+                        "schedule.scheduleKey.day",Schedule.class);
+
+        query.setParameter("doctor", doctor.getLicense());
 
         final List<Schedule> list = query.getResultList();
         return list;

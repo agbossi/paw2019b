@@ -74,15 +74,15 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
         return list;
     }
 
-    @Override
-    public void setSchedule(DoctorClinic doctorClinic, int day, int hour) {
-
-        Schedule schedule = scheduleService.createSchedule(day, hour, doctorClinic.getDoctor().getEmail(),
-                doctorClinic.getClinic().getId());
-        List<Schedule> list = doctorClinic.getSchedule();
-        list.add(schedule);
-        doctorClinic.setSchedule(list);
-    }
+//    @Override
+//    public void setSchedule(DoctorClinic doctorClinic, int day, int hour) {
+//
+//        Schedule schedule = scheduleService.createSchedule(day, hour, doctorClinic.getDoctor().getEmail(),
+//                doctorClinic.getClinic().getId());
+//        List<Schedule> list = doctorClinic.getSchedule();
+//        list.add(schedule);
+//        doctorClinic.setSchedule(list);
+//    }
 
     @Override
     public List<DoctorClinic> getDoctorsFromClinic(Clinic clinic) {
@@ -93,7 +93,7 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
 
     @Override
     public DoctorClinic getDoctorInClinic(String license, int clinic) {
-        return doctorClinicDao.getDoctorInClinic(license,clinic);
+        return doctorClinicDao.getDoctorInClinic(license, clinic);
     }
 
     @Override

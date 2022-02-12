@@ -11,6 +11,8 @@ public interface ScheduleDao {
 
     List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic);
 
+    List<Schedule> getDoctorsSchedule(Doctor doctor);
+
     boolean doctorHasScheduleInClinic(DoctorClinic doctorClinic, int day, int hour);
 
     void deleteSchedule(int hour, int day, DoctorClinic doctorClinic);

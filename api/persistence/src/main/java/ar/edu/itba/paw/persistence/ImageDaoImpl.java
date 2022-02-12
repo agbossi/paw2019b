@@ -21,7 +21,7 @@ public class ImageDaoImpl implements ImageDao {
     public void createProfileImage(byte[] image, Doctor doctor) {
         Doctor doc = entityManager.find(Doctor.class, doctor.getLicense());
         Image im = new Image(doc, image);
-        entityManager.persist(im); //TODO esto funciona??
+        entityManager.persist(im);
     }
 
     @Override

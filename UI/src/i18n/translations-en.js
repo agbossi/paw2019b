@@ -58,7 +58,12 @@ export const TRANSLATION_EN = {
         selectLocation: "Select location",
         selectPrepaid: "Select prepaid",
         selectClinic: "Select clinic",
-        enterPrice: "Enter price"
+        enterPrice: "Enter price",
+        day: "Day: ",
+        hour: "Hour: ",
+        schedule: "Schedule",
+        daySelect: "Select day",
+        hourSelect: "Select hour"
     },
     errors: {
         licenseInUse: "Licence already registered",
@@ -87,13 +92,27 @@ export const TRANSLATION_EN = {
         noDocEmail: "No doctor found with logged email",
         docClinicNotFound: "No doctor in clinic found",
         imageBroken: "Image or image data missing, try uploading the image again",
-        notSupported: "Image type not supported. Supported types: JPEG, JPG, PNG"
+        notSupported: "Image type not supported. Supported types: JPEG, JPG, PNG",
+        scheduleExists: "You already have scheduled this time and hour for this or other clinic",
+        scheduleNotFoundDelete: "No schedule found to delete",
+        scheduleOtherClinicDelete: "The schedule to delete belongs to another clinic"
 
     },
     actions: {
         add: "Add",
         edit: "Edit",
-        upload: "Upload"
+        upload: "Upload",
+        delete: "Delete"
+    },
+    CAL : {
+        hour: "Hour",
+        mon: "Monday",
+        tue: "Tuesday",
+        wed: "Wednesday",
+        thu: "Thursday",
+        fri: "Friday",
+        sat: "Saturday",
+        sun: "Sunday"
     },
     deleteButton: "Delete",
     prevButton: "Prev",
@@ -104,5 +123,5 @@ export const TRANSLATION_EN = {
     welcome: "Welcome",
     editProfileButton: "Edit Profile",
     changeImgButton: "Change Image",
-    deleteImgButton: "Delete Image"
+    deleteImgButton: "Delete Image",
 }

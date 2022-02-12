@@ -45,7 +45,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     @Override
     public List<DoctorClinic> getDoctorsInClinic(int clinic){
         TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc"  +
-                " where dc.clinic.id = :id",DoctorClinic.class);
+                " where dc.clinic.id = :id", DoctorClinic.class);
         query.setParameter("id",clinic);
         List<DoctorClinic> list = query.getResultList();
         return list;
@@ -53,7 +53,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public DoctorClinic getDoctorInClinic(String license, int clinic){
-        return entityManager.find(DoctorClinic.class,new DoctorClinicKey(license,clinic));
+        return entityManager.find(DoctorClinic.class, new DoctorClinicKey(license,clinic));
     }
 
     //solo para que no explote la clase

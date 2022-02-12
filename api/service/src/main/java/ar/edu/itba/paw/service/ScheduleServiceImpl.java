@@ -5,6 +5,9 @@ import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.DoctorClinic;
 import ar.edu.itba.paw.model.Schedule;
+import ar.edu.itba.paw.model.exceptions.ConflictException;
+import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
+import ar.edu.itba.paw.model.exceptions.OutOfRangeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +34,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     @Override
-    public Schedule createSchedule(int hour, int day, String email, int clinicId) {
+    public Schedule createSchedule(int hour, int day, String email, int clinicId) throws ConflictException {
 
         DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(
                 doctorService.getDoctorByEmail(email),
@@ -39,13 +42,19 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         if(!doctorHasSchedule(doctorClinic.getDoctor(),day,hour)) {
             return scheduleDao.createSchedule(day, hour, doctorClinic);
+        } else {
+            throw new ConflictException("schedule-exists");
         }
-        return null; // TODO: change this for optional, check where is it called
     }
 
     @Override
     public List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic) {
         return scheduleDao.getDoctorClinicSchedule(doctorClinic);
+    }
+
+    @Override
+    public List<Schedule> getDoctorSchedule(Doctor doctor) {
+        return scheduleDao.getDoctorsSchedule(doctor);
     }
 
     @Override
@@ -55,17 +64,27 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     @Override
-    public void deleteSchedule(int hour, int day, String license, int clinicId) {
+    public void deleteSchedule(int hour, int day, String license, int clinicId) throws OutOfRangeException, EntityNotFoundException {
         if(hour > 0 && hour < 24 && day > 0 && day < 8) {
             DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(
                     doctorService.getDoctorByLicense(license),
                     clinicService.getClinicById(clinicId));
 
             if(doctorHasSchedule(doctorClinic.getDoctor(), day, hour)) {
-                scheduleDao.deleteSchedule(hour, day, doctorClinic);
-                appointmentService.cancelAllAppointmentsOnSchedule(doctorClinic, day, hour);
+                if(doctorHasScheduleInClinic(doctorClinic, day, hour)) {
+                    scheduleDao.deleteSchedule(hour, day, doctorClinic);
+                    appointmentService.cancelAllAppointmentsOnSchedule(doctorClinic, day, hour);
+                } else {
+                    throw new EntityNotFoundException("schedule-clinic");
+                }
+
+            } else {
+                throw new EntityNotFoundException("schedule");
             }
+        } else {
+           throw new OutOfRangeException("time");
         }
+
     }
 
     @Override

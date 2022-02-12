@@ -57,12 +57,18 @@ export const TRANSLATION_ES = {
         selectLocation: "Seleccione localidad",
         selectPrepaid: "Seleccione prepaga",
         selectClinic: "Seleccione clínica",
-        enterPrice: "Ingrese precio"
+        enterPrice: "Ingrese precio",
+        day: "Día: ",
+        hour: "Hora: ",
+        schedule: "Horario",
+        daySelect: "Seleccione día",
+        hourSelect: "Seleccione hora"
     },
     actions: {
         add: "Agregar",
         edit: "Editar",
-        upload: "Subir"
+        upload: "Subir",
+        delete: "Borrar"
     },
     errors: {
         licenseInUse: "Licencia ya registrada",
@@ -91,8 +97,21 @@ export const TRANSLATION_ES = {
         noDocEmail: "No se encontró doctor con el email en sesión",
         docClinicNotFound: "No se encontró doctor en clínica",
         imageBroken: "Faltan datos de la imagen, intente subir la imagen de vuelta",
-        notSupported: "Tipo de imagen no soportada. Tipos soportados: JPEG, JPG, PNG"
+        notSupported: "Tipo de imagen no soportada. Tipos soportados: JPEG, JPG, PNG",
+        scheduleExists: "Usted ya tiene agendado ese horario para esta u otra clínica",
+        scheduleNotFoundDelete: "No se encontró el horario a eliminar",
+        scheduleOtherClinicDelete: "El horario a eliminar pertenece a otra clínica"
 
+    },
+    CAL : {
+        hour: "Hora",
+        mon: "Lunes",
+        tue: "Martes",
+        wed: "Miércoles",
+        thu: "Jueves",
+        fri: "Viernes",
+        sat: "Sábado",
+        sun: "Domingo"
     },
     deleteButton: "Eliminar",
     prevButton: "Anterior",

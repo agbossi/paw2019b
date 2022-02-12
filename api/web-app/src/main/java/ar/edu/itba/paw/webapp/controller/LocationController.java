@@ -36,7 +36,11 @@ public class LocationController {
     @Context
     private UriInfo uriInfo;
 
-    //TODO: Use: for admin locations
+    /**
+     * Returns paginated list of locations for ADMIN to manage
+     * @param page
+     * @return list of Locations
+     */
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getLocations(@QueryParam("page") @DefaultValue("0") Integer page,
@@ -55,7 +59,10 @@ public class LocationController {
         return ret.build();
     }
 
-    // TODO: Use: In admin clinics
+    /**
+     * Returns list of all locations for ADMIN to add/edit a clinic
+     * @return list of Locations
+     */
     @GET
     @Path("/all")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -68,8 +75,14 @@ public class LocationController {
         return ret.build();
     }
 
-
-    //TODO: Use: for admin to delete location
+    /**
+     * Lets ADMIN delete location. If a there is a clinic on the location to be deleted, it throws
+     * EntityDependencyException.
+     * @param name
+     * @return
+     * @throws EntityNotFoundException
+     * @throws EntityDependencyException
+     */
     @DELETE
     @Path("/{name}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -79,7 +92,12 @@ public class LocationController {
         return Response.noContent().build();
     }
 
-    // TODO: Use: for admin to add loaction
+    /**
+     * Lets ADMIN add location to application
+     * @param form
+     * @return
+     * @throws DuplicateEntityException
+     */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
