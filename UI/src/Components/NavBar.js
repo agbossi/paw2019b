@@ -96,6 +96,12 @@ function NavBar(props) {
                             <Nav.Link onClick={() => handleLogout()} style={{color: "white"}}>{t('NAVBAR.logout')}</Nav.Link>
                         </Nav.Item>
                         :
+                        <Nav.Item  class="ml-auto">
+                            <Nav.Link href="/signUp" style={{color: "white"}}>{t('NAVBAR.signUp')}</Nav.Link>
+                        </Nav.Item>}
+                    {localStorage.getItem('role') !== null ?
+                        ''
+                        :
                         <Nav.Item class="ml-auto">
                             <Nav.Link href="/login" style={{color: "white"}}>{t('NAVBAR.login')}</Nav.Link>
                         </Nav.Item>}

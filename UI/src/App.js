@@ -7,6 +7,7 @@ import Locations from "./Components/Pages/Locations";
 import Specialties from "./Components/Pages/Specialties";
 import Clinics from "./Components/Pages/Clinics";
 import Prepaids from "./Components/Pages/Prepaids";
+import SignUp from "./Components/Pages/SignUp";
 import ClinicPrepaids from './Components/Pages/ClinicPrepaids';
 import Doctors from "./Components/Pages/Doctors";
 import userDoctorClinics from "./Components/Pages/UserDoctorClinics";
@@ -38,6 +39,7 @@ function App() {
                     <Route path='admin/clinics/:id/prepaids' element={<ClinicPrepaids/>}/>
                     <Route path='admin/doctors' element={<Doctors/>}/>
                     <Route path='login' element={<WrappedLogin />}/>
+                    <Route path='signUp' element={<SignUp />}/>
                 </Routes>
             </Router>
         </div>

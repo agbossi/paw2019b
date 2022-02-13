@@ -18,6 +18,14 @@ const login = async (email, password) => {
         })
 }
 
+const signUp = async (data) => {
+    console.log('aaaaaaaaaaaaaaaaaaa')
+    console.log('ni estoy llegando aca no?')
+    console.log('data')
+    console.log(data)
+    return api.post(cons.PATIENT_PATH, data)
+}
+
 const logout = async () => {
     localStorage.removeItem('token');
     localStorage.removeItem('role')
@@ -29,5 +37,6 @@ const logout = async () => {
 
 export default {
     login,
+    signUp,
     logout,
 }

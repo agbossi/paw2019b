@@ -1,7 +1,7 @@
 export const PAGE_QUERY = 'page=';
 export const UNAVAILABLE_QUERY = 'includeUnavailables='
 export const PRICE_QUERY = 'price='
-
+export const PATIENT_PATH = '/patients';
 export const LOGIN_PATH = '/login';
 export const PREPAIDS_PATH = '/prepaids';
 export const LOCATIONS_PATH = '/locations';

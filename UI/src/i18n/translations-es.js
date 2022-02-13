@@ -5,6 +5,7 @@ export const TRANSLATION_ES = {
         profile: "Perfil",
         logout: "Cerrar Sesión",
         login: "Iniciar Sesión",
+        signUp: "Registrarse",
         clinics: "Mis Clínicas"
     },
     ADMIN: {
@@ -40,6 +41,8 @@ export const TRANSLATION_ES = {
         enterFirstName: "Ingrese nombre",
         lastName: "Apellido",
         enterLastName: "Ingrese apellido",
+        document: "Documento",
+        enterDocument: "Ingrese documento",
         specialty: "Especialidad: ",
         selectSpecialty: "Seleccione especialidad",
         enterLicense: "Ingrese licencia",
@@ -48,16 +51,21 @@ export const TRANSLATION_ES = {
         email: "Email",
         enterEmail: "Ingrese email",
         password: "Contraseña",
+        enterPassword: "Ingrese Contraseña",
         repeatPassword: "Reingrese Contraseña",
+        prepaidNumber: "Numero de prepaga",
+        enterPrepaidNumber: "Ingrese numero de prepaga",
         name: "Nombre",
         enterName: "Ingrese nombre",
         address: "Dirección",
         enterAddress: "Ingrese dirección",
         location: "Localidad: ",
+        prepaid: "Prepaga",
         selectLocation: "Seleccione localidad",
         selectPrepaid: "Seleccione prepaga",
         selectClinic: "Seleccione clínica",
-        enterPrice: "Ingrese precio"
+        enterPrice: "Ingrese precio",
+        signUp: "Registrarse"
     },
     actions: {
         add: "Agregar",
@@ -89,8 +97,14 @@ export const TRANSLATION_ES = {
         doctorNotFoundEdit: "No se encontró el doctor a editar",
         noLoggedDoc: "No se encontró el email en sesión, intente cerrando sesión y volviendo a entrar",
         noDocEmail: "No se encontró doctor con el email en sesión",
-        docClinicNotFound: "No se encontró doctor en clínica"
-
+        docClinicNotFound: "No se encontró doctor en clínica",
+        required: "El campo es obligatorio",
+        numeric: "El campo solo puede contener numeros",
+        passwordTooShort: "La contraseña es demasiado corta",
+        alphabetic: "El campo solo puede contener letras",
+        invalidEmail: "email invalido",
+        invalidDocumentLength: "El documento debe ser de 8 caracteres",
+        prepaidNumberTooLong: "Numero de prepaga demasiado largo"
     },
     deleteButton: "Eliminar",
     prevButton: "Anterior",

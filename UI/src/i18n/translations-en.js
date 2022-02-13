@@ -5,6 +5,7 @@ export const TRANSLATION_EN = {
         profile: "Profile",
         logout: "Logout",
         login: "Login",
+        signUp: "SignUp",
         clinics: "Clinics"
     },
     ADMIN: {
@@ -41,6 +42,8 @@ export const TRANSLATION_EN = {
         enterFirstName: "Enter first name",
         lastName: "Last Name",
         enterLastName: "Enter last name",
+        document: "Document",
+        enterDocument: "Enter document",
         specialty: "Specialty: ",
         selectSpecialty: "Select specialty",
         enterLicense: "Enter license",
@@ -49,7 +52,11 @@ export const TRANSLATION_EN = {
         email: "Email",
         enterEmail: "Enter email",
         password: "Password",
+        enterPassword: "Enter Password",
         repeatPassword: "Repeat Password",
+        prepaid: "Prepaid",
+        prepaidNumber: "Prepaid number",
+        enterPrepaidNumber: "enter prepaid number",
         name: "Name",
         enterName: "Enter name",
         address: "Address",
@@ -58,7 +65,8 @@ export const TRANSLATION_EN = {
         selectLocation: "Select location",
         selectPrepaid: "Select prepaid",
         selectClinic: "Select clinic",
-        enterPrice: "Enter price"
+        enterPrice: "Enter price",
+        signUp: "Sign up"
     },
     errors: {
         licenseInUse: "Licence already registered",
@@ -85,8 +93,14 @@ export const TRANSLATION_EN = {
         doctorNotFoundEdit: "No doctor found to edit",
         noLoggedDoc: "No logged email found, try logging out and logging in again",
         noDocEmail: "No doctor found with logged email",
-        docClinicNotFound: "No doctor in clinic found"
-
+        docClinicNotFound: "No doctor in clinic found",
+        required: "This field is required",
+        numeric: "This field only allows numbers",
+        passwordTooShort: "Password is too short",
+        alphabetic: "This field only allows letters",
+        invalidEmail: "Not a valid email",
+        invalidDocumentLength: "document length must be 8 digits",
+        prepaidNumberTooLong: "Prepaid number too long"
     },
     actions: {
         add: "Add",
