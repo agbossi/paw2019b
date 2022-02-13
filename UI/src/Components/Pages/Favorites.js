@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import PatientCalls from "../../api/PatientCalls";
-import {Card, Col, Container, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import {Link} from "react-router-dom";
 
 function Favorites() {
@@ -15,6 +15,12 @@ function Favorites() {
         if (response && response.ok) {
             setDoctors(response.data)
         }
+    }
+
+    const removeFromFavorites = async (license) => {
+        let id = localStorage.getItem('email')
+        const response = await PatientCalls.deleteFavoriteDoctor(id, license)
+        await fetchFavorites()
     }
 
     useEffect(async () => {
@@ -43,6 +49,12 @@ function Favorites() {
                                               role="button"
                                               to={'/home/' + doctor.license + '/profile'}>{t("USER.seeProfile")}
                                         </Link>
+                                        <div className="buttons-div">
+                                            <Button className="edit-remove-button remove-button-color shadow-sm"
+                                                    onClick={() => removeFromFavorites(doctor.license)}>
+                                                {t("deleteButton")}
+                                            </Button>
+                                        </div>
                                     </Card>
                                 )
                             })}
