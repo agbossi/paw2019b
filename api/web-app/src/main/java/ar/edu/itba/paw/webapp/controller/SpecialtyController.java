@@ -32,7 +32,11 @@ public class SpecialtyController {
     @Autowired
     private SpecialtyCaching specialtyCaching;
 
-    //TODO: Use: for admin to see specialties
+    /**
+     * Returns paginated list of specialties for ADMIN to manage
+     * @param page
+     * @return list of Specialties
+     */
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getSpecialties(@QueryParam("page") @DefaultValue("0") Integer page,
@@ -50,7 +54,10 @@ public class SpecialtyController {
                 .build();
     }
 
-    // TODO: Use: for adding doctor and for doctor to edit profile
+    /**
+     * Return list of all specialties for ADMIN to add doctor.
+     * @return list of Specialties
+     */
     @GET()
     @Path("/all")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -63,7 +70,14 @@ public class SpecialtyController {
                 .build();
     }
 
-    // TODO: Use: for admin to delete specialty
+    /**
+     * Lets ADMIN delete specialty. If a doctor belongs to the specialty, it throws
+     * EntityDependencyException.
+     * @param specialty
+     * @return
+     * @throws EntityNotFoundException
+     * @throws EntityDependencyException
+     */
     @DELETE
     @Path("/{specialty}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -73,7 +87,12 @@ public class SpecialtyController {
         return Response.noContent().build();
     }
 
-    //TODO: Use: for admin to add specialty
+    /**
+     * Lets ADMIN add specialty to application
+     * @param form
+     * @return
+     * @throws DuplicateEntityException
+     */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)

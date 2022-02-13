@@ -1,15 +1,58 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Form, FormControl, FormGroup, InputGroup, Button} from "react-bootstrap";
 import DropDownList from "./DropDownList";
+import LocationCalls from "../api/LocationCalls";
+import SpecialtyCalls from "../api/SpecialtyCalls";
+import PrepaidCalls from "../api/PrepaidCalls";
+import {useTranslation} from "react-i18next";
 
 function SearchBar(props) {
-
-    const [selectedSpecialty, setSelectedSpecialty] = useState('')
-    const [selectedLocation, setSelectedLocation] = useState('')
-    const [selectedPrepaid, setSelectedPrepaid] = useState('')
+    const {t} = useTranslation()
+    const [selectedSpecialty, setSelectedSpecialty] = useState('-')
+    const [selectedLocation, setSelectedLocation] = useState('-')
+    const [selectedPrepaid, setSelectedPrepaid] = useState('-')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [consultPrice, setConsultPrice] = useState(0)
+    const [locations, setLocations] = useState([])
+    const [specialties, setSpecialties] = useState([])
+    const [prepaids, setPrepaids] = useState([])
+
+
+    const fetchLocations = async () => {
+        const response = await LocationCalls.getAllLocations();
+        if (response && response.ok) {
+            const data = response.data
+            data.push({name: '-'})
+            setLocations(data);
+
+        }
+    }
+
+    const fetchSpecialties = async () => {
+        const response = await SpecialtyCalls.getAllSpecialties();
+        if (response && response.ok) {
+            const data = response.data
+            data.push({name: '-'})
+            setSpecialties(data);
+        }
+
+    }
+
+    const fetchPrepaids = async () => {
+        const response = await PrepaidCalls.getAllPrepaids();
+        if (response && response.ok) {
+            const data = response.data
+            data.push({name: '-'})
+            setPrepaids(data);
+        }
+    }
+
+    useEffect(async () => {
+        await fetchPrepaids();
+        await fetchLocations();
+        await fetchSpecialties();
+    }, [])
 
 
     const onChange = (event) => {
@@ -22,6 +65,7 @@ function SearchBar(props) {
                 setLastName(event.target.value)
                 break;
             case "consultPrice":
+                console.log(" sss " + event.target.value)
                 setConsultPrice(event.target.value)
                 break;
         }
@@ -45,70 +89,70 @@ function SearchBar(props) {
                 <Form>
                     <div className="list-group-item list-group-item-action">
                         <FormGroup className="mb-3" controlId="location">
-                                    <Form.Label>Location</Form.Label>
-                                    <DropDownList iterable={props.locations}
+                                    <Form.Label>{t("FORM.location")} {selectedLocation}</Form.Label>
+                                    <DropDownList iterable={locations.map(loc => loc.name)}
                                                   selectedElement=''
                                                   handleSelect={handleSelectLocation}
-                                                  elementType='Location'
+                                                  elementType={t("FORM.selectLocation")}
                                                   id='location'/>
                                 </FormGroup>
                     </div>
 
                     <div className="list-group-item list-group-item-action">
                         <FormGroup className="mb-3" controlId="specialty">
-                                    <Form.Label>Specialty</Form.Label>
-                                    <DropDownList iterable={props.specialties}
+                                    <Form.Label>{t("FORM.specialty")} {selectedSpecialty}</Form.Label>
+                                    <DropDownList iterable={specialties.map(spe => spe.name)}
                                                   selectedElement=''
                                                   handleSelect={handleSelectSpecialty}
-                                                  elementType='Specialty'
+                                                  elementType={t("FORM.selectSpecialty")}
                                                   id='specialty'/>
                                 </FormGroup>
                     </div>
 
                     <div className="list-group-item list-group-item-action">
                         <FormGroup className="mb-3" controlId="prepaid">
-                                    <Form.Label>Prepaid</Form.Label>
-                                    <DropDownList iterable={props.prepaids}
+                                    <Form.Label>{t("ADMIN.prepaid")}: {selectedPrepaid}</Form.Label>
+                                    <DropDownList iterable={prepaids.map(pre => pre.name)}
                                                   selectedElement=''
                                                   handleSelect={handleSelectPrepaid}
-                                                  elementType='Prepaid'
+                                                  elementType={t("FORM.selectPrepaid")}
                                                   id='prepaid'/>
                                 </FormGroup>
                     </div>
 
                     <div className="list-group-item list-group-item-action">
                         <FormGroup className="mb-3" controlId="firstName">
-                                    <Form.Label>First Name</Form.Label>
+                                    <Form.Label>{t("FORM.firstName")}</Form.Label>
                                     <Form.Control placeholder="Enter first name" onChange={onChange}/>
                                 </FormGroup>
                     </div>
 
                     <div className="list-group-item list-group-item-action">
                         <Form.Group className="mb-3" controlId="lastName">
-                                    <Form.Label>Last Name</Form.Label>
+                                    <Form.Label>{t("FORM.lastName")}</Form.Label>
                                     <Form.Control placeholder="Enter last name" onChange={onChange}/>
                                 </Form.Group>
                     </div>
 
                     <div className="list-group-item list-group-item-action">
                         <FormGroup controlId="consultPrice">
-                            <Form.Label>Consult Price</Form.Label>
+                            <Form.Label>{t("FORM.maxPrice")}</Form.Label>
                             <InputGroup className="mb-3">
                                 <InputGroup.Text>$</InputGroup.Text>
-                                <FormControl aria-label="Amount (to the nearest dollar)" />
+                                <FormControl aria-label="Amount (to the nearest dollar)" onChange={onChange}/>
                                 <InputGroup.Text>.00</InputGroup.Text>
                             </InputGroup>
                         </FormGroup>
                     </div>
                     <div className="list-group-item list-group-item-action">
-                        <Button variant="dark" onClick={() => props.handleSearch({
+                        <Button className="doc-button-color" onClick={() => props.handleSearch({
                                 firstName: firstName,
                                 lastName: lastName,
-                                location: selectedLocation,
-                                specialty: selectedSpecialty,
-                                prepaid: selectedPrepaid,
+                                location: selectedLocation === '-'? null : selectedLocation,
+                                specialty: selectedSpecialty === '-'? null : selectedSpecialty,
+                                prepaid: selectedPrepaid === '-'? null : selectedPrepaid,
                                 consultPrice: consultPrice
-                            }
+                            }, 0
                         )}>
                             Search
                         </Button>

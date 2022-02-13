@@ -6,7 +6,6 @@ import {useTranslation} from "react-i18next";
 import {Link, useNavigate} from "react-router-dom";
 import DoctorClinicAddModal from "../Modals/DoctorClinicAddModal";
 import EditPriceModal from "../Modals/EditPriceModal";
-import {loadLanguages} from "i18next";
 
 function DoctorClinics(props) {
     const [clinics, setClinics] = useState([]);
@@ -25,7 +24,6 @@ function DoctorClinics(props) {
             setClinics(response.data)
             setMaxPage(Number(response.headers.xMaxPage))
             setMessage("")
-            console.log(response.data)
         }
         if(response.status === 404) {
             setMessage("errors.docLoggedNotFound")
@@ -55,23 +53,8 @@ function DoctorClinics(props) {
         const response = await DoctorCalls.addDoctorToClinic(newDocClinic, license);
         if (response && response.ok) {
             await fetchDoctorsClinics(page)
-        }
-        if (response.status === 404) {
-            if (response.data === "doctor-not-found") {
-                setMessage("errors.docLoggedNotFound")
-            }
-            if (response.data === "clinic-not-found") {
-                setMessage("errors.clinicNotFound")
-            }
-        }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            localStorage.removeItem('license')
-            localStorage.removeItem('firstName')
-            localStorage.removeItem('lastName')
-            localStorage.removeItem('specialty')
-            navigate('/login')
+        }else {
+            handleErrors(response);
         }
     }
 
@@ -81,8 +64,29 @@ function DoctorClinics(props) {
             await fetchDoctorsClinics(page)
             await fetchAllDoctorClinics()
             setMessage('')
+        } else {
+            handleErrors(response);
         }
+    }
+
+
+    const handleDelete = async (clinicId) => {
+        const response = await DoctorCalls.deleteDoctorsClinic(license, clinicId)
+        if (response && response.ok) {
+            await fetchDoctorsClinics(page)
+            await fetchAllDoctorClinics()
+            setMessage('')
+        } else {
+            handleErrors(response);
+        }
+    }
+
+    const handleErrors = (response) => {
         if (response.status === 404) {
+            if (response.data === "doctor-not-found")
+                setMessage("errors.docLoggedNotFound")
+            if (response.data === "clinic-not-found")
+                setMessage("errors.clinicNotFound")
             if (response.data === "doctor-clinic-not-found")
                 setMessage("errors.docClinicNotFound")
         }
@@ -96,32 +100,6 @@ function DoctorClinics(props) {
             navigate('/login')
         }
     }
-
-
-    const handleDelete = async (clinicId) => {
-        const response = await DoctorCalls.deleteDoctorsClinic(license, clinicId)
-        if (response && response.ok) {
-            await fetchDoctorsClinics(page)
-            await fetchAllDoctorClinics()
-            setMessage('')
-        }
-        if (response.status === 404) {
-            if (response.data === "doctor-not-found")
-                setMessage("errors.docLoggedNotFound")
-            if (response.data === "clinic-not-found")
-                setMessage("errors.clinicNotFound")
-        }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            localStorage.removeItem('license')
-            localStorage.removeItem('firstName')
-            localStorage.removeItem('lastName')
-            localStorage.removeItem('specialty')
-            navigate('/login')
-        }
-    }
-
     useEffect(async () => {
         await fetchDoctorsClinics(page);
         await fetchAllClinics();
@@ -160,7 +138,8 @@ function DoctorClinics(props) {
                                     </Card.Text>
                                     <Link className="btn btn-outline-dark btn-lg see-prepaid-button shadow-sm"
                                           role="button"
-                                          to={'/doctor/clinics/' + dc.clinic.id + '/schedule'}>{t('scheduleButton')}
+                                          to={`/doctor/${license}/clinics/${dc.clinic.id}/schedule`}>
+                                        {t('scheduleButton')}
                                     </Link>
                                 </Card.Body>
                                 <div className="buttons-div">

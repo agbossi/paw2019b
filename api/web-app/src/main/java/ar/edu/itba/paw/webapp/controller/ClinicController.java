@@ -51,7 +51,12 @@ public class ClinicController {
     @Context
     private UriInfo uriInfo;
 
-    // TODO: Use: admin clinics
+    /**
+     * Returns paginated list of clinics for ADMIN user to manage.
+     * "X-max-page" header: last page of doctors
+     * @param page
+     * @return list of Clinics
+     */
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getClinics(@QueryParam("page") @DefaultValue("0") Integer page,
@@ -75,7 +80,10 @@ public class ClinicController {
                 .build(); */
     }
 
-    //TODO: Use: For doctor to get all clinics to add himself to one
+    /**
+     *Returns full list of clinics for DOCTOR to choose from
+     * @return list of Clinics
+     */
     @GET
     @Path("/all")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -86,7 +94,13 @@ public class ClinicController {
                         new GenericEntity<List<ClinicDto>>(clinics) {}, "clinics", request).build();
     }
 
-    //TODO: Use: admin adds clinic
+    /**
+     * Lets ADMIN add new clinics to the application (Requires clinicForm)
+     * @param clinicForm
+     * @return
+     * @throws EntityNotFoundException
+     * @throws DuplicateEntityException
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -99,7 +113,13 @@ public class ClinicController {
                 .path(String.valueOf(clinic.getId())).build()).build();
     }
 
-    // TODO: Use: admin edits clinic
+    /**
+     * Lets ADMIN edit clinic
+     * @param clinicId
+     * @param clinicForm
+     * @return
+     * @throws EntityNotFoundException
+     */
     @PUT
     @Path("{clinicId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -112,7 +132,11 @@ public class ClinicController {
         return Response.noContent().build();
     }
 
-    // TODO: Use: admin to get clinic's prepaids.
+    /**
+     * Returns specific clinic information
+     * @param clinicId
+     * @return Clinic
+     */
     @GET
     @Path("{clinicId}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -128,7 +152,12 @@ public class ClinicController {
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
-    //TODO: Use: admin delete clinic
+    /**
+     * Lets ADMIN delete a clinic
+     * @param clinicId
+     * @return
+     * @throws EntityNotFoundException
+     */
     @DELETE
     @Path("{clinicId}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -137,7 +166,14 @@ public class ClinicController {
         return Response.noContent().build();
     }
 
-    //TODO: Use: admin get paginated clinic's prepaids
+    /**
+     * Returns paginated list of a specific clinic's prepaids
+     * "X-max-page" header: last page of prepaids
+     * @param clinicId
+     * @param page
+     * @return list of Prepaids
+     * @throws EntityNotFoundException
+     */
     @GET
     @Path("{clinicId}/prepaids")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -158,7 +194,12 @@ public class ClinicController {
 
     }
 
-    // TODO: Use: admin get all prepaids for clinic's prepaids
+    /**
+     * Returns list of all prepaid of a specific clinic
+     * @param clinicId
+     * @return list of Prepaids
+     * @throws EntityNotFoundException
+     */
     @GET
     @Path("{clinicId}/prepaids/all")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -174,7 +215,13 @@ public class ClinicController {
 
     }
 
-    //TODO: Use: admin adding prepaid to clinic
+    /**
+     * Lets ADMIN add a prepaid to a specific clinic
+     * @param clinicId
+     * @param prepaidId
+     * @return
+     * @throws EntityNotFoundException
+     */
     @POST
     @Path("{clinicId}/prepaids/{prepaidId}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -188,6 +235,13 @@ public class ClinicController {
 
     }
 
+    /**
+     * Lets ADMIN remove a prepaid from a specific clinic
+     * @param clinicId
+     * @param prepaid
+     * @return
+     * @throws EntityNotFoundException
+     */
     @DELETE
     @Path("{clinicId}/prepaids/{prepaidId}")
     @Produces(value = { MediaType.APPLICATION_JSON })

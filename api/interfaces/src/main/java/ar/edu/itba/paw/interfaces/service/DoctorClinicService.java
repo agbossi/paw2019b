@@ -11,7 +11,7 @@ public interface DoctorClinicService {
 
     long deleteDoctorClinic(String license, int clinicid) throws EntityNotFoundException;
 
-    void setSchedule(DoctorClinic doctorClinic, int day, int hour);
+    //void setSchedule(DoctorClinic doctorClinic, int day, int hour);
 
     List<DoctorClinic> getDoctorClinics();
 

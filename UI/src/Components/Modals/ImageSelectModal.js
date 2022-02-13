@@ -24,6 +24,7 @@ function ImageSelectModal(props) {
             selectedImage.name
         );
         props.handleUpload(formData)
+        handleShow();
 
     }
 

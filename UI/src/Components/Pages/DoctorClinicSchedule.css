@@ -1,0 +1,15 @@
+.schedule-table {
+    width: auto !important;
+    margin: 2rem !important;
+}
+.content {
+    display: grid;
+}
+
+.current-clinic {
+    color: #3c677e;
+}
+
+.other-clinic {
+    color: gray;
+}

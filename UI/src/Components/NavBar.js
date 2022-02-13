@@ -33,11 +33,11 @@ function NavBar(props) {
 
     const docNavBarItems = [
         {
-            link: 'doctor/clinics',
+            link: '/doctor/clinics',
             text: "clinics"
         },
         {
-            link: 'doctor/appointments',
+            link: '/doctor/appointments',
             text: 'appointments'
         }
     ]

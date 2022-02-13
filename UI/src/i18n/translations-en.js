@@ -8,6 +8,9 @@ export const TRANSLATION_EN = {
         signUp: "SignUp",
         clinics: "Clinics"
     },
+    USER: {
+        seeProfile: "See Profile"
+    },
     ADMIN: {
         doctors: "Doctors",
         seeDocs: "See doctors",
@@ -65,6 +68,13 @@ export const TRANSLATION_EN = {
         selectLocation: "Select location",
         selectPrepaid: "Select prepaid",
         selectClinic: "Select clinic",
+        day: "Day: ",
+        hour: "Hour: ",
+        schedule: "Schedule",
+        daySelect: "Select day",
+        hourSelect: "Select hour",
+        none: "None",
+        maxPrice: "Maximum Consult Price",
         enterPrice: "Enter price",
         signUp: "Sign up"
     },
@@ -93,19 +103,36 @@ export const TRANSLATION_EN = {
         doctorNotFoundEdit: "No doctor found to edit",
         noLoggedDoc: "No logged email found, try logging out and logging in again",
         noDocEmail: "No doctor found with logged email",
-        docClinicNotFound: "No doctor in clinic found",
         required: "This field is required",
         numeric: "This field only allows numbers",
         passwordTooShort: "Password is too short",
         alphabetic: "This field only allows letters",
         invalidEmail: "Not a valid email",
         invalidDocumentLength: "document length must be 8 digits",
-        prepaidNumberTooLong: "Prepaid number too long"
+        prepaidNumberTooLong: "Prepaid number too long",
+        docClinicNotFound: "No doctor in clinic found",
+        imageBroken: "Image or image data missing, try uploading the image again",
+        notSupported: "Image type not supported. Supported types: JPEG, JPG, PNG",
+        scheduleExists: "You already have scheduled this time and hour for this or other clinic",
+        scheduleNotFoundDelete: "No schedule found to delete",
+        scheduleOtherClinicDelete: "The schedule to delete belongs to another clinic"
+
     },
     actions: {
         add: "Add",
         edit: "Edit",
-        upload: "Upload"
+        upload: "Upload",
+        delete: "Delete"
+    },
+    CAL : {
+        hour: "Hour",
+        mon: "Monday",
+        tue: "Tuesday",
+        wed: "Wednesday",
+        thu: "Thursday",
+        fri: "Friday",
+        sat: "Saturday",
+        sun: "Sunday"
     },
     deleteButton: "Delete",
     prevButton: "Prev",
@@ -115,5 +142,6 @@ export const TRANSLATION_EN = {
     scheduleButton: "Schedule",
     welcome: "Welcome",
     editProfileButton: "Edit Profile",
-    changeImgButton: "Change Image"
+    changeImgButton: "Change Image",
+    deleteImgButton: "Delete Image",
 }

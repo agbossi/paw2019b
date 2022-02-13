@@ -3,6 +3,9 @@ import * as cons from './Constants.js'
 
 const getDoctorsAdmin = async (pag) => api.get(
     cons.DOCTORS_PATH + cons.ALL_PATH + "?" + cons.PAGE_QUERY + pag);
+const searchDocs = async (pag, location, specialty, firstName, lastName, consultPrice, prepaid) => api.get(
+    cons.DOCTORS_PATH + "?" + cons.PAGE_QUERY + pag
+    + getSearchQuery(location, specialty, firstName, lastName, consultPrice, prepaid))
 const addDoctor = async (data) => api.post(
     cons.DOCTORS_PATH,
     data,
@@ -32,16 +35,62 @@ const deleteDoctorsClinic = async (license, clinic) => api.delete(
     {},
     {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
 )
-
 const editPrice = async (license, clinicId, price) => api.put(
     cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinicId + "?" + cons.PRICE_QUERY + price,
     {},
     {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
 )
+const getSchedule = async (license) => api.get(
+    cons.DOCTORS_PATH + "/" + license + "/schedules")
+const addSchedule = async (license, clinicId, day, hour) => api.post(
+    cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinicId + "/schedules",
+    {
+        day: day,
+        hour: hour
+    },
+    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
+)
+const deleteSchedule = async (license, clinicId, day, hour) => api.delete(
+    cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinicId + "/schedules"
+    + "?" + cons.DAY_QUERY + day + "&" + cons.HOUR_QUERY + hour,
+    {},
+    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
+)
+
+const getSearchQuery = (location, specialty, firstName, lastName, consultPrice, prepaid) => {
+    const queryParams = [];
+    if (location !== undefined & location !== null && location !== "") {
+        queryParams.push("location=" + location)
+    }
+    if (specialty !== undefined & specialty !== null && specialty !== "") {
+        queryParams.push("specialty=" + specialty)
+    }
+    if (firstName !== undefined & firstName !== null && firstName !== "") {
+        queryParams.push("firstName=" + firstName)
+    }
+    if (lastName !== undefined & lastName !== null && lastName !== "") {
+        queryParams.push("lastName=" + lastName)
+    }
+    if (consultPrice !== undefined & consultPrice !== null && consultPrice !== 0) {
+        queryParams.push("consultPrice=" + consultPrice)
+    }
+    if (prepaid !== undefined & prepaid !== null && prepaid !== "") {
+        queryParams.push("prepaid=" + prepaid)
+    }
+
+    let query = "";
+
+    for (let i = 0; i < queryParams.length; i++) {
+        query = query + "&" + queryParams[i];
+    }
+
+    return query;
+}
 
 
 export default {
     getDoctorsAdmin,
+    searchDocs,
     addDoctor,
     deleteDoctor,
     editDoctor,
@@ -50,5 +99,8 @@ export default {
     getDocByEmail,
     addDoctorToClinic,
     deleteDoctorsClinic,
-    editPrice
+    editPrice,
+    getSchedule,
+    addSchedule,
+    deleteSchedule
 }

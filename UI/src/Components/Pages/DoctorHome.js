@@ -10,6 +10,7 @@ import SpecialtyCalls from "../../api/SpecialtyCalls";
 import {useNavigate} from "react-router-dom";
 import ImageSelectModal from "../Modals/ImageSelectModal";
 import ImageCalls from "../../api/ImageCalls";
+import {BASE_URL} from "../../Constants";
 
 function DoctorHome(props) {
     const [doctor, setDoctor] = useState({})
@@ -43,7 +44,7 @@ function DoctorHome(props) {
         const license = localStorage.getItem('license');
         const response = await ImageCalls.getImage(license)
         if (response && response.ok) {
-           //
+           setImage(response.data)
         }
         if (response.status === 404) {
             if (response.data === "image-not-found") {
@@ -87,19 +88,64 @@ function DoctorHome(props) {
             setMessage('errors.doctorNotFoundEdit')
         }
         if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            localStorage.removeItem('license')
-            localStorage.removeItem('firstName')
-            localStorage.removeItem('lastName')
-            localStorage.removeItem('specialty')
-            navigate('/login')
+            handleUnauth()
         }
     }
 
     const handleUpload = async (formData) => {
         const response = await ImageCalls.uploadImage(localStorage.getItem("license"), formData)
+        if (response && response.ok) {
+            await fetchImage()
+            setMessage("")
+            window.location.reload()
+        }
+        if (response.status === 401) {
+            handleUnauth();
+        }
+        if (response.status === 404) {
+            if (response.data === "doctor-not-found") {
+                setMessage("errors.docLoggedNotFound")
+            }
+        }
+        if (response.status === 400) {
+            if (response.data === "image-info-missing") {
+                setMessage("errors.imageBroken")
+            }
+        }
+        if (response.status === 415) {
+            if (response.data === "image-type-not-supported") {
+                setMessage("errors.notSupported")
+            }
+        }
+
     }
+
+    const handleDeleteImage = async () => {
+        const response = await ImageCalls.deleteImage(localStorage.getItem("license"));
+        if (response && response.ok) {
+            setImage(null)
+            setMessage("")
+        }
+        if (response.status === 401) {
+            handleUnauth()
+        }
+        if (response.status === 404) {
+            if (response.data === "doctor-not-found") {
+                setMessage("errors.docLoggedNotFound")
+            }
+        }
+    }
+
+    const handleUnauth = () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('role')
+        localStorage.removeItem('license')
+        localStorage.removeItem('firstName')
+        localStorage.removeItem('lastName')
+        localStorage.removeItem('specialty')
+        navigate('/login')
+    }
+
 
     useEffect(async () => {
         await fetchDoctor();
@@ -151,9 +197,12 @@ function DoctorHome(props) {
                         />
                     </Col>
                     <Col>
-                        <Image className="img-size" src={image === null? "/images/docpic.jpg": image.home[0].image} />
+                        <img className="img-size"
+                             src={image === null?
+                                 "/images/docpic.jpg": BASE_URL + "/doctors/" + localStorage.getItem('license') +"/image"} />
                         <div className="mt-3">
                             <ImageSelectModal handleUpload={handleUpload} />
+                            <Button className="mx-3 shadow-sm doc-button-color" onClick={handleDeleteImage}> {t('deleteImgButton')}</Button>
                         </div>
                     </Col>
                 </Row>

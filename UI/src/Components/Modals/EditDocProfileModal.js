@@ -91,13 +91,13 @@ function EditDocProfileModal(props) {
                                           onChange={onChange}/>
                         </Form.Group>
 
-                        <Form.Group className="mb-3" controlId="location">
+                        <Form.Group className="mb-3" controlId="specialty">
                             <Form.Label>{t("FORM.specialty")} {selectedSpecialty}</Form.Label>
                             <DropDownList iterable={props.specialties}
                                           selectedElement={selectedSpecialty}
                                           handleSelect={handleSelect}
                                           elementType={t("FORM.selectSpecialty")}
-                                          id='location'/>
+                                          id='specialty'/>
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="phoneNumber">

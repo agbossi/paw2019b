@@ -19,12 +19,6 @@ public class ScheduleForm {
     @Max(value = 18, message = "schedule.max.hour.constraint")
     private int hour;
 
-    @Exists(field = "doctor", message = "value.not.exists")
-    private String license;
-
-    @ClinicExists(message = "value.not.exists")
-    private int clinic;
-
     public int getDay() {
         return day;
     }
@@ -39,21 +33,5 @@ public class ScheduleForm {
 
     public void setHour(int hour) {
         this.hour = hour;
-    }
-
-    public String getLicense() {
-        return license;
-    }
-
-    public void setLicense(String license) {
-        this.license = license;
-    }
-
-    public int getClinic() {
-        return clinic;
-    }
-
-    public void setClinic(int clinic) {
-        this.clinic = clinic;
     }
 }

@@ -300,6 +300,20 @@ public class DoctorController {
 
     private static final List<String> SUPPORTED_IMAGES_TYPES = Arrays.asList(".jpg", ".jpeg", ".png");
 
+    /**
+     * Returns a list of doctors (who are subscribed to a clinic and their schedule on that clinic is
+     * not empty) optionally filtered by the params: location, specialty, firstName, lastName, price,
+     * prepaid
+     * @param page
+     * @param location
+     * @param specialty
+     * @param firstName
+     * @param lastName
+     * @param consultPrice
+     * @param includeUnavailable
+     * @param prepaid
+     * @return list of Doctors
+     */
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getAvailableDoctors(
@@ -322,7 +336,11 @@ public class DoctorController {
         return getPaginatedDoctorsResponse(licenses, page, request, maxAvailablePage);
     }
 
-    // TODO: Use: in admin doctors page
+    /**
+     * Returns paginated list of doctors for ADMIN to manage.
+     * @param page
+     * @return list of Doctors
+     */
     @GET
     @Path("/all")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -351,7 +369,13 @@ public class DoctorController {
         }
     }
 
-    // TODO: Use: When doctor is logged in, to get it's license
+    /**
+     * Returns doctor's information by email. Used when doctor is logged in, to access its
+     * information.
+     * @param email
+     * @return Doctor
+     * @throws EntityNotFoundException
+     */
     @GET
     @Path("email/{email}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -363,7 +387,12 @@ public class DoctorController {
         return CacheHelper.handleResponse(dto, doctorCaching, "doctor", request).build();
     }
 
-    // TODO: Use: admin deletes doctor
+    /**
+     * Lets ADMIN delete a doctor from application
+     * @param license
+     * @return
+     * @throws EntityNotFoundException
+     */
     @DELETE
     @Path("/{license}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -372,8 +401,13 @@ public class DoctorController {
         return Response.noContent().build();
     }
 
-
-    //TODO: Use: For doctor to edit profile
+    /**
+     * Lets DOCTOR edit its information
+     * @param license
+     * @param form
+     * @return
+     * @throws EntityNotFoundException
+     */
     @PUT
     @Path("/{license}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -391,7 +425,14 @@ public class DoctorController {
             return Response.noContent().build();
     }
 
-    // TODO: Use: admin adds doctor
+    /**
+     * Lets ADMIN add doctor to application
+     * @param form
+     * @return
+     * @throws DuplicateEntityException
+     * @throws EntityNotFoundException
+     * @throws ar.edu.itba.paw.model.exceptions.BadRequestException
+     */
     @POST
     @Produces(value = { MediaType.APPLICATION_JSON, })
     @Consumes(MediaType.APPLICATION_JSON)
@@ -408,6 +449,12 @@ public class DoctorController {
         return Response.created(uriInfo.getAbsolutePathBuilder().path(form.getLicense()).build()).build();
     }
 
+    /**
+     * Returns profile image for a specific doctor
+     * @param license
+     * @return Image
+     * @throws EntityNotFoundException
+     */
     @GET
     @Path("/{license}/image")
     @Produces(value = { MediaType.MULTIPART_FORM_DATA })
@@ -420,12 +467,15 @@ public class DoctorController {
         if (img == null) throw new EntityNotFoundException("image");
 
         ImageDto dto = ImageDto.fromImage(img.getImage());
-        return CacheHelper.handleResponse(dto, imageCaching, "profileImage", request).build();
-        // return Response.ok(dto).build();
-
-
+        return CacheHelper.handleResponse(dto.getImage(), imageCaching, "profileImage", request).build();
     }
 
+    /**
+     * Lets DOCTOR delete its profile image
+     * @param license
+     * @return
+     * @throws EntityNotFoundException
+     */
     @DELETE
     @Path("/{license}/image")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -437,6 +487,18 @@ public class DoctorController {
         return Response.noContent().build();
     }
 
+    /**
+     * Lets DOCTOR upload its profile image
+     * @param license
+     * @param fileInputStream
+     * @param fileMetaData
+     * @return
+     * @throws EntityNotFoundException
+     * @throws ar.edu.itba.paw.model.exceptions.BadRequestException
+     * @throws ImageTooLargeException
+     * @throws UnsupportedMediaTypeException
+     * @throws IOException
+     */
     @POST
     @Path("/{license}/image")
     @Consumes("multipart/form-data")
@@ -468,7 +530,15 @@ public class DoctorController {
 
     }
 
-    //TODO: Use: for doctor to see his clinics
+    /**
+     * Returns paginated list of clinics a specific doctor is suscribed to.
+     * @param license
+     * @param page
+     * @param week
+     * @param request
+     * @return list of DoctorClinics
+     * @throws EntityNotFoundException
+     */
     @GET
     @Path("/{license}/clinics")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -492,7 +562,13 @@ public class DoctorController {
                 .build();
     }
 
-    // TODO: Use: for doctor to add clinic
+    /**
+     * Returns list of all clinics a specific doctor is suscribed to.
+     * @param license
+     * @param week
+     * @return list of DoctorClinics
+     * @throws EntityNotFoundException
+     */
     @GET
     @Path("/{license}/clinics/all")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -509,7 +585,13 @@ public class DoctorController {
                 "doctorsClinics", request).build();
     }
 
-    // TODO: Use: for doctor to add himself to clinic
+    /**
+     * Lets DOCTOR suscribe to a clinic
+     * @param license
+     * @param form
+     * @return
+     * @throws EntityNotFoundException
+     */
     @POST
     @Path("/{license}/clinics")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -522,7 +604,13 @@ public class DoctorController {
         return Response.created(uriInfo.getAbsolutePathBuilder().path(String.valueOf(form.getClinic())).build()).build();
     }
 
-    //TODO: Use: for doctor to unsubscribe clinics
+    /**
+     * Lets DOCTOR unsubscribe from clinic
+     * @param license
+     * @param clinic
+     * @return
+     * @throws EntityNotFoundException
+     */
     @DELETE
     @Path("/{license}/clinics/{clinic}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -534,6 +622,14 @@ public class DoctorController {
         return Response.noContent().build();
     }
 
+    /**
+     * Lets DOCTOR edit consult price for specific clinic
+     * @param license
+     * @param clinic
+     * @param price
+     * @return
+     * @throws EntityNotFoundException
+     */
     @PUT
     @Path("/{license}/clinics/{clinic}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -546,6 +642,7 @@ public class DoctorController {
     }
 
     //TODO preguntar a xime como era el tema de la semana inicial a mostrar y hasta donde se podia avanzar
+
     @GET
     @Path("/{license}/clinics/{clinic}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -554,7 +651,6 @@ public class DoctorController {
                                     @QueryParam("week") @DefaultValue("1") final Integer week,
                                     @Context Request request) {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
-
 
         if(dc != null) {
             List<List<DoctorHourDto>> doctorWeek = getDoctorWeek(dc, week);
@@ -569,23 +665,54 @@ public class DoctorController {
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }
 
+    /**
+     * Returns doctors schedule for a specific clinic
+     * @param license
+     * @param clinic
+     * @return List if Schedules
+     */
     @GET
     @Path("/{license}/clinics/{clinic}/schedules")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getDoctorClinicSchedules(@PathParam("license") final String license,
                                              @PathParam("clinic") final Integer clinic,
-                                             @Context Request request) {
-        DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
-        if(dc != null) {
-            List<ScheduleDto> schedules = dc.getSchedule()
-                    .stream().map(ScheduleDto::fromSchedule).collect(Collectors.toList());
-            return CacheHelper.handleResponse(schedules, scheduleCaching,
-                    new GenericEntity<List<ScheduleDto>>(schedules) {},"schedules", request).build();
-            //return Response.ok(new GenericEntity<List<ScheduleDto>>(schedules) {}).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+                                             @Context Request request) throws EntityNotFoundException {
+        DoctorClinic dc = doctorClinicService.getDoctorInClinic(license, clinic);
+        if(dc == null) throw new EntityNotFoundException("doctor-clinic");
+        List<ScheduleDto> schedules = scheduleService.getDoctorClinicSchedule(dc)
+                .stream().map(s -> ScheduleDto.fromSchedule(s, uriInfo)).collect(Collectors.toList());
+        return CacheHelper.handleResponse(schedules, scheduleCaching,
+                new GenericEntity<List<ScheduleDto>>(schedules) {},"schedules", request).build();
+        //return Response.ok(new GenericEntity<List<ScheduleDto>>(schedules) {}).build();
     }
 
+    /**
+     * Returns doctor schedule for all clinics, used by doctor to see other clinic's schedule
+     * while adding a working hour to specific clinic
+     * @param license
+     * @return
+     */
+    @GET
+    @Path("/{license}/schedules")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getDoctorSchedules(@PathParam("license") final String license,
+                                       @Context Request request) throws EntityNotFoundException {
+        Doctor doctor = doctorService.getDoctorByLicense(license);
+        if(doctor == null) throw new EntityNotFoundException("doctor");
+
+        List<ScheduleDto> schedules = scheduleService.getDoctorSchedule(doctor).stream()
+                .map(s -> ScheduleDto.fromSchedule(s, uriInfo)).collect(Collectors.toList());
+        return CacheHelper.handleResponse(schedules, scheduleCaching,
+                new GenericEntity<List<ScheduleDto>>(schedules) {},"schedules", request).build();
+    }
+    /**
+     * Lets DOCTOR delete a scheduled working hour for a specific clinic
+     * @param license
+     * @param clinic
+     * @param day
+     * @param hour
+     * @return
+     */
     @DELETE
     @Path("/{license}/clinics/{clinic}/schedules")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -593,29 +720,37 @@ public class DoctorController {
     public Response deleteDoctorClinicSchedule(@PathParam("license") final String license,
                                                @PathParam("clinic") final Integer clinic,
                                                @QueryParam("day") final Integer day,
-                                               @QueryParam("hour") final Integer hour) {
+                                               @QueryParam("hour") final Integer hour)
+            throws EntityNotFoundException, OutOfRangeException {
+        DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
+        if(dc == null) throw new EntityNotFoundException("doctor-clinic");
+
         scheduleService.deleteSchedule(hour, day, license, clinic);
         return Response.noContent().build();
     }
 
+    /**
+     * Lets DOCTOR schedule a working hour for a specific clinic
+     * @param license
+     * @param clinic
+     * @param form
+     * @return
+     */
     @POST
-    @Path("/{license}/doctorsClinics/{clinic}/schedules")
+    @Path("/{license}/clinics/{clinic}/schedules")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Consumes(MediaType.APPLICATION_JSON)
     @PreAuthorize("hasPermission(#license, 'doctor')")
     public Response createSchedule(@PathParam("license") final String license,
                                    @PathParam("clinic") final Integer clinic,
-                                   ScheduleForm form) {
+                                   ScheduleForm form) throws EntityNotFoundException, ConflictException {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
-        if(dc != null) {
-            if(license.equals(form.getLicense()) && clinic == form.getClinic()) {
-                scheduleService.createSchedule(form.getHour(), form.getDay(),
-                        dc.getDoctor().getEmail(), dc.getClinic().getId());
-                return Response.created(uriInfo.getAbsolutePath()).build();
-            }
-            return Response.status(Response.Status.CONFLICT.getStatusCode()).build();
-        }
-        return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
+        if(dc == null) throw new EntityNotFoundException("doctor-clinic");
+
+        scheduleService.createSchedule(form.getHour(), form.getDay(), dc.getDoctor().getEmail(),
+                dc.getClinic().getId());
+        return Response.created(uriInfo.getAbsolutePath()).build();
+
     }
 
 
