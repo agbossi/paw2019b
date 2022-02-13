@@ -17,6 +17,7 @@ import "../src/i18n/i18n"
 import DoctorHome from "./Components/Pages/DoctorHome";
 import DoctorClinics from "./Components/Pages/DoctorClinics";
 import DoctorClinicSchedule from "./Components/Pages/DoctorClinicSchedule";
+import Favorites from "./Components/Pages/Favorites";
 
 function App() {
 
@@ -42,6 +43,7 @@ function App() {
                     <Route path='admin/doctors' element={<Doctors/>}/>
                     <Route path='login' element={<WrappedLogin />}/>
                     <Route path='signUp' element={<SignUp />}/>
+                    <Route path='favorites' element={<Favorites />}/>
                 </Routes>
             </Router>
         </div>

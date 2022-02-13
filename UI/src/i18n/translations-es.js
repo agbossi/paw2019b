@@ -9,7 +9,8 @@ export const TRANSLATION_ES = {
         clinics: "Mis Clínicas"
     },
     USER: {
-        seeProfile: "Ver Perfil"
+        seeProfile: "Ver Perfil",
+        emptyFavorites: "No hay doctores favoritos aun"
     },
     ADMIN: {
         doctors: "Doctores",

@@ -9,7 +9,8 @@ export const TRANSLATION_EN = {
         clinics: "Clinics"
     },
     USER: {
-        seeProfile: "See Profile"
+        seeProfile: "See Profile",
+        emptyFavorites: "No favorite doctors yet"
     },
     ADMIN: {
         doctors: "Doctors",
