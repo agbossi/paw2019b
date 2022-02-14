@@ -15,6 +15,8 @@ import java.util.List;
 @Repository
 public class FavoriteDaoImpl implements FavoriteDao {
 
+    private final static int MAX_FAVORITES_PER_PAGE = 12;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -65,5 +67,20 @@ public class FavoriteDaoImpl implements FavoriteDao {
         query.setParameter("license", doctorLicense);
         query.setParameter("email", patientEmail);
         query.executeUpdate();
+    }
+
+    @Override
+    public List<Favorite> getPaginatedObjects(int page, Patient patient) {
+        final TypedQuery<Favorite> query = entityManager.createQuery("from Favorite as fav " +
+                "where fav.favoriteKey.patient = :email", Favorite.class);
+        query.setParameter("email", patient.getEmail());
+        return query.setFirstResult(page * MAX_FAVORITES_PER_PAGE)
+                .setMaxResults(MAX_FAVORITES_PER_PAGE)
+                .getResultList();
+    }
+
+    @Override
+    public int maxAvailablePage(Patient patient) {
+        return (int) (Math.ceil(( ((double)getPatientsFavorite(patient).size()) / (double)MAX_FAVORITES_PER_PAGE)));
     }
 }

@@ -17,4 +17,8 @@ public interface FavoriteDao {
     void deleteFavorite(String doctorLicense, String patientEmail);
 
     void deleteFavorite(Doctor doctor, Patient patient);
+
+    public List<Favorite> getPaginatedObjects(int page, Patient patient);
+
+    public int maxAvailablePage(Patient patient);
 }

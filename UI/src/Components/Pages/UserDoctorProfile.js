@@ -7,8 +7,9 @@ import DoctorCalls from "../../api/DoctorCalls";
 import ImageCalls from "../../api/ImageCalls";
 import AppointmentCalls from "../../api/AppointmentCalls";
 import DropDownList from "../DropDownList";
-import ClinicCalls from "../../api/ClinicCalls";
 import {getMonth, getWeekDate} from "../../utils/dateHelper";
+import PatientCalls from "../../api/PatientCalls";
+import './UserDoctorProfile.css'
 
 
 function UserDoctorProfile(props) {
@@ -23,6 +24,7 @@ function UserDoctorProfile(props) {
     const [clinics, setClinics] = useState([])
     const [selectedClinic, setSelectedClinic] = useState(null)
     const [selectedDateTime, setSelectedDateTime] = useState(null)
+    const [isFavorite, setIsFavorite] = useState(false)
 
     const fetchDoctor = async () => {
         const response = await DoctorCalls.getDocByLicense(license);
@@ -58,7 +60,7 @@ function UserDoctorProfile(props) {
                 setImage(null)
             }
             if (response.data === "doctor-not-found") {
-                setMessage("errors.docLoggedNotFound")
+                setMessage("errors.noDocFound")
             }
         }
     }
@@ -71,12 +73,34 @@ function UserDoctorProfile(props) {
         }
     }
 
+    const fetchIsFavorite = async () => {
+        if (localStorage.getItem('email') === null) {
+            setIsFavorite(false)
+        }
+        const response = await PatientCalls.isFavorite(localStorage.getItem('email'), license)
+        if (response && response.ok) {
+            setIsFavorite(true)
+            setMessage("")
+        }
+        if (response.status === 404) {
+            if (response.data === "doctor-not-found")
+                setMessage("errors.noDocFound")
+            if (response.data === "not-favorite"){
+                setIsFavorite(false)
+                setMessage("")
+            }
+        }
+
+    }
+
+
     useEffect(async () => {
         await fetchDoctor();
         await fetchImage();
         await fetchSchedule();
         await fetchClinics();
         await fetchAvailableAppointments();
+        await fetchIsFavorite();
     },[])
 
     const getName = () => {
@@ -89,6 +113,9 @@ function UserDoctorProfile(props) {
     const handleMakeApp = async () => {
         if (localStorage.getItem('email') === null) {
             navigate("/login")
+        }
+        if (selectedClinic === null) {
+            setMessage("errors.selectTime")
         }
         if (selectedDateTime === null) {
             setMessage("errors.selectTime")
@@ -124,6 +151,54 @@ function UserDoctorProfile(props) {
              }
         }
 
+    }
+
+    const makeFavorite = async () => {
+        if (localStorage.getItem('email') === null) {
+            navigate("/login")
+        }
+        const response = await PatientCalls.addFavoriteDoctor(localStorage.getItem('email'), license)
+        if (response && response.ok) {
+            setIsFavorite(true)
+            setMessage("")
+        }
+        if (response.status === 404) {
+            if (response.data === "doctor-not-found")
+                setMessage("errors.noDocFound")
+            if (response.data === "patient-not-found")
+                setMessage("errors.noPatientEmail")
+        }
+        if (response.status === 409) {
+            if (response.data === "favorite-exists")
+                setMessage("errors.favExists")
+        }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/login')
+        }
+    }
+
+    const deleteFavorite = async () => {
+        if (localStorage.getItem('email') === null) {
+            navigate("/login")
+        }
+        const response = await PatientCalls.deleteFavoriteDoctor(localStorage.getItem('email'), license)
+        if (response && response.ok) {
+            setIsFavorite(false)
+            setMessage("")
+        }
+        if (response.status === 404) {
+            if (response.data === "doctor-not-found")
+                setMessage("errors.noDocFound")
+            if (response.data === "patient-not-found")
+                setMessage("errors.noPatientEmail")
+        }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/login')
+        }
     }
 
     const getEmail = () => {
@@ -186,8 +261,13 @@ function UserDoctorProfile(props) {
                 <Row className="mt-3">
 
                     <Col className="info-col-user">
-                        <h4>
-                            {t('USER.dataProfile')}
+                        <h4 style={{display: "flex"}}>
+                            <div style={{alignSelf: "center"}}>{t('USER.dataProfile')}</div>
+                            {isFavorite ? <Button className="m-2 fav-button" onClick={deleteFavorite}>
+                                <img src="/images/yesfav.png"/>
+                            </Button>:<Button className="m-2 fav-button" onClick={makeFavorite}>
+                                <img src="/images/nofav.png"/>
+                            </Button>}
                         </h4>
                         <div className="user-info-label">
                             <b>{t('FORM.name')}:</b> {getName()}

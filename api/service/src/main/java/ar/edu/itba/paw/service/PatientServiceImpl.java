@@ -3,10 +3,12 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.PatientDao;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.FavouriteExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,12 +61,16 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void addFavorite(String patientEmail, String license) {
+    public void addFavorite(String patientEmail, String license) throws FavouriteExistsException,
+            EntityNotFoundException {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         Patient patient = getPatientByEmail(patientEmail);
-
-        if(!favoriteService.isFavorite(doctor, patient)){
+        if (doctor == null) throw new EntityNotFoundException("doctor");
+        if (patient == null) throw new EntityNotFoundException("patient");
+        if (!favoriteService.isFavorite(doctor, patient)){
             favoriteService.create(doctor,patient);
+        } else {
+            throw new FavouriteExistsException();
         }
     }
 
@@ -76,12 +82,16 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void deleteFavorite(String patientEmail, String license) {
+    public void deleteFavorite(String patientEmail, String license) throws EntityNotFoundException {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         Patient patient = getPatientByEmail(patientEmail);
+        if (doctor == null) throw new EntityNotFoundException("doctor");
+        if (patient == null) throw new EntityNotFoundException("patient");
 
         if(favoriteService.isFavorite(doctor, patient)){
             favoriteService.deleteFavorite(doctor,patient);
+        } else {
+            throw new EntityNotFoundException("favorite");
         }
     }
 

@@ -66,11 +66,11 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public Doctor getDoctorByLicense(String license) {
-        return entityManager.find(Doctor.class,license);
+        return entityManager.find(Doctor.class, license);
     }
 
     @Override
-    public List<Doctor> getDoctorByName(String firstName,String lastName) {
+    public List<Doctor> getDoctorByName(String firstName, String lastName) {
         final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor " +
                 "where doctor.user.firstName = :firstName and doctor.user.lastName = :lastName",Doctor.class);
 

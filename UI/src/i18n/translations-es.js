@@ -10,8 +10,9 @@ export const TRANSLATION_ES = {
     },
     USER: {
         seeProfile: "Ver Perfil",
-        emptyFavorites: "No hay doctores favoritos aun",
-        dataProfile: "Información del Doctor"
+        emptyFavorites: "No hay doctores favoritos aún",
+        dataProfile: "Información del Doctor",
+        fav: "Favoritos"
     },
     ADMIN: {
         doctors: "Doctores",
@@ -129,9 +130,10 @@ export const TRANSLATION_ES = {
         selectTime: "Seleccione clínica, día y horario para tomar un turno",
         datePast: "La fecha seleccionada es en el pasado, seleccione una fecha futura",
         outOfSchedule: "La fecha seleccionada no pertenece al horario de atención del doctor",
-        appointmentExists: "La fecha seleccionada ya posee un turno asignado, seleccione otra fecha"
-
-
+        appointmentExists: "La fecha seleccionada ya posee un turno asignado, seleccione otra fecha",
+        noDocFound: "No se encontró el doctor",
+        noPatientEmail: "No se encontró paciente con el email en sesión",
+        favExists: "El doctor ya es un favorito"
     },
     CAL : {
         hour: "Hora",

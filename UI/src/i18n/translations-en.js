@@ -11,7 +11,8 @@ export const TRANSLATION_EN = {
     USER: {
         seeProfile: "See Profile",
         dataProfile: "Doctor's Information",
-        emptyFavorites: "No favorite doctors yet"
+        emptyFavorites: "No favorite doctors yet",
+        fav: "Favorites"
     },
     ADMIN: {
         doctors: "Doctors",
@@ -123,7 +124,10 @@ export const TRANSLATION_EN = {
         selectTime: "Select clinic, date and time to make an appointment",
         datePast: "Selected date is in the past, select a future date",
         outOfSchedule: "Selected date is out of doctor's schedule",
-        appointmentExists: "The selected date already has an appointment, select another date"
+        appointmentExists: "The selected date already has an appointment, select another date",
+        noDocFound: "No doctor found",
+        noPatientEmail: "No patient found with logged email",
+        favExists: "The doctor is already a favorite"
     },
     actions: {
         add: "Add",
