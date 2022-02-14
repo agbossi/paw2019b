@@ -217,22 +217,22 @@ function SignUp() {
     }
 
     return (
-        <>
-            <br/>
+        <div className="m-3">
+            <h3>{t("FORM.signUp")}</h3>
             <Form onSubmit={handleSignUp}>
                 <Row>
-                    <Col>
-                        <Form.Group className="mb-3" controlId="firstName">
-                            <Form.Label>{t("FORM.firstName")}</Form.Label>
+                    <Col className="mx-4">
+                        <Form.Group className="mb-3 div-signup" controlId="firstName">
+                            <Form.Label className="label-signup m-3">{t("FORM.firstName")}</Form.Label>
                             <Form.Control placeholder={t("FORM.enterFirstName")}
                                           value={firstName}
                                           onChange={onChange}
                             />
                         </Form.Group>
                     </Col>
-                    <Col>
-                        <Form.Group className="mb-3" controlId="lastName">
-                            <Form.Label>{t("FORM.lastName")}</Form.Label>
+                    <Col className="mx-4">
+                        <Form.Group className="mb-3 div-signup" controlId="lastName">
+                            <Form.Label className="label-signup m-3">{t("FORM.lastName")}</Form.Label>
                             <Form.Control placeholder={t("FORM.enterLastName")}
                                           value={lastName}
                                           onChange={onChange}
@@ -241,9 +241,9 @@ function SignUp() {
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
-                        <Form.Group className="mb-3" controlId="prepaids">
-                            <Form.Label>{t("FORM.prepaid")} {selectedPrepaid}</Form.Label>
+                    <Col className="mx-4">
+                        <Form.Group className="mb-3 div-signup" controlId="prepaids">
+                            <Form.Label className="label-signup m-3">{t("FORM.prepaid")} {selectedPrepaid}</Form.Label>
                             <DropDownList iterable={prepaids}
                                           selectedElement=''
                                           handleSelect={handleSelect}
@@ -252,9 +252,9 @@ function SignUp() {
                             />
                         </Form.Group>
                     </Col>
-                    <Col>
-                        <Form.Group className="mb-3" controlId="prepaidNumber">
-                            <Form.Label>{t("FORM.prepaidNumber")}</Form.Label>
+                    <Col className="mx-4">
+                        <Form.Group className="mb-3 div-signup" controlId="prepaidNumber">
+                            <Form.Label className="label-signup m-3">{t("FORM.prepaidNumber")}</Form.Label>
                             <Form.Control placeholder={t("FORM.enterPrepaidNumber")}
                                           value={prepaidNumber}
                                           onChange={onChange}
@@ -263,18 +263,18 @@ function SignUp() {
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
-                        <Form.Group className="mb-3" controlId="document">
-                            <Form.Label>{t("FORM.document")}</Form.Label>
+                    <Col className="mx-4">
+                        <Form.Group className="mb-3 div-signup" controlId="document">
+                            <Form.Label className="label-signup m-3">{t("FORM.document")}</Form.Label>
                             <Form.Control placeholder={t("FORM.enterDocument")}
                                           value={document}
                                           onChange={onChange}
                             />
                         </Form.Group>
                     </Col>
-                    <Col>
-                        <Form.Group className="mb-3" controlId="email">
-                            <Form.Label>{t("FORM.email")}</Form.Label>
+                    <Col className="mx-4">
+                        <Form.Group className="mb-3 div-signup" controlId="email">
+                            <Form.Label className="label-signup m-3">{t("FORM.email")}</Form.Label>
                             <Form.Control type="email"
                                           placeholder={t("FORM.enterEmail")}
                                           value={email}
@@ -284,18 +284,18 @@ function SignUp() {
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
-                        <Form.Group className="mb-3" controlId="password">
-                            <Form.Label>{t("FORM.password")}</Form.Label>
+                    <Col className="mx-4">
+                        <Form.Group className="mb-3 div-signup" controlId="password">
+                            <Form.Label className="label-signup m-3">{t("FORM.password")}</Form.Label>
                             <Form.Control type="password"
                                           placeholder={t("FORM.password")}
                                           value={password} onChange={onChange}
                             />
                         </Form.Group>
                     </Col>
-                    <Col>
-                        <Form.Group className="mb-3" controlId="repeatPassword">
-                            <Form.Label>{t("FORM.repeatPassword")}</Form.Label>
+                    <Col className="mx-4">
+                        <Form.Group className="mb-3 div-signup" controlId="repeatPassword">
+                            <Form.Label className="label-signup m-3">{t("FORM.repeatPassword")}</Form.Label>
                             <Form.Control type="password"
                                           placeholder={t("FORM.repeatPassword")}
                                           value={repeatPassword}
@@ -320,11 +320,11 @@ function SignUp() {
                     </div>
                 )}
                 <br/>
-                <Button type="submit" variant="secondary">
+                <Button type="submit" variant="secondary" >
                     {t("FORM.signUp")}
                 </Button>
             </Form>
-        </>
+        </div>
     )
 }
 
