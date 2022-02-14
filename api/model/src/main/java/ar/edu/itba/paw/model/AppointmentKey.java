@@ -13,9 +13,6 @@ public class AppointmentKey implements Serializable {
     private String doctor;
 
     @Column
-    private String patient;
-
-    @Column
     private LocalDateTime date;
 
     // DO NOT DELETE
@@ -23,9 +20,8 @@ public class AppointmentKey implements Serializable {
 
     }
 
-    public AppointmentKey(String doctor,String clinic, LocalDateTime date){
+    public AppointmentKey(String doctor, LocalDateTime date){
         this.doctor = doctor;
-        this.patient = clinic;
         this.date = date;
     }
 
@@ -37,16 +33,8 @@ public class AppointmentKey implements Serializable {
         return doctor;
     }
 
-    public String getPatient() {
-        return patient;
-    }
-
     public void setDoctorLicense(String doctorLicense) {
         this.doctor = doctorLicense;
-    }
-
-    public void setPatient(String patient) {
-        this.patient = patient;
     }
 
     public void setDate(LocalDateTime date) {
@@ -59,12 +47,12 @@ public class AppointmentKey implements Serializable {
         if (!(o instanceof AppointmentKey)) return false;
         AppointmentKey k = (AppointmentKey) o;
         return Objects.equals(getDoctor(), k.getDoctor()) &&
-                Objects.equals(getPatient(), k.getPatient()) &&
                 Objects.equals(getDate(),k.getDate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getDoctor(), getPatient());
+        return Objects.hash(getDoctor(), getDate().getYear(),
+                getDate().getMonthValue(), getDate().getDayOfMonth(), getDate().getHour());
     }
 }

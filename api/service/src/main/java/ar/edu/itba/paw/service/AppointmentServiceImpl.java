@@ -14,8 +14,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class AppointmentServiceImpl implements AppointmentService {
@@ -37,6 +37,9 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
     private PatientService patientService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     @Autowired
     private ClinicService clinicService;
@@ -73,6 +76,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         for (Schedule schedule : doctorClinic.getSchedule()) {
             if (date.getDayOfWeek().getValue() == schedule.getDay() && date.getHour() == schedule.getHour()) {
                 Locale locale = LocaleContextHolder.getLocale();
+                final String language = locale.getLanguage();
+                locale = Arrays.stream(Locale.getAvailableLocales()).filter(loc -> language.equals(loc.getLanguage())).findFirst().orElse(Locale.ENGLISH);
+
                 emailService.sendSimpleMail(
                         userEmail,
                         messageSource.getMessage("appointment.created.subject", null, locale),
@@ -110,7 +116,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         if(appointment == null) throw new EntityNotFoundException("appointment");
 
-        String patientEmail = appointment.getPatient().getEmail();
+        String patientEmail = appointment.getPatientUser().getEmail();
         cancelAppointment(license, clinicId, patientEmail, year, month, day, time, cancelledByDoctor);
 
     }
@@ -203,6 +209,41 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour) {
         appointmentDao.cancelAllAppointmentsOnSchedule(doctorClinic, day, hour);
+    }
+
+    @Override
+    public List<Appointment> getDoctorsAvailableAppointments(Doctor doctor) {
+        List<Appointment> appointments = getAllDoctorsAppointments(doctor);
+        List<Schedule> schedule = scheduleService.getDoctorSchedule(doctor);
+
+        Set<Appointment> available = new HashSet<>();
+        LocalDateTime today = LocalDateTime.now();
+
+        for (Schedule s: schedule) {
+            int day = today.getDayOfWeek().getValue();
+            if (day < s.getDay()) {
+                LocalDateTime date = today.plusDays(s.getDay()-day);
+                Appointment appointment = new Appointment(LocalDateTime.of(date.getYear(),
+                        date.getMonthValue(), date.getDayOfMonth(), s.getHour(), 0), s.getDoctorClinic(), null);
+                available.add(appointment);
+            }
+        }
+
+        for (int week = 1; week < 10; week++) {
+            for (Schedule s: schedule) {
+                int day = today.getDayOfWeek().getValue();
+                LocalDateTime date = today.plusDays(s.getDay() - day + week*7);
+                Appointment appointment = new Appointment(LocalDateTime.of(date.getYear(),
+                        date.getMonthValue(), date.getDayOfMonth(), s.getHour(), 0), s.getDoctorClinic(), null);
+                available.add(appointment);
+            }
+        }
+
+        Set<Appointment> occupied = new HashSet<>(appointments);
+        available.removeAll(occupied);
+
+        return available.stream().sorted(Comparator.comparing(o -> o.getAppointmentKey().getDate())
+        ).collect(Collectors.toList());
     }
 
     private String dateString(LocalDateTime calendar) {

@@ -354,6 +354,12 @@ public class DoctorController {
         return getPaginatedDoctorsResponse(licenses, page, request, maxAvailablePage);
     }
 
+    /**
+     * Lets USER access doctor's information
+     * @param license
+     * @return Doctor
+     * @throws NotFoundException
+     */
     @GET
     @Path("/{license}")
     @Produces(value = { MediaType.APPLICATION_JSON })
@@ -551,7 +557,7 @@ public class DoctorController {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor == null) throw new EntityNotFoundException("doctor");
         final List<DoctorClinicDto> doctorClinics = doctorClinicService.getPaginatedDoctorsClinics(doctor, page)
-                .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo, null))
+                .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo))
                 .collect(Collectors.toList());
         int max = doctorClinicService.maxAvailablePage();
         return CacheHelper.handleResponse(doctorClinics, doctorClinicCaching,
@@ -578,7 +584,7 @@ public class DoctorController {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor == null) throw new EntityNotFoundException("doctor");
         final List<DoctorClinicDto> doctorClinics = doctorClinicService.getDoctorClinicsForDoctor(doctor)
-                .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo, null))
+                .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo))
                 .collect(Collectors.toList());
         return CacheHelper.handleResponse(doctorClinics, doctorClinicCaching,
                 new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {},
@@ -653,8 +659,8 @@ public class DoctorController {
         DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
 
         if(dc != null) {
-            List<List<DoctorHourDto>> doctorWeek = getDoctorWeek(dc, week);
-            DoctorClinicDto dto = DoctorClinicDto.fromDoctorClinic(dc, uriInfo, doctorWeek);
+     //       List<List<DoctorHourDto>> doctorWeek = getDoctorWeek(dc, week);
+            DoctorClinicDto dto = DoctorClinicDto.fromDoctorClinic(dc, uriInfo);
             return CacheHelper.handleResponse(dto, doctorClinicCaching, "doctorsClinic", request)
                     .build();
             /*return Response.ok(DoctorClinicDto.fromDoctorClinic(dc, uriInfo, doctorWeek))
@@ -779,12 +785,12 @@ public class DoctorController {
 
     // private methods
 
-    private List<List<DoctorHourDto>> getDoctorWeek(DoctorClinic dc, int week) {
-        List<List<DoctorHour>> doctorHours = doctorHourService.getDoctorsWeek(dc, week);
-        return doctorHours.stream().map(l ->
-                l.stream().map(DoctorHourDto::fromDoctorHour).collect(Collectors.toList()))
-                .collect(Collectors.toList());
-    }
+//    private List<List<DoctorHourDto>> getDoctorWeek(DoctorClinic dc, int week) {
+//        List<List<DoctorHour>> doctorHours = doctorHourService.getDoctorsWeek(dc, week);
+//        return doctorHours.stream().map(l ->
+//                l.stream().map(DoctorHourDto::fromDoctorHour).collect(Collectors.toList()))
+//                .collect(Collectors.toList());
+//    }
 
     private Response getPaginatedDoctorsResponse(List<String> licenses, int page, Request request, int max) {
 

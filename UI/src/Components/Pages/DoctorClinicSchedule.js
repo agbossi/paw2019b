@@ -35,7 +35,7 @@ function DoctorClinicSchedule(props) {
     }
 
     const fetchSchedule = async () => {
-        const response = await DoctorCalls.getSchedule(license, id)
+        const response = await DoctorCalls.getSchedule(license)
         if (response && response.ok) {
             setSchedule(response.data)
             setMessage("")

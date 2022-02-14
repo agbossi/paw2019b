@@ -6,6 +6,7 @@ import ar.edu.itba.paw.model.exceptions.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public interface AppointmentService {
 
@@ -41,4 +42,6 @@ public interface AppointmentService {
     List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, LocalDate beginning, LocalDate end);
 
     void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour);
+
+    List<Appointment> getDoctorsAvailableAppointments(Doctor doctor);
 }

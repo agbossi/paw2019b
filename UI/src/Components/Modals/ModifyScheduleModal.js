@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import DropDownList from "../DropDownList";
 import DoctorCalls from "../../api/DoctorCalls";
+import {getWeekDate} from "../../utils/dateHelper";
 
 function ModifyScheduleModal(props) {
     const [show, setShow] = useState(false);
@@ -50,27 +51,6 @@ function ModifyScheduleModal(props) {
         return [t("CAL.mon"), t("CAL.tue"), t("CAL.wed"), t("CAL.thu"), t("CAL.fri"), t("CAL.sat"), t("CAL.sun")]
     }
 
-    const stringDays = (numberDay) => {
-        switch (numberDay) {
-            case 1:
-                return t("CAL.mon");
-            case 2:
-                return t("CAL.tue");
-            case 3:
-                return t("CAL.wed");
-            case 4:
-                return t("CAL.thu");
-            case 5:
-                return t("CAL.fri");
-            case 6:
-                return t("CAL.sat");
-            case 7:
-                return t("CAL.sun");
-
-
-        }
-    }
-
     const parseDays = (dayString) => {
         switch (dayString) {
             case t("CAL.mon"):
@@ -108,7 +88,7 @@ function ModifyScheduleModal(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group className="mb-3" controlId="day">
-                        <Form.Label>{t("FORM.day")} {day === null? "": stringDays(day)}</Form.Label>
+                        <Form.Label>{t("FORM.day")} {day === null? "": t(getWeekDate(day))}</Form.Label>
                         <DropDownList iterable={getDays()}
                                       selectedElement={day}
                                       handleSelect={handleSelectDay}

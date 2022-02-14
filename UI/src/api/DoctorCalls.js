@@ -26,6 +26,7 @@ const getClinics = async (license, pag) =>
 const getAllClinics = async (license) =>
     api.get (cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + cons.ALL_PATH)
 const getDocByEmail = async (email) => api.get (cons.DOCTORS_PATH + cons.EMAIL_PATH + "/" + email)
+const getDocByLicense = async (license) => api.get(cons.DOCTORS_PATH + "/" + license)
 const addDoctorToClinic = async (data, license) => api.post(
     cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH,
     data,
@@ -97,10 +98,11 @@ export default {
     getClinics,
     getAllClinics,
     getDocByEmail,
+    getDocByLicense,
     addDoctorToClinic,
     deleteDoctorsClinic,
     editPrice,
     getSchedule,
     addSchedule,
-    deleteSchedule
+    deleteSchedule,
 }

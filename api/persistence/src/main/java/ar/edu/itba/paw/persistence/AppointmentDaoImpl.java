@@ -21,7 +21,12 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
     @Override
     public Appointment createAppointment(DoctorClinic doctorClinic, User patient, LocalDateTime date){
-        Appointment appointment = new Appointment(date, doctorClinic, patient);
+        DoctorClinic dc = entityManager.find(DoctorClinic.class, new DoctorClinicKey(doctorClinic.getDoctor().getLicense(),
+                doctorClinic.getClinic().getId()));
+        User pat = entityManager.find(User.class, patient.getEmail());
+        pat = entityManager.merge(pat);
+        dc = entityManager.merge(dc);
+        Appointment appointment = new Appointment(date, dc, pat);
         entityManager.persist(appointment);
         return appointment;
     }
@@ -39,7 +44,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     @Override
     public List<Appointment> getPatientsAppointments(User patient){
         TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap " +
-                "where ap.patient.email = :email",Appointment.class);
+                "where ap.patient = :email",Appointment.class);
         query.setParameter("email",patient.getEmail());
         List<Appointment> list = query.getResultList();
         return list;
@@ -48,7 +53,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     @Override
     public List<Appointment> getPatientsAppointments(User patient, int clinicId) {
         TypedQuery<Appointment> query = entityManager.createQuery("select ap from Appointment as ap " +
-                "where ap.appointmentKey.clinic = :clinic and ap.patient.email = :email", Appointment.class);
+                "where ap.clinic = :clinic and ap.patient = :email", Appointment.class);
         query.setParameter("email",patient.getEmail());
         query.setParameter("clinic",clinicId);
         return query.getResultList();
@@ -71,7 +76,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     @Override
     public void cancelAppointment(DoctorClinic doctorClinic, User patient, LocalDateTime date){
         final Query query = entityManager.createQuery(
-                "delete from Appointment as ap where ap.appointmentKey.patient = :email and " +
+                "delete from Appointment as ap where ap.patient = :email and " +
                         "ap.appointmentKey.doctor = :doctor and ap.clinic = :clinic " +
                         "and ap.appointmentKey.date = :date");
         query.setParameter("email",patient.getEmail());
@@ -118,7 +123,7 @@ public class AppointmentDaoImpl implements AppointmentDao {
     @Override
     public boolean hasAppointment(String doctorLicense, String patientEmail, LocalDateTime date){
         TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
-                " where ap.doctorClinic.doctor.license = :doctor and ap.patient.email = :email " +
+                " where ap.doctorClinic.doctor.license = :doctor and ap.patient = :email " +
                 "and ap.appointmentKey.date = :date",Appointment.class);
         query.setParameter("doctor",doctorLicense);
         query.setParameter("email",patientEmail);

@@ -12,13 +12,13 @@ public class DoctorClinicDto {
     private int consultPrice;
 //    private URI schedules;
 //    private URI appointments;
-    private List<List<DoctorHourDto>> week;
+//    private List<List<DoctorHourDto>> week;
 
     //lo que sale en schedules desde doctorsClinic: /web_app_war_exploded/doctors/8895668/doctorsClinics/6/schedules
     //lo que sale en appointments: /web_app_war_exploded/doctors/8895668/doctorsClinics/6/appointments
 
 
-    public static DoctorClinicDto fromDoctorClinic(DoctorClinic doctorClinic, UriInfo uriInfo, List<List<DoctorHourDto>> week) {
+    public static DoctorClinicDto fromDoctorClinic(DoctorClinic doctorClinic, UriInfo uriInfo) {
         DoctorClinicDto doctorClinicDto = new DoctorClinicDto();
         doctorClinicDto.doctor = DoctorDto.fromDoctor(doctorClinic.getDoctor(), uriInfo);
         doctorClinicDto.clinic = ClinicDto.fromClinic(doctorClinic.getClinic(), uriInfo);
@@ -29,7 +29,7 @@ public class DoctorClinicDto {
 //        doctorClinicDto.appointments = uriInfo.getBaseUriBuilder().path("appointments")
 //                .path(doctorClinic.getDoctor().getEmail())
 //                .path(String.valueOf(doctorClinic.getClinic().getId())).build();
-        doctorClinicDto.week = week;
+       // doctorClinicDto.week = week;
         return doctorClinicDto;
     }
 
@@ -72,12 +72,4 @@ public class DoctorClinicDto {
 //    public void setAppointments(URI appointments) {
 //        this.appointments = appointments;
 //    }
-
-    public List<List<DoctorHourDto>> getWeek() {
-        return week;
-    }
-
-    public void setWeek(List<List<DoctorHourDto>> week) {
-        this.week = week;
-    }
 }

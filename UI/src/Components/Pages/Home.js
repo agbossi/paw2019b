@@ -62,8 +62,11 @@ function Home(props) {
     }
 
     const handleSearch = async (criteria, pag) => {
-        console.log(criteria)
         setSearchCriteria(criteria);
+        if (criteria == null) {
+            await fetchAllDoctorsWithAvailability(pag);
+            return;
+        }
         const response = await DoctorCalls.searchDocs(pag, criteria.location, criteria.specialty,
             criteria.firstName, criteria.lastName, criteria.consultPrice , criteria.prepaid)
         if (response && response.ok) {
@@ -95,7 +98,7 @@ function Home(props) {
                                         </Card.Body>
                                         <Link className="doc-button-color btn m-1"
                                               role="button"
-                                              to={'/home/' + doctor.license + '/profile'}>{t("USER.seeProfile")}
+                                              to={doctor.license + '/profile'}>{t("USER.seeProfile")}
                                         </Link>
                                     </Card>
                                 )

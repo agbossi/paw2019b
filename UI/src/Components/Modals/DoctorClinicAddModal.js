@@ -54,7 +54,7 @@ function DoctorClinicAddModal(props) {
                                       selectedElement=''
                                       handleSelect={handleSelect}
                                       elementType={t('FORM.selectClinic')}
-                                      id='prepaid'/>
+                                      id='clinic'/>
                         <Form.Group className="mb-3 mt-3" controlId="price">
                             <Form.Label>{t('DOC.price')}</Form.Label>
                             <Form.Control type="number" placeholder={t("FORM.enterPrice")} onChange={onChange}/>

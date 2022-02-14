@@ -96,8 +96,11 @@ public class AppointmentController {
 
 import ar.edu.itba.paw.interfaces.service.AppointmentService;
 import ar.edu.itba.paw.interfaces.service.ClinicService;
+import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.model.Appointment;
 import ar.edu.itba.paw.model.Clinic;
+import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.webapp.caching.AppointmentCaching;
@@ -127,6 +130,9 @@ public class AppointmentController {
     private ClinicService clinicService;
 
     @Autowired
+    private DoctorService doctorService;
+
+    @Autowired
     private AppointmentCaching appointmentCaching;
 
     @Context
@@ -142,7 +148,8 @@ public class AppointmentController {
         User user = userService.findUserByEmail(email);
         if(user != null) {
             List<AppointmentDto> appointments = appointmentService.getUserAppointments(user)
-                    .stream().map(AppointmentDto::fromAppointment).collect(Collectors.toList());
+                    .stream().map(appointment -> AppointmentDto.fromAppointment(appointment, uriInfo))
+                    .collect(Collectors.toList());
             return CacheHelper.handleResponse(appointments, appointmentCaching,
                     new GenericEntity<List<AppointmentDto>>(appointments) {}, "appointments",
                     request).build();
@@ -150,6 +157,29 @@ public class AppointmentController {
         }
         // TODO no se si llega alguna vez aca, solo un user puede buscarse a el mismo
         return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
+    }
+
+    /**
+     * Returns a list of all available Appointments from today to 9 weeks in the future, to check doctor's
+     * availability
+     * @param license
+     * @return List of Appointments
+     * @throws EntityNotFoundException
+     */
+    @GET
+    @Path("available/{license}")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    public Response getDoctorAvailableAppointments(@PathParam("license") final String license,
+                                                   @Context Request request) throws EntityNotFoundException {
+        Doctor doc = doctorService.getDoctorByLicense(license);
+        if (doc == null) throw new EntityNotFoundException("doctor");
+
+        List<AppointmentDto> appointments = appointmentService.getDoctorsAvailableAppointments(doc)
+                .stream().map(appointment -> AppointmentDto.fromAppointment(appointment, uriInfo))
+                .collect(Collectors.toList());
+        return CacheHelper.handleResponse(appointments, appointmentCaching,
+                new GenericEntity<List<AppointmentDto>>(appointments) {}, "appointments",
+                request).build();
     }
 
     @DELETE
@@ -182,7 +212,8 @@ public class AppointmentController {
         Clinic clinic = clinicService.getClinicById(clinicId);
         if(user != null && clinic != null) {
             List<AppointmentDto> appointments = appointmentService.getUserAppointmentsForClinic(user, clinic)
-                    .stream().map(AppointmentDto::fromAppointment).collect(Collectors.toList());
+                    .stream().map(appointment -> AppointmentDto.fromAppointment(appointment, uriInfo))
+                    .collect(Collectors.toList());
             return CacheHelper.handleResponse(appointments, appointmentCaching,
                     new GenericEntity<List<AppointmentDto>>(appointments) {},
                     "appointments", request).build();
@@ -211,6 +242,11 @@ public class AppointmentController {
     }
 
 
+    /**
+     * For USER to make an appointment
+     * @param form
+     * @return
+     */
     @POST
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Consumes(MediaType.APPLICATION_JSON)

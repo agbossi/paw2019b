@@ -70,6 +70,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/locations").permitAll()
                 .antMatchers(HttpMethod.GET, "/clinics/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/prepaids").permitAll()
+                .antMatchers(HttpMethod.GET, "/appointments/available/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/login").anonymous()
                 .antMatchers(HttpMethod.POST, "/patients").permitAll()
                 .antMatchers(HttpMethod.POST, "/locations").hasRole("ADMIN")

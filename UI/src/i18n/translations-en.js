@@ -10,6 +10,7 @@ export const TRANSLATION_EN = {
     },
     USER: {
         seeProfile: "See Profile",
+        dataProfile: "Doctor's Information",
         emptyFavorites: "No favorite doctors yet"
     },
     ADMIN: {
@@ -69,15 +70,17 @@ export const TRANSLATION_EN = {
         selectLocation: "Select location",
         selectPrepaid: "Select prepaid",
         selectClinic: "Select clinic",
+        enterPrice: "Enter price",
         day: "Day: ",
         hour: "Hour: ",
         schedule: "Schedule",
         daySelect: "Select day",
         hourSelect: "Select hour",
         none: "None",
+        signUp: "Sign up",
         maxPrice: "Maximum Consult Price",
-        enterPrice: "Enter price",
-        signUp: "Sign up"
+        dateTime: "Date and Time",
+        selectDateTime: "Select date and time"
     },
     errors: {
         licenseInUse: "Licence already registered",
@@ -116,14 +119,16 @@ export const TRANSLATION_EN = {
         notSupported: "Image type not supported. Supported types: JPEG, JPG, PNG",
         scheduleExists: "You already have scheduled this time and hour for this or other clinic",
         scheduleNotFoundDelete: "No schedule found to delete",
-        scheduleOtherClinicDelete: "The schedule to delete belongs to another clinic"
+        scheduleOtherClinicDelete: "The schedule to delete belongs to another clinic",
+        selectTime: "Select clinic, date and time to make an appointment"
 
     },
     actions: {
         add: "Add",
         edit: "Edit",
         upload: "Upload",
-        delete: "Delete"
+        delete: "Delete",
+        makeApp: "Make Appointment"
     },
     CAL : {
         hour: "Hour",
@@ -133,7 +138,19 @@ export const TRANSLATION_EN = {
         thu: "Thursday",
         fri: "Friday",
         sat: "Saturday",
-        sun: "Sunday"
+        sun: "Sunday",
+        jan: "January",
+        feb: "February",
+        mar: "March",
+        apr: "April",
+        may: "May",
+        jun: "June",
+        jul: "July",
+        aug: "August",
+        sep: "September",
+        oct: "October",
+        nov: "November",
+        dec: "December"
     },
     deleteButton: "Delete",
     prevButton: "Prev",

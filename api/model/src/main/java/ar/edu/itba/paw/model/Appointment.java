@@ -25,15 +25,20 @@ public class Appointment {
     @EmbeddedId
     private AppointmentKey appointmentKey;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient", insertable = false, updatable = false)
-    private User patient;
+    private User patientUser;
+
+    @Column
+    private String patient;
+
 
     public Appointment(LocalDateTime date, DoctorClinic doctorClinic, User patient) {
         this.clinic = doctorClinic.getClinic().getId();
         this.doctorClinic = doctorClinic;
-        this.patient = patient;
-        this.appointmentKey = new AppointmentKey(doctorClinic.getDoctor().getLicense(),patient.getEmail(),date);
+        this.patientUser = patient;
+        this.patient = patient == null ? null : patient.getEmail();
+        this.appointmentKey = new AppointmentKey(doctorClinic.getDoctor().getLicense(), date);
     }
 
     public Appointment(){
@@ -43,8 +48,8 @@ public class Appointment {
         return doctorClinic;
     }
 
-    public User getPatient() {
-        return patient;
+    public User getPatientUser() {
+        return patientUser;
     }
 
 
@@ -52,11 +57,24 @@ public class Appointment {
         this.doctorClinic = doctorClinic;
     }
 
-    public void setPatient(User patient) {
-        this.patient = patient;
+    public void setPatientUser(User patientUser) {
+        this.patientUser = patientUser;
     }
 
     public AppointmentKey getAppointmentKey() {
         return appointmentKey;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Appointment)) return false;
+        Appointment other = (Appointment) obj;
+        return this.appointmentKey.equals(other.appointmentKey);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.appointmentKey.hashCode();
     }
 }
