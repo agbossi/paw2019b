@@ -120,8 +120,10 @@ export const TRANSLATION_EN = {
         scheduleExists: "You already have scheduled this time and hour for this or other clinic",
         scheduleNotFoundDelete: "No schedule found to delete",
         scheduleOtherClinicDelete: "The schedule to delete belongs to another clinic",
-        selectTime: "Select clinic, date and time to make an appointment"
-
+        selectTime: "Select clinic, date and time to make an appointment",
+        datePast: "Selected date is in the past, select a future date",
+        outOfSchedule: "Selected date is out of doctor's schedule",
+        appointmentExists: "The selected date already has an appointment, select another date"
     },
     actions: {
         add: "Add",

@@ -112,6 +112,16 @@ function UserDoctorProfile(props) {
                 localStorage.removeItem('role')
                 navigate('/login')
             }
+            if (response.status === 400) {
+                if (response.data === "past-date")
+                    setMessage("errors.datePast")
+            }
+            if (response.status === 409) {
+                if (response.data === "out-of-schedule")
+                    setMessage("errors.outOfSchedule")
+                if (response.data === "appointment-exists")
+                    setMessage("errors.appointmentExists")
+             }
         }
 
     }

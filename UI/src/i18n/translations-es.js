@@ -126,7 +126,11 @@ export const TRANSLATION_ES = {
         scheduleExists: "Usted ya tiene agendado ese horario para esta u otra clínica",
         scheduleNotFoundDelete: "No se encontró el horario a eliminar",
         scheduleOtherClinicDelete: "El horario a eliminar pertenece a otra clínica",
-        selectTime: "Seleccione clínica, día y horario para tomar un turno"
+        selectTime: "Seleccione clínica, día y horario para tomar un turno",
+        datePast: "La fecha seleccionada es en el pasado, seleccione una fecha futura",
+        outOfSchedule: "La fecha seleccionada no pertenece al horario de atención del doctor",
+        appointmentExists: "La fecha seleccionada ya posee un turno asignado, seleccione otra fecha"
+
 
     },
     CAL : {

@@ -251,17 +251,12 @@ public class AppointmentController {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Consumes(MediaType.APPLICATION_JSON)
     @PreAuthorize("hasPermission(#form.patient, 'user')")
-    public Response createAppointment(final AppointmentForm form) {
-        try {
-            appointmentService.createAppointment(form.getLicense(), form.getClinic(),
-                    form.getPatient(), form.getYear(), form.getMonth(), form.getDay(),
-                    form.getTime());
-            return Response.created(uriInfo.getAbsolutePathBuilder().path(form.getPatient())
-                    .path(String.valueOf(form.getClinic())).build()).build();
-        } catch (AppointmentAlreadyScheduledException e) {
-            return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
-        } catch (DateInPastException | OutOfScheduleException e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
-        }
+    public Response createAppointment(final AppointmentForm form) throws
+            DateInPastException, OutOfScheduleException, AppointmentAlreadyScheduledException {
+        appointmentService.createAppointment(form.getLicense(), form.getClinic(),
+                form.getPatient(), form.getYear(), form.getMonth(), form.getDay(),
+                form.getTime());
+        return Response.created(uriInfo.getAbsolutePathBuilder().path(form.getPatient())
+                .path(String.valueOf(form.getClinic())).build()).build();
     }
 }
