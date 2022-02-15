@@ -56,7 +56,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Transactional
     @Override
     public Appointment createAppointment(String license, int clinicId, String userEmail, int year, int month, int day, int time)
-    throws DateInPastException, AppointmentAlreadyScheduledException, OutOfScheduleException {
+            throws DateInPastException, AppointmentAlreadyScheduledException, OutOfScheduleException, HasAppointmentException {
         LocalDateTime today = LocalDateTime.now();
         LocalDateTime date = createAppointmentCalendar(year, month, day, time);
 
@@ -72,6 +72,11 @@ public class AppointmentServiceImpl implements AppointmentService {
         if(hasAppointment(license, userEmail, date)) {
             throw new AppointmentAlreadyScheduledException();
         }
+
+        if (hasAppointment(doctor, date)) throw new HasAppointmentException("doctor");
+
+        if (hasAppointment(user, date)) throw new HasAppointmentException("patient");
+
 
         for (Schedule schedule : doctorClinic.getSchedule()) {
             if (date.getDayOfWeek().getValue() == schedule.getDay() && date.getHour() == schedule.getHour()) {
@@ -105,6 +110,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         return appointmentDao.getPatientsAppointments(patient, clinicId);
     }
 
+    @Transactional
     @Override
     public void cancelAppointment(String license, int clinicId, int year, int month, int day, int time, boolean cancelledByDoctor)
             throws EntityNotFoundException, RequestEntityNotFoundException {
@@ -121,6 +127,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     }
 
+    @Transactional
     @Override
     public void cancelUserAppointment(String userEmail, String license, int clinicId, int year, int month, int day, int time)
             throws EntityNotFoundException, RequestEntityNotFoundException {
@@ -141,6 +148,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         User user = userService.findUserByEmail(userEmail);
 
         Locale locale = LocaleContextHolder.getLocale();
+
+        final String language = locale.getLanguage();
+        locale = Arrays.stream(Locale.getAvailableLocales()).filter(loc -> language.equals(loc.getLanguage())).findFirst().orElse(Locale.ENGLISH);
+
         if(hasAppointment(license , userEmail ,date)) {
             if (cancelledByDoctor) {
                 emailService.sendSimpleMail(
@@ -162,7 +173,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
     }
 
-    //TODO agregar filtro de fechas
     @Override
     public List<Appointment> getUserAppointments(User user) {
         if(userService.isDoctor(user.getEmail())) {
@@ -193,6 +203,16 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public boolean hasAppointment(String doctorLicense, String patientEmail, LocalDateTime date) {
         return appointmentDao.hasAppointment(doctorLicense,patientEmail,date);
+    }
+
+    @Override
+    public boolean hasAppointment(Doctor doctor, LocalDateTime date) {
+        return appointmentDao.hasAppointment(doctor, date);
+    }
+
+    @Override
+    public boolean hasAppointment(User patient, LocalDateTime date) {
+        return appointmentDao.hasAppointment(patient, date);
     }
 
     @Override
@@ -244,6 +264,28 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return available.stream().sorted(Comparator.comparing(o -> o.getAppointmentKey().getDate())
         ).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Appointment> getPaginatedAppointments(User user, int page) {
+        if(userService.isDoctor(user.getEmail())) {
+            Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
+            return appointmentDao.getPaginatedAppointments(page, doctor);
+        } else {
+            Patient patient = patientService.getPatientByEmail(user.getEmail());
+            return appointmentDao.getPaginatedAppointments(page, patient);
+        }
+    }
+
+    @Override
+    public int getMaxAvailablePage(User user) {
+        if(userService.isDoctor(user.getEmail())) {
+            Doctor doctor = doctorService.getDoctorByEmail(user.getEmail());
+            return appointmentDao.getMaxAvailablePage(doctor);
+        } else {
+            Patient patient = patientService.getPatientByEmail(user.getEmail());
+            return appointmentDao.getMaxAvailablePage(patient);
+        }
     }
 
     private String dateString(LocalDateTime calendar) {

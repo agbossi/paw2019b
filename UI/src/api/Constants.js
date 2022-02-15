@@ -4,6 +4,10 @@ export const PRICE_QUERY = 'price='
 export const HOUR_QUERY = 'hour='
 export const DAY_QUERY = 'day='
 export const LICENSE_QUERY = 'license='
+export const CLINIC_QUERY = 'clinic='
+export const YEAR_QUERY = 'year='
+export const MONTH_QUERY = 'month='
+export const TIME_QUERY = 'time='
 
 export const PATIENT_PATH = '/patients';
 export const FAVORITE_PATH = '/favorites'

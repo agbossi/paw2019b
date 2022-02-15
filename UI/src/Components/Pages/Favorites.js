@@ -17,6 +17,11 @@ function Favorites() {
 
     const fetchFavorites = async (pag) => {
         let id = localStorage.getItem('email')
+        if (id === null) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/login')
+        }
         setIsLoading(true)
         const response = await PatientCalls.getFavoriteDoctors(id, pag)
         if (response && response.ok) {
@@ -27,12 +32,18 @@ function Favorites() {
         if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
+            localStorage.removeItem('email')
             navigate('/login')
         }
     }
 
     const removeFromFavorites = async (license) => {
         let id = localStorage.getItem('email')
+        if (id === null) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/login')
+        }
         const response = await PatientCalls.deleteFavoriteDoctor(id, license);
         if (response && response.ok) {
             await fetchFavorites(page);

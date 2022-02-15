@@ -15,6 +15,12 @@
     height: 75vh;
 }
 
+.app-user-container {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    height: 75vh;
+}
+
 .search-doctor-container {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
@@ -55,6 +61,12 @@
     color: #000;
     width: 20rem;
     height: 8.5rem;
+}
+
+.app-card {
+    color: #000;
+    width: 25rem;
+    height: 12rem;
 }
 
 .fav-doc-card {
