@@ -18,7 +18,7 @@ import DoctorClinics from "./Components/Pages/DoctorClinics";
 import DoctorClinicSchedule from "./Components/Pages/DoctorClinicSchedule";
 import UserDoctorProfile from "./Components/Pages/UserDoctorProfile";
 import Favorites from "./Components/Pages/Favorites";
-import UserAppointments from "./Components/Pages/UserAppointments";
+import Appointments from "./Components/Pages/Appointments";
 
 function App() {
 
@@ -31,10 +31,11 @@ function App() {
                 <Navbar isAuth={isAuth}/>
                 <Routes>
                     <Route path='/' exact element={<Home/>}/>
-                    <Route path='/appointments' element={<UserAppointments/>}/>
+                    <Route path='/appointments' element={<Appointments user="patient" />}/>
                     <Route path='/:license/profile' element={<UserDoctorProfile />}/>
                     <Route path="/doctor" element={<DoctorHome />} />
                     <Route path="/doctor/clinics" element={<DoctorClinics/>} />
+                    <Route path="/doctor/appointments" element={<Appointments user="doctor" />} />
                     <Route path="/doctor/:license/clinics/:id/schedule" element={<DoctorClinicSchedule />} />
                     <Route path='admin/' exact element={<AdminHome />}/>
                     <Route path='admin/locations' element={<Locations />}/>

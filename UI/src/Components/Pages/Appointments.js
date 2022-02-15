@@ -6,7 +6,7 @@ import {Button, Card, Container, Row} from "react-bootstrap";
 import './Favorites.css'
 import {getMonth, getWeekDate} from "../../utils/dateHelper";
 
-function UserAppointments(props) {
+function Appointments(props) {
     const [appointments, setAppointments] = useState([])
     const [page, setPage] = useState(0)
     const [maxPage, setMaxPage] = useState(0)
@@ -133,9 +133,12 @@ function UserAppointments(props) {
                                 <Card.Body>
                                     <Card.Title><b>{dateToString(ap)}</b></Card.Title>
                                     <Card.Text>
-                                        <div>
+                                        {props.user === "patient"? <div>
                                             {t("USER.doc")}{ap.doctorClinic.doctor.user.firstName + ' ' + ap.doctorClinic.doctor.user.lastName}
-                                        </div>
+                                        </div>: <div>
+                                            {t("USER.patient")}{ap.patient.firstName + ' ' + ap.patient.lastName} ({ap.patient.email})
+                                        </div> }
+
                                         <div>
                                             {t("USER.clinic")} {ap.doctorClinic.clinic.name} - {ap.doctorClinic.clinic.location} ({ap.doctorClinic.clinic.address})
                                         </div>
@@ -144,7 +147,7 @@ function UserAppointments(props) {
                                 </Card.Body>
                                 <Button className="remove-button remove-button-color shadow-sm"
                                         onClick={() => {deleteAppointment(ap)}}>
-                                    {t('deleteButton')}
+                                    {t('cancelButton')}
                                 </Button>
                             </Card>
                         )
@@ -157,4 +160,4 @@ function UserAppointments(props) {
     )
 
 }
-export default UserAppointments;
+export default Appointments;

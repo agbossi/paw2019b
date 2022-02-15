@@ -15,7 +15,8 @@ export const TRANSLATION_EN = {
         noApp: "No appointments yet",
         fav: "Favorites",
         doc: "Doctor: ",
-        clinic: "Clinic: "
+        clinic: "Clinic: ",
+        patient: "Patient: "
     },
     ADMIN: {
         doctors: "Doctors",
@@ -174,4 +175,5 @@ export const TRANSLATION_EN = {
     editProfileButton: "Edit Profile",
     changeImgButton: "Change Image",
     deleteImgButton: "Delete Image",
+    cancelButton: "Cancel"
 }

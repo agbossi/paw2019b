@@ -15,7 +15,8 @@ export const TRANSLATION_ES = {
         dataProfile: "Información del Doctor",
         fav: "Favoritos",
         doc: "Doctor: ",
-        clinic: "Clínica: "
+        clinic: "Clínica: ",
+        patient: "Paciente: "
     },
     ADMIN: {
         doctors: "Doctores",
@@ -172,6 +173,7 @@ export const TRANSLATION_ES = {
     welcome: "Bienvenido/a",
     editProfileButton: "Editar Perfil",
     changeImgButton: "Cambiar Imagen",
-    deleteImgButton: "Eliminar Imagen"
+    deleteImgButton: "Eliminar Imagen",
+    cancelButton: "Cancelar"
 
 }
