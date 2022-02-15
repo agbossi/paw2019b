@@ -18,9 +18,18 @@ function SignUp() {
     const [document, setDocument] = useState('')
     const [prepaidNumber, setPrepaidNumber] = useState('')
     const [prepaids, setPrepaids] = useState([])
+
+    const [firstNameErrors, setFirstNameErrors] = useState([])
+    const [lastNameErrors, setLastNameErrors] = useState([])
+    const [emailErrors, setEmailErrors] = useState([])
+    const [prepaidNumberErrors, setPrepaidNumberErrors] = useState([])
+    const [passwordErrors, setPasswordErrors] = useState([])
+    const [repeatPasswordErrors, setRepeatPasswordErrors] = useState([])
+    const [documentErrors, setDocumentErrors] = useState([])
+    const [invalidForm, setInvalidForm] = useState(true)
+
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [errors, setErrors] = useState([])
 
     const handleSelect = (prepaid) => {
         setSelectedPrepaid(prepaid)
@@ -106,30 +115,9 @@ function SignUp() {
         }
     }
 
-    const handleValidation = (values) => {
-        console.log('en validacion')
-        console.log('errors antes de vaciar')
-        console.log(errors)
-        setErrors([])
-        console.log('errors desps de vaciar')
-        console.log(errors)
-        checkRequired(values, errors)
-        checkDigits(values, errors)
-        checkPassword(values, errors)
-        checkEmail(values, errors)
-        checkAlpha(values, errors)
-        if(values.id.length !== 8) {
-            errors.push(t("errors.invalidDocumentLength"))
-        }
-        if(values.prepaidNumber.length > 20) {
-            errors.push(t("errors.prepaidNumberTooLong"))
-        }
-        setErrors(errors)
-        return errors
-    }
-
     const handleSignUp = (e) => {
         e.preventDefault();
+        setInvalidForm(true)
         let data = {
             firstName: firstName,
             lastName: lastName,
@@ -140,20 +128,14 @@ function SignUp() {
             prepaid: selectedPrepaid,
             prepaidNumber: prepaidNumber
         }
-        console.log('me toma la funcion?')
-        let errors = []//handleValidation(data)
-        console.log('hay ' + errors.length + ' errores')
-        if(errors.length === 0) {
-            console.log('entonces entra aca?')
-            ApiCalls.signUp(data)
-                .then(resp => {
-                    console.log('se supone que se llamo al api signup')
-                    if (resp.status === 201) {
-                        ApiCalls.login(data.email, data.password).then(
-                            (resp) => {
-                                console.log('post login')
-                                if (resp.status === 200) {
-                                    switch (localStorage.getItem('role')) {
+
+        ApiCalls.signUp(data)
+            .then(resp => {
+                if (resp.status === 201) {
+                    ApiCalls.login(data.email, data.password).then(
+                        (resp) => {
+                            if (resp.status === 200) {
+                                switch (localStorage.getItem('role')) {
                                         case "ROLE_ADMIN":
                                             navigate("/admin");
                                             window.location.reload()
@@ -166,54 +148,124 @@ function SignUp() {
                                             navigate("/");
                                             window.location.reload()
                                             break;
-                                    }
                                 }
+                            }
                             },
-                            error => {
-                                const resMessage =
-                                    (error.response &&
-                                        error.response.data &&
-                                        error.response.data.message) ||
+                        error => {
+                            const resMessage =
+                                (error.response &&
+                                    error.response.data &&
+                                    error.response.data.message) ||
                                     error.message ||
                                     error.toString();
-                                console.log('caso error')
-                                console.log(resMessage)
-                            }
+                        }
                         );
-                    } else {
-                        console.log('no fue 201')
-                        console.log(resp)
-                        console.log(resp.status)
-                    }
-                })
-        }
+                } else {
+
+                }
+            })
+        setInvalidForm(false)
     }
 
     const onChange = (event) => {
         // eslint-disable-next-line default-case
+        let error = false
+        let errors = []
         switch (event.target.id) {
             case "firstName":
                 setFirstName(event.target.value)
+                if(!isPresent(event.target.value)) {
+                    errors.push(t("FORM.firstName") + "  " + t("errors.required"))
+                    error = true
+                }
+                if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(event.target.value)) {
+                    errors.push(t("FORM.firstName") + "  " + t("errors.alphabetic"))
+                    error = true
+                }
+                setFirstNameErrors(errors)
                 break;
             case "lastName":
                 setLastName(event.target.value)
+                if(!isPresent(event.target.value)) {
+                    errors.push(t("FORM.lastName") + "  " + t("errors.required"))
+                    error = true
+                }
+                if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(event.target.value)) {
+                    errors.push(t("FORM.lastName") + "  " + t("errors.alphabetic"))
+                    error = true
+                }
+                setLastNameErrors(errors)
                 break;
             case "document":
                 setDocument(event.target.value)
+                if(!isPresent(event.target.value)) {
+                    errors.push(t("FORM.document") + "  " + t("errors.required"))
+                    error = true
+                }
+                if(event.target.value.length !== 8) {
+                    errors.push(t("errors.invalidDocumentLength"))
+                    error = true
+                }
+                if(event.target.value.length > 20) {
+                    errors.push(t("errors.prepaidNumberTooLong"))
+                    error = true
+                }
+                if(!/^\d+$/.test(event.target.value)) {
+                    errors.push(t("FORM.document") + "  " + t("errors.numeric"))
+                    error = true
+                }
+                setDocumentErrors(errors)
                 break;
             case "email":
                 setEmail(event.target.value)
+                if(!isPresent(event.target.value)) {
+                    errors.push(t("FORM.email") + "  " + t("errors.required"))
+                    error = true
+                }
+                if(!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(event.target.value)) {
+                    errors.push(t("errors.invalidEmail"))
+                    error = true
+                }
+                setEmailErrors(errors)
                 break;
             case "password":
                 setPassword(event.target.value)
+                if(event.target.value !== '' && event.target.value.length < 8) {
+                    errors.push(t("errors.passwordTooShort"))
+                    error = true
+                }
+                if(event.target.value !== '' && repeatPassword !== event.target.value) {
+                    setRepeatPasswordErrors([t("errors.passwordMismatch")])
+                    error = true
+                }
+                setPasswordErrors(errors)
                 break;
             case "prepaidNumber":
                 setPrepaidNumber(event.target.value)
+                if(!/^\d+$/.test(event.target.value)) {
+                    errors.push(t("FORM.prepaidNumber") + "  " + t("errors.numeric"))
+                    error = true
+                }
+                if(event.target.value.length > 20) {
+                    errors.push(t("errors.prepaidNumberTooLong"))
+                    error = true
+                }
+                if(!isPresent(event.target.value)) {
+                    errors.push(t("FORM.prepaidNumber") + "  " + t("errors.required"))
+                    error = true
+                }
+                setPrepaidNumberErrors(errors)
                 break;
             case "repeatPassword":
                 setRepeatPassword(event.target.value)
+                if(event.target.value !== '' && password !== '' && password !== event.target.value) {
+                    errors.push(t("errors.passwordMismatch"))
+                    error = true
+                }
+                setRepeatPasswordErrors(errors)
                 break;
         }
+        setInvalidForm(error)
     }
 
     return (
@@ -229,6 +281,19 @@ function SignUp() {
                                           onChange={onChange}
                             />
                         </Form.Group>
+                        {firstNameErrors.length !== 0 && (
+                            <div className="form-group">
+                                <div className="alert alert-danger" role="alert">
+                                    <ul>
+                                        {firstNameErrors.map((error) => {
+                                            return (
+                                                <li>{error}</li>
+                                            )
+                                        })}
+                                    </ul>
+                                </div>
+                            </div>
+                        )}
                     </Col>
                     <Col className="mx-4">
                         <Form.Group className="mb-3 div-signup" controlId="lastName">
@@ -238,18 +303,32 @@ function SignUp() {
                                           onChange={onChange}
                             />
                         </Form.Group>
+                        {lastNameErrors.length !== 0 && (
+                            <div className="form-group">
+                                <div className="alert alert-danger" role="alert">
+                                    <ul>
+                                        {lastNameErrors.map((error) => {
+                                            return (
+                                                <li>{error}</li>
+                                            )
+                                        })}
+                                    </ul>
+                                </div>
+                            </div>
+                        )}
                     </Col>
                 </Row>
                 <Row>
                     <Col className="mx-4">
                         <Form.Group className="mb-3 div-signup" controlId="prepaids">
-                            <Form.Label className="label-signup m-3">{t("FORM.prepaid")} {selectedPrepaid}</Form.Label>
+                            <Form.Label className="label-signup m-3">{t("FORM.prepaid")}</Form.Label>
                             <DropDownList iterable={prepaids}
                                           selectedElement=''
                                           handleSelect={handleSelect}
                                           elementType={t("FORM.selectPrepaid")}
                                           id='prepaids'
                             />
+                            <Form.Label className="label-signup m-3">{selectedPrepaid}</Form.Label>
                         </Form.Group>
                     </Col>
                     <Col className="mx-4">
@@ -259,6 +338,19 @@ function SignUp() {
                                           value={prepaidNumber}
                                           onChange={onChange}
                             />
+                            {prepaidNumberErrors.length !== 0 && (
+                                <div className="form-group">
+                                    <div className="alert alert-danger" role="alert">
+                                        <ul>
+                                            {prepaidNumberErrors.map((error) => {
+                                                return (
+                                                    <li>{error}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
                         </Form.Group>
                     </Col>
                 </Row>
@@ -271,6 +363,19 @@ function SignUp() {
                                           onChange={onChange}
                             />
                         </Form.Group>
+                        {documentErrors.length !== 0 && (
+                            <div className="form-group">
+                                <div className="alert alert-danger" role="alert">
+                                    <ul>
+                                        {documentErrors.map((error) => {
+                                            return (
+                                                <li>{error}</li>
+                                            )
+                                        })}
+                                    </ul>
+                                </div>
+                            </div>
+                        )}
                     </Col>
                     <Col className="mx-4">
                         <Form.Group className="mb-3 div-signup" controlId="email">
@@ -280,6 +385,19 @@ function SignUp() {
                                           value={email}
                                           onChange={onChange}
                             />
+                            {emailErrors.length !== 0 && (
+                                <div className="form-group">
+                                    <div className="alert alert-danger" role="alert">
+                                        <ul>
+                                            {emailErrors.map((error) => {
+                                                return (
+                                                    <li>{error}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
                         </Form.Group>
                     </Col>
                 </Row>
@@ -291,6 +409,19 @@ function SignUp() {
                                           placeholder={t("FORM.password")}
                                           value={password} onChange={onChange}
                             />
+                            {passwordErrors.length !== 0 && (
+                                <div className="form-group">
+                                    <div className="alert alert-danger" role="alert">
+                                        <ul>
+                                            {passwordErrors.map((error) => {
+                                                return (
+                                                    <li>{error}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
                         </Form.Group>
                     </Col>
                     <Col className="mx-4">
@@ -301,26 +432,24 @@ function SignUp() {
                                           value={repeatPassword}
                                           onChange={onChange}
                             />
+                            {repeatPasswordErrors.length !== 0 && (
+                                <div className="form-group">
+                                    <div className="alert alert-danger" role="alert">
+                                        <ul>
+                                            {repeatPasswordErrors.map((error) => {
+                                                return (
+                                                    <li>{error}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
                         </Form.Group>
                     </Col>
                 </Row>
-                {console.log('errores antes del cartel: ' + errors.length)}
-                {errors.length !== 0 && (
-                    <div className="form-group">
-                        <div className="alert alert-danger" role="alert">
-                            <ul>
-                                {errors.map((error) => {
-                                    {console.log(error)}
-                                    return (
-                                        <li>{error}</li>
-                                    )
-                                })}
-                            </ul>
-                        </div>
-                    </div>
-                )}
                 <br/>
-                <Button type="submit" variant="secondary" >
+                <Button type="submit" disabled={invalidForm && selectedPrepaid !== ''} variant="secondary" >
                     {t("FORM.signUp")}
                 </Button>
             </Form>

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Col, Form, Modal, Row} from "react-bootstrap";
+import {Button, Col, Form, Row} from "react-bootstrap";
 import DropDownList from "../DropDownList";
 import {useTranslation} from "react-i18next";
 import '../../i18n/i18n'
@@ -27,6 +27,13 @@ function Profile() {
 
     const handleSelect = (prepaid) => {
         setSelectedPrepaid(prepaid)
+        console.log('prepNum: ' + prepaidNumber)
+        console.log('test: ' + password)
+        if(prepaidNumber === '') {
+            console.log('entro al if')
+            let error = t("FORM.prepaidNumber") + "  " + t("errors.required")
+            setPrepaidNumberErrors([error])
+        }
     }
 
     useEffect(async () => {
@@ -44,15 +51,19 @@ function Profile() {
     const fetchProfile = async () => {
         const response = await PatientCalls.getProfile(localStorage.getItem('email'));
         if (response && response.ok) {
-            setFirstName(response.data.firstName)
-            setLastName(response.data.lastName)
-            setSelectedPrepaid(response.data.prepaid)
-            setPrepaidNumber(response.data.prepaidNumber)
+            setFirstName(response.data.userData.firstName)
+            setLastName(response.data.userData.lastName)
+            setSelectedPrepaid(response.data.userData.prepaid)
+            setPrepaidNumber(response.data.userData.prepaidNumber)
         } else if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
             navigate('/login')
         }
+    }
+
+    const handleCancel = () => {
+        navigate('/home')
     }
 
     const handleProfileUpdate = async (e) => {
@@ -121,14 +132,14 @@ function Profile() {
                     errors.push(t("errors.passwordTooShort"))
                     error = true
                 }
+                if(event.target.value !== '' && repeatPassword !== event.target.value) {
+                    setRepeatPasswordErrors([t("errors.passwordMismatch")])
+                    error = true
+                }
                 setPasswordErrors(errors)
                 break;
             case "prepaidNumber":
                 setPrepaidNumber(event.target.value)
-                if(!isPresent(event.target.value)) {
-                    errors.push(t("FORM.prepaidNumber") + "  " + t("errors.required"))
-                    error = true
-                }
                 if(!/^\d+$/.test(event.target.value)) {
                     errors.push(t("FORM.prepaidNumber") + "  " + t("errors.numeric"))
                     error = true
@@ -153,7 +164,7 @@ function Profile() {
 
     return (
         <div className="m-3">
-            <h3>{t("FORM.profile")}</h3>
+            <h3>{t("USER.profile")}</h3>
             <Form onSubmit={handleProfileUpdate}>
                 <Row>
                     <Col className="mx-4">
@@ -204,13 +215,14 @@ function Profile() {
                 <Row>
                     <Col className="mx-4">
                         <Form.Group className="mb-3 div-signup" controlId="prepaids">
-                            <Form.Label className="label-signup m-3">{t("FORM.prepaid")} {selectedPrepaid}</Form.Label>
+                            <Form.Label className="label-signup m-3">{t("FORM.prepaid")}</Form.Label>
                             <DropDownList iterable={prepaids}
                                           selectedElement={selectedPrepaid}
                                           handleSelect={handleSelect}
                                           elementType={t("FORM.selectPrepaid")}
                                           id='prepaids'
                             />
+                            <Form.Label className="label-signup m-3">{selectedPrepaid}</Form.Label>
                         </Form.Group>
                     </Col>
                     <Col className="mx-4">
@@ -239,7 +251,7 @@ function Profile() {
                 <Row>
                     <Col className="mx-4">
                         <Form.Group className="mb-3 div-signup" controlId="password">
-                            <Form.Label className="label-signup m-3">{t("FORM.password")}</Form.Label>
+                            <Form.Label className="label-signup m-3">{t("FORM.newPassword")}</Form.Label>
                             <Form.Control type="password"
                                           placeholder={t("FORM.password")}
                                           value={password} onChange={onChange}
@@ -284,9 +296,14 @@ function Profile() {
                     </Col>
                 </Row>
                 <br/>
-                <Button type="submit" disabled={invalidForm} variant="secondary" >
-                    {t("FORM.update")}
-                </Button>
+                <div className="buttons-div">
+                    <Button type="submit" disabled={invalidForm} variant="secondary" >
+                        {t("actions.update")}
+                    </Button>
+                    <Button onClick={handleCancel}>
+                        {t("actions.cancel")}
+                    </Button>
+                </div>
             </Form>
         </div>
     )

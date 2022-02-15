@@ -11,6 +11,7 @@ export const TRANSLATION_ES = {
     USER: {
         seeProfile: "Ver Perfil",
         emptyFavorites: "No hay doctores favoritos aún",
+        profile: "Informacion personal",
         noApp: "No tienes turnos aún",
         dataProfile: "Información del Doctor",
         fav: "Favoritos",
@@ -61,6 +62,7 @@ export const TRANSLATION_ES = {
         email: "Email",
         enterEmail: "Ingrese email",
         password: "Contraseña",
+        newPassword: "Nueva contraseña",
         enterPassword: "Ingrese Contraseña",
         repeatPassword: "Reingrese Contraseña",
         prepaidNumber: "Numero de prepaga",
@@ -92,7 +94,9 @@ export const TRANSLATION_ES = {
         edit: "Editar",
         upload: "Subir",
         delete: "Borrar",
-        makeApp: "Tomar Turno"
+        makeApp: "Tomar Turno",
+        cancel: "Cancelar",
+        update: "Actualizar"
     },
     errors: {
         licenseInUse: "Licencia ya registrada",
@@ -119,10 +123,10 @@ export const TRANSLATION_ES = {
         doctorNotFoundEdit: "No se encontró el doctor a editar",
         noLoggedDoc: "No se encontró el email en sesión, intente cerrando sesión y volviendo a entrar",
         noDocEmail: "No se encontró doctor con el email en sesión",
-        required: "El campo es obligatorio",
-        numeric: "El campo solo puede contener numeros",
+        required: "es obligatorio",
+        numeric: "solo puede contener numeros",
         passwordTooShort: "La contraseña es demasiado corta",
-        alphabetic: "El campo solo puede contener letras",
+        alphabetic: "solo puede contener letras",
         invalidEmail: "email invalido",
         invalidDocumentLength: "El documento debe ser de 8 caracteres",
         prepaidNumberTooLong: "Numero de prepaga demasiado largo",

@@ -67,8 +67,7 @@ function App() {
                     <Route path='login' element={<WrappedLogin />}/>
                     <Route path='signUp' element={<SignUp />}/>
                     <Route path='favorites' element={<UserRoute><Favorites /></UserRoute>}/>
-                    <Route path='favorites' element={<Favorites />}/>
-                    <Route path='profile' element={<Profile/>}/>
+                    <Route path='profile' element={<UserRoute><Profile/></UserRoute>}/>
                 </Routes>
             </Router>
         </div>

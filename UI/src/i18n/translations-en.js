@@ -10,6 +10,7 @@ export const TRANSLATION_EN = {
     },
     USER: {
         seeProfile: "See Profile",
+        profile: "Personal information",
         dataProfile: "Doctor's Information",
         emptyFavorites: "No favorite doctors yet",
         noApp: "No appointments yet",
@@ -64,6 +65,7 @@ export const TRANSLATION_EN = {
         password: "Password",
         enterPassword: "Enter Password",
         repeatPassword: "Repeat Password",
+        newPassword: "New password",
         prepaid: "Prepaid",
         prepaidNumber: "Prepaid number",
         enterPrepaidNumber: "enter prepaid number",
@@ -86,7 +88,6 @@ export const TRANSLATION_EN = {
         maxPrice: "Maximum Consult Price",
         dateTime: "Date and Time",
         selectDateTime: "Select date and time",
-        update: "Update"
     },
     errors: {
         licenseInUse: "Licence already registered",
@@ -113,10 +114,10 @@ export const TRANSLATION_EN = {
         doctorNotFoundEdit: "No doctor found to edit",
         noLoggedDoc: "No logged email found, try logging out and logging in again",
         noDocEmail: "No doctor found with logged email",
-        required: "This field is required",
-        numeric: "This field only allows numbers",
+        required: "is required",
+        numeric: "only allows numbers",
         passwordTooShort: "Password is too short",
-        alphabetic: "This field only allows letters",
+        alphabetic: "only allows letters",
         invalidEmail: "Not a valid email",
         invalidDocumentLength: "document length must be 8 digits",
         prepaidNumberTooLong: "Prepaid number too long",
@@ -142,7 +143,9 @@ export const TRANSLATION_EN = {
         edit: "Edit",
         upload: "Upload",
         delete: "Delete",
-        makeApp: "Make Appointment"
+        makeApp: "Make Appointment",
+        cancel: "Cancel",
+        update: "Update"
     },
     CAL : {
         hour: "Hour",
