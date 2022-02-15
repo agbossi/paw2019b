@@ -17,9 +17,11 @@ function Home(props) {
     const [searchCriteria, setSearchCriteria] = useState(null)
     const [maxPage, setMaxPage] = useState(0)
     const [page, setPage] = useState(0)
+    const [loading, setLoading] = useState(false)
     const {t} = useTranslation()
 
     const fetchAllDoctorsWithAvailability = async (page) => {
+        setLoading(true)
         const response = await DoctorCalls.searchDocs(page, null, null,
             null, null, null , null)
         if (response && response.ok) {
@@ -27,6 +29,7 @@ function Home(props) {
             setMaxPage(Number(response.headers.xMaxPage))
             setMessage("")
         }
+        setLoading(false)
     }
 
     useEffect(async () => {
@@ -62,6 +65,7 @@ function Home(props) {
     }
 
     const handleSearch = async (criteria, pag) => {
+        setLoading(true)
         setSearchCriteria(criteria);
         if (criteria == null) {
             await fetchAllDoctorsWithAvailability(pag);
@@ -74,6 +78,7 @@ function Home(props) {
             setMaxPage(Number(response.headers.xMaxPage))
             setMessage("")
         }
+        setLoading(false)
     }
 
     return (
@@ -83,6 +88,9 @@ function Home(props) {
                     <SearchBar handleSearch={handleSearch}/>
                 </Col>
                 <Col xs={9}>
+                    {loading && (
+                        <span className="spinner-border mt-3"/>
+                    )}
                     <Container>
                         <div className="admin-info-container search-doctor-container">
                             {doctors.map((doctor) => {
