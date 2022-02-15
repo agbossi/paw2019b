@@ -20,9 +20,17 @@ const addFavoriteDoctor = async (id, license) => api.post(
     {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
 )
 
+const getProfile = async (id) => api.get(PATIENT_PATH + "/" + id,{},
+    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}})
+
+const updateProfile = async (data, id) => api.put(PATIENT_PATH + "/" + id, data,
+    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}})
+
 export default {
     getFavoriteDoctors,
     deleteFavoriteDoctor,
     isFavorite,
-    addFavoriteDoctor
+    addFavoriteDoctor,
+    updateProfile,
+    getProfile
 }

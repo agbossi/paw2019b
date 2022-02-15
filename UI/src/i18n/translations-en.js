@@ -81,7 +81,8 @@ export const TRANSLATION_EN = {
         signUp: "Sign up",
         maxPrice: "Maximum Consult Price",
         dateTime: "Date and Time",
-        selectDateTime: "Select date and time"
+        selectDateTime: "Select date and time",
+        update: "Update"
     },
     errors: {
         licenseInUse: "Licence already registered",

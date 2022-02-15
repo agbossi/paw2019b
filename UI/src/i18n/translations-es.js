@@ -80,7 +80,8 @@ export const TRANSLATION_ES = {
         none: "Ninguna",
         maxPrice: "Máximo Precio de Consulta",
         dateTime: "Día y Hora",
-        selectDateTime: "Seleccione día y hora"
+        selectDateTime: "Seleccione día y hora",
+        update: "Actualizar"
     },
     actions: {
         add: "Agregar",

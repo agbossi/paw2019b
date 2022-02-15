@@ -18,6 +18,7 @@ import DoctorClinics from "./Components/Pages/DoctorClinics";
 import DoctorClinicSchedule from "./Components/Pages/DoctorClinicSchedule";
 import UserDoctorProfile from "./Components/Pages/UserDoctorProfile";
 import Favorites from "./Components/Pages/Favorites";
+import Profile from "./Components/Pages/Profile";
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
                     <Route path='login' element={<WrappedLogin />}/>
                     <Route path='signUp' element={<SignUp />}/>
                     <Route path='favorites' element={<Favorites />}/>
+                    <Route path='profile' element={<Profile/>}/>
                 </Routes>
             </Router>
         </div>
