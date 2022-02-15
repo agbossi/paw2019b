@@ -88,9 +88,6 @@ function Home(props) {
                     <SearchBar handleSearch={handleSearch}/>
                 </Col>
                 <Col xs={9}>
-                    {loading && (
-                        <span className="spinner-border mt-3"/>
-                    )}
                     <Container>
                         <div className="admin-info-container search-doctor-container">
                             {doctors.map((doctor) => {
@@ -113,8 +110,13 @@ function Home(props) {
                             })}
                         </div>
                     </Container>
-                    {renderPrevButton()}
-                    {renderNextButton()}
+                    <div>
+                        {renderPrevButton()}
+                        {renderNextButton()}
+                    </div>
+                    {loading && (
+                        <span className="spinner-border mt-3" style={{marginRight:"1rem"}}/>
+                    )}
                 </Col>
             </Row>
         </>
