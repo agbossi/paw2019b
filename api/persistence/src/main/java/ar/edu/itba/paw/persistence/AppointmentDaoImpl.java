@@ -16,6 +16,8 @@ import java.util.*;
 @Repository
 public class AppointmentDaoImpl implements AppointmentDao {
 
+    private final static int MAX_APPOINTMENTS_PER_PAGE = 6;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -132,6 +134,28 @@ public class AppointmentDaoImpl implements AppointmentDao {
         return !list.isEmpty();
     }
 
+    @Override
+    public boolean hasAppointment(Doctor doctor, LocalDateTime date) {
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
+                " where ap.doctorClinic.doctor.license = :doctor " +
+                "and ap.appointmentKey.date = :date",Appointment.class);
+        query.setParameter("doctor",doctor.getLicense());
+        query.setParameter("date",date);
+        List<Appointment> list = query.getResultList();
+        return !list.isEmpty();
+    }
+
+    @Override
+    public boolean hasAppointment(User patient, LocalDateTime date) {
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
+                " where ap.patient = :email " +
+                "and ap.appointmentKey.date = :date",Appointment.class);
+        query.setParameter("email", patient.getEmail());
+        query.setParameter("date",date);
+        List<Appointment> list = query.getResultList();
+        return !list.isEmpty();
+    }
+
     //TODO finish how to do the date parts
     @Override
     public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour){
@@ -143,6 +167,40 @@ public class AppointmentDaoImpl implements AppointmentDao {
         query.setParameter("day",day-1);
         query.setParameter("hour",hour);
         query.executeUpdate();
+    }
+
+    @Override
+    public List<Appointment> getPaginatedAppointments(int page, Doctor doctor) {
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
+                " where ap.doctorClinic.doctor.license = :doctor",Appointment.class);
+        query.setParameter("doctor",doctor.getLicense());
+        List<Appointment> list = query
+                .setFirstResult(page * MAX_APPOINTMENTS_PER_PAGE)
+                .setMaxResults(MAX_APPOINTMENTS_PER_PAGE)
+                .getResultList();
+        return list;
+    }
+
+    @Override
+    public List<Appointment> getPaginatedAppointments(int page, Patient patient) {
+        TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap " +
+                "where ap.patient = :email ORDER BY ap.appointmentKey.date",Appointment.class);
+        query.setParameter("email",patient.getEmail());
+        List<Appointment> list = query
+                .setFirstResult(page * MAX_APPOINTMENTS_PER_PAGE)
+                .setMaxResults(MAX_APPOINTMENTS_PER_PAGE)
+                .getResultList();
+        return list;
+    }
+
+    @Override
+    public int getMaxAvailablePage(Patient patient) {
+        return (int) (Math.ceil(( ((double)getPatientsAppointments(patient.getUser()).size()) / (double)MAX_APPOINTMENTS_PER_PAGE)));
+    }
+
+    @Override
+    public int getMaxAvailablePage(Doctor doctor) {
+        return (int) (Math.ceil(( ((double)getAllDoctorsAppointments(doctor).size()) / (double)MAX_APPOINTMENTS_PER_PAGE)));
     }
 
 

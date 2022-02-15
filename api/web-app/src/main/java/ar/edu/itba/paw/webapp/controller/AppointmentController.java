@@ -138,25 +138,36 @@ public class AppointmentController {
     @Context
     private UriInfo uriInfo;
 
-    //TODO agregar query params para filtros de tiempo
+    /**
+     * Returns a paginated list of a users appointments (doctor or patient)
+     * @param email
+     * @return List of Appointment
+     * @throws EntityNotFoundException
+     */
     @GET
-    @Path("{userId}")
+    @Path("{user}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#email, 'user')")
-    public Response getUserAppointments(@PathParam("userId") final String email,
-                                        @Context Request request) {
+    public Response getUserAppointments(@PathParam("user") final String email,
+                                        @QueryParam("page") @DefaultValue("0") Integer page,
+                                        @Context Request request) throws EntityNotFoundException {
+        page = (page < 0) ? 0 : page;
+
         User user = userService.findUserByEmail(email);
-        if(user != null) {
-            List<AppointmentDto> appointments = appointmentService.getUserAppointments(user)
-                    .stream().map(appointment -> AppointmentDto.fromAppointment(appointment, uriInfo))
-                    .collect(Collectors.toList());
-            return CacheHelper.handleResponse(appointments, appointmentCaching,
-                    new GenericEntity<List<AppointmentDto>>(appointments) {}, "appointments",
-                    request).build();
-            // return Response.ok(new GenericEntity<List<AppointmentDto>>(appointments) {}).build();
-        }
-        // TODO no se si llega alguna vez aca, solo un user puede buscarse a el mismo
-        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
+        if(user == null) throw new EntityNotFoundException("user");
+
+        List<AppointmentDto> appointments = appointmentService.getPaginatedAppointments(user, page)
+                .stream().map(appointment -> AppointmentDto.fromAppointment(appointment, uriInfo))
+                .collect(Collectors.toList());
+
+        int maxPage = appointmentService.getMaxAvailablePage(user);
+        return CacheHelper.handleResponse(appointments, appointmentCaching,
+                new GenericEntity<List<AppointmentDto>>(appointments) {}, "appointments",
+                request)
+                .header("Access-Control-Expose-Headers", "X-max-page")
+                .header("X-max-page", maxPage).build();
+
+
     }
 
     /**
@@ -182,12 +193,25 @@ public class AppointmentController {
                 request).build();
     }
 
+    /**
+     * For doctor or user to cancel an appointment
+     * @param email
+     * @param clinic
+     * @param license
+     * @param year
+     * @param month
+     * @param day
+     * @param time
+     * @return
+     * @throws EntityNotFoundException
+     * @throws RequestEntityNotFoundException
+     */
     @DELETE
-    @Path("{userId}")
+    @Path("{email}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#email, 'user')")
-    public Response cancelAppointment(@PathParam("userId") final String email,
-                                      @QueryParam("clinicId") final Integer clinic,
+    public Response cancelAppointment(@PathParam("email") final String email,
+                                      @QueryParam("clinic") final Integer clinic,
                                       @QueryParam("license") final String license,
                                       @QueryParam("year") final Integer year,
                                       @QueryParam("month") final Integer month,
@@ -252,7 +276,7 @@ public class AppointmentController {
     @Consumes(MediaType.APPLICATION_JSON)
     @PreAuthorize("hasPermission(#form.patient, 'user')")
     public Response createAppointment(final AppointmentForm form) throws
-            DateInPastException, OutOfScheduleException, AppointmentAlreadyScheduledException {
+            DateInPastException, OutOfScheduleException, AppointmentAlreadyScheduledException, HasAppointmentException {
         appointmentService.createAppointment(form.getLicense(), form.getClinic(),
                 form.getPatient(), form.getYear(), form.getMonth(), form.getDay(),
                 form.getTime());

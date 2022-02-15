@@ -25,7 +25,7 @@ public class Appointment {
     @EmbeddedId
     private AppointmentKey appointmentKey;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "patient", insertable = false, updatable = false)
     private User patientUser;
 

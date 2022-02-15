@@ -12,7 +12,11 @@ export const TRANSLATION_EN = {
         seeProfile: "See Profile",
         dataProfile: "Doctor's Information",
         emptyFavorites: "No favorite doctors yet",
-        fav: "Favorites"
+        noApp: "No appointments yet",
+        fav: "Favorites",
+        doc: "Doctor: ",
+        clinic: "Clinic: ",
+        patient: "Patient: "
     },
     ADMIN: {
         doctors: "Doctors",
@@ -126,9 +130,12 @@ export const TRANSLATION_EN = {
         datePast: "Selected date is in the past, select a future date",
         outOfSchedule: "Selected date is out of doctor's schedule",
         appointmentExists: "The selected date already has an appointment, select another date",
+        doctorAppointment: "Doctor already has an appointment on that date, select another date",
+        patientAppointment: "You already have an appointment on that date, select another date",
         noDocFound: "No doctor found",
         noPatientEmail: "No patient found with logged email",
-        favExists: "The doctor is already a favorite"
+        favExists: "The doctor is already a favorite",
+        noAppointmentFound: "No appointment found"
     },
     actions: {
         add: "Add",
@@ -169,4 +176,5 @@ export const TRANSLATION_EN = {
     editProfileButton: "Edit Profile",
     changeImgButton: "Change Image",
     deleteImgButton: "Delete Image",
+    cancelButton: "Cancel"
 }

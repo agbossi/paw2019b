@@ -148,6 +148,10 @@ function UserDoctorProfile(props) {
                     setMessage("errors.outOfSchedule")
                 if (response.data === "appointment-exists")
                     setMessage("errors.appointmentExists")
+                if (response.data === "doctor-already-has-appointment")
+                    setMessage("errors.doctorAppointment")
+                if (response.data === "patient-already-has-appointment")
+                    setMessage("errors.patientAppointment")
              }
         }
 

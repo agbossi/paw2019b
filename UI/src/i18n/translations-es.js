@@ -11,8 +11,12 @@ export const TRANSLATION_ES = {
     USER: {
         seeProfile: "Ver Perfil",
         emptyFavorites: "No hay doctores favoritos aún",
+        noApp: "No tienes turnos aún",
         dataProfile: "Información del Doctor",
-        fav: "Favoritos"
+        fav: "Favoritos",
+        doc: "Doctor: ",
+        clinic: "Clínica: ",
+        patient: "Paciente: "
     },
     ADMIN: {
         doctors: "Doctores",
@@ -132,9 +136,12 @@ export const TRANSLATION_ES = {
         datePast: "La fecha seleccionada es en el pasado, seleccione una fecha futura",
         outOfSchedule: "La fecha seleccionada no pertenece al horario de atención del doctor",
         appointmentExists: "La fecha seleccionada ya posee un turno asignado, seleccione otra fecha",
+        doctorAppointment: "El doctor ya posee un turno en la fecha seleccionada, seleccione otra",
+        patientAppointment: "Usted ya posee un turno en la fecha seleccionada, seleccione otra",
         noDocFound: "No se encontró el doctor",
         noPatientEmail: "No se encontró paciente con el email en sesión",
-        favExists: "El doctor ya es un favorito"
+        favExists: "El doctor ya es un favorito",
+        noAppointmentFound: "No se encontró el turno"
     },
     CAL : {
         hour: "Hora",
@@ -167,6 +174,7 @@ export const TRANSLATION_ES = {
     welcome: "Bienvenido/a",
     editProfileButton: "Editar Perfil",
     changeImgButton: "Cambiar Imagen",
-    deleteImgButton: "Eliminar Imagen"
+    deleteImgButton: "Eliminar Imagen",
+    cancelButton: "Cancelar"
 
 }

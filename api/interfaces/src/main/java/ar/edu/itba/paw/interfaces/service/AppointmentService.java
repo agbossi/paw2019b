@@ -19,7 +19,7 @@ public interface AppointmentService {
             throws EntityNotFoundException, RequestEntityNotFoundException;
 
     Appointment createAppointment(String license, int clinicId, String patientEmail, int year, int month, int day, int time)
-            throws DateInPastException, AppointmentAlreadyScheduledException, OutOfScheduleException;
+            throws DateInPastException, AppointmentAlreadyScheduledException, OutOfScheduleException, HasAppointmentException;
 
     List<Appointment> getDoctorsAppointments(DoctorClinic doctorClinic);
 
@@ -37,6 +37,10 @@ public interface AppointmentService {
 
     boolean hasAppointment(String doctorLicense,String patientEmail, LocalDateTime date);
 
+    boolean hasAppointment(Doctor doctor, LocalDateTime date);
+
+    boolean hasAppointment(User patient, LocalDateTime date);
+
     List<Appointment> getAllDoctorsAppointments(Doctor doctor);
 
     List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, LocalDate beginning, LocalDate end);
@@ -44,4 +48,8 @@ public interface AppointmentService {
     void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour);
 
     List<Appointment> getDoctorsAvailableAppointments(Doctor doctor);
+
+    List<Appointment> getPaginatedAppointments(User user, int page);
+
+    int getMaxAvailablePage(User user);
 }
