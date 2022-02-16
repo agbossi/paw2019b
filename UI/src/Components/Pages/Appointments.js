@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import AppointmentCalls from "../../api/AppointmentCalls";
 import {Button, Card, Container, Row} from "react-bootstrap";
 import './Favorites.css'
-import {getMonth, getWeekDate} from "../../utils/dateHelper";
+import {dateToString, getMonth, getWeekDate} from "../../utils/dateHelper";
 
 function Appointments(props) {
     const [appointments, setAppointments] = useState([])
@@ -40,11 +40,6 @@ function Appointments(props) {
             if (response.data === "user-not-found")
                 setMessage("errors.noLoggedDoc")
         }
-    }
-
-    const dateToString = (app) => {
-        return t(getWeekDate(app.dayWeek)) + " " + app.day + " " + t(getMonth(app.month)) + ", " + app.year +
-            " " + app.hour + ":00"
     }
 
     const deleteAppointment = async (app) => {
@@ -131,7 +126,7 @@ function Appointments(props) {
                         return (
                             <Card className="mb-3 app-card shadow">
                                 <Card.Body>
-                                    <Card.Title><b>{dateToString(ap)}</b></Card.Title>
+                                    <Card.Title><b>{dateToString(ap, t)}</b></Card.Title>
                                     <Card.Text>
                                         {props.user === "patient"? <div>
                                             {t("USER.doc")}{ap.doctorClinic.doctor.user.firstName + ' ' + ap.doctorClinic.doctor.user.lastName}

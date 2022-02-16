@@ -7,7 +7,7 @@ import DoctorCalls from "../../api/DoctorCalls";
 import ImageCalls from "../../api/ImageCalls";
 import AppointmentCalls from "../../api/AppointmentCalls";
 import DropDownList from "../DropDownList";
-import {getMonth, getWeekDate} from "../../utils/dateHelper";
+import {dateToString, getMonth, getWeekDate} from "../../utils/dateHelper";
 import PatientCalls from "../../api/PatientCalls";
 import './UserDoctorProfile.css'
 
@@ -253,12 +253,6 @@ function UserDoctorProfile(props) {
         return available.filter(appointment => appointment.doctorClinic.clinic.id === selectedClinic.clinic.id)
     }
 
-    const dateToString = (date) => {
-        return t(getWeekDate(date.dayWeek)) + " " + date.day + " " + t(getMonth(date.month)) + ", " + date.year +
-            " " + date.hour + ":00"
-    }
-
-
     return (
         <>
             <Container>
@@ -347,7 +341,7 @@ function UserDoctorProfile(props) {
                         </Form.Group>
                         <Form.Group className="m-3">
                             <Form.Label><b>{t("FORM.dateTime")}</b>: {selectedDateTime === null? "":
-                                dateToString(selectedDateTime)}</Form.Label>
+                                dateToString(selectedDateTime, t)}</Form.Label>
                             <DropDownList iterable={getDateTimes().map(date => dateToString(date))}
                                           selectedElement=''
                                           handleSelect={handleSelectDateTime}

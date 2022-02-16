@@ -87,7 +87,8 @@ export const TRANSLATION_ES = {
         maxPrice: "Máximo Precio de Consulta",
         dateTime: "Día y Hora",
         selectDateTime: "Seleccione día y hora",
-        update: "Actualizar"
+        update: "Actualizar",
+        id: "DNI"
     },
     actions: {
         add: "Agregar",
@@ -179,6 +180,8 @@ export const TRANSLATION_ES = {
     editProfileButton: "Editar Perfil",
     changeImgButton: "Cambiar Imagen",
     deleteImgButton: "Eliminar Imagen",
-    cancelButton: "Cancelar"
+    cancelButton: "Cancelar",
+    with: "con",
+    nextApp: "Próximos turnos"
 
 }

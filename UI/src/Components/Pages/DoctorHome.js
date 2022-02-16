@@ -211,7 +211,6 @@ function DoctorHome(props) {
                 </Row>
             </Container>
         </>
-
     )
 }
 export default DoctorHome

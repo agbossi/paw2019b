@@ -76,4 +76,8 @@ public class PersonalInformationForm {
     public String getPrepaidNumber() {
         return prepaidNumber;
     }
+
+    public void setPrepaidNumber(String prepaidNumber) {
+        this.prepaidNumber = prepaidNumber;
+    }
 }

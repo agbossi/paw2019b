@@ -88,6 +88,7 @@ export const TRANSLATION_EN = {
         maxPrice: "Maximum Consult Price",
         dateTime: "Date and Time",
         selectDateTime: "Select date and time",
+        id: "Id"
     },
     errors: {
         licenseInUse: "Licence already registered",
@@ -179,5 +180,7 @@ export const TRANSLATION_EN = {
     editProfileButton: "Edit Profile",
     changeImgButton: "Change Image",
     deleteImgButton: "Delete Image",
-    cancelButton: "Cancel"
+    cancelButton: "Cancel",
+    with: "with",
+    nextApp: "Next Appointments"
 }
