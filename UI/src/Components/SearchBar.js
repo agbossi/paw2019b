@@ -8,12 +8,13 @@ import {useTranslation} from "react-i18next";
 
 function SearchBar(props) {
     const {t} = useTranslation()
-    const [selectedSpecialty, setSelectedSpecialty] = useState('-')
-    const [selectedLocation, setSelectedLocation] = useState('-')
-    const [selectedPrepaid, setSelectedPrepaid] = useState('-')
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
-    const [consultPrice, setConsultPrice] = useState(0)
+    const [selectedSpecialty, setSelectedSpecialty] = useState(props.specialty === "null"? '-': props.specialty)
+    const [selectedLocation, setSelectedLocation] = useState(props.location === "null"? '-': props.location)
+    const [selectedPrepaid, setSelectedPrepaid] = useState(props.prepaid === "null"? '-': props.prepaid)
+    const [firstName, setFirstName] = useState(props.firstName === "null"? '': props.firstName)
+    const [lastName, setLastName] = useState(props.lastName === "null"? '': props.lastName)
+    const [consultPrice, setConsultPrice] = useState(props.consultPrice === "null" || props.consultPrice  === "0"?
+        '': props.consultPrice)
     const [locations, setLocations] = useState([])
     const [specialties, setSpecialties] = useState([])
     const [prepaids, setPrepaids] = useState([])

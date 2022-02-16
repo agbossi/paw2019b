@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import SearchBar from "../SearchBar";
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
-import {Link} from "react-router-dom";
+import {Link, useSearchParams} from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DoctorCalls from "../../api/DoctorCalls";
 import './home.css'
@@ -9,6 +9,7 @@ import {useTranslation} from "react-i18next";
 
 
 function Home(props) {
+    const [searchParams, setSearchParams] = useSearchParams()
     const [doctors, setDoctors] = useState([])
     const [specialties, setSpecialties] = useState([])
     const [locations, setLocations] = useState([])
@@ -20,6 +21,7 @@ function Home(props) {
     const [loading, setLoading] = useState(false)
     const {t} = useTranslation()
 
+
     const fetchAllDoctorsWithAvailability = async (page) => {
         setLoading(true)
         const response = await DoctorCalls.searchDocs(page, null, null,
@@ -28,12 +30,36 @@ function Home(props) {
             setDoctors(response.data)
             setMaxPage(Number(response.headers.xMaxPage))
             setMessage("")
+            setSearchParams()
         }
         setLoading(false)
     }
 
     useEffect(async () => {
-        await fetchAllDoctorsWithAvailability(page);
+        const pag = searchParams.get('page') === undefined ||  searchParams.get('page') === null ?
+            0: searchParams.get('page')
+
+        console.log("page " + page)
+        const search = {
+            location: searchParams.get('location') === "null"? null: searchParams.get('location'),
+            specialty: searchParams.get('specialty') === "null"? null: searchParams.get('specialty'),
+            firstName: searchParams.get('firstName') === "null"? null: searchParams.get('firstName'),
+            lastName: searchParams.get('lastName') === "null"? null: searchParams.get('lastName'),
+            consultPrice: searchParams.get('consultPrice') === "null" || searchParams.get('consultPrice') === "0"?
+                null: searchParams.get('consultPrice'),
+            prepaid: searchParams.get('prepaid') === "null"? null: searchParams.get('prepaid')
+
+        }
+        await handleSearch(search, pag);
+        setSearchParams({'page': pag,
+            'location': searchParams.get('location') === "null"? null: searchParams.get('location'),
+            'specialty': searchParams.get('specialty') === "null"? null: searchParams.get('specialty'),
+            'firstName': searchParams.get('firstName') === "null"? null: searchParams.get('firstName'),
+            'lastName': searchParams.get('lastName') === "null"? null: searchParams.get('lastName'),
+            'consultPrice': searchParams.get('consultPrice') === "null" || searchParams.get('consultPrice') === "0"?
+                null: searchParams.get('consultPrice'),
+            'prepaid': searchParams.get('prepaid') === "null"? null: searchParams.get('prepaid')})
+
     }, [])
 
     const nextPage = async () => {
@@ -51,7 +77,8 @@ function Home(props) {
     }
 
     const renderPrevButton = () => {
-        if (page !== 0) {
+
+        if (Number(page) !== 0) {
             return <Button className="doc-button doc-button-color shadow-sm"
                            onClick={() => prevPage()}>{t('prevButton')}</Button>
         }
@@ -69,10 +96,16 @@ function Home(props) {
         setSearchCriteria(criteria);
         if (criteria == null) {
             await fetchAllDoctorsWithAvailability(pag);
+            setSearchParams({'page': pag})
             return;
         }
+        setPage(pag)
+        setSearchParams({'page': pag, 'location':criteria.location, 'specialty': criteria.specialty,
+            'firstName': criteria.firstName, 'lastName': criteria.lastName, 'consultPrice': criteria.consultPrice,
+            'prepaid':criteria.prepaid})
         const response = await DoctorCalls.searchDocs(pag, criteria.location, criteria.specialty,
             criteria.firstName, criteria.lastName, criteria.consultPrice , criteria.prepaid)
+
         if (response && response.ok) {
             setDoctors(response.data)
             setMaxPage(Number(response.headers.xMaxPage))
@@ -85,7 +118,14 @@ function Home(props) {
         <>
             <Row>
                 <Col>
-                    <SearchBar handleSearch={handleSearch}/>
+                    <SearchBar handleSearch={handleSearch}
+                               location={searchParams.get('location')}
+                               specialty={searchParams.get('specialty')}
+                               firstName={searchParams.get('firstName')}
+                               lastName={searchParams.get('lastName')}
+                               prepaid={searchParams.get('prepaid')}
+                               consultPrice={searchParams.get('consultPrice')}
+                    />
                 </Col>
                 <Col xs={9}>
                     <Container>
