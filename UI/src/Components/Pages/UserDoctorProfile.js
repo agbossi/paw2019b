@@ -342,7 +342,7 @@ function UserDoctorProfile(props) {
                         <Form.Group className="m-3">
                             <Form.Label><b>{t("FORM.dateTime")}</b>: {selectedDateTime === null? "":
                                 dateToString(selectedDateTime, t)}</Form.Label>
-                            <DropDownList iterable={getDateTimes().map(date => dateToString(date))}
+                            <DropDownList iterable={getDateTimes().map(date => dateToString(date, t))}
                                           selectedElement=''
                                           handleSelect={handleSelectDateTime}
                                           elementType={t('FORM.selectDateTime')}
