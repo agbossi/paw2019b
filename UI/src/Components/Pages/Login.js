@@ -85,8 +85,14 @@ class Login extends Component {
                                 window.location.reload()
                                 break;
                             case "ROLE_USER":
-                                this.props.navigate("/");
-                                window.location.reload()
+                                if (localStorage.getItem("path") !== null) {
+                                    this.props.navigate(localStorage.getItem("path"));
+                                    localStorage.removeItem("path")
+                                    window.location.reload()
+                                } else {
+                                    this.props.navigate("/");
+                                    window.location.reload()
+                                }
                                 break;
                         }
                     }

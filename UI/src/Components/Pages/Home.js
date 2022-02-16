@@ -37,7 +37,7 @@ function Home(props) {
 
     useEffect(async () => {
         const pag = searchParams.get('page') === undefined ||  searchParams.get('page') === null ?
-            0: searchParams.get('page')
+            0: Number(searchParams.get('page'))
 
         console.log("page " + page)
         const search = {
@@ -78,7 +78,7 @@ function Home(props) {
 
     const renderPrevButton = () => {
 
-        if (Number(page) !== 0) {
+        if (page !== 0) {
             return <Button className="doc-button doc-button-color shadow-sm"
                            onClick={() => prevPage()}>{t('prevButton')}</Button>
         }
@@ -99,7 +99,7 @@ function Home(props) {
             setSearchParams({'page': pag})
             return;
         }
-        setPage(pag)
+        setPage(Number(pag))
         setSearchParams({'page': pag, 'location':criteria.location, 'specialty': criteria.specialty,
             'firstName': criteria.firstName, 'lastName': criteria.lastName, 'consultPrice': criteria.consultPrice,
             'prepaid':criteria.prepaid})

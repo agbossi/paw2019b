@@ -137,6 +137,7 @@ function UserDoctorProfile(props) {
             if (response.status === 401) {
                 localStorage.removeItem('token')
                 localStorage.removeItem('role')
+                localStorage.setItem('path', "/" + license + "/profile")
                 navigate('/login')
             }
             if (response.status === 400) {
@@ -179,6 +180,7 @@ function UserDoctorProfile(props) {
         if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
+            localStorage.setItem('path', "/" + license + "/profile")
             navigate('/login')
         }
     }
@@ -201,6 +203,7 @@ function UserDoctorProfile(props) {
         if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
+            localStorage.setItem('path', "/" + license + "/profile")
             navigate('/login')
         }
     }

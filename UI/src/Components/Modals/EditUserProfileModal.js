@@ -4,6 +4,7 @@ import {Button, Form, Modal} from "react-bootstrap";
 import DropDownList from "../DropDownList";
 import PatientCalls from "../../api/PatientCalls";
 import {useNavigate} from "react-router-dom";
+import '../Pages/Profile.css'
 
 function EditUserProfileModal(props) {
     const [firstName, setFirstName] = useState(localStorage.getItem('firstName'))
@@ -133,7 +134,7 @@ function EditUserProfileModal(props) {
 
     return (
         <>
-            <Button variant="edit-remove-button doc-button-color shadow-sm edit-button"
+            <Button variant="edit-remove-button doc-button-color shadow-sm edit-button app-btn"
                     onClick={() => handleShow()} size="lg"
                     className="add-margin">
                 {t("editProfileButton")}

@@ -6,12 +6,10 @@ import '../../i18n/i18n'
 import {Link, useNavigate} from "react-router-dom";
 import PatientCalls from "../../api/PatientCalls";
 import PrepaidCalls from "../../api/PrepaidCalls";
-import EditDocProfileModal from "../Modals/EditDocProfileModal";
-import {BASE_URL} from "../../Constants";
-import ImageSelectModal from "../Modals/ImageSelectModal";
 import EditUserProfileModal from "../Modals/EditUserProfileModal";
 import AppointmentCalls from "../../api/AppointmentCalls";
 import {dateToString} from "../../utils/dateHelper";
+import './Profile.css'
 
 function Profile() {
     const [selectedPrepaid, setSelectedPrepaid] = useState('')
@@ -114,10 +112,6 @@ function Profile() {
                                 <b>{t('FORM.prepaidNumber')}:</b> {prepaidNumber}
                             </div>
                         }
-                        <EditUserProfileModal prepaids={prepaids}
-                                              handleOk={handleProfileUpdateOk}
-                                              prepaidNumber={prepaidNumber}
-                                              />
                     </Col>
                     <Col>
                         <h4>{t('nextApp')}</h4>
@@ -130,8 +124,19 @@ function Profile() {
                                 )
                             })}
                         </ul>
+
+                    </Col>
+                </Row>
+                <Row>
+                    <Col className="col-button">
+                        <EditUserProfileModal prepaids={prepaids}
+                                              handleOk={handleProfileUpdateOk}
+                                              prepaidNumber={prepaidNumber}
+                        />
+                    </Col>
+                    <Col className="col-button">
                         <Link
-                            className="btn btn-outline-dark btn-lg"
+                            className="edit-remove-button doc-button-color shadow-sm edit-button btn app-btn"
                             role="button"
                             to="/appointments">{t('NAVBAR.appointments')}
                         </Link>

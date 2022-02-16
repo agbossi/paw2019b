@@ -135,20 +135,8 @@ function SignUp() {
                     ApiCalls.login(data.email, data.password).then(
                         (resp) => {
                             if (resp.status === 200) {
-                                switch (localStorage.getItem('role')) {
-                                        case "ROLE_ADMIN":
-                                            navigate("/admin");
-                                            window.location.reload()
-                                            break;
-                                        case "ROLE_DOCTOR":
-                                            navigate("/doctor");
-                                            window.location.reload()
-                                            break;
-                                        case "ROLE_USER":
-                                            navigate("/");
-                                            window.location.reload()
-                                            break;
-                                }
+                                    navigate("/login");
+                                    window.location.reload()
                             }
                             },
                         error => {
