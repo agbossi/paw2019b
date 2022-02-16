@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Constraint(validatedBy = ExistsValidator.class)
 public @interface Exists {
-    String message() default "entity-not-exist"; //si esta harcodeado lo toma, asi no
+    String message() default "entity-not-exist";
 
     Class<?>[] groups() default {};
 

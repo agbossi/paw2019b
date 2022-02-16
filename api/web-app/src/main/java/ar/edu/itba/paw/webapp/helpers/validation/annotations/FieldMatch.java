@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.helpers.validation.annotations;
 
 
 import ar.edu.itba.paw.webapp.helpers.validation.implementations.FieldMatchValidator;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

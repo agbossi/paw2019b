@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.helpers.validation.annotations;
 
-
 import ar.edu.itba.paw.webapp.helpers.validation.implementations.ClinicValidator;
 
 import javax.validation.Constraint;
@@ -22,7 +21,7 @@ public @interface UniqueClinic {
 
     Class<? extends Payload>[] payload() default {};
 
-    String message() default "passwords dont match"; //los constraints de clase no muestran mensaje por mas que este harcodeado
+    String message() default "passwords dont match";
 
     String name();
 

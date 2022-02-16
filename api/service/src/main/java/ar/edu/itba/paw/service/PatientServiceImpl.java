@@ -37,7 +37,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Transactional
     @Override
-    public Patient create(String id, String prepaid, String prepaidNumber, String firstName, String lastName, String password, String email) throws DuplicateEntityException {
+    public Patient create(String id, String prepaid, String prepaidNumber, String firstName, String lastName, String password,
+                          String email) throws DuplicateEntityException {
         if (userService.userExists(email)) throw new DuplicateEntityException("user-exists");
         if(prepaid.equals(NoPrepaid)) {
             prepaid = null;

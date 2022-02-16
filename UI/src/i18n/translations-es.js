@@ -146,7 +146,8 @@ export const TRANSLATION_ES = {
         noDocFound: "No se encontró el doctor",
         noPatientEmail: "No se encontró paciente con el email en sesión",
         favExists: "El doctor ya es un favorito",
-        noAppointmentFound: "No se encontró el turno"
+        noAppointmentFound: "No se encontró el turno",
+        alreadySubscribed: "Yá está suscripto a esta clínica"
     },
     CAL : {
         hour: "Hora",

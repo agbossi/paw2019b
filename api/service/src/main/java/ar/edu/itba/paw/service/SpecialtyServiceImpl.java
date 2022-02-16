@@ -2,7 +2,6 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.SpecialtyDao;
 import ar.edu.itba.paw.interfaces.service.DoctorService;
-import ar.edu.itba.paw.interfaces.service.PaginationService;
 import ar.edu.itba.paw.interfaces.service.SpecialtyService;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Specialty;

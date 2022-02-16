@@ -64,7 +64,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Transactional
     @Override
-    public void deleteSchedule(int hour, int day, String license, int clinicId) throws OutOfRangeException, EntityNotFoundException {
+    public void deleteSchedule(int hour, int day, String license, int clinicId)
+            throws OutOfRangeException, EntityNotFoundException {
         if(hour > 0 && hour < 24 && day > 0 && day < 8) {
             DoctorClinic doctorClinic = doctorClinicService.getDoctorClinicFromDoctorAndClinic(
                     doctorService.getDoctorByLicense(license),

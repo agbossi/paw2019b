@@ -9,8 +9,6 @@ public interface UserDao {
 
     User findUserByEmail(String email);
 
-   // void changePassword(String password,String email);
-
     void updateUser(String email, Map<String, String> args);
 
     long deleteUser(String email);

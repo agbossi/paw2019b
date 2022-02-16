@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.persistence;
 
-import ar.edu.itba.paw.model.PrepaidToClinicKey;
 import ar.edu.itba.paw.model.Specialty;
 import ar.edu.itba.paw.interfaces.dao.SpecialtyDao;
 import org.springframework.stereotype.Repository;

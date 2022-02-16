@@ -2,7 +2,6 @@ package ar.edu.itba.paw.webapp.helpers;
 
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class SecurityHelper {
@@ -11,7 +10,7 @@ public class SecurityHelper {
         String pass;
         if(newPass == null || newPass.equals("")) {
             User user = userService.findUserByEmail(userEmail);
-            pass = user.getPassword();// TODO mismo tema con user logueado y eso
+            pass = user.getPassword();
         } else {
             pass = passwordEncoder.encode(newPass);
         }

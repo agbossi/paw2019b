@@ -12,10 +12,6 @@ public class ScheduleDto {
 
     private ClinicDto clinic;
 
-    /*
-    * lo mismo que appointments, si asumo que ya tengo doctorClinic, el resto es redundante
-    * */
-
     public static ScheduleDto fromSchedule(Schedule schedule, UriInfo uriInfo) {
         ScheduleDto scheduleDto = new ScheduleDto();
         scheduleDto.day = schedule.getDay();

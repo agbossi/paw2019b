@@ -53,7 +53,12 @@ function DoctorClinics(props) {
         const response = await DoctorCalls.addDoctorToClinic(newDocClinic, license);
         if (response && response.ok) {
             await fetchDoctorsClinics(page)
-        }else {
+        }
+        if (response.status === 409){
+            if (response.data === "doctor-clinic-exists")
+                setMessage("errors.alreadySubscribed")
+        }
+        else {
             handleErrors(response);
         }
     }

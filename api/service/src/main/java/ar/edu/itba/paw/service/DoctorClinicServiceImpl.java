@@ -3,6 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
 import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,11 +42,13 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
 
     @Transactional
     @Override
-    public DoctorClinic createDoctorClinic(String email, int clinicId, int consultPrice) throws EntityNotFoundException {
+    public DoctorClinic createDoctorClinic(String email, int clinicId, int consultPrice) throws EntityNotFoundException, DuplicateEntityException {
         Doctor doctor = doctorService.getDoctorByEmail(email);
         Clinic clinic = clinicService.getClinicById(clinicId);
         if (doctor == null) throw new EntityNotFoundException("doctor");
         if (clinic == null) throw new EntityNotFoundException("clinic");
+        DoctorClinic dc = getDoctorInClinic(doctor.getLicense(), clinicId);
+        if (dc != null) throw new DuplicateEntityException("doctor-clinic-exists");
 
         return doctorClinicDao.createDoctorClinic(doctor, clinic, consultPrice);
     }

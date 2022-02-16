@@ -1,9 +1,7 @@
 package ar.edu.itba.paw.webapp.auth.login;
 
-import ar.edu.itba.paw.webapp.auth.TokenAuthenticationService;
 import ar.edu.itba.paw.webapp.auth.exceptions.AlreadyLoggedInException;
 import ar.edu.itba.paw.webapp.auth.exceptions.InvalidRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;

@@ -58,8 +58,6 @@ public class PrepaidServiceImplTest {
         // Set up
         Mockito.when(prepaidDao.getPrepaidByName(name))
                 .thenReturn(new Prepaid(name));
-        Mockito.when(prepaidDao.createPrepaid(name))
-                .thenReturn(new Prepaid(name));
         Mockito.when(patientService.getPatientsByPrepaid(name))
                 .thenReturn(Collections.emptyList());
 

@@ -10,7 +10,6 @@ import java.util.Map;
 public class CacheHelper {
     private static final Map<String, Integer> cacheTimes = getTimes();
 
-    //TODO: ajustar tiempos
     private static Map<String, Integer> getTimes() {
         Map<String, Integer> map = new HashMap<>();
         map.put("doctors", 10);

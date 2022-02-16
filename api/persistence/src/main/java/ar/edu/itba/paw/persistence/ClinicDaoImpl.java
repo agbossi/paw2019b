@@ -32,7 +32,8 @@ public class ClinicDaoImpl implements ClinicDao {
 
     @Override
     public Clinic getClinicByName(String clinicName){
-        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic where clinic.name = :name",Clinic.class);
+        TypedQuery<Clinic> query = entityManager.createQuery("from Clinic as clinic where clinic.name = :name",
+                Clinic.class);
         query.setParameter("name",clinicName);
         List<Clinic> list = query.getResultList();
         return list.isEmpty() ? null : list.get(0);
@@ -108,8 +109,6 @@ public class ClinicDaoImpl implements ClinicDao {
 
     @Override
     public long deleteClinic(int id) {
-        //String deleteQuery = "DELETE FROM clinics WHERE id = ?";
-        //return jdbcTemplate.update(deleteQuery, id);
         Query query = entityManager.createQuery("delete from Clinic as clinic where clinic.id = :id");
         query.setParameter("id", id);
         return query.executeUpdate();

@@ -137,7 +137,8 @@ export const TRANSLATION_EN = {
         noDocFound: "No doctor found",
         noPatientEmail: "No patient found with logged email",
         favExists: "The doctor is already a favorite",
-        noAppointmentFound: "No appointment found"
+        noAppointmentFound: "No appointment found",
+        alreadySubscribed: "Already subscribed to this clinic"
     },
     actions: {
         add: "Add",

@@ -44,7 +44,7 @@ import "../../i18n/i18n"
                         <Form.Label>{t("FORM.name")}: {newPrepaid}</Form.Label>
                         <DropDownList iterable={remainingPrepaids()}
                                       selectedElement=''
-                                      hhandleSelectandleSelect={handleSelect}
+                                      handleSelect={handleSelect}
                                       elementType={t("FORM.selectPrepaid")}
                                       id='prepaid'/>
                     </Form.Group>

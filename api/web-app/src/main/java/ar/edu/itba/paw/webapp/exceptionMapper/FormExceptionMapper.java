@@ -1,20 +1,13 @@
 package ar.edu.itba.paw.webapp.exceptionMapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
-import java.util.Locale;
 
 @Provider
 public class FormExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
-
-    @Autowired
-    private MessageSource messageSource;
 
     @Override
     public Response toResponse(ConstraintViolationException e) {

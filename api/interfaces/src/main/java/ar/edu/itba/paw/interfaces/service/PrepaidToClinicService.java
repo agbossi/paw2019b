@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.interfaces.service;
 
-import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Prepaid;
 import ar.edu.itba.paw.model.PrepaidToClinic;
 import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;

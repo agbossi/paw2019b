@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.helpers.validation.annotations;
 
 import ar.edu.itba.paw.webapp.helpers.validation.implementations.UniqueClinicValidator;
-import ar.edu.itba.paw.webapp.helpers.validation.implementations.UniqueValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

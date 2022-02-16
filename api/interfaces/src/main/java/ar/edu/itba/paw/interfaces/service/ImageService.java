@@ -4,8 +4,6 @@ import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Image;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.Doc;
-
 public interface ImageService {
 
     void createProfileImage(MultipartFile file, Doctor doctor);

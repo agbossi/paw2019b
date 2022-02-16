@@ -1,12 +1,9 @@
 package ar.edu.itba.paw.webapp.form;
 
-import ar.edu.itba.paw.webapp.helpers.validation.annotations.ClinicExists;
-import ar.edu.itba.paw.webapp.helpers.validation.annotations.Exists;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.UniqueSchedule;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
 
 @UniqueSchedule(license = "license", clinic = "clinic", day = "day", hour = "hour", message = "schedule.registered")
 public class ScheduleForm {

@@ -1,7 +1,5 @@
 package ar.edu.itba.paw.webapp.helpers.validation.annotations;
 
-
-import ar.edu.itba.paw.model.PrepaidToClinic;
 import ar.edu.itba.paw.webapp.helpers.validation.implementations.PrepaidToClinicValidator;
 
 import javax.validation.Constraint;

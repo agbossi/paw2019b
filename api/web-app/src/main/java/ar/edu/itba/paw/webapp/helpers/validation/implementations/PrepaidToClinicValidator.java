@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.helpers.validation.implementations;
 
 import ar.edu.itba.paw.interfaces.service.PrepaidToClinicService;
-import ar.edu.itba.paw.webapp.helpers.validation.annotations.UniqueDoctorClinic;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.UniquePrepaidToClinic;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;

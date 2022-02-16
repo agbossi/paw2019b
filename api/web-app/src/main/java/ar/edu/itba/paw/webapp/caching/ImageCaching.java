@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.caching;
 
 import ar.edu.itba.paw.interfaces.web.Caching;
-import ar.edu.itba.paw.webapp.dto.ImageDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;

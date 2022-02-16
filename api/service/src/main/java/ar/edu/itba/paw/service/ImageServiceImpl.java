@@ -31,7 +31,6 @@ public class ImageServiceImpl implements ImageService {
 
     @Transactional
     @Override
-    // TODO: check if there's an more elegant way of doing this
     public void createProfileImage(MultipartFile file, Doctor doctor) {
         try {
             imageDao.createProfileImage(file.getBytes(), doctor);

@@ -3,7 +3,6 @@ package ar.edu.itba.paw.webapp.caching;
 import ar.edu.itba.paw.interfaces.web.Caching;
 import ar.edu.itba.paw.webapp.dto.AppointmentDto;
 import ar.edu.itba.paw.webapp.dto.DoctorClinicDto;
-import ar.edu.itba.paw.webapp.dto.UserDto;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

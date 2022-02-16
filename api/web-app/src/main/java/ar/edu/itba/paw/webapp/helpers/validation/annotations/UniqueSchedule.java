@@ -1,6 +1,5 @@
 package ar.edu.itba.paw.webapp.helpers.validation.annotations;
 
-import ar.edu.itba.paw.webapp.helpers.validation.implementations.DoctorClinicValidator;
 import ar.edu.itba.paw.webapp.helpers.validation.implementations.ScheduleValidator;
 
 import javax.validation.Constraint;

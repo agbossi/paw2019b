@@ -9,7 +9,7 @@ function EditDocProfileModal(props) {
     const [newPassword, setNewPassword] = useState('')
     const [repeatPassword, setRepeatPassword] = useState('')
     const [selectedSpecialty, setSelectedSpecialty] = useState(localStorage.getItem('specialty'))
-    const [phoneNumber, setPhoneNumber] = useState(props.phoneNumber)
+    const [phoneNumber, setPhoneNumber] = useState(localStorage.getItem('phone'))
     const [show, setShow] = useState(false)
     const [message, setMessage] = useState('')
     const {t} = useTranslation()

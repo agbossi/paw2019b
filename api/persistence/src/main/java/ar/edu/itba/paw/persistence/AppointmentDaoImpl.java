@@ -156,7 +156,6 @@ public class AppointmentDaoImpl implements AppointmentDao {
         return !list.isEmpty();
     }
 
-    //TODO finish how to do the date parts
     @Override
     public void cancelAllAppointmentsOnSchedule(DoctorClinic doctorClinic, int day, int hour){
         final Query query = entityManager.createQuery("delete from Appointment as ap where " +

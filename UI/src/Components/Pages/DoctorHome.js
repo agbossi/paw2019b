@@ -30,6 +30,7 @@ function DoctorHome(props) {
                 localStorage.setItem('firstName', response.data.userData.firstName)
                 localStorage.setItem('lastName', response.data.userData.lastName)
                 localStorage.setItem('specialty', response.data.specialty)
+                localStorage.setItem('phone', response.data.phoneNumber)
             }
             if (response.status === 404)
                 setMessage("errors.noDocEmail")
@@ -143,6 +144,7 @@ function DoctorHome(props) {
         localStorage.removeItem('firstName')
         localStorage.removeItem('lastName')
         localStorage.removeItem('specialty')
+        localStorage.removeItem('phone')
         navigate('/login')
     }
 
@@ -193,7 +195,6 @@ function DoctorHome(props) {
                         </div>
                         <EditDocProfileModal specialties={specialties.map(specialty=> specialty.name)}
                                              handleEdit={handleEdit}
-                                             phoneNumber={doctor.phoneNumber}
                         />
                     </Col>
                     <Col>

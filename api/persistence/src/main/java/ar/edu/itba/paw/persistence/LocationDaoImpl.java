@@ -2,14 +2,12 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.LocationDao;
 import ar.edu.itba.paw.model.Location;
-import org.postgresql.core.NativeQuery;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -40,13 +38,6 @@ public class LocationDaoImpl implements LocationDao {
 
     @Override
     public List<Location> getPaginatedObjects(int page){
-
-//        Query nativeQuery = entityManager.createNativeQuery("SELECT name FROM locations ORDER BY name");
-//        @SuppressWarnings("unchecked")
-//        List<String> ids = nativeQuery.setFirstResult(page * MAX_LOCATIONS_PER_PAGE)
-//                .setMaxResults(MAX_LOCATIONS_PER_PAGE)
-//                .getResultList();
-
         TypedQuery<Location> query = entityManager.createQuery("from Location as location " +
                 "ORDER BY location.name", Location.class);
 

@@ -1,7 +1,6 @@
 package ar.edu.itba.paw.webapp.form;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.EditablePassword;
 import ar.edu.itba.paw.webapp.helpers.validation.annotations.FieldMatch;
-import ar.edu.itba.paw.webapp.helpers.validation.annotations.Unique;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;

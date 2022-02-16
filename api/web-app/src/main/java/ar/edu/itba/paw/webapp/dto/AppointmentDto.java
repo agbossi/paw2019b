@@ -16,11 +16,6 @@ public class AppointmentDto {
     private int dayWeek;
     private DoctorClinicDto doctorClinic;
 
-    /*
-    * No dejo info de doctor o clinic porque esta modelado como entidad debil que
-    * depende de doctorClinic mediante uri
-    */
-
     public static AppointmentDto fromAppointment(Appointment appointment, UriInfo uriInfo) {
         AppointmentDto appointmentDto = new AppointmentDto();
         appointmentDto.patient = appointment.getPatientUser() == null ? null : UserDto.fromUser(appointment.getPatientUser());

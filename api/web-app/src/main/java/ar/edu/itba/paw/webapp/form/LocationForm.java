@@ -9,7 +9,6 @@ public class LocationForm {
 
     @Size(min=1, max=30, message = "location.size.between.constraint")
     @Pattern(regexp = "[a-zA-Z ]+", message = "alphabetic.constraint")
-    //@Unique(field = "location",message = "value.registered")
     private String name;
 
     public String getName() {

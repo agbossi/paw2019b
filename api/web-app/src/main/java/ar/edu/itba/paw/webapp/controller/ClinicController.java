@@ -1,13 +1,10 @@
 package ar.edu.itba.paw.webapp.controller;
 
-
 import ar.edu.itba.paw.interfaces.service.ClinicService;
 import ar.edu.itba.paw.interfaces.service.LocationService;
-import ar.edu.itba.paw.interfaces.service.PrepaidService;
 import ar.edu.itba.paw.interfaces.service.PrepaidToClinicService;
 import ar.edu.itba.paw.model.Clinic;
 import ar.edu.itba.paw.model.Location;
-import ar.edu.itba.paw.model.Prepaid;
 import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
 import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import ar.edu.itba.paw.webapp.caching.ClinicCaching;
@@ -15,7 +12,6 @@ import ar.edu.itba.paw.webapp.caching.PrepaidCaching;
 import ar.edu.itba.paw.webapp.dto.ClinicDto;
 import ar.edu.itba.paw.webapp.dto.PrepaidDto;
 import ar.edu.itba.paw.webapp.form.ClinicForm;
-import ar.edu.itba.paw.webapp.form.PrepaidToClinicForm;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,9 +31,6 @@ public class ClinicController {
 
     @Autowired
     private PrepaidToClinicService prepaidToClinicService;
-
-    @Autowired
-    private PrepaidService prepaidService;
 
     @Autowired
     private LocationService locationService;
@@ -71,13 +64,6 @@ public class ClinicController {
                 .header("Access-Control-Expose-Headers", "X-max-page")
                 .header("X-max-page", maxPage).build();
 
-
-        /*return Response.ok(new GenericEntity<List<ClinicDto>>(clinics) {})
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(), "first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page - 1).build(), "prev")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(), "next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(), "last")
-                .build(); */
     }
 
     /**
@@ -147,7 +133,6 @@ public class ClinicController {
             ClinicDto dto = ClinicDto.fromClinic(clinic, uriInfo);
             Response.ResponseBuilder r = CacheHelper.handleResponse(dto, clinicCaching, "clinic", request);
             return r.build();
-            //return Response.ok(dto).build();
         }
         return Response.status(Response.Status.NOT_FOUND.getStatusCode()).build();
     }

@@ -2,7 +2,6 @@ package ar.edu.itba.paw.service;
 
 import ar.edu.itba.paw.interfaces.dao.FavoriteDao;
 import ar.edu.itba.paw.interfaces.service.FavoriteService;
-import ar.edu.itba.paw.interfaces.service.PaginationService;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Favorite;
 import ar.edu.itba.paw.model.Patient;

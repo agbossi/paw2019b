@@ -56,7 +56,6 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
         return entityManager.find(DoctorClinic.class, new DoctorClinicKey(license,clinic));
     }
 
-    //solo para que no explote la clase
     @Override
     public List<DoctorClinic> getClinicsWithDoctor(String doctor){
         Doctor d = entityManager.find(Doctor.class,doctor);
@@ -110,8 +109,6 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public void editPrice(DoctorClinic dc, int price) {
-//        DoctorClinic doctorClinic = entityManager.merge(dc);
-//        doctorClinic.setConsultPrice(price);
         Query query = entityManager.createQuery("update DoctorClinic dc set dc.consultPrice = :newPrice " +
                 "where dc.clinic.id = :id and dc.doctor.license = :license");
         query.setParameter("newPrice", price);
@@ -122,8 +119,6 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
    public long deleteDoctorClinic(String license, int clinicid) {
-        //String deleteQuery = "DELETE FROM doctorClinics WHERE doctorLicense = ? and clinicid = ?";
-        //return jdbcTemplate.update(deleteQuery, license, clinicid);
         Query query = entityManager.createQuery("delete from DoctorClinic as docCli where docCli.doctor.license = :license" +
                 " and docCli.clinic.id = :id");
         query.setParameter("license",license);

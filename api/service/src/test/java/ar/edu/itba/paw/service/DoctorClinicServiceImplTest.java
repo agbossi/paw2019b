@@ -6,6 +6,7 @@ import ar.edu.itba.paw.interfaces.service.ClinicService;
 import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
 import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -69,7 +70,7 @@ public class DoctorClinicServiceImplTest {
     private AppointmentService appointmentService;
 
     @Test
-    public void testCreate() throws EntityNotFoundException {
+    public void testCreate() throws EntityNotFoundException, DuplicateEntityException {
         //Set Up
         Mockito.when(doctorService.getDoctorByEmail(Mockito.eq(doc.getEmail())))
                         .thenReturn(doc);
@@ -89,7 +90,7 @@ public class DoctorClinicServiceImplTest {
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void testCreateNoDoc() throws EntityNotFoundException {
+    public void testCreateNoDoc() throws EntityNotFoundException, DuplicateEntityException {
         //Set Up
         Mockito.when(doctorService.getDoctorByEmail(Mockito.eq(doc.getEmail())))
                 .thenReturn(null);
@@ -101,7 +102,7 @@ public class DoctorClinicServiceImplTest {
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void testCreateNoClinic() throws EntityNotFoundException {
+    public void testCreateNoClinic() throws EntityNotFoundException, DuplicateEntityException {
         //Set Up
         Mockito.when(doctorService.getDoctorByEmail(Mockito.eq(doc.getEmail())))
                 .thenReturn(doc);
