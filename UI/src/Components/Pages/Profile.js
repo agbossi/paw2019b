@@ -125,7 +125,7 @@ function Profile() {
                             {appointments.map(app => {
                                 return(
                                     <li className="my-3">
-                                        {dateToString(app, t)} {t("with")} {app.doctorClinic.doctor.user.firstName + ' ' + app.doctorClinic.doctor.user.lastName} ({app.doctorClinic.clinic.name})
+                                        <b>{dateToString(app, t)}</b> {t("with")} <b>{app.doctorClinic.doctor.user.firstName + ' ' + app.doctorClinic.doctor.user.lastName}</b> ({app.doctorClinic.clinic.name})
                                     </li>
                                 )
                             })}
