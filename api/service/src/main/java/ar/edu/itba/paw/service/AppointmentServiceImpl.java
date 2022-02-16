@@ -289,6 +289,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     private String dateString(LocalDateTime calendar) {
-        return calendar.format(DateTimeFormatter.ofPattern("EEEE yyyy-MM-dd hh:mm:ss"));
+        return calendar.format(DateTimeFormatter.ofPattern("EEEE yyyy-MM-dd hh:mm:ss a"));
     }
 }
