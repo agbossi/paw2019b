@@ -154,6 +154,7 @@ import ar.edu.itba.paw.interfaces.service.PatientService;
 import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.Patient;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
 import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import ar.edu.itba.paw.model.exceptions.FavouriteExistsException;
 import ar.edu.itba.paw.webapp.caching.DoctorCaching;
@@ -246,7 +247,7 @@ public class PatientController {
     @POST
     @Produces(value = { MediaType.APPLICATION_JSON, })
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createPatient(final SignUpForm form) {
+    public Response createPatient(final SignUpForm form) throws DuplicateEntityException {
         String encodedPassword = passwordEncoder.encode(form.getPassword());
         patientService.create(form.getId(), form.getPrepaid(),
                 form.getPrepaidNumber(), form.getFirstName(),

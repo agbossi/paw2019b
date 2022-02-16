@@ -20,7 +20,7 @@ public class Doctor {
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
-    public Doctor(Specialty specialty,String license, String phoneNumber, User user){
+    public Doctor(Specialty specialty, String license, String phoneNumber, User user){
         this.user = user;
         this.specialty = specialty;
         this.license = license;

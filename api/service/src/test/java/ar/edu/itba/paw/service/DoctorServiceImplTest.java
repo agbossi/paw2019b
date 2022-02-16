@@ -1,10 +1,13 @@
 package ar.edu.itba.paw.service;
-/*
+
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.interfaces.service.DoctorClinicService;
 import ar.edu.itba.paw.interfaces.service.DoctorService;
+import ar.edu.itba.paw.interfaces.service.UserService;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -36,7 +39,12 @@ public class DoctorServiceImplTest {
 
     private static final int hour = 10;
 
-    private static final User user = new User("patFirstName", "patLastName", "password", "patient@mail.com");
+    private static final String email ="patient@mail.com";
+    private static final String firstName = "firstName";
+    private static final String lastName = "lastName";
+    private static final String password = "password";
+
+    private static final User user = new User(firstName, lastName, password, email);
 
     private static final Doctor doctor = new Doctor(specialty, license, phone, user);
 
@@ -52,14 +60,24 @@ public class DoctorServiceImplTest {
     @Mock
     private DoctorClinicService doctorClinicService;
 
+    @Mock
+    private UserService userService;
+
     @Test
-    public void testCreate(){
+    public void testCreate() throws DuplicateEntityException {
         //Set Up
+        Mockito.when(mockDao.getDoctorByLicense(Mockito.eq(license)))
+                .thenReturn(null);
+        Mockito.when(userService.findUserByEmail(Mockito.eq(email)))
+                .thenReturn(null);
+        Mockito.when(userService.createUser(Mockito.eq(firstName), Mockito.eq(lastName), Mockito.eq(password), Mockito.eq(email)))
+                        .thenReturn(user);
         Mockito.when(mockDao.createDoctor(Mockito.eq(specialty), Mockito.eq(license), Mockito.eq(phone), Mockito.eq(user)))
                 .thenReturn(new Doctor(specialty, license, phone, user));
 
         //Execute
-        Doctor doctor = doctorService.createDoctor(specialty, license, phone, user.getFirstName(), user.getLastName(), user.getPassword(), user.getEmail());
+        Doctor doctor = doctorService.createDoctor(specialty, license, phone, firstName,
+                lastName, password, email);
 
         //Assert
         Assert.assertNotNull(doctor);
@@ -70,7 +88,29 @@ public class DoctorServiceImplTest {
         Assert.assertEquals(user.getEmail(), doctor.getEmail());
     }
 
-    @Test
+    @Test(expected = DuplicateEntityException.class)
+    public void testCreateDocExists() throws DuplicateEntityException {
+        //Set Up
+        Mockito.when(mockDao.getDoctorByLicense(Mockito.eq(license)))
+                .thenReturn(doctor);
+        //Execute
+        doctorService.createDoctor(specialty, license, phone, firstName,
+                lastName, password, email);
+    }
+
+    @Test(expected = DuplicateEntityException.class)
+    public void testCreateUserExists() throws DuplicateEntityException {
+        //Set Up
+        Mockito.when(mockDao.getDoctorByLicense(Mockito.eq(license)))
+                .thenReturn(null);
+        Mockito.when(userService.findUserByEmail(Mockito.eq(email)))
+                .thenReturn(user);
+        //Execute
+        doctorService.createDoctor(specialty, license, phone, firstName,
+                lastName, password, email);
+    }
+
+        @Test
     public void testGetDoctorsWithAvailability(){
         //Set Up
         List<Schedule> s = new ArrayList<>();
@@ -95,4 +135,3 @@ public class DoctorServiceImplTest {
 
     }
 }
-*/

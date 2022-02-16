@@ -24,7 +24,7 @@ public class Schedule {
     private int clinic;
 
 
-    public Schedule(int day, int hour,DoctorClinic doctorClinic) {
+    public Schedule(int day, int hour, DoctorClinic doctorClinic) {
         this.clinic = doctorClinic.getClinic().getId();
         this.scheduleKey = new ScheduleKey(day,hour,doctorClinic.getDoctor().getLicense());
         this.doctorClinic = doctorClinic;

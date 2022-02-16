@@ -54,7 +54,6 @@ public class PrepaidServiceImpl implements PrepaidService {
         List<Patient> patients = patientService.getPatientsByPrepaid(name);
         long result = prepaidDao.deletePrepaid(name);
         for(Patient patient : patients) {
-            System.out.println(patient.getEmail());
             patientService.updatePatient(patient.getEmail(), null ,null);
         }
         return result;

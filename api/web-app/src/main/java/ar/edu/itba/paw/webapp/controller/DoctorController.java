@@ -266,8 +266,8 @@ public class DoctorController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private DoctorHourService doctorHourService;
+//    @Autowired
+//    private DoctorHourService doctorHourService;
 
     @Autowired
     private ImageService imageService;

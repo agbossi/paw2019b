@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public User createUser(String firstName,String lastName, String password, String email) {
-        Locale locale = LocaleContextHolder.getLocale();
         return userDao.createUser(firstName,lastName,password,email);
     }
 

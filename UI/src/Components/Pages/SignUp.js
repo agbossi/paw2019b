@@ -19,6 +19,7 @@ function SignUp() {
     const [prepaidNumber, setPrepaidNumber] = useState('')
     const [prepaids, setPrepaids] = useState([])
 
+    const [message, setMessage] = useState("")
     const [firstNameErrors, setFirstNameErrors] = useState([])
     const [lastNameErrors, setLastNameErrors] = useState([])
     const [emailErrors, setEmailErrors] = useState([])
@@ -115,7 +116,7 @@ function SignUp() {
         }
     }
 
-    const handleSignUp = (e) => {
+    const handleSignUp = async (e) => {
         e.preventDefault();
         setInvalidForm(true)
         let data = {
@@ -129,29 +130,17 @@ function SignUp() {
             prepaidNumber: prepaidNumber
         }
 
-        ApiCalls.signUp(data)
-            .then(resp => {
-                if (resp.status === 201) {
-                    ApiCalls.login(data.email, data.password).then(
-                        (resp) => {
-                            if (resp.status === 200) {
-                                    navigate("/login");
-                                    window.location.reload()
-                            }
-                            },
-                        error => {
-                            const resMessage =
-                                (error.response &&
-                                    error.response.data &&
-                                    error.response.data.message) ||
-                                    error.message ||
-                                    error.toString();
-                        }
-                        );
-                } else {
+        const resp = await ApiCalls.signUp(data)
 
-                }
-            })
+        if (resp.status === 201) {
+            navigate("/login");
+            window.location.reload()
+        }
+        if (resp.status === 409) {
+            if (resp.data === "user-exists") {
+                setMessage(t("errors.emailInUse"))
+            }
+        }
         setInvalidForm(false)
     }
 
@@ -441,6 +430,13 @@ function SignUp() {
                     {t("FORM.signUp")}
                 </Button>
             </Form>
+            {message && (
+                <div className="form-group">
+                    <div className="alert alert-danger m-3" role="alert">
+                        {t(message)}
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

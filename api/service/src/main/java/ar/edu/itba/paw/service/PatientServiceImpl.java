@@ -3,6 +3,7 @@ package ar.edu.itba.paw.service;
 import ar.edu.itba.paw.interfaces.dao.PatientDao;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
 import ar.edu.itba.paw.model.exceptions.FavouriteExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,7 +37,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Transactional
     @Override
-    public Patient create(String id, String prepaid, String prepaidNumber, String firstName, String lastName, String password, String email) {
+    public Patient create(String id, String prepaid, String prepaidNumber, String firstName, String lastName, String password, String email) throws DuplicateEntityException {
+        if (userService.userExists(email)) throw new DuplicateEntityException("user-exists");
         if(prepaid.equals(NoPrepaid)) {
             prepaid = null;
             prepaidNumber = null;

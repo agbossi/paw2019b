@@ -1,9 +1,12 @@
 package ar.edu.itba.paw.service;
-/*
+
 import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
 import ar.edu.itba.paw.interfaces.service.AppointmentService;
+import ar.edu.itba.paw.interfaces.service.ClinicService;
+import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.interfaces.service.ScheduleService;
 import ar.edu.itba.paw.model.*;
+import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import javax.print.Doc;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -57,11 +60,21 @@ public class DoctorClinicServiceImplTest {
     private ScheduleService scheduleService;
 
     @Mock
+    private DoctorService doctorService;
+
+    @Mock
+    private ClinicService clinicService;
+
+    @Mock
     private AppointmentService appointmentService;
 
     @Test
-    public void testCreate(){
+    public void testCreate() throws EntityNotFoundException {
         //Set Up
+        Mockito.when(doctorService.getDoctorByEmail(Mockito.eq(doc.getEmail())))
+                        .thenReturn(doc);
+        Mockito.when(clinicService.getClinicById(Mockito.eq(clinic.getId())))
+                        .thenReturn(clinic);
         Mockito.when(mockDao.createDoctorClinic(Mockito.eq(doc), Mockito.eq(clinic), Mockito.eq(consultPrice)))
                 .thenReturn(new DoctorClinic(doc, clinic, consultPrice));
 
@@ -75,19 +88,28 @@ public class DoctorClinicServiceImplTest {
         Assert.assertEquals(consultPrice, doctorClinic.getConsultPrice());
     }
 
-    @Test
-    public void testSetSchedule(){
+    @Test(expected = EntityNotFoundException.class)
+    public void testCreateNoDoc() throws EntityNotFoundException {
         //Set Up
-        doctorClinic.setSchedule(new ArrayList<Schedule>());
-        Mockito.when(scheduleService.createSchedule(Mockito.eq(day), Mockito.eq(hour),
-                Mockito.eq(doctorClinic).getDoctor().getEmail(),Mockito.eq(doctorClinic).getClinic().getId()))
-                .thenReturn(new Schedule(day, hour, doctorClinic));
+        Mockito.when(doctorService.getDoctorByEmail(Mockito.eq(doc.getEmail())))
+                .thenReturn(null);
+        Mockito.when(clinicService.getClinicById(Mockito.eq(clinic.getId())))
+                .thenReturn(clinic);
 
         //Execute
-        doctorClinicService.setSchedule(doctorClinic, day, hour);
+       doctorClinicService.createDoctorClinic(doc.getEmail(), clinic.getId(),consultPrice);
+    }
 
-        //Assert
-        Assert.assertFalse(doctorClinic.getSchedule().isEmpty());
+    @Test(expected = EntityNotFoundException.class)
+    public void testCreateNoClinic() throws EntityNotFoundException {
+        //Set Up
+        Mockito.when(doctorService.getDoctorByEmail(Mockito.eq(doc.getEmail())))
+                .thenReturn(doc);
+        Mockito.when(clinicService.getClinicById(Mockito.eq(clinic.getId())))
+                .thenReturn(null);
+
+        //Execute
+        doctorClinicService.createDoctorClinic(doc.getEmail(), clinic.getId(),consultPrice);
     }
 
     @Test
@@ -158,9 +180,37 @@ public class DoctorClinicServiceImplTest {
         Assert.assertEquals(doc.getFirstName(), doctors.get(0).getDoctor().getFirstName());
         Assert.assertEquals(doc.getLastName(), docs.get(0).getDoctor().getLastName());
         Assert.assertEquals(doc.getSpecialty().getSpecialtyName(), docs.get(0).getDoctor().getSpecialty().getSpecialtyName());
+    }
 
+    @Test
+    public void testDelete() throws EntityNotFoundException {
+        //Set Up
+        Mockito.when(doctorService.getDoctorByLicense(Mockito.eq(doc.getLicense())))
+                .thenReturn(doc);
+        Mockito.when(clinicService.getClinicById(Mockito.eq(clinic.getId())))
+                .thenReturn(clinic);
+        //Execute
+        doctorClinicService.deleteDoctorClinic(doc.getLicense(), clinic.getId());
+    }
 
+    @Test(expected = EntityNotFoundException.class)
+    public void testDeleteNoDoc() throws EntityNotFoundException {
+        //Set Up
+        Mockito.when(doctorService.getDoctorByLicense(Mockito.eq(doc.getLicense())))
+                .thenReturn(null);
+        //Execute
+        doctorClinicService.deleteDoctorClinic(doc.getLicense(), clinic.getId());
+    }
+
+    @Test(expected = EntityNotFoundException.class)
+    public void testDeleteNoClinic() throws EntityNotFoundException {
+        //Set Up
+        Mockito.when(doctorService.getDoctorByLicense(Mockito.eq(doc.getLicense())))
+                .thenReturn(doc);
+        Mockito.when(clinicService.getClinicById(Mockito.eq(clinic.getId())))
+                .thenReturn(null);
+        //Execute
+        doctorClinicService.deleteDoctorClinic(doc.getLicense(), clinic.getId());
     }
 
 }
-*/

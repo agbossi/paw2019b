@@ -74,16 +74,6 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
         return list;
     }
 
-//    @Override
-//    public void setSchedule(DoctorClinic doctorClinic, int day, int hour) {
-//
-//        Schedule schedule = scheduleService.createSchedule(day, hour, doctorClinic.getDoctor().getEmail(),
-//                doctorClinic.getClinic().getId());
-//        List<Schedule> list = doctorClinic.getSchedule();
-//        list.add(schedule);
-//        doctorClinic.setSchedule(list);
-//    }
-
     @Override
     public List<DoctorClinic> getDoctorsFromClinic(Clinic clinic) {
         List<DoctorClinic> list = doctorClinicDao.getDoctorsInClinic(clinic.getId());
