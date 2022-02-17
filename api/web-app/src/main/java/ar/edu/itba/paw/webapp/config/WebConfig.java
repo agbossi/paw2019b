@@ -52,11 +52,11 @@ import java.util.concurrent.Executor;
 @Configuration
 public class WebConfig extends WebMvcConfigurerAdapter {
     
-    private String dbUser = "root";
+    private String dbUser = "paw-2019b-4";
 
-    private String dbPassword = "root";
+    private String dbPassword = "7Up7gfwcS";
 
-    private String jdbcPath = "jdbc:postgresql://localhost/paw";
+    private String jdbcPath = "jdbc:postgresql://localhost/paw-2019b-4";
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
@@ -101,7 +101,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         factoryBean.setJpaVendorAdapter(vendorAdapter);final Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", "validate");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL92Dialect");
-        properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("hibernate.show_sql", "false");
         properties.setProperty("format_sql", "true");
         factoryBean.setJpaProperties(properties);
         return factoryBean;
@@ -165,8 +165,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public LocaleResolver localeResolver() {
-        CookieLocaleResolver localeResolver = new CookieLocaleResolver();
-        return localeResolver;
+        return new CookieLocaleResolver();
     }
 
     @Override
