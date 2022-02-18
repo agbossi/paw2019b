@@ -57,6 +57,12 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     private String dbPassword = "7Up7gfwcS";
 
     private String jdbcPath = "jdbc:postgresql://localhost/paw-2019b-4";
+//
+//    private String dbUser = "root";
+//
+//    private String dbPassword = "root";
+//
+//    private String jdbcPath = "jdbc:postgresql://localhost/paw";
 
     @Value("classpath:schema.sql")
     private Resource schemaSql;
@@ -129,6 +135,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+        registry.addResourceHandler("/static/media/**").addResourceLocations("/static/media");
+        registry.addResourceHandler("/static/css/**").addResourceLocations("/static/css");
+        registry.addResourceHandler("/static/js/**").addResourceLocations("/static/js");
+        registry.addResourceHandler("/index.html").addResourceLocations("/index.html");
+
     }
 
     @Bean

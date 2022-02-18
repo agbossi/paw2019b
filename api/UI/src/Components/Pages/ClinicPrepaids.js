@@ -84,7 +84,7 @@ function ClinicPrepaids() {
         if(response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
         if (response.status === 404) {
             if (response.data === "prepaid-not-found") {
@@ -117,7 +117,7 @@ function ClinicPrepaids() {
         if(response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
 
     }

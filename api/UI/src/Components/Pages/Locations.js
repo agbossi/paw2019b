@@ -41,7 +41,7 @@ function Locations(props){
         if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
         if (response.status === 409) {
             if (response.data === "clinics-dependency") {
@@ -58,7 +58,7 @@ function Locations(props){
         } else if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         } else if (response.status === 409) {
             if (response.data === "location-exists") {
                 setMessage("errors.locationExists")

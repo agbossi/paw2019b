@@ -46,7 +46,7 @@ function Specialties(props){
         if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
     }
 
@@ -58,7 +58,7 @@ function Specialties(props){
         } else if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         } else if (response.status === 409) {
             if (response.data === "specialty-exists") {
                 setMessage("errors.specialtyExists")

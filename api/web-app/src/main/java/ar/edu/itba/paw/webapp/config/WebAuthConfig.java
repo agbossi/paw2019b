@@ -71,7 +71,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/clinics/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/prepaids").permitAll()
                 .antMatchers(HttpMethod.GET, "/appointments/available/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/login").anonymous()
+                .antMatchers(HttpMethod.POST, "/api/login").anonymous()
                 .antMatchers(HttpMethod.POST, "/patients").permitAll()
                 .antMatchers(HttpMethod.POST, "/locations").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/locations/**").hasRole("ADMIN")
@@ -97,7 +97,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/**").permitAll()
                 .and()
                 .formLogin().usernameParameter("email").passwordParameter("password")
-                .loginProcessingUrl("/login").successHandler(myAuthenticationSuccessHandler())
+                .loginProcessingUrl("/api/login").successHandler(myAuthenticationSuccessHandler())
                 .failureHandler(myAuthenticationFailureHandler())
                 .and()
                 .addFilterBefore(loginFilter(), UsernamePasswordAuthenticationFilter.class)
@@ -140,7 +140,7 @@ public class WebAuthConfig extends WebSecurityConfigurerAdapter {
     @Bean
         public LoginAuthenticationFilter loginFilter() throws Exception {
         LoginAuthenticationFilter filter = new LoginAuthenticationFilter();
-        filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login",
+        filter.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/login",
                 "POST"));
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler(loginAuthenticationSuccessHandler);

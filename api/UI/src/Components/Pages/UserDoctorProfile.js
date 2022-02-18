@@ -112,7 +112,7 @@ function UserDoctorProfile(props) {
 
     const handleMakeApp = async () => {
         if (localStorage.getItem('email') === null) {
-            navigate("/login")
+            navigate("/paw-2019b-4/login")
         }
         if (selectedClinic === null) {
             setMessage("errors.selectTime")
@@ -132,13 +132,13 @@ function UserDoctorProfile(props) {
             }
             const response = await AppointmentCalls.makeAppointment(data);
             if (response && response.ok) {
-                navigate("/appointments")
+                navigate("/paw-2019b-4/appointments")
             }
             if (response.status === 401) {
                 localStorage.removeItem('token')
                 localStorage.removeItem('role')
                 localStorage.setItem('path', "/" + license + "/profile")
-                navigate('/login')
+                navigate('/paw-2019b-4/login')
             }
             if (response.status === 400) {
                 if (response.data === "past-date")
@@ -160,7 +160,7 @@ function UserDoctorProfile(props) {
 
     const makeFavorite = async () => {
         if (localStorage.getItem('email') === null) {
-            navigate("/login")
+            navigate("/paw-2019b-4/login")
         }
         const response = await PatientCalls.addFavoriteDoctor(localStorage.getItem('email'), license)
         if (response && response.ok) {
@@ -181,13 +181,13 @@ function UserDoctorProfile(props) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
             localStorage.setItem('path', "/" + license + "/profile")
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
     }
 
     const deleteFavorite = async () => {
         if (localStorage.getItem('email') === null) {
-            navigate("/login")
+            navigate("/paw-2019b-4/login")
         }
         const response = await PatientCalls.deleteFavoriteDoctor(localStorage.getItem('email'), license)
         if (response && response.ok) {
@@ -204,7 +204,7 @@ function UserDoctorProfile(props) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
             localStorage.setItem('path', "/" + license + "/profile")
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
     }
 

@@ -77,11 +77,11 @@ class Login extends Component {
                     if (resp.status === 200) {
                         switch (localStorage.getItem('role')) {
                             case "ROLE_ADMIN":
-                                this.props.navigate("/admin");
+                                this.props.navigate("/paw-2019b-4/admin");
                                 window.location.reload()
                                 break;
                             case "ROLE_DOCTOR":
-                                this.props.navigate("/doctor");
+                                this.props.navigate("/paw-2019b-4/doctor");
                                 window.location.reload()
                                 break;
                             case "ROLE_USER":
@@ -90,7 +90,7 @@ class Login extends Component {
                                     localStorage.removeItem("path")
                                     window.location.reload()
                                 } else {
-                                    this.props.navigate("/");
+                                    this.props.navigate("/paw-2019b-4");
                                     window.location.reload()
                                 }
                                 break;
@@ -101,7 +101,7 @@ class Login extends Component {
                             loading: false,
                             message: "Email or password are not correct. Try again"
                         });
-                        this.props.navigate("/login")
+                        this.props.navigate("/paw-2019b-4/login")
                     }
                 },
                 error => {

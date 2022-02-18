@@ -133,7 +133,7 @@ function SignUp() {
         const resp = await ApiCalls.signUp(data)
 
         if (resp.status === 201) {
-            navigate("/login");
+            navigate("/paw-2019b-4/login");
             window.location.reload()
         }
         if (resp.status === 409) {

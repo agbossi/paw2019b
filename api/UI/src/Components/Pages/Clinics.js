@@ -53,7 +53,7 @@ function Clinics(props) {
         } else if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
     }
 
@@ -72,7 +72,7 @@ function Clinics(props) {
         if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
         if (response.status === 404) {
             if (response.data === "location-not-found") {
@@ -101,7 +101,7 @@ function Clinics(props) {
         if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
         if (response.status === 404) {
             if (response.data === "clinic-not-found") {
@@ -195,7 +195,7 @@ function Clinics(props) {
                                 </Card.Body>
                                 <Link className="btn btn-outline-dark btn-lg see-prepaid-button shadow-sm"
                                       role="button"
-                                      to={'/admin/clinics/' + clinic.id + '/prepaids'}>{t("ADMIN.seePrepaids")}
+                                      to={'/paw-2019b-4/admin/clinics/' + clinic.id + '/prepaids'}>{t("ADMIN.seePrepaids")}
                                 </Link>
                                 <div className="buttons-div">
                                     <Button className="edit-remove-button remove-button-color shadow-sm"

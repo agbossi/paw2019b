@@ -52,7 +52,7 @@ function Profile() {
         } else if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
     }
 
@@ -61,7 +61,7 @@ function Profile() {
         if (email === null) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
         const response = await AppointmentCalls.getAppointment(email, 0)
         if (response && response.ok) {
@@ -71,7 +71,7 @@ function Profile() {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
             localStorage.removeItem('email')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
     }
     const handleProfileUpdateOk = async () => {
@@ -138,7 +138,7 @@ function Profile() {
                         <Link
                             className="edit-remove-button doc-button-color shadow-sm edit-button btn app-btn"
                             role="button"
-                            to="/appointments">{t('NAVBAR.appointments')}
+                            to="/paw-2019b-4/appointments">{t('NAVBAR.appointments')}
                         </Link>
                     </Col>
                 </Row>

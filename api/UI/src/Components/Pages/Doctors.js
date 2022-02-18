@@ -46,7 +46,7 @@ function Doctors() {
         } else if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         } else if (response.status === 409) {
             if (response.data === 'license-in-use')
                 setMessage("errors.licenseInUse")
@@ -76,7 +76,7 @@ function Doctors() {
         } else if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
     }
 

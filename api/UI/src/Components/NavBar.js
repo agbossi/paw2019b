@@ -18,26 +18,26 @@ function NavBar(props) {
 
     const userNavbarItems = [
         {
-            link: '/favorites',
+            link: '/paw-2019b-4/favorites',
             text: "favourites"
         },
         {
-            link: '/appointments',
+            link: '/paw-2019b-4/appointments',
             text: 'appointments'
         },
         {
-            link: '/profile',
+            link: '/paw-2019b-4/profile',
             text: 'profile'
         }
     ]
 
     const docNavBarItems = [
         {
-            link: '/doctor/clinics',
+            link: '/paw-2019b-4/doctor/clinics',
             text: "clinics"
         },
         {
-            link: '/doctor/appointments',
+            link: '/paw-2019b-4/doctor/appointments',
             text: 'appointments'
         }
     ]
@@ -59,21 +59,21 @@ function NavBar(props) {
 
     const handleLogout = () => {
         ApiCalls.logout().then(() => {
-            navigate("/");
+            navigate("/paw-2019b-4");
             window.location.reload()
         })
 
     }
 
     const getRoleHome = () => {
-        if (!props.isAuth()) return "/";
+        if (!props.isAuth()) return "/paw-2019b-4";
         switch (localStorage.getItem('role')) {
             case "ROLE_ADMIN":
-                return '/admin';
+                return '/paw-2019b-4/admin';
             case "ROLE_DOCTOR":
-                return '/doctor';
+                return '/paw-2019b-4/doctor';
             case "ROLE_USER":
-                return '/';
+                return '/paw-2019b-4';
         }
     }
 
@@ -97,13 +97,13 @@ function NavBar(props) {
                         </Nav.Item>
                         :
                         <Nav.Item  class="ml-auto">
-                            <Nav.Link href="/signUp" style={{color: "white"}}>{t('NAVBAR.signUp')}</Nav.Link>
+                            <Nav.Link href="/paw-2019b-4/signUp" style={{color: "white"}}>{t('NAVBAR.signUp')}</Nav.Link>
                         </Nav.Item>}
                     {localStorage.getItem('role') !== null ?
                         ''
                         :
                         <Nav.Item class="ml-auto">
-                            <Nav.Link href="/login" style={{color: "white"}}>{t('NAVBAR.login')}</Nav.Link>
+                            <Nav.Link href="/paw-2019b-4/login" style={{color: "white"}}>{t('NAVBAR.login')}</Nav.Link>
                         </Nav.Item>}
                     <ButtonGroup aria-label="Basic example">
                         <Button className="lang-buttons" onClick={() =>changeLanguage('en')}>EN</Button>

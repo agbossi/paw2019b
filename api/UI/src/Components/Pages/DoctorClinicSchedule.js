@@ -125,7 +125,7 @@ function DoctorClinicSchedule(props) {
         localStorage.removeItem('firstName')
         localStorage.removeItem('lastName')
         localStorage.removeItem('specialty')
-        navigate('/login')
+        navigate('/paw-2019b-4/login')
     }
 
     return (

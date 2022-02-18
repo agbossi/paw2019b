@@ -20,7 +20,7 @@ function Favorites() {
         if (id === null) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
         setIsLoading(true)
         const response = await PatientCalls.getFavoriteDoctors(id, pag)
@@ -33,7 +33,7 @@ function Favorites() {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
             localStorage.removeItem('email')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
     }
 
@@ -42,7 +42,7 @@ function Favorites() {
         if (id === null) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
         const response = await PatientCalls.deleteFavoriteDoctor(id, license);
         if (response && response.ok) {
@@ -52,7 +52,7 @@ function Favorites() {
         if (response.status === 401) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
     }
 
@@ -118,7 +118,7 @@ function Favorites() {
                                         <div className="buttons-div">
                                             <Link className="doc-button-color btn m-1"
                                                   role="button"
-                                                  to={'/' + doctor.license + '/profile'}>{t("USER.seeProfile")}
+                                                  to={'/paw-2019b-4' + doctor.license + '/profile'}>{t("USER.seeProfile")}
                                             </Link>
                                             <Button className="edit-remove-button remove-button-color shadow-sm"
                                                     onClick={() => removeFromFavorites(doctor.license)}>

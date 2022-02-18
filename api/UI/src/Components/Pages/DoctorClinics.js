@@ -102,7 +102,7 @@ function DoctorClinics(props) {
             localStorage.removeItem('firstName')
             localStorage.removeItem('lastName')
             localStorage.removeItem('specialty')
-            navigate('/login')
+            navigate('/paw-2019b-4/login')
         }
     }
     useEffect(async () => {
@@ -143,7 +143,7 @@ function DoctorClinics(props) {
                                     </Card.Text>
                                     <Link className="btn btn-outline-dark btn-lg see-prepaid-button shadow-sm"
                                           role="button"
-                                          to={`/doctor/${license}/clinics/${dc.clinic.id}/schedule`}>
+                                          to={`/paw-2019b-4/doctor/${license}/clinics/${dc.clinic.id}/schedule`}>
                                         {t('scheduleButton')}
                                     </Link>
                                 </Card.Body>

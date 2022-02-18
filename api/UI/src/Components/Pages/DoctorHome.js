@@ -145,7 +145,7 @@ function DoctorHome(props) {
         localStorage.removeItem('lastName')
         localStorage.removeItem('specialty')
         localStorage.removeItem('phone')
-        navigate('/login')
+        navigate('/paw-2019b-4/login')
     }
 
 

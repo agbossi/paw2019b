@@ -381,7 +381,7 @@
                                     <goal>copy-resources</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>web-app/src/main/resources/META-INF/resources</outputDirectory>
+                                    <outputDirectory>target/classes/web-app/WEB-APP/classes</outputDirectory>
                                     <resources>
                                         <resource>
                                             <directory>./UI/build</directory>
