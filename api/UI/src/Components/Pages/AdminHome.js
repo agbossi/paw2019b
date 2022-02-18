@@ -15,7 +15,7 @@ function AdminHome(props) {
                 <Row className="admin_row">
                     <Col>
                         <Card className="admin_card shadow" style={{marginLeft: '3.5rem', marginRight: '1rem'}}>
-                            <Card.Img variant="top" className="card_img" src="/images/doctor.png" />
+                            <Card.Img variant="top" className="card_img" src="/paw-2019b-4/images/doctor.png" />
                             <Card.Body className="card_body">
                                 <Card.Title style={{verticalAlign: "bottom"}}>{t('ADMIN.doctors')}</Card.Title>
                                 <Link className="btn btn-outline-dark btn-lg"
@@ -27,7 +27,7 @@ function AdminHome(props) {
                     </Col>
                     <Col>
                         <Card className="mb-3 admin_card shadow" style={{marginLeft: '2.5rem', marginRight: '1rem'}}>
-                            <Card.Img variant="top" className="card_img" src="/images/clinic.png" />
+                            <Card.Img variant="top" className="card_img" src="/paw-2019b-4/images/clinic.png" />
                             <Card.Body className="card_body">
                                 <Card.Title>{t('ADMIN.clinics')}</Card.Title>
                                 <Link className="btn btn-outline-dark btn-lg"
@@ -39,7 +39,7 @@ function AdminHome(props) {
                     </Col>
                     <Col>
                         <Card className="mb-3 admin_card shadow" style={{ marginLeft: '1rem'}}>
-                            <Card.Img variant="top" className="card_img" src="/images/location.png" />
+                            <Card.Img variant="top" className="card_img" src="/paw-2019b-4/images/location.png" />
                             <Card.Body className="card_body">
                                 <Card.Title>{t('ADMIN.locations')}</Card.Title>
                                 <Link className="btn btn-outline-dark btn-lg"
@@ -53,7 +53,7 @@ function AdminHome(props) {
                 <Row className="admin_row">
                     <Col>
                         <Card className="mb-3 admin_card shadow" style={{marginLeft: '3.5rem', marginRight: '1rem'}}>
-                            <Card.Img className="card_img" variant="top" src="/images/specialty.png" />
+                            <Card.Img className="card_img" variant="top" src="/paw-2019b-4/images/specialty.png" />
                             <Card.Body className="card_body">
                                 <Card.Title>{t('ADMIN.specialties')}</Card.Title>
                                 <Link className="btn btn-outline-dark btn-lg"
@@ -65,7 +65,7 @@ function AdminHome(props) {
                     </Col>
                     <Col>
                         <Card className="mb-3 admin_card shadow" style={{marginLeft: '2.5rem', marginRight: '1rem'}}>
-                            <Card.Img variant="top" className="card_img" src="/images/prepaid.png" />
+                            <Card.Img variant="top" className="card_img" src="/paw-2019b-4/images/prepaid.png" />
                             <Card.Body className="card_body">
                                 <Card.Title>{t('ADMIN.prepaids')}</Card.Title>
                                 <Link className="btn btn-outline-dark btn-lg"

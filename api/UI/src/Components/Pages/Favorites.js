@@ -118,7 +118,7 @@ function Favorites() {
                                         <div className="buttons-div">
                                             <Link className="doc-button-color btn m-1"
                                                   role="button"
-                                                  to={'/paw-2019b-4' + doctor.license + '/profile'}>{t("USER.seeProfile")}
+                                                  to={'/paw-2019b-4/' + doctor.license + '/profile'}>{t("USER.seeProfile")}
                                             </Link>
                                             <Button className="edit-remove-button remove-button-color shadow-sm"
                                                     onClick={() => removeFromFavorites(doctor.license)}>

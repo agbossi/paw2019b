@@ -265,9 +265,9 @@ function UserDoctorProfile(props) {
                         <h4 style={{display: "flex"}}>
                             <div style={{alignSelf: "center"}}>{t('USER.dataProfile')}</div>
                             {isFavorite ? <Button className="m-2 fav-button" onClick={deleteFavorite}>
-                                <img src="/images/yesfav.png"/>
+                                <img src="/paw-2019b-4/images/yesfav.png"/>
                             </Button>:<Button className="m-2 fav-button" onClick={makeFavorite}>
-                                <img src="/images/nofav.png"/>
+                                <img src="/paw-2019b-4/images/nofav.png"/>
                             </Button>}
                         </h4>
                         <div className="user-info-label">
@@ -289,7 +289,7 @@ function UserDoctorProfile(props) {
                     <Col className="img-col-user mx-3">
                         <img className="user-img-size"
                              src={image === null?
-                                 "/images/docpic.jpg": BASE_URL + "/doctors/" + license +"/image"} />
+                                 "/paw-2019b-4/images/docpic.jpg": BASE_URL + "/doctors/" + license +"/image"} />
                     </Col>
                 </Row>
                 <hr/>
