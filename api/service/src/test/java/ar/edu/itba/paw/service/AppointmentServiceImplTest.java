@@ -146,8 +146,11 @@ public class AppointmentServiceImplTest {
         Mockito.when(appointmentDao.hasAppointment(Mockito.any(User.class), Mockito.any()))
                 .thenReturn(false);
 
+        LocalDateTime newDate = date.plusDays(1);
+
         // Execute
-        appointmentService.createAppointment(license1, id1, email2, year, month, day + 1, time);
+        appointmentService.createAppointment(license1, id1, email2, newDate.getYear(), newDate.getMonthValue(),
+                newDate.getDayOfMonth(), time);
     }
 
     @Test(expected = HasAppointmentException.class)
@@ -161,7 +164,7 @@ public class AppointmentServiceImplTest {
                 .thenReturn(true);
 
         // Execute
-        appointmentService.createAppointment(license1, id1, email2, year, month, day + 1, time);
+        appointmentService.createAppointment(license1, id1, email2, year, month, day, time);
     }
 
     @Test(expected = HasAppointmentException.class)
@@ -172,7 +175,7 @@ public class AppointmentServiceImplTest {
         Mockito.when(appointmentDao.hasAppointment(Mockito.any(Doctor.class), Mockito.any()))
                 .thenReturn(true);
         // Execute
-        appointmentService.createAppointment(license1, id1, email2, year, month, day + 1, time);
+        appointmentService.createAppointment(license1, id1, email2, year, month, day, time);
     }
 
     @Test
