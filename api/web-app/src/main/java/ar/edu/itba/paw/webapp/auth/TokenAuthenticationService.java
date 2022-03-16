@@ -29,8 +29,6 @@ public class TokenAuthenticationService {
         Optional<? extends GrantedAuthority> authority = userDetails.getAuthorities().stream().findFirst();
         if (!authority.isPresent()) throw new AuthorizationServiceException("User " + authentication.getName() + " has no role");
         String role = authority.get().getAuthority();
-        response.addHeader("Access-Control-Expose-Headers", AUTH_HEADER_NAME + ", " + ROLE_HEADER_NAME);
-        response.setHeader("Access-Control-Allow-Origin", "*");
         response.addHeader(AUTH_HEADER_NAME, token);
         response.addHeader(ROLE_HEADER_NAME, role);
     }

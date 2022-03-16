@@ -45,7 +45,6 @@ public class PrepaidController {
         int maxPage = prepaidService.maxAvailablePage();
 
         return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {}, "prepaids", request)
-                .header("Access-Control-Expose-Headers", "X-max-page")
                 .header("X-max-page", maxPage)
                 .build();
     }

@@ -49,7 +49,6 @@ public class SpecialtyController {
 
         return CacheHelper.handleResponse(specialties, specialtyCaching,
                 new GenericEntity<List<SpecialtyDto>>(specialties) {}, "specialties", request)
-                .header("Access-Control-Expose-Headers", "X-max-page")
                 .header("X-max-page", maxPage)
                 .build();
     }

@@ -54,7 +54,6 @@ public class LocationController {
 
         Response.ResponseBuilder ret = CacheHelper.handleResponse(locations, locationCaching,
                 new GenericEntity<List<LocationDto>>(locations) {}, "locations", request)
-                .header("Access-Control-Expose-Headers", "X-max-page")
                 .header("X-max-page", maxPage);
         return ret.build();
     }

@@ -69,7 +69,6 @@ public class AppointmentController {
         return CacheHelper.handleResponse(appointments, appointmentCaching,
                 new GenericEntity<List<AppointmentDto>>(appointments) {}, "appointments",
                 request)
-                .header("Access-Control-Expose-Headers", "X-max-page")
                 .header("X-max-page", maxPage).build();
 
 

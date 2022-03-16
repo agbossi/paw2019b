@@ -272,7 +272,6 @@ public class PatientController {
         return CacheHelper.handleResponse(favorites, doctorCaching,
                 new GenericEntity<List<DoctorDto>>(favorites) {},
                 "favorites", request)
-                .header("Access-Control-Expose-Headers", "X-max-page")
                 .header("X-max-page", maxPage).build();
         // return Response.ok(new GenericEntity<List<DoctorDto>>(favorites) {}).build();
 

@@ -335,7 +335,6 @@ public class DoctorController {
         return CacheHelper.handleResponse(doctorClinics, doctorClinicCaching,
                 new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {},
                 "doctorsClinics", request)
-                .header("Access-Control-Expose-Headers", "X-max-page")
                 .header("X-max-page", max)
                 .build();
     }
@@ -532,7 +531,6 @@ public class DoctorController {
 
         return CacheHelper.handleResponse(doctors, doctorCaching, new GenericEntity<List<DoctorDto>>(doctors) {},
                         "doctors", request)
-                .header("Access-Control-Expose-Headers", "X-max-page")
                 .header("X-max-page", max)
                 .build();
     }

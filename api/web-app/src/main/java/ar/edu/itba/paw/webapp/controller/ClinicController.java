@@ -61,7 +61,6 @@ public class ClinicController {
         int maxPage = clinicService.maxAvailablePage() - 1;
         return CacheHelper.handleResponse(clinics, clinicCaching,
                 new GenericEntity<List<ClinicDto>>(clinics) {}, "clinics", request)
-                .header("Access-Control-Expose-Headers", "X-max-page")
                 .header("X-max-page", maxPage).build();
 
     }
@@ -174,7 +173,6 @@ public class ClinicController {
         int maxPage = prepaidToClinicService.maxAvailablePagePerClinic(clinicId);
         return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {},
                 "prepaids", request)
-                .header("Access-Control-Expose-Headers", "X-max-page")
                 .header("X-max-page", maxPage).build();
 
     }
