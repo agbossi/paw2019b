@@ -3,6 +3,7 @@ import {Button, Card, Container, Modal} from "react-bootstrap";
 import '../CardContainer.css'
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
 import {useNavigate} from "react-router-dom";
+import Utils from "../../Utils";
 import SpecialtyCalls from "../../api/SpecialtyCalls";
 import {useTranslation} from "react-i18next";
 import "../../i18n/i18n"
@@ -19,7 +20,7 @@ function Specialties(props){
         const response = await SpecialtyCalls.getSpecialties(pag);
         if (response && response.ok) {
             setSpecialties(response.data);
-            setMaxPage(response.headers.xMaxPage);
+            setMaxPage(Utils.getMaxPage(response.headers.link));
         }
     }
 

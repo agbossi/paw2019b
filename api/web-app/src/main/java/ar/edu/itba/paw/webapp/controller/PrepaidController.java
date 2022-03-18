@@ -42,10 +42,13 @@ public class PrepaidController {
         page = (page < 0) ? 0 : page;
         List<PrepaidDto> prepaids = prepaidService.getPaginatedObjects(page).stream()
                 .map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
-        int maxPage = prepaidService.maxAvailablePage();
+        int maxPage = prepaidService.maxAvailablePage() - 1;
 
         return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {}, "prepaids", request)
-                .header("X-max-page", maxPage)
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(),"last")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
                 .build();
     }
 

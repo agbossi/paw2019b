@@ -106,7 +106,7 @@ public class DoctorController {
                 firstName, lastName, new Prepaid(prepaid), consultPrice, includeUnavailable);
         int maxAvailablePage = doctorService.getMaxAvailableDoctorsPage(licenses);
 
-        return getPaginatedDoctorsResponse(licenses, page, request, maxAvailablePage);
+        return getPaginatedDoctorsResponse(licenses, page, request, maxAvailablePage-1);
     }
 
     /**
@@ -124,7 +124,7 @@ public class DoctorController {
         List<String> licenses = doctorService.getDoctors().stream().map(Doctor::getLicense).collect(Collectors.toList());
         int maxAvailablePage = doctorService.getMaxAvailableDoctorsPage(licenses);
 
-        return getPaginatedDoctorsResponse(licenses, page, request, maxAvailablePage);
+        return getPaginatedDoctorsResponse(licenses, page, request, maxAvailablePage-1);
     }
 
     /**
@@ -335,7 +335,10 @@ public class DoctorController {
         return CacheHelper.handleResponse(doctorClinics, doctorClinicCaching,
                 new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {},
                 "doctorsClinics", request)
-                .header("X-max-page", max)
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", max-1).build(),"last")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
                 .build();
     }
 
@@ -531,7 +534,10 @@ public class DoctorController {
 
         return CacheHelper.handleResponse(doctors, doctorCaching, new GenericEntity<List<DoctorDto>>(doctors) {},
                         "doctors", request)
-                .header("X-max-page", max)
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", max).build(),"last")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
                 .build();
     }
 }

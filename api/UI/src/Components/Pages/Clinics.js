@@ -4,6 +4,7 @@ import '../CardContainer.css'
 import ClinicEditModal from "../Modals/ClinicEditModal";
 import {Link, useNavigate} from "react-router-dom";
 import ClinicCalls from "../../api/ClinicCalls";
+import Utils from "../../Utils";
 import LocationCalls from "../../api/LocationCalls";
 import {useTranslation} from "react-i18next";
 import "../../i18n/i18n";
@@ -26,7 +27,7 @@ function Clinics(props) {
         const response = await ClinicCalls.getClinics(pag)
         if (response && response.ok) {
             setClinics(response.data)
-            setMaxPage(Number(response.headers.xMaxPage))
+            setMaxPage(Number(Utils.getMaxPage(response.headers.link)));
         }
     }
 

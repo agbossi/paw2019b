@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {Button, Card, Container} from "react-bootstrap";
 import '../CardContainer.css'
+import Utils from "../../Utils";
 import DoctorAddModal from "../Modals/DoctorAddModal";
 import DoctorCalls from "../../api/DoctorCalls";
 import SpecialtyCalls from "../../api/SpecialtyCalls";
@@ -21,7 +22,7 @@ function Doctors() {
         const response = await DoctorCalls.getDoctorsAdmin(pag)
         if (response && response.ok) {
             setDoctors(response.data)
-            setMaxPage(Number(response.headers.xMaxPage))
+            setMaxPage(Number(Utils.getMaxPage(response.headers.link)))
         }
 
     }
@@ -102,7 +103,7 @@ function Doctors() {
     }
 
     const renderNextButton = () => {
-        if (page < maxPage - 1) {
+        if (page < maxPage) {
             return <Button className="doc-button doc-button-color shadow-sm"
                            onClick={() => nextPage()}>{t('nextButton')}</Button>
         }

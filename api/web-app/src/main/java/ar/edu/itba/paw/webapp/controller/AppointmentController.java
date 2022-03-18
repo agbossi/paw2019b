@@ -69,7 +69,11 @@ public class AppointmentController {
         return CacheHelper.handleResponse(appointments, appointmentCaching,
                 new GenericEntity<List<AppointmentDto>>(appointments) {}, "appointments",
                 request)
-                .header("X-max-page", maxPage).build();
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(),"last")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
+                .build();
 
 
     }

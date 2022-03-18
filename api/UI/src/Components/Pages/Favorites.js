@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import PatientCalls from "../../api/PatientCalls";
+import Utils from "../../Utils";
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import {Link, useNavigate} from "react-router-dom";
 import './Favorites.css'
@@ -26,7 +27,7 @@ function Favorites() {
         const response = await PatientCalls.getFavoriteDoctors(id, pag)
         if (response && response.ok) {
             setDoctors(response.data)
-            setMaxPage(Number(response.headers.xMaxPage))
+            setMaxPage(Number(Utils.getMaxPage(response.headers.link)));
             setIsLoading(false)
         }
         if (response.status === 401) {
@@ -82,7 +83,7 @@ function Favorites() {
     }
 
     const renderNextButton = () => {
-        if (page < maxPage - 1) {
+        if (page < maxPage) {
             return <Button className="doc-button doc-button-color shadow-sm"
                            onClick={() => nextPage()}>{t('nextButton')}</Button>
         }

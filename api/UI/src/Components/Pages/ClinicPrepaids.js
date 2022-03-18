@@ -4,6 +4,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import ClinicPrepaidAddModal from "../Modals/ClinicPrepaidAddModal";
 import ClinicCalls from "../../api/ClinicCalls";
+import Utils from "../../Utils";
 import PrepaidCalls from "../../api/PrepaidCalls";
 import {useTranslation} from "react-i18next";
 import "../../i18n/i18n"
@@ -39,7 +40,7 @@ function ClinicPrepaids() {
         const response = await ClinicCalls.getClinicPrepaids(id, pag);
         if (response && response.ok) {
             setPrepaidClinics(response.data)
-            setMaxPage(response.headers.xMaxPage)
+            setMaxPage(Utils.getMaxPage(response.headers.link));
         }
         if (response.status === 404) {
             if (response.data === "clinic-not-found") {
@@ -141,7 +142,7 @@ function ClinicPrepaids() {
     }
 
     const renderNextButton = () => {
-        if (page < maxPage - 1) {
+        if (page < maxPage) {
             return <Button className="remove-button doc-button-color shadow-sm"
                            onClick={() => nextPage()}>{t("nextButton")}</Button>
         }

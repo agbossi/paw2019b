@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import SearchBar from "../SearchBar";
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import {Link, useSearchParams} from "react-router-dom";
+import Utils from "../../Utils";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DoctorCalls from "../../api/DoctorCalls";
 import './home.css'
@@ -21,14 +22,13 @@ function Home(props) {
     const [loading, setLoading] = useState(false)
     const {t} = useTranslation()
 
-
     const fetchAllDoctorsWithAvailability = async (page) => {
         setLoading(true)
         const response = await DoctorCalls.searchDocs(page, null, null,
             null, null, null , null)
         if (response && response.ok) {
             setDoctors(response.data)
-            setMaxPage(Number(response.headers.xMaxPage))
+            setMaxPage(Number(Utils.getMaxPage(response.headers.link)));
             setMessage("")
             setSearchParams()
         }
@@ -85,7 +85,7 @@ function Home(props) {
     }
 
     const renderNextButton = () => {
-        if (page < maxPage - 1) {
+        if (page < maxPage) {
             return <Button className="doc-button doc-button-color shadow-sm"
                            onClick={() => nextPage()}>{t('nextButton')}</Button>
         }
@@ -108,7 +108,7 @@ function Home(props) {
 
         if (response && response.ok) {
             setDoctors(response.data)
-            setMaxPage(Number(response.headers.xMaxPage))
+            setMaxPage(Number(Utils.getMaxPage(response.headers.link)))
             setMessage("")
         }
         setLoading(false)

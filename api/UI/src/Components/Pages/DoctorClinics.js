@@ -3,6 +3,7 @@ import DoctorCalls from "../../api/DoctorCalls";
 import ClinicCalls from "../../api/ClinicCalls";
 import {Button, Card, Container, Row} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
+import Utils from "../../Utils";
 import {Link, useNavigate} from "react-router-dom";
 import DoctorClinicAddModal from "../Modals/DoctorClinicAddModal";
 import EditPriceModal from "../Modals/EditPriceModal";
@@ -22,7 +23,7 @@ function DoctorClinics(props) {
         const response = await DoctorCalls.getClinics(license, pag)
         if (response && response.ok) {
             setClinics(response.data)
-            setMaxPage(Number(response.headers.xMaxPage))
+            setMaxPage(Number(Utils.getMaxPage(response.headers.link)));
             setMessage("")
         }
         if(response.status === 404) {

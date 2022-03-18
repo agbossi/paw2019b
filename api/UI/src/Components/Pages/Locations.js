@@ -1,6 +1,7 @@
 import React, {Component, useEffect, useState} from 'react';
 import {Button, Card, Container} from "react-bootstrap";
 import '../CardContainer.css'
+import Utils from "../../Utils";
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
 import LocationCalls from "../../api/LocationCalls";
 import {useNavigate} from "react-router-dom";
@@ -19,7 +20,7 @@ function Locations(props){
         const response = await LocationCalls.getLocations(pag)
         if (response && response.ok){
             setLocations(response.data)
-            setMaxPage(response.headers.xMaxPage)
+            setMaxPage(Utils.getMaxPage(response.headers.link));
         }
     }
 

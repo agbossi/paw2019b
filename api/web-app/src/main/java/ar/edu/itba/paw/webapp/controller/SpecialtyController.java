@@ -49,7 +49,10 @@ public class SpecialtyController {
 
         return CacheHelper.handleResponse(specialties, specialtyCaching,
                 new GenericEntity<List<SpecialtyDto>>(specialties) {}, "specialties", request)
-                .header("X-max-page", maxPage)
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(),"last")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
                 .build();
     }
 

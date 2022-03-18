@@ -3,6 +3,7 @@ import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import AppointmentCalls from "../../api/AppointmentCalls";
 import {Button, Card, Container, Row} from "react-bootstrap";
+import Utils from "../../Utils";
 import './Favorites.css'
 import {dateToString, getMonth, getWeekDate} from "../../utils/dateHelper";
 
@@ -26,7 +27,7 @@ function Appointments(props) {
         const response = await AppointmentCalls.getAppointment(email, pag)
         if (response && response.ok) {
             setAppointments(response.data)
-            setMaxPage(Number(response.headers.xMaxPage))
+            setMaxPage(Utils.getMaxPage(response.headers.link));
             setMessage("")
             setIsLoading(false)
         }
@@ -101,7 +102,7 @@ function Appointments(props) {
     }
 
     const renderNextButton = () => {
-        if (page < maxPage - 1) {
+        if (page < maxPage) {
             return <Button className="doc-button doc-button-color shadow-sm"
                            onClick={() => nextPage()}>{t('nextButton')}</Button>
         }

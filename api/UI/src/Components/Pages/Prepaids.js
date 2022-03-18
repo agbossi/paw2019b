@@ -1,6 +1,7 @@
 import React, {Component, useEffect, useState} from 'react';
 import {Button, Card, Container, Modal} from "react-bootstrap";
 import '../CardContainer.css'
+import Utils from "../../Utils";
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
 import {useNavigate} from "react-router-dom";
 import PrepaidCalls from "../../api/PrepaidCalls";
@@ -20,7 +21,7 @@ function Prepaids(props) {
         const response = await PrepaidCalls.getPrepaids(pag);
         if (response && response.ok){
             setPrepaids(response.data)
-            setMaxPage(response.headers.xMaxPage)
+            setMaxPage(Utils.getMaxPage(response.headers.link));
         }
     }
 
@@ -83,7 +84,7 @@ function Prepaids(props) {
     }
 
     const renderNextButton = () => {
-        if (page < maxPage - 1) {
+        if (page < maxPage) {
             return <Button className="remove-button doc-button-color shadow-sm"
                            onClick={() => nextPage()}>{t("nextButton")}</Button>
         }
