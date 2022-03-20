@@ -50,6 +50,11 @@ public class StatelessAuthenticationFilter extends AbstractAuthenticationProcess
                 ((HttpServletResponse) res).sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
             }
         } else {
+            httpResponse.setHeader("Access-Control-Allow-Origin", "*");
+            httpResponse.setHeader("Access-Control-Allow-Methods", "POST,GET,DELETE,PUT");
+            //httpResponse.setHeader("Access-Control-Max-Age", "3600");
+            httpResponse.setHeader("Access-Control-Allow-Headers", "Access-Control-Expose-Headers, "+"X-AUTH-TOKEN, content-type," +
+                    "access-control-request-headers,access-control-request-method,accept,origin,x-auth-token,x-requested-with,responseType,x-role,token-header");
             httpResponse.setStatus(HttpServletResponse.SC_OK);
         }
 

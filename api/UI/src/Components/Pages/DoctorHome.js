@@ -11,6 +11,7 @@ import {useNavigate} from "react-router-dom";
 import ImageSelectModal from "../Modals/ImageSelectModal";
 import ImageCalls from "../../api/ImageCalls";
 import {BASE_URL} from "../../Constants";
+import docpic from "../../Assets/docpic.jpg";
 
 function DoctorHome(props) {
     const [doctor, setDoctor] = useState({})
@@ -200,7 +201,7 @@ function DoctorHome(props) {
                     <Col>
                         <img className="img-size"
                              src={image === null?
-                                 "/paw-2019b-4/images/docpic.jpg": BASE_URL + "/doctors/" + localStorage.getItem('license') +"/image"} />
+                                 {docpic}: BASE_URL + "/doctors/" + localStorage.getItem('license') +"/image"} />
                         <div className="mt-3">
                             <ImageSelectModal handleUpload={handleUpload} />
                             <Button className="mx-3 shadow-sm doc-button-color" onClick={handleDeleteImage}> {t('deleteImgButton')}</Button>

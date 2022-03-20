@@ -10,7 +10,9 @@ import DropDownList from "../DropDownList";
 import {dateToString, getMonth, getWeekDate} from "../../utils/dateHelper";
 import PatientCalls from "../../api/PatientCalls";
 import './UserDoctorProfile.css'
-
+import docpic from "../../Assets/docpic.jpg";
+import yesFav from "../../Assets/yesfav.png";
+import noFav from "../../Assets/nofav.png";
 
 function UserDoctorProfile(props) {
     const {license} = useParams()
@@ -265,9 +267,9 @@ function UserDoctorProfile(props) {
                         <h4 style={{display: "flex"}}>
                             <div style={{alignSelf: "center"}}>{t('USER.dataProfile')}</div>
                             {isFavorite ? <Button className="m-2 fav-button" onClick={deleteFavorite}>
-                                <img src="/paw-2019b-4/images/yesfav.png"/>
+                                <img src={yesFav}/>
                             </Button>:<Button className="m-2 fav-button" onClick={makeFavorite}>
-                                <img src="/paw-2019b-4/images/nofav.png"/>
+                                <img src={noFav}/>
                             </Button>}
                         </h4>
                         <div className="user-info-label">
@@ -289,7 +291,7 @@ function UserDoctorProfile(props) {
                     <Col className="img-col-user mx-3">
                         <img className="user-img-size"
                              src={image === null?
-                                 "/paw-2019b-4/images/docpic.jpg": BASE_URL + "/doctors/" + license +"/image"} />
+                                 {docpic}: BASE_URL + "/doctors/" + license +"/image"} />
                     </Col>
                 </Row>
                 <hr/>
