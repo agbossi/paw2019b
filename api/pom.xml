@@ -36,10 +36,17 @@
         <javax.xml.bind.version>2.3.0</javax.xml.bind.version>
         <jjwt.version>0.4</jjwt.version>
         <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
+        <tomcat-version>7.0.76</tomcat-version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.apache.tomcat</groupId>
+                <artifactId>tomcat-catalina</artifactId>
+                <version>${tomcat-version}</version>
+                <scope>provided</scope>
+            </dependency>
             <dependency>
                 <groupId>org.glassfish.jersey.containers</groupId>
                 <artifactId>jersey-container-servlet-core</artifactId>
