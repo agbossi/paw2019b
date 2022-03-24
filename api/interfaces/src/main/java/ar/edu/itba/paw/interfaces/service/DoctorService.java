@@ -47,4 +47,12 @@ public interface DoctorService extends PaginationService<Doctor> {
     List<Doctor> getPaginatedDoctors(List<String> licenses, int page);
 
     int getMaxAvailableDoctorsPage(List<String> licenses);
+
+    List<Doctor> getFilteredDoctors(Location location, Specialty specialty,
+            String firstName, String lastName, Prepaid prepaid, int consultPrice, int page);
+
+
+    int getMaxAvailableDoctorsPageForSearch(Location location, Specialty specialty,
+                                            String firstName, String lastName,
+                                            Prepaid prepaid, int consultPrice);
 }

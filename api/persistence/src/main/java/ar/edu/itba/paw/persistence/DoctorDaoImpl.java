@@ -1,9 +1,9 @@
 package ar.edu.itba.paw.persistence;
 
+import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
 import ar.edu.itba.paw.interfaces.dao.DoctorDao;
-import ar.edu.itba.paw.model.Doctor;
-import ar.edu.itba.paw.model.Specialty;
-import ar.edu.itba.paw.model.User;
+import ar.edu.itba.paw.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -19,6 +19,9 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    private DoctorClinicDao doctorClinicDao;
 
     private static final int MAX_DOCTORS_PER_PAGE_ADMIN = 9;
     private static final int MAX_DOCTORS_PER_PAGE_USER = 9;
@@ -56,6 +59,26 @@ public class DoctorDaoImpl implements DoctorDao {
         query.setParameter("filteredLicenses", ids);
 
         return query.getResultList();
+    }
+
+    @Override
+    public List<Doctor> getDoctorsByLicenses(List<String> licenses) {
+        final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor where doctor.license " +
+                "IN (:filteredLicenses) order by " +
+                "doctor.user.firstName, doctor.user.lastName, doctor.license",Doctor.class);
+        query.setParameter("filteredLicenses", licenses);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public int maxAvailableDoctorsPageForSearch(Location location, Specialty specialty,
+                                                String firstName, String lastName,
+                                                Prepaid prepaid, int consultPrice) {
+
+        List<String> licenses = doctorClinicDao.getIdsForSearch(location, specialty,
+                firstName, lastName, prepaid, consultPrice, -1);
+        return (int) (Math.ceil(( ((double)licenses.size()) / (double)MAX_DOCTORS_PER_PAGE_USER)));
     }
 
     @Override

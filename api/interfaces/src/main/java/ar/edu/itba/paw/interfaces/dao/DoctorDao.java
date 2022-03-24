@@ -25,4 +25,10 @@ public interface DoctorDao extends PaginationDao<Doctor> {
     List<Doctor> getPaginatedDoctorsInList(List<String> licenses, int page);
 
     int maxAvailableDoctorsInListPage(List<String> licenses);
+
+    int maxAvailableDoctorsPageForSearch(Location location, Specialty specialty,
+                                         String firstName, String lastName,
+                                         Prepaid prepaid, int consultPrice);
+
+    List<Doctor> getDoctorsByLicenses(List<String> licenses);
 }

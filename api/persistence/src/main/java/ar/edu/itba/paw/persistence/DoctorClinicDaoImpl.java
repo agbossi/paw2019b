@@ -1,18 +1,25 @@
 package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.DoctorClinicDao;
+import ar.edu.itba.paw.interfaces.dao.DoctorDao;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.DoctorClinicKey;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class DoctorClinicDaoImpl implements DoctorClinicDao {
+
+    @Autowired
+    private DoctorDao doctorDao;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -63,6 +70,35 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     }
 
     @Override
+    public List<String> getIdsForSearch(final Location location, final Specialty specialty,
+                                        final String firstName, final String lastName, final Prepaid prepaid,
+                                        final int consultPrice, int page) {
+        DoctorQueryBuilder builder = new DoctorQueryBuilder();
+        builder.buildNativeQuery(location.getLocationName(), specialty.getSpecialtyName(), firstName, lastName, prepaid.getName(), consultPrice);
+
+        Query idsQuery = entityManager.createNativeQuery(builder.getQuery());
+        //TypedQuery<DoctorClinicKey> idsQuery = entityManager.createQuery(builder.getQuery(),DoctorClinicKey.class);
+        Map<Integer, String> positionalParameters = builder.getPositionalParameters();
+        for(int i = 0; i < positionalParameters.size(); i++) {
+            idsQuery.setParameter(i, positionalParameters.get(i));
+        }
+
+        @SuppressWarnings("unchecked")
+        List<String> ids = page >= 0 ? idsQuery.setFirstResult(page * MAX_DOCTORS_CLINICS_PER_PAGE)
+                .setMaxResults(MAX_DOCTORS_CLINICS_PER_PAGE).getResultList() : idsQuery.getResultList();
+        return ids;
+    }
+
+    @Override
+    public List<Doctor> getFilteredDoctors(final Location location, final Specialty specialty,
+                                           final String firstName, final String lastName, final Prepaid prepaid,
+                                           final int consultPrice, int page){
+        List<String> ids = this.getIdsForSearch(location, specialty,
+                firstName, lastName, prepaid, consultPrice, page);
+        return doctorDao.getDoctorsByLicenses(ids);
+    }
+
+    @Override
     public List<DoctorClinic> getFilteredDoctors(final Location location, final Specialty specialty,
                                                  final String firstName, final String lastName, final Prepaid prepaid,
                                                  final int consultPrice){
@@ -93,13 +129,23 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
     @Override
     public List<DoctorClinic> getDoctorClinicPaginatedByList(Doctor doctor, int page) {
-        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc "  +
-                " where dc.doctor.license = :doctorLicense",DoctorClinic.class);
-        query.setParameter("doctorLicense", doctor.getLicense());
-        return query
-                .setFirstResult(page * MAX_DOCTORS_CLINICS_PER_PAGE)
+
+        TypedQuery<DoctorClinicKey> idsQuery = entityManager.createQuery("from DoctorClinic as dc "  +
+                " where dc.doctor.license = :doctorLicense",DoctorClinicKey.class);
+        idsQuery.setParameter("doctorLicense", doctor.getLicense());
+
+        List<DoctorClinicKey> ids = idsQuery.setFirstResult(page * MAX_DOCTORS_CLINICS_PER_PAGE)
                 .setMaxResults(MAX_DOCTORS_CLINICS_PER_PAGE)
                 .getResultList();
+
+        if(ids.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        TypedQuery<DoctorClinic> query = entityManager.createQuery("from DoctorClinic as dc where " +
+                "dc.doctorClinicKey IN (:filteredDoctorClinic)", DoctorClinic.class);
+        query.setParameter("filteredDoctorClinic", ids);
+        return query.getResultList();
     }
 
     @Override

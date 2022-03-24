@@ -135,6 +135,24 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    public List<Doctor> getFilteredDoctors(Location location, Specialty specialty,
+                                           String firstName, String lastName,
+                                           Prepaid prepaid, int consultPrice,
+                                           int page) {
+
+        return doctorClinicService.getFilteredDoctors(location, specialty,
+                firstName, lastName, prepaid, consultPrice, page);
+    }
+
+    @Override
+    public int getMaxAvailableDoctorsPageForSearch(Location location, Specialty specialty,
+                                                   String firstName, String lastName,
+                                                   Prepaid prepaid, int consultPrice) {
+        return doctorDao.maxAvailableDoctorsPageForSearch(location, specialty,
+                firstName, lastName, prepaid, consultPrice);
+    }
+
+    @Override
     public List<String> getFilteredLicenses(Location location, Specialty specialty,
                                                      String firstName, String lastName,
                                                      Prepaid prepaid, int consultPrice, boolean includeUnavailable) {

@@ -83,7 +83,6 @@ public class DoctorController {
      * @param firstName
      * @param lastName
      * @param consultPrice
-     * @param includeUnavailable
      * @param prepaid
      * @return list of Doctors
      */
@@ -96,17 +95,29 @@ public class DoctorController {
             @QueryParam("firstName") @DefaultValue("") final String firstName,
             @QueryParam("lastName") @DefaultValue("") final String lastName,
             @QueryParam("consultPrice") @DefaultValue("0") final Integer consultPrice,
-            @QueryParam("includeUnavailables") @DefaultValue("false") final Boolean includeUnavailable,
             @QueryParam("prepaid") @DefaultValue("") final String prepaid,
             @Context Request request) {
 
         page = (page < 0) ? 0 : page;
 
-        List<String> licenses = doctorService.getFilteredLicenses(new Location(location), new Specialty(specialty),
-                firstName, lastName, new Prepaid(prepaid), consultPrice, includeUnavailable);
-        int maxAvailablePage = doctorService.getMaxAvailableDoctorsPage(licenses);
+        List<Doctor> doctors = doctorService.getFilteredDoctors(new Location(location), new Specialty(specialty),
+                firstName, lastName, new Prepaid(prepaid), consultPrice, page);
 
-        return getPaginatedDoctorsResponse(licenses, page, request, maxAvailablePage-1);
+        int maxAvailablePage = doctorService.getMaxAvailableDoctorsPageForSearch(new Location(location), new Specialty(specialty),
+                firstName, lastName, new Prepaid(prepaid), consultPrice);
+
+        List<DoctorDto> doctorsDtos = doctors.stream()
+                .map(d -> DoctorDto.fromDoctor(d, uriInfo))
+                .collect(Collectors.toList());
+
+        return CacheHelper.handleResponse(doctorsDtos, doctorCaching, new GenericEntity<List<DoctorDto>>(doctorsDtos) {},
+                "doctors", request)
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxAvailablePage).build(),"last")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
+                .build();
+
     }
 
     /**
@@ -121,10 +132,19 @@ public class DoctorController {
                                            @Context Request request) {
         page = (page < 0) ? 0 : page;
 
-        List<String> licenses = doctorService.getDoctors().stream().map(Doctor::getLicense).collect(Collectors.toList());
-        int maxAvailablePage = doctorService.getMaxAvailableDoctorsPage(licenses);
+        List<DoctorDto> doctorsDtos = doctorService.getPaginatedObjects(page)
+                .stream()
+                .map(d -> DoctorDto.fromDoctor(d, uriInfo))
+                .collect(Collectors.toList());
+        int maxAvailablePage = doctorService.maxAvailablePage();
 
-        return getPaginatedDoctorsResponse(licenses, page, request, maxAvailablePage-1);
+        return CacheHelper.handleResponse(doctorsDtos, doctorCaching, new GenericEntity<List<DoctorDto>>(doctorsDtos) {},
+                "doctors", request)
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxAvailablePage).build(),"last")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
+                .build();
     }
 
     /**

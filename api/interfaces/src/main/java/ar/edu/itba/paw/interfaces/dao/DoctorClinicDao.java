@@ -27,4 +27,12 @@ public interface DoctorClinicDao {
         int maxPageAvailable();
 
         void editPrice(DoctorClinic dc, int price);
+
+        List<Doctor> getFilteredDoctors(Location location, Specialty specialty,
+                                        String firstName,String lastName,
+                                        Prepaid prepaid,int consultPrice, int page);
+
+        List<String> getIdsForSearch(final Location location, final Specialty specialty,
+                                     final String firstName, final String lastName, final Prepaid prepaid,
+                                     final int consultPrice, int page);
 }

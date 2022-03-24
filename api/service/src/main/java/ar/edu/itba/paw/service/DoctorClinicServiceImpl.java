@@ -104,6 +104,14 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
     }
 
     @Override
+    public List<Doctor> getFilteredDoctors(Location location, Specialty specialty,
+                                           String firstName, String lastName,
+                                           Prepaid prepaid, int consultPrice, int page) {
+        return doctorClinicDao.getFilteredDoctors(location, specialty, firstName,
+                lastName, prepaid, consultPrice, page);
+    }
+
+    @Override
     public List<DoctorClinic> getFilteredDoctorClinics(Location location, Specialty specialty,
                                    String firstName, String lastName,
                                    Prepaid prepaid, int consultPrice) {
