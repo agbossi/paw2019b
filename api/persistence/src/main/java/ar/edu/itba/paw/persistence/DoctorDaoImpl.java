@@ -63,6 +63,11 @@ public class DoctorDaoImpl implements DoctorDao {
 
     @Override
     public List<Doctor> getDoctorsByLicenses(List<String> licenses) {
+
+        if(licenses.isEmpty()) {
+            return Collections.emptyList();
+        }
+
         final TypedQuery<Doctor> query = entityManager.createQuery("from Doctor as doctor where doctor.license " +
                 "IN (:filteredLicenses) order by " +
                 "doctor.user.firstName, doctor.user.lastName, doctor.license",Doctor.class);

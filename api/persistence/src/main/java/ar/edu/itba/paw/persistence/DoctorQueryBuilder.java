@@ -7,7 +7,7 @@ public class DoctorQueryBuilder {
 
     private String query;
 
-    private Map<Integer, String> positionalParameters;
+    private Map<Integer, Object> positionalParameters;
 
     public void buildNativeQuery(String location, String specialty, String firstName,
                                  String lastName, String prepaid, int consultPrice){
@@ -16,34 +16,34 @@ public class DoctorQueryBuilder {
         int position = 0;
 
         if(!(location.equals(""))){
-            query.append("clinics.location = ?1 and ");
+            query.append("clinics.location = ?").append(position).append(" and ");
             positionalParameters.put(position++, location);
         }
         if(!(specialty.equals(""))){
-            query.append("doctors.specialty = ?2 and ");
+            query.append("doctors.specialty = ?").append(position).append(" and ");
             positionalParameters.put(position++, specialty);
         }
         if(!(firstName.equals(""))){
-            query.append("users.firstName = ?3 and ");
+            query.append("users.firstName = ?").append(position).append(" and ");
             positionalParameters.put(position++, firstName);
         }
         if(!(lastName.equals(""))){
-            query.append("users.lastName = ?4 and ");
+            query.append("users.lastName = ?").append(position).append(" and ");
             positionalParameters.put(position++, lastName);
         }
         if(!(prepaid.equals(""))){
-            query.append("clinicPrepaids.prepaid = ?5");
+            query.append("clinicPrepaids.prepaid = ?").append(position);
             positionalParameters.put(position, prepaid);
         } else if(consultPrice > 0){
-            query.append("doctorclinics.consultPrice <= ?6");
-            positionalParameters.put(position, String.valueOf(consultPrice));
+            query.append("doctorclinics.consultPrice <= ?").append(position);
+            positionalParameters.put(position, consultPrice);
         } else {
             query.append("1=1");
         }
         this.query = query.toString();
     }
 
-    public Map<Integer, String> getPositionalParameters() { return positionalParameters; }
+    public Map<Integer, Object> getPositionalParameters() { return positionalParameters; }
 
     public void buildQuery(String location, String specialty, String firstName, String lastName, String prepaid, int consultPrice){
         StringBuilder query = new StringBuilder("select doctorCli from DoctorClinic as doctorCli inner join doctorCli.clinic.prepaids as p where ");

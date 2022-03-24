@@ -78,7 +78,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
 
         Query idsQuery = entityManager.createNativeQuery(builder.getQuery());
         //TypedQuery<DoctorClinicKey> idsQuery = entityManager.createQuery(builder.getQuery(),DoctorClinicKey.class);
-        Map<Integer, String> positionalParameters = builder.getPositionalParameters();
+        Map<Integer, Object> positionalParameters = builder.getPositionalParameters();
         for(int i = 0; i < positionalParameters.size(); i++) {
             idsQuery.setParameter(i, positionalParameters.get(i));
         }
