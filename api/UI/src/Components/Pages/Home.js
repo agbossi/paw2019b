@@ -12,9 +12,6 @@ import {useTranslation} from "react-i18next";
 function Home(props) {
     const [searchParams, setSearchParams] = useSearchParams()
     const [doctors, setDoctors] = useState([])
-    const [specialties, setSpecialties] = useState([])
-    const [locations, setLocations] = useState([])
-    const [prepaids, setPrepaids] = useState([])
     const [message, setMessage] = useState("")
     const [searchCriteria, setSearchCriteria] = useState(null)
     const [maxPage, setMaxPage] = useState(0)
@@ -129,6 +126,7 @@ function Home(props) {
                 </Col>
                 <Col xs={9}>
                     <Container>
+                        {doctors.length === 0 && !loading && <h4 className="m-3 no-fav">{t("USER.emptySearch")}</h4>}
                         <div className="admin-info-container search-doctor-container">
                             {doctors.map((doctor) => {
                                 return (

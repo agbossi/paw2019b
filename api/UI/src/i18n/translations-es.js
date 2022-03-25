@@ -17,7 +17,8 @@ export const TRANSLATION_ES = {
         fav: "Favoritos",
         doc: "Doctor: ",
         clinic: "Clínica: ",
-        patient: "Paciente: "
+        patient: "Paciente: ",
+        emptySearch: "No hay doctores con esos filtros"
     },
     ADMIN: {
         doctors: "Doctores",
@@ -48,6 +49,8 @@ export const TRANSLATION_ES = {
         addPrepaid: "Agregar Prepaga a Clínica",
     },
     FORM: {
+        clear: "Limpiar filtros",
+        price: "Precio de consulta",
         firstName: "Nombre",
         enterFirstName: "Ingrese nombre",
         lastName: "Apellido",

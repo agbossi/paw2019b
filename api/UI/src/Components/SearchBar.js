@@ -19,6 +19,11 @@ function SearchBar(props) {
     const [specialties, setSpecialties] = useState([])
     const [prepaids, setPrepaids] = useState([])
 
+    const [firstNameErrors, setFirstNameErrors] = useState([])
+    const [lastNameErrors, setLastNameErrors] = useState([])
+    const [priceErrors, setPriceErrors] = useState([])
+    const [invalidSearch, setInvalidSearch] = useState(false)
+
 
     const fetchLocations = async () => {
         const response = await LocationCalls.getAllLocations();
@@ -55,21 +60,37 @@ function SearchBar(props) {
         await fetchSpecialties();
     }, [])
 
-
     const onChange = (event) => {
         // eslint-disable-next-line default-case
+        let error = false
+        let errors = []
         switch (event.target.id) {
             case "firstName":
                 setFirstName(event.target.value)
+                if(event.target.value !== '' && !/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(event.target.value)) {
+                    errors.push(t("FORM.firstName") + "  " + t("errors.alphabetic"))
+                    error = true
+                }
+                setFirstNameErrors(errors)
                 break;
             case "lastName":
                 setLastName(event.target.value)
+                if(event.target.value !== '' && !/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(event.target.value)) {
+                    errors.push(t("FORM.lastName") + "  " + t("errors.alphabetic"))
+                    error = true
+                }
+                setLastNameErrors(errors)
                 break;
             case "consultPrice":
-                console.log(" sss " + event.target.value)
                 setConsultPrice(event.target.value)
+                if(event.target.value !== '' && !/^\d+$/.test(event.target.value)) {
+                    errors.push(t("FORM.price") + "  " + t("errors.numeric"))
+                    error = true
+                }
+                setPriceErrors(errors)
                 break;
         }
+        setInvalidSearch(error)
     }
 
     const handleSelectSpecialty = (specialty) => {
@@ -82,6 +103,15 @@ function SearchBar(props) {
 
     const handleSelectPrepaid = (prepaid) => {
         setSelectedPrepaid(prepaid)
+    }
+
+    const clearFilters = () => {
+        setSelectedLocation('-')
+        setSelectedPrepaid('-')
+        setSelectedSpecialty('-')
+        setConsultPrice('')
+        setFirstName('')
+        setLastName('')
     }
 
     return (
@@ -124,15 +154,45 @@ function SearchBar(props) {
                     <div className="list-group-item list-group-item-action">
                         <FormGroup className="mb-3" controlId="firstName">
                                     <Form.Label>{t("FORM.firstName")}</Form.Label>
-                                    <Form.Control placeholder="Enter first name" onChange={onChange}/>
-                                </FormGroup>
+                                    <Form.Control placeholder="Enter first name"
+                                                  value={firstName}
+                                                  onChange={onChange}/>
+                        </FormGroup>
+                        {firstNameErrors.length !== 0 && (
+                            <div className="form-group">
+                                <div className="alert alert-danger" role="alert">
+                                    <ul>
+                                        {firstNameErrors.map((error) => {
+                                            return (
+                                                <li>{error}</li>
+                                            )
+                                        })}
+                                    </ul>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <div className="list-group-item list-group-item-action">
                         <Form.Group className="mb-3" controlId="lastName">
                                     <Form.Label>{t("FORM.lastName")}</Form.Label>
-                                    <Form.Control placeholder="Enter last name" onChange={onChange}/>
-                                </Form.Group>
+                                    <Form.Control placeholder="Enter last name"
+                                                  value={lastName}
+                                                  onChange={onChange}/>
+                        </Form.Group>
+                        {lastNameErrors.length !== 0 && (
+                            <div className="form-group">
+                                <div className="alert alert-danger" role="alert">
+                                    <ul>
+                                        {lastNameErrors.map((error) => {
+                                            return (
+                                                <li>{error}</li>
+                                            )
+                                        })}
+                                    </ul>
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     <div className="list-group-item list-group-item-action">
@@ -140,13 +200,31 @@ function SearchBar(props) {
                             <Form.Label>{t("FORM.maxPrice")}</Form.Label>
                             <InputGroup className="mb-3">
                                 <InputGroup.Text>$</InputGroup.Text>
-                                <FormControl aria-label="Amount (to the nearest dollar)" onChange={onChange}/>
+                                <FormControl aria-label="Amount (to the nearest dollar)"
+                                             value={consultPrice}
+                                             onChange={onChange}/>
                                 <InputGroup.Text>.00</InputGroup.Text>
                             </InputGroup>
                         </FormGroup>
+                        {priceErrors.length !== 0 && (
+                            <div className="form-group">
+                                <div className="alert alert-danger" role="alert">
+                                    <ul>
+                                        {priceErrors.map((error) => {
+                                            return (
+                                                <li>{error}</li>
+                                            )
+                                        })}
+                                    </ul>
+                                </div>
+                            </div>
+                        )}
                     </div>
                     <div className="list-group-item list-group-item-action">
-                        <Button className="doc-button-color" onClick={() => props.handleSearch({
+                        <Button className="doc-button-color" onClick={() => clearFilters()}>
+                            {t("FORM.clear")}
+                        </Button>
+                        <Button disabled={invalidSearch} className="doc-button-color" onClick={() => props.handleSearch({
                                 firstName: firstName,
                                 lastName: lastName,
                                 location: selectedLocation === '-'? null : selectedLocation,

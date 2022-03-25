@@ -17,7 +17,8 @@ export const TRANSLATION_EN = {
         fav: "Favorites",
         doc: "Doctor: ",
         clinic: "Clinic: ",
-        patient: "Patient: "
+        patient: "Patient: ",
+        emptySearch: "No doctors with those filters"
     },
     ADMIN: {
         doctors: "Doctors",
@@ -49,6 +50,8 @@ export const TRANSLATION_EN = {
         edit: "Edit Profile"
     },
     FORM: {
+        clear: "Clear filters",
+        price: "Consult price",
         firstName: "First Name",
         enterFirstName: "Enter first name",
         lastName: "Last Name",
