@@ -130,7 +130,7 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     @Override
     public List<DoctorClinic> getDoctorClinicPaginatedByList(Doctor doctor, int page) {
 
-        TypedQuery<DoctorClinicKey> idsQuery = entityManager.createQuery("from DoctorClinic as dc "  +
+        TypedQuery<DoctorClinicKey> idsQuery = entityManager.createQuery("select dc.doctorClinicKey from DoctorClinic as dc "  +
                 " where dc.doctor.license = :doctorLicense",DoctorClinicKey.class);
         idsQuery.setParameter("doctorLicense", doctor.getLicense());
 
