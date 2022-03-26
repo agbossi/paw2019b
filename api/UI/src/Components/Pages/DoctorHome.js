@@ -26,12 +26,13 @@ function DoctorHome(props) {
         if (email) {
             const response = await DoctorCalls.getDocByEmail(email)
             if (response && response.ok) {
-                setDoctor(response.data)
-                localStorage.setItem('license', response.data.license)
-                localStorage.setItem('firstName', response.data.userData.firstName)
-                localStorage.setItem('lastName', response.data.userData.lastName)
-                localStorage.setItem('specialty', response.data.specialty)
-                localStorage.setItem('phone', response.data.phoneNumber)
+                let doctor = response.data[0]
+                setDoctor(doctor)
+                localStorage.setItem('license', doctor.license)
+                localStorage.setItem('firstName', doctor.userData.firstName)
+                localStorage.setItem('lastName', doctor.userData.lastName)
+                localStorage.setItem('specialty', doctor.specialty)
+                localStorage.setItem('phone', doctor.phoneNumber)
             }
             if (response.status === 404)
                 setMessage("errors.noDocEmail")

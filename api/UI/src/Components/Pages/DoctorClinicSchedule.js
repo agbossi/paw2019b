@@ -18,8 +18,10 @@ function DoctorClinicSchedule(props) {
     let {license} = useParams()
 
     const fetchDoctor = async () => {
-        const email = localStorage.getItem('email');
-        const response = await DoctorCalls.getDocByEmail(email);
+        //const email = localStorage.getItem('email');
+        //const response = await DoctorCalls.getDocByEmail(email);
+        const response = await DoctorCalls.getDocByLicense(license);
+        console.log('es doc by license?')
         if (response && response.ok) {
             setDoctor(response.data);
             setMessage("")

@@ -30,6 +30,8 @@ public interface DoctorClinicService {
 
     int maxAvailablePage();
 
+    int maxPageAvailableForDoctor(Doctor doctor);
+
     List<Doctor> getFilteredDoctors(Location location, Specialty specialty, String firstName,
                                     String lastName, Prepaid prepaid, int consultPrice, int page);
 

@@ -154,6 +154,11 @@ public class DoctorClinicDaoImpl implements DoctorClinicDao {
     }
 
     @Override
+    public int maxPageAvailableForDoctor(Doctor doctor) {
+        return (int) (Math.ceil(( ((double)getDoctorClinicsForDoctor(doctor).size()) / (double)MAX_DOCTORS_CLINICS_PER_PAGE)));
+    }
+
+    @Override
     public void editPrice(DoctorClinic dc, int price) {
         Query query = entityManager.createQuery("update DoctorClinic dc set dc.consultPrice = :newPrice " +
                 "where dc.clinic.id = :id and dc.doctor.license = :license");

@@ -23,8 +23,8 @@ public class DoctorDaoImpl implements DoctorDao {
     @Autowired
     private DoctorClinicDao doctorClinicDao;
 
-    private static final int MAX_DOCTORS_PER_PAGE_ADMIN = 9;
-    private static final int MAX_DOCTORS_PER_PAGE_USER = 9;
+    private static final int MAX_DOCTORS_PER_PAGE_ADMIN = 6;
+    private static final int MAX_DOCTORS_PER_PAGE_USER = 6;
 
     @Override
     public Doctor createDoctor(final Specialty specialty, final String license, final String phoneNumber, User user){

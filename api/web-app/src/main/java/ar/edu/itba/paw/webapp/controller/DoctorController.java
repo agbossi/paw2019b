@@ -25,6 +25,8 @@ import javax.ws.rs.core.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.Valid;
@@ -96,15 +98,17 @@ public class DoctorController {
             @QueryParam("lastName") @DefaultValue("") final String lastName,
             @QueryParam("consultPrice") @DefaultValue("0") final Integer consultPrice,
             @QueryParam("prepaid") @DefaultValue("") final String prepaid,
+            @QueryParam("email") @DefaultValue("") final String email,
+            @QueryParam("mode") @DefaultValue("search") final String mode,
             @Context Request request) {
 
         page = (page < 0) ? 0 : page;
+        List<Doctor> doctors = doctorService.handleDoctorSearch(new Location(location), new Specialty(specialty),
+                firstName, lastName, new Prepaid(prepaid), consultPrice, email, mode, page);
 
-        List<Doctor> doctors = doctorService.getFilteredDoctors(new Location(location), new Specialty(specialty),
-                firstName, lastName, new Prepaid(prepaid), consultPrice, page);
-
-        int maxAvailablePage = doctorService.getMaxAvailableDoctorsPageForSearch(new Location(location), new Specialty(specialty),
-                firstName, lastName, new Prepaid(prepaid), consultPrice);
+        int maxAvailablePage = doctorService.handleDoctorSearchMaxPage(new Location(location),
+                new Specialty(specialty), firstName, lastName, new Prepaid(prepaid),
+                consultPrice, email, mode, page);
 
         List<DoctorDto> doctorsDtos = doctors.stream()
                 .map(d -> DoctorDto.fromDoctor(d, uriInfo))
@@ -120,12 +124,7 @@ public class DoctorController {
 
     }
 
-    /**
-     * Returns paginated list of doctors for ADMIN to manage.
-     * @param page
-     * @return list of Doctors
-     */
-    @GET
+   /* @GET
     @Path("/all")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getAllDoctorsPaginated(@QueryParam("page") @DefaultValue("0") Integer page,
@@ -145,7 +144,7 @@ public class DoctorController {
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
                 .build();
-    }
+    } */
 
     /**
      * Lets USER access doctor's information
@@ -351,14 +350,14 @@ public class DoctorController {
         final List<DoctorClinicDto> doctorClinics = doctorClinicService.getPaginatedDoctorsClinics(doctor, page)
                 .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo))
                 .collect(Collectors.toList());
-        int max = doctorClinicService.maxAvailablePage();
+        int max = doctorClinicService.maxPageAvailableForDoctor(doctor);
         return CacheHelper.handleResponse(doctorClinics, doctorClinicCaching,
                 new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {},
                 "doctorsClinics", request)
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", max-1).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
+                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
                 .build();
     }
 
@@ -547,7 +546,7 @@ public class DoctorController {
 
     }
 
-    private Response getPaginatedDoctorsResponse(List<String> licenses, int page, Request request, int max) {
+    /* private Response getPaginatedDoctorsResponse(List<String> licenses, int page, Request request, int max) {
 
         List<DoctorDto> doctors = doctorService.getPaginatedDoctors(licenses, page)
                 .stream().map(d -> DoctorDto.fromDoctor(d, uriInfo)).collect(Collectors.toList());
@@ -559,5 +558,5 @@ public class DoctorController {
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
                 .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
                 .build();
-    }
+    } */
 }

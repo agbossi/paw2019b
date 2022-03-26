@@ -140,4 +140,7 @@ public class DoctorClinicServiceImpl implements DoctorClinicService {
         return doctorClinicDao.maxPageAvailable();
     }
 
+    @Override
+    public int maxPageAvailableForDoctor(Doctor doctor) { return doctorClinicDao.maxPageAvailableForDoctor(doctor); }
+
 }

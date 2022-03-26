@@ -193,9 +193,7 @@ public class DoctorServiceImpl implements DoctorService {
             return Collections.emptyList();
         }
 
-        //not inline for debugging purposes
-        List<Doctor> doctors = doctorDao.getPaginatedDoctorsInList(licenses, page);
-        return doctors;
+        return doctorDao.getPaginatedDoctorsInList(licenses, page);
     }
 
     @Override
@@ -209,6 +207,38 @@ public class DoctorServiceImpl implements DoctorService {
             return Collections.emptyList();
         }
         return doctorDao.getPaginatedObjects(page);
+    }
+
+    @Override
+    public List<Doctor> handleDoctorSearch(Location location, Specialty specialty,
+                                           String firstName, String lastName, Prepaid prepaid,
+                                           int consultPrice, String email, String mode, int page) {
+        List<Doctor> doctors;
+        if(mode.equals("all")) {
+            doctors = this.getPaginatedObjects(page);
+        } else if(mode.equals("one") && !email.equals("")) {
+            doctors = Collections.singletonList(this.getDoctorByEmail(email));
+        } else {
+            doctors = this.getFilteredDoctors(location, specialty,
+                    firstName, lastName, prepaid, consultPrice, page);
+        }
+        return doctors;
+    }
+
+    @Override
+    public int handleDoctorSearchMaxPage(Location location, Specialty specialty,
+                                        String firstName, String lastName, Prepaid prepaid,
+                                        int consultPrice, String email, String mode, int page) {
+        int maxAvailablePage;
+        if(mode.equals("all")) {
+            maxAvailablePage = this.maxAvailablePage();
+        } else if(mode.equals("one")) {
+            maxAvailablePage = 1;
+        } else {
+            maxAvailablePage = this.getMaxAvailableDoctorsPageForSearch(location, specialty,
+                    firstName, lastName, prepaid, consultPrice);
+        }
+        return maxAvailablePage;
     }
 
     @Override
