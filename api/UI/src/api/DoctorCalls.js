@@ -51,6 +51,10 @@ const addSchedule = async (license, clinicId, day, hour) => api.post(
     },
     {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
 )
+
+const getAvailableAppointments = async (license) => api.get(
+    cons.DOCTORS_PATH + '/' + license + cons.APPOINTMENT_PATH);
+
 const deleteSchedule = async (license, clinicId, day, hour) => api.delete(
     cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinicId + "/schedules"
     + "?" + cons.DAY_QUERY + day + "&" + cons.HOUR_QUERY + hour,
@@ -105,4 +109,5 @@ export default {
     getSchedule,
     addSchedule,
     deleteSchedule,
+    getAvailableAppointments
 }

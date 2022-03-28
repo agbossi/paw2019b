@@ -3,7 +3,7 @@ import DoctorCalls from "../../api/DoctorCalls";
 import ClinicCalls from "../../api/ClinicCalls";
 import {Button, Card, Container, Row} from "react-bootstrap";
 import {useTranslation} from "react-i18next";
-import Utils from "../../Utils";
+import Utils from "../../utils/paginationHelper";
 import {Link, useNavigate} from "react-router-dom";
 import DoctorClinicAddModal from "../Modals/DoctorClinicAddModal";
 import EditPriceModal from "../Modals/EditPriceModal";

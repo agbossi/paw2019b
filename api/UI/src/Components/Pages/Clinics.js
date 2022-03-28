@@ -4,7 +4,7 @@ import '../CardContainer.css'
 import ClinicEditModal from "../Modals/ClinicEditModal";
 import {Link, useNavigate} from "react-router-dom";
 import ClinicCalls from "../../api/ClinicCalls";
-import Utils from "../../Utils";
+import Utils from "../../utils/paginationHelper";
 import LocationCalls from "../../api/LocationCalls";
 import {useTranslation} from "react-i18next";
 import "../../i18n/i18n";

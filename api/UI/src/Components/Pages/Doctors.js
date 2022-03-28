@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {Button, Card, Container} from "react-bootstrap";
 import '../CardContainer.css'
-import Utils from "../../Utils";
+import Utils from "../../utils/paginationHelper";
 import DoctorAddModal from "../Modals/DoctorAddModal";
 import DoctorCalls from "../../api/DoctorCalls";
 import SpecialtyCalls from "../../api/SpecialtyCalls";

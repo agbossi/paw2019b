@@ -3,7 +3,7 @@ import {useTranslation} from "react-i18next";
 import {useNavigate} from "react-router-dom";
 import AppointmentCalls from "../../api/AppointmentCalls";
 import {Button, Card, Container, Row} from "react-bootstrap";
-import Utils from "../../Utils";
+import Utils from "../../utils/paginationHelper";
 import './Favorites.css'
 import {dateToString, getMonth, getWeekDate} from "../../utils/dateHelper";
 

@@ -12,6 +12,7 @@ import ar.edu.itba.paw.webapp.caching.AppointmentCaching;
 import ar.edu.itba.paw.webapp.dto.AppointmentDto;
 import ar.edu.itba.paw.webapp.form.AppointmentForm;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
+import ar.edu.itba.paw.webapp.helpers.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
@@ -30,12 +31,6 @@ public class AppointmentController {
 
     @Autowired
     private AppointmentService appointmentService;
-
-    @Autowired
-    private ClinicService clinicService;
-
-    @Autowired
-    private DoctorService doctorService;
 
     @Autowired
     private AppointmentCaching appointmentCaching;
@@ -65,40 +60,11 @@ public class AppointmentController {
                 .stream().map(appointment -> AppointmentDto.fromAppointment(appointment, uriInfo))
                 .collect(Collectors.toList());
 
-        int maxPage = appointmentService.getMaxAvailablePage(user);
-        return CacheHelper.handleResponse(appointments, appointmentCaching,
-                new GenericEntity<List<AppointmentDto>>(appointments) {}, "appointments",
-                request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
-                .build();
+        int maxPage = appointmentService.getMaxAvailablePage(user) - 1;
 
-
-    }
-
-    /**
-     * Returns a list of all available Appointments from today to 9 weeks in the future, to check doctor's
-     * availability
-     * @param license
-     * @return List of Appointments
-     * @throws EntityNotFoundException
-     */
-    @GET
-    @Path("available/{license}")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getDoctorAvailableAppointments(@PathParam("license") final String license,
-                                                   @Context Request request) throws EntityNotFoundException {
-        Doctor doc = doctorService.getDoctorByLicense(license);
-        if (doc == null) throw new EntityNotFoundException("doctor");
-
-        List<AppointmentDto> appointments = appointmentService.getDoctorsAvailableAppointments(doc)
-                .stream().map(appointment -> AppointmentDto.fromAppointment(appointment, uriInfo))
-                .collect(Collectors.toList());
-        return CacheHelper.handleResponse(appointments, appointmentCaching,
-                new GenericEntity<List<AppointmentDto>>(appointments) {}, "appointments",
-                request).build();
+        return PaginationHelper.handlePagination(page, maxPage, "appointments",
+                uriInfo, appointments, appointmentCaching,
+                new GenericEntity<List<AppointmentDto>>(appointments) {}, request);
     }
 
     /**
@@ -115,10 +81,10 @@ public class AppointmentController {
      * @throws RequestEntityNotFoundException
      */
     @DELETE
-    @Path("{email}")
+    @Path("{user}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#email, 'user')")
-    public Response cancelAppointment(@PathParam("email") final String email,
+    public Response cancelAppointment(@PathParam("user") final String email,
                                       @QueryParam("clinic") final Integer clinic,
                                       @QueryParam("license") final String license,
                                       @QueryParam("year") final Integer year,
@@ -133,7 +99,7 @@ public class AppointmentController {
 
     }
 
-    @GET
+    /* @GET
     @Path("{userId}/{clinicId}")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#email, 'user')")
@@ -170,7 +136,7 @@ public class AppointmentController {
         return Response.noContent().build();
 
 
-    }
+    } */
 
 
     /**
@@ -188,6 +154,6 @@ public class AppointmentController {
                 form.getPatient(), form.getYear(), form.getMonth(), form.getDay(),
                 form.getTime());
         return Response.created(uriInfo.getAbsolutePathBuilder().path(form.getPatient())
-                .path(String.valueOf(form.getClinic())).build()).build();
+                .build()).build();
     }
 }

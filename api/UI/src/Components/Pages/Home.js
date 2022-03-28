@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import SearchBar from "../SearchBar";
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import {Link, useSearchParams} from "react-router-dom";
-import Utils from "../../Utils";
+import Utils from "../../utils/paginationHelper";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DoctorCalls from "../../api/DoctorCalls";
 import './home.css'

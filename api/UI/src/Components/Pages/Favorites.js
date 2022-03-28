@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {useTranslation} from "react-i18next";
 import PatientCalls from "../../api/PatientCalls";
-import Utils from "../../Utils";
+import Utils from "../../utils/paginationHelper";
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import {Link, useNavigate} from "react-router-dom";
 import './Favorites.css'

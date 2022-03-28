@@ -3,10 +3,7 @@ package ar.edu.itba.paw.webapp.controller;
 import ar.edu.itba.paw.interfaces.service.*;
 import ar.edu.itba.paw.model.*;
 import ar.edu.itba.paw.model.exceptions.*;
-import ar.edu.itba.paw.webapp.caching.DoctorCaching;
-import ar.edu.itba.paw.webapp.caching.DoctorClinicCaching;
-import ar.edu.itba.paw.webapp.caching.ImageCaching;
-import ar.edu.itba.paw.webapp.caching.ScheduleCaching;
+import ar.edu.itba.paw.webapp.caching.*;
 import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
@@ -68,6 +65,12 @@ public class DoctorController {
 
     @Autowired
     private ScheduleCaching scheduleCaching;
+
+    @Autowired
+    private AppointmentCaching appointmentCaching;
+
+    @Autowired
+    private AppointmentService appointmentService;
 
     @Context
     private UriInfo uriInfo;
@@ -483,5 +486,29 @@ public class DoctorController {
                 dc.getClinic().getId());
         return Response.created(uriInfo.getAbsolutePath()).build();
 
+    }
+
+    /**
+     * Returns a list of all available Appointments from today to 9 weeks in the future, to check doctor's
+     * availability
+     * @param license
+     * @return List of Appointments
+     * @throws EntityNotFoundException
+     */
+    @GET
+    @Path("/{license}/appointments")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAvailableAppointments(@PathParam("license") final String license,
+                                             @Context Request request) throws EntityNotFoundException {
+        Doctor doc = doctorService.getDoctorByLicense(license);
+        if (doc == null) throw new EntityNotFoundException("doctor");
+
+        List<AppointmentDto> appointments = appointmentService.getDoctorsAvailableAppointments(doc)
+                .stream().map(appointment -> AppointmentDto.fromAppointment(appointment, uriInfo))
+                .collect(Collectors.toList());
+        return CacheHelper.handleResponse(appointments, appointmentCaching,
+                new GenericEntity<List<AppointmentDto>>(appointments) {}, "appointments",
+                request).build();
     }
 }

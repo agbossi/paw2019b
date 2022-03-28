@@ -1,7 +1,7 @@
 import React, {Component, useEffect, useState} from 'react';
 import {Button, Card, Container} from "react-bootstrap";
 import '../CardContainer.css'
-import Utils from "../../Utils";
+import Utils from "../../utils/paginationHelper";
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
 import LocationCalls from "../../api/LocationCalls";
 import {useNavigate} from "react-router-dom";

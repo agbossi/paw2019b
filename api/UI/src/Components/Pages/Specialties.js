@@ -3,7 +3,7 @@ import {Button, Card, Container, Modal} from "react-bootstrap";
 import '../CardContainer.css'
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
 import {useNavigate} from "react-router-dom";
-import Utils from "../../Utils";
+import Utils from "../../utils/paginationHelper";
 import SpecialtyCalls from "../../api/SpecialtyCalls";
 import {useTranslation} from "react-i18next";
 import "../../i18n/i18n"

@@ -4,7 +4,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import ClinicPrepaidAddModal from "../Modals/ClinicPrepaidAddModal";
 import ClinicCalls from "../../api/ClinicCalls";
-import Utils from "../../Utils";
+import Utils from "../../utils/paginationHelper";
 import PrepaidCalls from "../../api/PrepaidCalls";
 import {useTranslation} from "react-i18next";
 import "../../i18n/i18n"

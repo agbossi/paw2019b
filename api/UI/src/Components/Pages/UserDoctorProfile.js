@@ -36,7 +36,7 @@ function UserDoctorProfile(props) {
     }
 
     const fetchAvailableAppointments = async () => {
-        const response = await AppointmentCalls.getAvailableAppointments(license);
+        const response = await DoctorCalls.getAvailableAppointments(license);
         if (response && response.ok) {
             setAvailable(response.data)
             setMessage("")

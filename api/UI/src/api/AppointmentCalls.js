@@ -1,9 +1,6 @@
 import api from "./index";
 import * as cons from './Constants.js'
 
-const getAvailableAppointments = async (license) => api.get(
-    cons.APPOINTMENT_PATH + cons.AVAILABLE_PATH + '/' + license);
-
 const makeAppointment = async (data) => api.post(
     cons.APPOINTMENT_PATH,
     data,
@@ -27,7 +24,6 @@ const deleteQueryParams = (license, clinic, year, month, day, time) => {
         cons.MONTH_QUERY + month + '&' + cons.DAY_QUERY + day + '&' + cons.TIME_QUERY + time;
 }
 export default {
-    getAvailableAppointments,
     makeAppointment,
     getAppointment,
     deleteAppointment

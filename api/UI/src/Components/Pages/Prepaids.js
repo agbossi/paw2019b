@@ -1,7 +1,7 @@
 import React, {Component, useEffect, useState} from 'react';
 import {Button, Card, Container, Modal} from "react-bootstrap";
 import '../CardContainer.css'
-import Utils from "../../Utils";
+import Utils from "../../utils/paginationHelper";
 import SinglePropertyAddModal from "../Modals/SinglePropertyAddModal";
 import {useNavigate} from "react-router-dom";
 import PrepaidCalls from "../../api/PrepaidCalls";
