@@ -36,3 +36,4 @@ public interface DoctorClinicService {
                                     String lastName, Prepaid prepaid, int consultPrice, int page);
 
 }
+

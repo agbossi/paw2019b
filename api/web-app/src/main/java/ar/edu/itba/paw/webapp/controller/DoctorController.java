@@ -10,6 +10,7 @@ import ar.edu.itba.paw.webapp.caching.ScheduleCaching;
 import ar.edu.itba.paw.webapp.dto.*;
 import ar.edu.itba.paw.webapp.form.*;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
+import ar.edu.itba.paw.webapp.helpers.PaginationHelper;
 import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
 import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -108,43 +109,16 @@ public class DoctorController {
 
         int maxAvailablePage = doctorService.handleDoctorSearchMaxPage(new Location(location),
                 new Specialty(specialty), firstName, lastName, new Prepaid(prepaid),
-                consultPrice, email, mode, page);
+                consultPrice, email, mode, page) - 1;
 
         List<DoctorDto> doctorsDtos = doctors.stream()
                 .map(d -> DoctorDto.fromDoctor(d, uriInfo))
                 .collect(Collectors.toList());
 
-        return CacheHelper.handleResponse(doctorsDtos, doctorCaching, new GenericEntity<List<DoctorDto>>(doctorsDtos) {},
-                "doctors", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxAvailablePage).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
-                .build();
-
+        return PaginationHelper.handlePagination(page, maxAvailablePage, "doctors",
+                uriInfo, doctorsDtos, doctorCaching,
+                new GenericEntity<List<DoctorDto>>(doctorsDtos) {}, request);
     }
-
-   /* @GET
-    @Path("/all")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getAllDoctorsPaginated(@QueryParam("page") @DefaultValue("0") Integer page,
-                                           @Context Request request) {
-        page = (page < 0) ? 0 : page;
-
-        List<DoctorDto> doctorsDtos = doctorService.getPaginatedObjects(page)
-                .stream()
-                .map(d -> DoctorDto.fromDoctor(d, uriInfo))
-                .collect(Collectors.toList());
-        int maxAvailablePage = doctorService.maxAvailablePage();
-
-        return CacheHelper.handleResponse(doctorsDtos, doctorCaching, new GenericEntity<List<DoctorDto>>(doctorsDtos) {},
-                "doctors", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxAvailablePage).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
-                .build();
-    } */
 
     /**
      * Lets USER access doctor's information
@@ -164,24 +138,6 @@ public class DoctorController {
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-    }
-
-    /**
-     * Returns doctor's information by email. Used when doctor is logged in, to access its
-     * information.
-     * @param email
-     * @return Doctor
-     * @throws EntityNotFoundException
-     */
-    @GET
-    @Path("email/{email}")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getDoctorByEmail(@PathParam("email") final String email,
-                                     @Context Request request) throws EntityNotFoundException {
-        Doctor doctor = doctorService.getDoctorByEmail(email);
-        if (doctor == null) throw new EntityNotFoundException("doctor");
-        DoctorDto dto = DoctorDto.fromDoctor(doctor, uriInfo);
-        return CacheHelper.handleResponse(dto, doctorCaching, "doctor", request).build();
     }
 
     /**
@@ -331,7 +287,6 @@ public class DoctorController {
      * Returns paginated list of clinics a specific doctor is suscribed to.
      * @param license
      * @param page
-     * @param week
      * @param request
      * @return list of DoctorClinics
      * @throws EntityNotFoundException
@@ -341,47 +296,31 @@ public class DoctorController {
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getDoctorPage(@PathParam("license") final String license,
                                   @QueryParam("page") @DefaultValue("0") Integer page,
-                                  @QueryParam("week") @DefaultValue("1") final Integer week,
+                                  @QueryParam("mode") @DefaultValue("search") String mode,
                                   @Context Request request) throws EntityNotFoundException {
         page = (page < 0) ? 0 : page;
 
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor == null) throw new EntityNotFoundException("doctor");
-        final List<DoctorClinicDto> doctorClinics = doctorClinicService.getPaginatedDoctorsClinics(doctor, page)
-                .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo))
-                .collect(Collectors.toList());
-        int max = doctorClinicService.maxPageAvailableForDoctor(doctor);
-        return CacheHelper.handleResponse(doctorClinics, doctorClinicCaching,
-                new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {},
-                "doctorsClinics", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", max-1).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
-                .build();
-    }
+        final List<DoctorClinicDto> doctorClinics;
 
-    /**
-     * Returns list of all clinics a specific doctor is suscribed to.
-     * @param license
-     * @param week
-     * @return list of DoctorClinics
-     * @throws EntityNotFoundException
-     */
-    @GET
-    @Path("/{license}/clinics/all")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getAllDoctorsClinics(@PathParam("license") final String license,
-                                         @QueryParam("week") @DefaultValue("1") final Integer week,
-                                         @Context Request request) throws EntityNotFoundException {
-        Doctor doctor = doctorService.getDoctorByLicense(license);
-        if(doctor == null) throw new EntityNotFoundException("doctor");
-        final List<DoctorClinicDto> doctorClinics = doctorClinicService.getDoctorClinicsForDoctor(doctor)
-                .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo))
-                .collect(Collectors.toList());
-        return CacheHelper.handleResponse(doctorClinics, doctorClinicCaching,
-                new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {},
-                "doctorsClinics", request).build();
+        if(mode.equals("all")) {
+            doctorClinics = doctorClinicService.getDoctorClinicsForDoctor(doctor)
+                    .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo))
+                    .collect(Collectors.toList());
+            return CacheHelper.handleResponse(doctorClinics, doctorClinicCaching,
+                    new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {},
+                    "doctorsClinics", request).build();
+        } else {
+            doctorClinics = doctorClinicService.getPaginatedDoctorsClinics(doctor, page)
+                    .stream().map(dc -> DoctorClinicDto.fromDoctorClinic(dc, uriInfo))
+                    .collect(Collectors.toList());
+            int max = doctorClinicService.maxPageAvailableForDoctor(doctor) - 1;
+
+            return PaginationHelper.handlePagination(page, max, "doctorsClinics",
+                    uriInfo, doctorClinics, doctorClinicCaching,
+                    new GenericEntity<List<DoctorClinicDto>>(doctorClinics) {}, request);
+        }
     }
 
     /**
@@ -545,18 +484,4 @@ public class DoctorController {
         return Response.created(uriInfo.getAbsolutePath()).build();
 
     }
-
-    /* private Response getPaginatedDoctorsResponse(List<String> licenses, int page, Request request, int max) {
-
-        List<DoctorDto> doctors = doctorService.getPaginatedDoctors(licenses, page)
-                .stream().map(d -> DoctorDto.fromDoctor(d, uriInfo)).collect(Collectors.toList());
-
-        return CacheHelper.handleResponse(doctors, doctorCaching, new GenericEntity<List<DoctorDto>>(doctors) {},
-                        "doctors", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", max).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
-                .build();
-    } */
 }

@@ -8,6 +8,7 @@ import ar.edu.itba.paw.webapp.caching.PrepaidCaching;
 import ar.edu.itba.paw.webapp.dto.PrepaidDto;
 import ar.edu.itba.paw.webapp.form.PrepaidForm;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
+import ar.edu.itba.paw.webapp.helpers.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,33 +39,25 @@ public class PrepaidController {
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getPrepaids(@QueryParam("page") @DefaultValue("0") Integer page,
+                                @QueryParam("mode") @DefaultValue("paged") final String mode,
                                 @Context Request request) {
         page = (page < 0) ? 0 : page;
-        List<PrepaidDto> prepaids = prepaidService.getPaginatedObjects(page).stream()
-                .map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
-        int maxPage = prepaidService.maxAvailablePage() - 1;
 
-        return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {}, "prepaids", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
-                .build();
-    }
+        if(mode.equals("all")) {
+            List<PrepaidDto> prepaids = prepaidService.getPrepaids().stream()
+                    .map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
 
-    /**
-     * Return list of all prepaids for ADMIN to edit/add clinic.
-     * @return list of Prepaids
-     */
-    @GET
-    @Path("/all")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getAllPrepaids(@Context Request request) {
-        List<PrepaidDto> prepaids = prepaidService.getPrepaids().stream()
-                .map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
+            return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {}, "prepaids", request)
+                    .build();
+        } else {
+            List<PrepaidDto> prepaids = prepaidService.getPaginatedObjects(page).stream()
+                    .map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
+            int maxPage = prepaidService.maxAvailablePage() - 1;
 
-        return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {}, "prepaids", request)
-                .build();
+            return PaginationHelper.handlePagination(page, maxPage, "prepaids", uriInfo,
+                    prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {},
+                    request);
+        }
     }
 
     /**

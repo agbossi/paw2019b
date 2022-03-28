@@ -109,7 +109,7 @@ function DoctorClinics(props) {
     useEffect(async () => {
         await fetchDoctorsClinics(page);
         await fetchAllClinics();
-        await fetchAllDoctorClinics();
+        //await fetchAllDoctorClinics();
     },[])
 
     return (

@@ -13,6 +13,7 @@ import ar.edu.itba.paw.webapp.dto.ClinicDto;
 import ar.edu.itba.paw.webapp.dto.PrepaidDto;
 import ar.edu.itba.paw.webapp.form.ClinicForm;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
+import ar.edu.itba.paw.webapp.helpers.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -52,34 +53,24 @@ public class ClinicController {
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getClinics(@QueryParam("page") @DefaultValue("0") Integer page,
+                               @QueryParam("mode") @DefaultValue("paged") final String mode,
                                @Context Request request) {
         page = (page < 0) ? 0 : page;
 
-        List<ClinicDto> clinics = clinicService.getPaginatedObjects(page).stream()
-                .map(c -> ClinicDto.fromClinic(c, uriInfo)).collect(Collectors.toList());
-        int maxPage = clinicService.maxAvailablePage() - 1;
-        return CacheHelper.handleResponse(clinics, clinicCaching,
-                new GenericEntity<List<ClinicDto>>(clinics) {}, "clinics", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
-                .build();
+        if(mode.equals("all")) {
+            List<ClinicDto> clinics = clinicService.getClinics().stream()
+                    .map(c -> ClinicDto.fromClinic(c, uriInfo)).collect(Collectors.toList());
+            return CacheHelper.handleResponse(clinics, clinicCaching,
+                    new GenericEntity<List<ClinicDto>>(clinics) {}, "clinics", request).build();
+        } else {
+            List<ClinicDto> clinics = clinicService.getPaginatedObjects(page).stream()
+                    .map(c -> ClinicDto.fromClinic(c, uriInfo)).collect(Collectors.toList());
+            int maxPage = clinicService.maxAvailablePage() - 1;
 
-    }
-
-    /**
-     *Returns full list of clinics for DOCTOR to choose from
-     * @return list of Clinics
-     */
-    @GET
-    @Path("/all")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getAllClinics(@Context Request request) {
-        List<ClinicDto> clinics = clinicService.getClinics().stream()
-                .map(c -> ClinicDto.fromClinic(c, uriInfo)).collect(Collectors.toList());
-        return CacheHelper.handleResponse(clinics, clinicCaching,
-                        new GenericEntity<List<ClinicDto>>(clinics) {}, "clinics", request).build();
+            return PaginationHelper.handlePagination(page, maxPage, "clinics",
+                    uriInfo, clinics, clinicCaching,
+                    new GenericEntity<List<ClinicDto>>(clinics) {}, request);
+        }
     }
 
     /**
@@ -165,43 +156,27 @@ public class ClinicController {
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getClinicPrepaids(@PathParam("clinicId") final Integer clinicId,
                                       @QueryParam("page") @DefaultValue("0") Integer page,
+                                      @QueryParam("mode") @DefaultValue("paged") final String mode,
                                       @Context Request request) throws EntityNotFoundException {
         page = (page < 0) ? 0 : page;
 
         Clinic clinic = clinicService.getClinicById(clinicId);
         if(clinic == null) throw new EntityNotFoundException("clinic");
-        List<PrepaidDto> prepaids = prepaidToClinicService.getPrepaidsForClinic(clinicId, page)
-                .stream().map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
-        int maxPage = prepaidToClinicService.maxAvailablePagePerClinic(clinicId);
-        return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {},
-                "prepaids", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage-1).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
-                .build();
 
-    }
-
-    /**
-     * Returns list of all prepaid of a specific clinic
-     * @param clinicId
-     * @return list of Prepaids
-     * @throws EntityNotFoundException
-     */
-    @GET
-    @Path("{clinicId}/prepaids/all")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getAllClinicPrepaids(@PathParam("clinicId") final Integer clinicId,
-                                      @Context Request request) throws EntityNotFoundException {
-
-        Clinic clinic = clinicService.getClinicById(clinicId);
-        if(clinic == null) throw new EntityNotFoundException("clinic");
-        List<PrepaidDto> prepaids = prepaidToClinicService.getPrepaidsForClinic(clinicId)
-                .stream().map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
-        return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {},
-                "prepaids", request).build();
-
+        if(mode.equals("all")) {
+            List<PrepaidDto> prepaids = prepaidToClinicService.getPrepaidsForClinic(clinicId)
+                    .stream().map(PrepaidDto::fromPrepaid).collect(Collectors.toList());
+            return CacheHelper.handleResponse(prepaids, prepaidCaching, new GenericEntity<List<PrepaidDto>>(prepaids) {},
+                    "prepaids", request).build();
+        } else {
+            List<PrepaidDto> prepaids = prepaidToClinicService.getPrepaidsForClinic(clinicId, page)
+                    .stream().map(PrepaidDto::fromPrepaid)
+                    .collect(Collectors.toList());
+            int maxPage = prepaidToClinicService.maxAvailablePagePerClinic(clinicId);
+            return PaginationHelper.handlePagination(page, maxPage, "prepaids",
+                    uriInfo, prepaids, prepaidCaching,
+                    new GenericEntity<List<PrepaidDto>>(prepaids) {}, request);
+        }
     }
 
     /**

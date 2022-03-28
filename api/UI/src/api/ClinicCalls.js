@@ -4,11 +4,11 @@ import {PREPAIDS_PATH} from "./Constants.js";
 
 // Clinic calls and clinic prepaids
 const getClinics = async (pag) => api.get(cons.CLINICS_PATH + "?" + cons.PAGE_QUERY + pag);
-const getAllClinics = async () => api.get(cons.CLINICS_PATH  + cons.ALL_PATH);
+const getAllClinics = async () => api.get(cons.CLINICS_PATH  + "?" + cons.MODE + "all");
 const getClinic = async (id) => api.get(cons.CLINICS_PATH + "/" + id)
 const getClinicPrepaids = async (id, pag) =>
     api.get(cons.CLINICS_PATH + "/" + id + PREPAIDS_PATH + "?" + cons.PAGE_QUERY + pag)
-const getAllClinicPrepaids = async (id) => api.get(cons.CLINICS_PATH + "/" + id + PREPAIDS_PATH + cons.ALL_PATH )
+const getAllClinicPrepaids = async (id) => api.get(cons.CLINICS_PATH + "/" + id + PREPAIDS_PATH + "?" + cons.MODE + "all")
 const addClinic = async (data) => api.post(
     cons.CLINICS_PATH,
     data,

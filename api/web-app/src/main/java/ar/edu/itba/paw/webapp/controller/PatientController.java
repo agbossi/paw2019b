@@ -17,6 +17,7 @@ import ar.edu.itba.paw.webapp.form.FavoriteForm;
 import ar.edu.itba.paw.webapp.form.PersonalInformationForm;
 import ar.edu.itba.paw.webapp.form.SignUpForm;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
+import ar.edu.itba.paw.webapp.helpers.PaginationHelper;
 import ar.edu.itba.paw.webapp.helpers.SecurityHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -58,12 +59,12 @@ public class PatientController {
 
     @GET
     @Path("{id}")
-    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = {MediaType.APPLICATION_JSON})
     @PreAuthorize("hasPermission(#patientEmail, 'user')")
     public Response getPatient(@PathParam("id") final String patientEmail,
                                @Context Request request) {
         Patient patient = patientService.getPatientByEmail(patientEmail);
-        if(patient != null) {
+        if (patient != null) {
             PatientDto dto = PatientDto.fromPatient(patient, uriInfo);
             return CacheHelper.handleResponse(dto, patientCaching, "patient", request).build();
             // return Response.ok(dto).build();
@@ -73,7 +74,7 @@ public class PatientController {
 
     @DELETE
     @Path("{id}")
-    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = {MediaType.APPLICATION_JSON})
     @PreAuthorize("hasPermission(#patientEmail, 'user')")
     public Response deletePatient(@PathParam("id") final String patientEmail) {
         patientService.deletePatient(patientEmail);
@@ -82,12 +83,12 @@ public class PatientController {
 
     @PUT
     @Path("{id}")
-    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = {MediaType.APPLICATION_JSON})
     @PreAuthorize("hasPermission(#patientEmail, 'user')")
     public Response updatePatient(@PathParam("id") final String patientEmail,
                                   PersonalInformationForm form) {
         Patient patient = patientService.getPatientByEmail(patientEmail);
-        if(patient != null) {
+        if (patient != null) {
             patientService.updatePatientProfile(patientEmail, SecurityHelper.processNewPassword(form.getNewPassword(),
                     passwordEncoder, userService, patientEmail), form.getFirstName(),
                     form.getLastName(), form.getPrepaid(), form.getPrepaidNumber());
@@ -97,7 +98,7 @@ public class PatientController {
     }
 
     @POST
-    @Produces(value = { MediaType.APPLICATION_JSON, })
+    @Produces(value = {MediaType.APPLICATION_JSON,})
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createPatient(final SignUpForm form) throws DuplicateEntityException {
         String encodedPassword = passwordEncoder.encode(form.getPassword());
@@ -109,32 +110,39 @@ public class PatientController {
 
     @GET
     @Path("{id}/favorites")
-    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = {MediaType.APPLICATION_JSON})
     @PreAuthorize("hasPermission(#patientEmail, 'user')")
     public Response getPatientFavorites(@PathParam("id") String patientEmail,
                                         @QueryParam("page") @DefaultValue("0") Integer page,
+                                        @QueryParam("mode") @DefaultValue("paged") final String mode,
+                                        @QueryParam("license") @DefaultValue("") final String queryLicense,
                                         @Context Request request) throws EntityNotFoundException {
         page = (page < 0) ? 0 : page;
 
         Patient patient = patientService.getPatientByEmail(patientEmail);
-        if(patient == null) throw new EntityNotFoundException("patient");
-        List<DoctorDto> favorites = favoriteService.getPaginatedObjects(page, patient)
-                .stream().map(f -> DoctorDto.fromDoctor(f.getDoctor(), uriInfo)).collect(Collectors.toList());
-        int maxPage = favoriteService.maxAvailablePage(patient) - 1;
-        return CacheHelper.handleResponse(favorites, doctorCaching,
-                new GenericEntity<List<DoctorDto>>(favorites) {},
-                "favorites", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
-                .build();
+        if (patient == null) throw new EntityNotFoundException("patient");
 
+        if (mode.equals("isFav")) {
+            Doctor doc = doctorService.getDoctorByLicense(queryLicense);
+            if (doc == null) throw new EntityNotFoundException("doctor");
+            if (favoriteService.isFavorite(doc, patient)) {
+                return Response.ok().build();
+            }
+            return Response.status(Response.Status.NOT_FOUND).entity("not-favorite").build();
+        } else {
+            List<DoctorDto> favorites = favoriteService.getPaginatedObjects(page, patient)
+                    .stream().map(f -> DoctorDto.fromDoctor(f.getDoctor(), uriInfo)).collect(Collectors.toList());
+            int maxPage = favoriteService.maxAvailablePage(patient) - 1;
+            return PaginationHelper.handlePagination(page, maxPage, "favorites",
+                    uriInfo, favorites, doctorCaching,
+                    new GenericEntity<List<DoctorDto>>(favorites) {
+                    }, request);
+        }
     }
 
     @DELETE
     @Path("{id}/favorites")
-    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = {MediaType.APPLICATION_JSON})
     @PreAuthorize("hasPermission(#patientEmail, 'user')")
     public Response removeFromFavorites(@PathParam("id") final String patientEmail,
                                         @QueryParam("license") String doctorLicense) throws EntityNotFoundException {
@@ -144,7 +152,7 @@ public class PatientController {
 
     @POST
     @Path("{id}/favorites")
-    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = {MediaType.APPLICATION_JSON})
     @Consumes(MediaType.APPLICATION_JSON)
     @PreAuthorize("hasPermission(#patientEmail, 'user')")
     public Response addFavorite(@PathParam("id") final String patientEmail,
@@ -152,30 +160,5 @@ public class PatientController {
         patientService.addFavorite(patientEmail, doctorLicense);
         return Response.created(uriInfo.getAbsolutePath()).build();
     }
-
-    /**
-     * Returns true if the doctor is already a favorite of a patient
-     * @param patientEmail
-     * @param license
-     * @return boolean
-     * @throws EntityNotFoundException
-     */
-    @GET
-    @Path("{id}/favorites/{license}")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    @PreAuthorize("hasPermission(#patientEmail, 'user')")
-    public Response isDoctorFavorite (@PathParam("id") String patientEmail,
-                                      @PathParam("license") String license,
-                                      @Context Request request) throws EntityNotFoundException {
-        Doctor doc = doctorService.getDoctorByLicense(license);
-        if (doc == null) throw new EntityNotFoundException("doctor");
-        Patient patient = patientService.getPatientByEmail(patientEmail);
-        if(patient == null) throw new EntityNotFoundException("patient");
-        if (favoriteService.isFavorite(doc, patient)) {
-            return Response.ok().build();
-        }
-        return Response.status(Response.Status.NOT_FOUND).entity("not-favorite").build();
-
-    }
-
 }
+

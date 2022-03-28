@@ -9,6 +9,7 @@ import ar.edu.itba.paw.webapp.caching.LocationCaching;
 import ar.edu.itba.paw.webapp.dto.LocationDto;;
 import ar.edu.itba.paw.webapp.form.LocationForm;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
+import ar.edu.itba.paw.webapp.helpers.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -44,37 +45,27 @@ public class LocationController {
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getLocations(@QueryParam("page") @DefaultValue("0") Integer page,
+                                 @QueryParam("mode") @DefaultValue("paged") final String mode,
                                  @Context Request request) {
 
         page = (page < 0) ? 0 : page;
 
-        List<LocationDto> locations = locationService.getPaginatedObjects(page).stream()
-                .map(LocationDto::fromLocation).collect(Collectors.toList());
-        int maxPage = locationService.maxAvailablePage() - 1;
+        if(mode.equals("all")) {
+            List<LocationDto> locations = locationService.getLocations().stream()
+                    .map(LocationDto::fromLocation).collect(Collectors.toList());
 
-        return CacheHelper.handleResponse(locations, locationCaching,
-                new GenericEntity<List<LocationDto>>(locations) {}, "locations", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
-                .build();
-    }
+            return CacheHelper.handleResponse(locations, locationCaching,
+                    new GenericEntity<List<LocationDto>>(locations) {},
+                    "locations", request).build();
+        } else {
+            List<LocationDto> locations = locationService.getPaginatedObjects(page).stream()
+                    .map(LocationDto::fromLocation).collect(Collectors.toList());
+            int maxPage = locationService.maxAvailablePage() - 1;
 
-    /**
-     * Returns list of all locations for ADMIN to add/edit a clinic
-     * @return list of Locations
-     */
-    @GET
-    @Path("/all")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getAllLocations(@Context Request request) {
-        List<LocationDto> locations = locationService.getLocations().stream()
-                .map(LocationDto::fromLocation).collect(Collectors.toList());
-
-        Response.ResponseBuilder ret = CacheHelper.handleResponse(locations, locationCaching,
-                        new GenericEntity<List<LocationDto>>(locations) {}, "locations", request);
-        return ret.build();
+            return PaginationHelper.handlePagination(page, maxPage, "locations", uriInfo,
+                    locations, locationCaching,
+                    new GenericEntity<List<LocationDto>>(locations) {}, request);
+        }
     }
 
     /**

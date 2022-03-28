@@ -24,8 +24,8 @@ const editDoctor = async (license, data) => api.put(
 const getClinics = async (license, pag) =>
     api.get (cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "?" + cons.PAGE_QUERY + pag)
 const getAllClinics = async (license) =>
-    api.get (cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + cons.ALL_PATH)
-const getDocByEmail = async (email) => api.get (cons.DOCTORS_PATH + cons.EMAIL_PATH + "/" + email)
+    api.get (cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "?" + cons.MODE + "all")
+const getDocByEmail = async (email) => api.get (cons.DOCTORS_PATH + "?" + cons.MODE + "one" + '&' + cons.EMAIL_QUERY + email)
 const getDocByLicense = async (license) => api.get(cons.DOCTORS_PATH + "/" + license)
 const addDoctorToClinic = async (data, license) => api.post(
     cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH,

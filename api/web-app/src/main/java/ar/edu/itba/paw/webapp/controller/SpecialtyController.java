@@ -9,6 +9,7 @@ import ar.edu.itba.paw.webapp.caching.SpecialtyCaching;
 import ar.edu.itba.paw.webapp.dto.SpecialtyDto;
 import ar.edu.itba.paw.webapp.form.SpecialtyForm;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
+import ar.edu.itba.paw.webapp.helpers.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Component;
@@ -40,36 +41,25 @@ public class SpecialtyController {
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getSpecialties(@QueryParam("page") @DefaultValue("0") Integer page,
+                                   @QueryParam("mode") @DefaultValue("paged") final String mode,
                                    @Context Request request) {
         page = (page < 0) ? 0 : page;
 
-        List<SpecialtyDto> specialties = specialtyService.getPaginatedObjects(page).stream()
-                .map(SpecialtyDto::fromSpecialty).collect(Collectors.toList());
-        int maxPage = specialtyService.maxAvailablePage() - 1;
+        if(mode.equals("all")) {
+            List<SpecialtyDto> specialties = specialtyService.getSpecialties().stream()
+                    .map(SpecialtyDto::fromSpecialty).collect(Collectors.toList());
 
-        return CacheHelper.handleResponse(specialties, specialtyCaching,
-                new GenericEntity<List<SpecialtyDto>>(specialties) {}, "specialties", request)
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", 0).build(),"first")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", maxPage).build(),"last")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", page + 1).build(),"next")
-                .link(uriInfo.getAbsolutePathBuilder().queryParam("page", Math.max(page - 1, 0)).build(),"prev")
-                .build();
-    }
-
-    /**
-     * Return list of all specialties for ADMIN to add doctor.
-     * @return list of Specialties
-     */
-    @GET()
-    @Path("/all")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getAllSpecialties(@Context Request request) {
-        List<SpecialtyDto> specialties = specialtyService.getSpecialties().stream()
-                .map(SpecialtyDto::fromSpecialty).collect(Collectors.toList());
-
-        return CacheHelper.handleResponse(specialties, specialtyCaching,
-                        new GenericEntity<List<SpecialtyDto>>(specialties) {}, "specialties", request)
-                .build();
+            return CacheHelper.handleResponse(specialties, specialtyCaching,
+                    new GenericEntity<List<SpecialtyDto>>(specialties) {}, "specialties", request)
+                    .build();
+        } else {
+            List<SpecialtyDto> specialties = specialtyService.getPaginatedObjects(page).stream()
+                    .map(SpecialtyDto::fromSpecialty).collect(Collectors.toList());
+            int maxPage = specialtyService.maxAvailablePage() - 1;
+            return PaginationHelper.handlePagination(page, maxPage, "specialties",
+                    uriInfo, specialties, specialtyCaching,
+                    new GenericEntity<List<SpecialtyDto>>(specialties) {}, request);
+        }
     }
 
     /**
