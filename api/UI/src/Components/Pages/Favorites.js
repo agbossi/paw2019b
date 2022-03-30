@@ -59,6 +59,7 @@ function Favorites() {
 
     useEffect(async () => {
         await fetchFavorites(page);
+        localStorage.setItem('path', '/favorites')
     }, [])
 
     const nextPage = async () => {

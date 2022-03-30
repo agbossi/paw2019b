@@ -24,7 +24,11 @@ function Doctors() {
             setDoctors(response.data)
             setMaxPage(Number(Utils.getMaxPage(response.headers.link)))
         }
-
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
+        }
     }
 
     const fetchSpecialties = async () => {
@@ -32,11 +36,17 @@ function Doctors() {
         if (response && response.ok) {
             setSpecialties(response.data)
         }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
+        }
     }
 
     useEffect(async () => {
         await fetchDoctors(page)
         await fetchSpecialties()
+        localStorage.setItem('path', '/admin/doctors')
     }, [])
 
     const handleAdd = async (newDoctor) => {

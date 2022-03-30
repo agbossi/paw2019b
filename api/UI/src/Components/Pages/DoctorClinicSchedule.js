@@ -21,7 +21,6 @@ function DoctorClinicSchedule(props) {
         //const email = localStorage.getItem('email');
         //const response = await DoctorCalls.getDocByEmail(email);
         const response = await DoctorCalls.getDocByLicense(license);
-        console.log('es doc by license?')
         if (response && response.ok) {
             setDoctor(response.data);
             setMessage("")
@@ -77,6 +76,7 @@ function DoctorClinicSchedule(props) {
         await fetchDoctor();
         await fetchClinic();
         await fetchSchedule()
+        localStorage.setItem('path', '/doctor/' + license + '/clinics/' + id + '/schedule')
     },[])
 
     const handleAdd = async (day, hour) => {

@@ -39,12 +39,16 @@ class Login extends Component {
         this.handleLogin = this.handleLogin.bind(this);
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
+        //this.loginRedirect = this.loginRedirect.bind(this);
+
+        console.log('path en constructor: ' + localStorage.getItem("path"))
 
         this.state = {
             email: "",
             password: "",
             loading: false,
-            message: ""
+            message: "",
+            redirect: localStorage.getItem("path")
         };
 
     }
@@ -61,6 +65,18 @@ class Login extends Component {
         });
     }
 
+    /*loginRedirect(redirectPath) {
+        console.log('redirect path ' + redirectPath)
+        console.log('state redirect ' + this.state.redirect)
+        if (localStorage.getItem("path") !== null) {
+            this.props.navigate('/paw-2019b-4/' + localStorage.getItem("path"));
+        } else if(redirectPath !== null && redirectPath !== undefined) {
+            this.props.navigate(redirectPath);
+        } else {
+            this.props.navigate('/paw-2019b-4/login')
+        }
+    } */
+
     handleLogin(e) {
         e.preventDefault();
 
@@ -70,41 +86,55 @@ class Login extends Component {
         });
 
         this.form.validateAll();
-
+        let redirectPath;
         if (this.checkBtn.context._errors.length === 0) {
             ApiCalls.login(this.state.email, this.state.password).then(
                 (resp) => {
                     if (resp.status === 200) {
                         switch (localStorage.getItem('role')) {
                             case "ROLE_ADMIN":
-                                this.props.navigate("/paw-2019b-4/admin");
-                                window.location.reload()
+                                redirectPath = "/paw-2019b-4/admin"
+                                //this.props.navigate("/paw-2019b-4/admin");
+                                //window.location.reload()
                                 break;
                             case "ROLE_DOCTOR":
-                                this.props.navigate("/paw-2019b-4/doctor");
-                                window.location.reload()
+                                redirectPath = "/paw-2019b-4/doctor"
+                                //this.props.navigate("/paw-2019b-4/doctor");
+                                //window.location.reload()
                                 break;
                             case "ROLE_USER":
-                                if (localStorage.getItem("path") !== null) {
-                                    this.props.navigate(localStorage.getItem("path"));
-                                    localStorage.removeItem("path")
-                                    window.location.reload()
-                                } else {
-                                    this.props.navigate("/paw-2019b-4");
-                                    window.location.reload()
-                                }
+                                redirectPath = "/paw-2019b-4"
+                                //localStorage.removeItem("path")
+                                //window.location.reload()
+                                //this.props.navigate("/paw-2019b-4");
+                                //window.location.reload()
                                 break;
                         }
-                    }
-                    if (resp.status === 401) {
+                        if (localStorage.getItem("path") !== null) {
+                            console.log('entro en memoria')
+                            console.log('/paw-2019b-4' + localStorage.getItem("path"))
+                            this.props.navigate('/paw-2019b-4' + localStorage.getItem("path"));
+                        } else if(redirectPath !== null && redirectPath !== undefined) {
+                            console.log('entro en redirect principal')
+                            this.props.navigate(redirectPath);
+                        } else {
+                            console.log('pasaron cosas')
+                            this.props.navigate('/paw-2019b-4/login')
+                        }
+                        localStorage.removeItem("path")
+                        window.location.reload()
+
+                    } else if (resp.status === 401) {
                         this.setState({
                             loading: false,
                             message: "Email or password are not correct. Try again"
                         });
-                        this.props.navigate("/paw-2019b-4/login")
+                        //this.props.navigate('/paw-2019b-4/login')
+                        //window.location.reload()
                     }
                 },
                 error => {
+                    console.log('en error')
                     const resMessage =
                         (error.response &&
                             error.response.data &&

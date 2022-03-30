@@ -22,10 +22,16 @@ function Specialties(props){
             setSpecialties(response.data);
             setMaxPage(Utils.getMaxPage(response.headers.link));
         }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
+        }
     }
 
     useEffect(async () => {
         await fetchSpecialties(page)
+        localStorage.setItem('path', '/specialties')
     }, [])
 
     const deleteSpecialty = async (name) => {

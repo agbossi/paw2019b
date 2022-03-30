@@ -103,6 +103,7 @@ function UserDoctorProfile(props) {
         await fetchClinics();
         await fetchAvailableAppointments();
         await fetchIsFavorite();
+        localStorage.setItem('path', "/" + license + "/profile")
     },[])
 
     const getName = () => {
@@ -139,7 +140,6 @@ function UserDoctorProfile(props) {
             if (response.status === 401) {
                 localStorage.removeItem('token')
                 localStorage.removeItem('role')
-                localStorage.setItem('path', "/" + license + "/profile")
                 navigate('/paw-2019b-4/login')
             }
             if (response.status === 400) {

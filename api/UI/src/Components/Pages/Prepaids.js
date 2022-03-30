@@ -23,10 +23,16 @@ function Prepaids(props) {
             setPrepaids(response.data)
             setMaxPage(Utils.getMaxPage(response.headers.link));
         }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
+        }
     }
 
     useEffect(async () => {
         await fetchPrepaids(page)
+        localStorage.setItem('path', '/prepaids')
     }, [])
 
     const deletePrepaids = async (name) => {

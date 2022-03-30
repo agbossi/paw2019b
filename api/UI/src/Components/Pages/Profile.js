@@ -28,12 +28,18 @@ function Profile() {
         await fetchProfile()
         await fetchPrepaids()
         await fetchAppointments()
+        localStorage.setItem('path', '/profile')
     }, [])
 
     const fetchPrepaids = async () => {
         const response = await PrepaidCalls.getAllPrepaids();
         if (response && response.ok) {
             setPrepaids(response.data.map(prepaid => prepaid.name))
+        }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
         }
     }
 

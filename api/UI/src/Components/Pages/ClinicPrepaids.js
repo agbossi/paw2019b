@@ -33,6 +33,11 @@ function ClinicPrepaids() {
                 setMessage("errors.clinicNotFound")
             }
         }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
+        }
 
     }
 
@@ -47,6 +52,11 @@ function ClinicPrepaids() {
                 setMessage("errors.clinicNotFound")
             }
         }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
+        }
 
     }
 
@@ -54,6 +64,11 @@ function ClinicPrepaids() {
         const response = await PrepaidCalls.getAllPrepaids();
         if (response && response.ok) {
             setAllPrepaids(response.data)
+        }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
         }
     }
 
@@ -66,6 +81,11 @@ function ClinicPrepaids() {
         if (response.status === 404) {
             setMessage("errors.clinicNotFound")
         }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
+        }
     }
 
     useEffect(async () => {
@@ -73,6 +93,7 @@ function ClinicPrepaids() {
         await fetchAllClinicPrepaids()
         await fetchPrepaids()
         await fetchClinic(id)
+        localStorage.setItem('path', '/admin/clinics/' + id + '/prepaids')
     }, [])
 
     const handleAdd = async (newPrepaid) => {

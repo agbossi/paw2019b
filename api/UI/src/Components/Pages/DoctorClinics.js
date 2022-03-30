@@ -29,6 +29,11 @@ function DoctorClinics(props) {
         if(response.status === 404) {
             setMessage("errors.docLoggedNotFound")
         }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
+        }
     }
 
     const fetchAllDoctorClinics = async () => {
@@ -40,6 +45,11 @@ function DoctorClinics(props) {
         if(response.status === 404) {
             setMessage("errors.docLoggedNotFound")
         }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
+        }
     }
 
     const fetchAllClinics = async () => {
@@ -47,7 +57,11 @@ function DoctorClinics(props) {
         if (response && response.ok) {
             setAllClinics(response.data);
         }
-
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
+        }
     }
 
     const handleAdd = async (newDocClinic) => {
@@ -109,6 +123,8 @@ function DoctorClinics(props) {
     useEffect(async () => {
         await fetchDoctorsClinics(page);
         await fetchAllClinics();
+        localStorage.setItem('path', '/doctor/clinics')
+
         //await fetchAllDoctorClinics();
     },[])
 

@@ -59,6 +59,7 @@ function NavBar(props) {
 
     const handleLogout = () => {
         ApiCalls.logout().then(() => {
+            localStorage.removeItem("path")
             navigate("/paw-2019b-4");
             window.location.reload()
         })

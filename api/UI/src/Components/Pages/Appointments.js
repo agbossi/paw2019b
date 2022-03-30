@@ -15,6 +15,7 @@ function Appointments(props) {
     const [isLoading, setIsLoading] = useState(false)
     const {t} = useTranslation()
     const navigate = useNavigate()
+    console.log('print en appointments')
 
     const fetchAppointments = async (pag) => {
         const email = localStorage.getItem('email')
@@ -77,6 +78,7 @@ function Appointments(props) {
     }
 
     useEffect(async () => {
+        localStorage.setItem('path', '/' + props.user + '/appointments')
         await fetchAppointments(page);
     }, [])
 

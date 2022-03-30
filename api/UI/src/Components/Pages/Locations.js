@@ -22,11 +22,17 @@ function Locations(props){
             setLocations(response.data)
             setMaxPage(Utils.getMaxPage(response.headers.link));
         }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
+        }
     }
 
      useEffect(async () => {
         await fetchLocations(page)
-    }, [])
+         localStorage.setItem('path', '/locations')
+     }, [])
 
     const deleteLocation = async (name) => {
         const response = await LocationCalls.deleteLocation(name);

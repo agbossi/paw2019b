@@ -29,6 +29,11 @@ function Clinics(props) {
             setClinics(response.data)
             setMaxPage(Number(Utils.getMaxPage(response.headers.link)));
         }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
+        }
     }
 
     const fetchLocation = async () => {
@@ -37,11 +42,17 @@ function Clinics(props) {
             setLocations(response.data)
             setMessage("")
         }
+        if (response.status === 401) {
+            localStorage.removeItem('token')
+            localStorage.removeItem('role')
+            navigate('/paw-2019b-4/login')
+        }
     }
 
     useEffect( async () => {
         await fetchClinics(page)
         await fetchLocation()
+        localStorage.setItem('path', '/admin/clinics')
     }, [])
 
     const deleteClinic = async (id) => {
