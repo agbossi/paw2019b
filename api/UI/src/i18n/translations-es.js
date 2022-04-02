@@ -130,11 +130,12 @@ export const TRANSLATION_ES = {
         noDocEmail: "No se encontró doctor con el email en sesión",
         required: "es obligatorio",
         numeric: "solo puede contener numeros",
-        passwordTooShort: "La contraseña es demasiado corta",
+        short: "is too short",
+        long: "is too long",
+        invalidLength: "length must be",
         alphabetic: "solo puede contener letras",
+        alphanumeric: "solo puede contener letras o numeros",
         invalidEmail: "email invalido",
-        invalidDocumentLength: "El documento debe ser de 8 caracteres",
-        prepaidNumberTooLong: "Numero de prepaga demasiado largo",
         docClinicNotFound: "No se encontró doctor en clínica",
         imageBroken: "Faltan datos de la imagen, intente subir la imagen de vuelta",
         notSupported: "Tipo de imagen no soportada. Tipos soportados: JPEG, JPG, PNG",
@@ -188,6 +189,6 @@ export const TRANSLATION_ES = {
     deleteImgButton: "Eliminar Imagen",
     cancelButton: "Cancelar",
     with: "con",
-    nextApp: "Próximos turnos"
-
+    nextApp: "Próximos turnos",
+    characters: "caracteres"
 }

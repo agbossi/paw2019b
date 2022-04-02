@@ -1,12 +1,18 @@
-import {Button, Form, Modal} from "react-bootstrap";
+import {Button, Col, Form, Modal} from "react-bootstrap";
 import DropDownList from "../DropDownList";
 import React, {useState} from "react";
 import {useTranslation} from "react-i18next";
+import validation from "../../utils/validationHelper";
+
 
 function DoctorClinicAddModal(props) {
     const [show, setShow] = useState(false)
     const [selectedClinic, setSelectedClinic] = useState({})
     const [price, setPrice] = useState(0)
+
+    const [priceErrors, setPriceErrors] = useState([])
+    const [invalidForm, setInvalidForm] = useState(false)
+
     const {t} = useTranslation()
 
     const handleSelect = (clinicName) => {
@@ -19,7 +25,12 @@ function DoctorClinicAddModal(props) {
     }
 
     const onChange = (event) => {
+        let error = false
+        let errors = []
         setPrice(event.target.value)
+        error = validation.requiredNumeric(event.target.value, errors, "price", t)
+        setPriceErrors(errors)
+        setInvalidForm(error)
     }
 
     const handleAdd = async () => {
@@ -57,7 +68,23 @@ function DoctorClinicAddModal(props) {
                                       id='clinic'/>
                         <Form.Group className="mb-3 mt-3" controlId="price">
                             <Form.Label>{t('DOC.price')}</Form.Label>
-                            <Form.Control type="number" placeholder={t("FORM.enterPrice")} onChange={onChange}/>
+                            <Form.Control type="number"
+                                          placeholder={t("FORM.enterPrice")}
+                                          value={price}
+                                          onChange={onChange}/>
+                            {priceErrors.length !== 0 && (
+                                <div className="form-group">
+                                    <div className="alert alert-danger" role="alert">
+                                        <ul>
+                                            {priceErrors.map((error) => {
+                                                return (
+                                                    <li>{error}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
                         </Form.Group>
                     </Form.Group>
                 </Modal.Body>
@@ -65,7 +92,7 @@ function DoctorClinicAddModal(props) {
                     <Button variant="secondary" onClick={handleShow}>
                         {t("closeButton")}
                     </Button>
-                    <Button className="doc-button-color" onClick={handleAdd}>
+                    <Button disabled={invalidForm && selectedClinic !== ''} className="doc-button-color" onClick={handleAdd}>
                         {t("actions.add")}
                     </Button>
                 </Modal.Footer>

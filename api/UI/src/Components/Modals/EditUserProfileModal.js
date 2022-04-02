@@ -5,6 +5,7 @@ import DropDownList from "../DropDownList";
 import PatientCalls from "../../api/PatientCalls";
 import {useNavigate} from "react-router-dom";
 import '../Pages/Profile.css'
+import validation from "../../utils/validationHelper";
 
 function EditUserProfileModal(props) {
     const [firstName, setFirstName] = useState(localStorage.getItem('firstName'))
@@ -31,70 +32,33 @@ function EditUserProfileModal(props) {
         switch (event.target.id) {
             case "firstName":
                 setFirstName(event.target.value)
-                if(!isPresent(event.target.value)) {
-                    errors.push(t("FORM.firstName") + "  " + t("errors.required"))
-                    error = true
-                }
-                if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(event.target.value)) {
-                    errors.push(t("FORM.firstName") + "  " + t("errors.alphabetic"))
-                    error = true
-                }
+                error = error || validation.requiredAlpha(event.target.value, errors, "firstName", t)
                 setFirstNameErrors(errors)
                 break;
             case "lastName":
                 setLastName(event.target.value)
-                if(!isPresent(event.target.value)) {
-                    errors.push(t("FORM.lastName") + "  " + t("errors.required"))
-                    error = true
-                }
-                if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(event.target.value)) {
-                    errors.push(t("FORM.lastName") + "  " + t("errors.alphabetic"))
-                    error = true
-                }
+                error = error || validation.requiredAlpha(event.target.value, errors, "lastName", t)
                 setLastNameErrors(errors)
                 break;
             case "password":
                 setNewPassword(event.target.value)
-                if(event.target.value !== '' && event.target.value.length < 8) {
-                    errors.push(t("errors.passwordTooShort"))
-                    error = true
-                }
-                if(event.target.value !== '' && repeatPassword !== event.target.value) {
-                    setRepeatPasswordErrors([t("errors.passwordMismatch")])
-                    error = true
-                }
+                error = error || validation.requiredLength(event.target.value, errors, "password", 8, 20, t)
+                    || !validation.passwordMatch(event.target.value, errors, repeatPassword, t)
                 setPasswordErrors(errors)
                 break;
             case "prepaidNumber":
                 setPrepaidNumber(event.target.value)
-                if(!/^\d+$/.test(event.target.value)) {
-                    errors.push(t("FORM.prepaidNumber") + "  " + t("errors.numeric"))
-                    error = true
-                }
-                if(event.target.value.length > 20) {
-                    errors.push(t("errors.prepaidNumberTooLong"))
-                    error = true
-                }
+                error = error || validation.requiredNumeric(event.target.value, errors, "prepaidNumber", t) ||
+                    !validation.checkLength(event.target.value, errors, "prepaidNumber", 8, 20, t)
                 setPrepaidNumberErrors(errors)
                 break;
             case "repeatPassword":
                 setRepeatPassword(event.target.value)
-                if(event.target.value !== '' && newPassword !== '' && newPassword !== event.target.value) {
-                    errors.push(t("errors.passwordMismatch"))
-                    error = true
-                }
+                error = error || !validation.passwordMatch(newPassword, errors, event.target.value, t)
                 setRepeatPasswordErrors(errors)
                 break;
         }
         setInvalidForm(error)
-    }
-
-    const isPresent = (value) => {
-        let is = true
-        if(!value) {
-            is = false
-        }
-        return is
     }
 
     const handleSelect = (prepaid) => {

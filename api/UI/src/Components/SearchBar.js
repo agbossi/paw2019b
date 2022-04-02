@@ -5,6 +5,9 @@ import LocationCalls from "../api/LocationCalls";
 import SpecialtyCalls from "../api/SpecialtyCalls";
 import PrepaidCalls from "../api/PrepaidCalls";
 import {useTranslation} from "react-i18next";
+import validation from "../utils/validationHelper";
+
+
 
 function SearchBar(props) {
     const {t} = useTranslation()
@@ -67,26 +70,17 @@ function SearchBar(props) {
         switch (event.target.id) {
             case "firstName":
                 setFirstName(event.target.value)
-                if(event.target.value !== '' && !/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(event.target.value)) {
-                    errors.push(t("FORM.firstName") + "  " + t("errors.alphabetic"))
-                    error = true
-                }
+                error = error || validation.optionalAlpha(event.target.value, errors, "firstName", t)
                 setFirstNameErrors(errors)
                 break;
             case "lastName":
                 setLastName(event.target.value)
-                if(event.target.value !== '' && !/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(event.target.value)) {
-                    errors.push(t("FORM.lastName") + "  " + t("errors.alphabetic"))
-                    error = true
-                }
+                error = error || validation.optionalAlpha(event.target.value, errors, "lastName", t)
                 setLastNameErrors(errors)
                 break;
             case "consultPrice":
                 setConsultPrice(event.target.value)
-                if(event.target.value !== '' && !/^\d+$/.test(event.target.value)) {
-                    errors.push(t("FORM.price") + "  " + t("errors.numeric"))
-                    error = true
-                }
+                error = error || validation.optionalNumeric(event.target.value, errors, "price", t)
                 setPriceErrors(errors)
                 break;
         }

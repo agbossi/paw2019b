@@ -91,7 +91,7 @@ export const TRANSLATION_EN = {
         maxPrice: "Maximum Consult Price",
         dateTime: "Date and Time",
         selectDateTime: "Select date and time",
-        id: "Id"
+        id: "Id",
     },
     errors: {
         auth: "other credentials required for that page",
@@ -121,11 +121,12 @@ export const TRANSLATION_EN = {
         noDocEmail: "No doctor found with logged email",
         required: "is required",
         numeric: "only allows numbers",
-        passwordTooShort: "Password is too short",
+        short: "is too short",
+        long: "is too long",
         alphabetic: "only allows letters",
+        alphanumeric: "only allows letters or numbers",
         invalidEmail: "Not a valid email",
-        invalidDocumentLength: "document length must be 8 digits",
-        prepaidNumberTooLong: "Prepaid number too long",
+        invalidLength: "length must be",
         docClinicNotFound: "No doctor in clinic found",
         imageBroken: "Image or image data missing, try uploading the image again",
         notSupported: "Image type not supported. Supported types: JPEG, JPG, PNG",
@@ -188,5 +189,6 @@ export const TRANSLATION_EN = {
     deleteImgButton: "Delete Image",
     cancelButton: "Cancel",
     with: "with",
-    nextApp: "Next Appointments"
+    nextApp: "Next Appointments",
+    characters: "characters"
 }

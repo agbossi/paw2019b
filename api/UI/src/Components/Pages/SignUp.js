@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Col, Form, Modal, Row} from "react-bootstrap";
+import {Button, Col, Form, Row} from "react-bootstrap";
 import '../CardContainer.css'
 import DropDownList from "../DropDownList";
 import {useTranslation} from "react-i18next";
@@ -7,6 +7,7 @@ import '../../i18n/i18n'
 import ApiCalls from "../../api/apiCalls"
 import {useNavigate} from "react-router-dom";
 import PrepaidCalls from "../../api/PrepaidCalls";
+import validation from "../../utils/validationHelper";
 
 function SignUp() {
     const [selectedPrepaid, setSelectedPrepaid] = useState('')
@@ -55,67 +56,6 @@ function SignUp() {
         return is
     }
 
-    const checkRequired = (values, errors) => {
-        console.log('first name antes de required: ' + values.firstName)
-        if(!isPresent(values.firstName)) {
-            errors.push(t("FORM.firstName") + "  " + t("errors.required"))
-        }
-        if(!isPresent(values.lastName)) {
-            errors.push(t("FORM.lastName") + "  " + t("errors.required"))
-        }
-        console.log('email antes de required: ' + values.email)
-        if(!isPresent(values.email)) {
-            console.log('entro igual')
-            errors.push(t("FORM.email") + "  " + t("errors.required"))
-        }
-        if(!isPresent(values.id)) {
-            errors.push(t("FORM.document") + "  " + t("errors.required"))
-        }
-        console.log('pass antes de required: ' + values.password)
-        if(!isPresent(values.password)) {
-            console.log('fallo pass')
-            errors.push(t("FORM.password") + "  " + t("errors.required"))
-        }
-        if(!isPresent(values.repeatPassword)) {
-            errors.push(t("FORM.repeatPassword") + "  " + t("errors.required"))
-        }
-        if(!isPresent(values.prepaidNumber)) {
-            errors.push(t("FORM.prepaidNumber") + "  " + t("errors.required"))
-        }
-    }
-
-    const checkDigits = (values, errors) => {
-        if(!/^\d+$/.test(values.id)) {
-            errors.push(t("FORM.document") + "  " + t("errors.numeric"))
-        }
-        if(!/^\d+$/.test(values.prepaidNumber)) {
-            errors.push(t("FORM.prepaidNumber") + "  " + t("errors.numeric"))
-        }
-    }
-
-    const checkPassword = (values, errors) => {
-        if(values.password !== values.repeatPassword) {
-            errors.push(t("errors.passwordMismatch"))
-        }
-        if(values.password.length < 8) {
-            errors.push(t("errors.passwordTooShort"))
-        }
-    }
-
-    const checkAlpha = (values, errors) => {
-        if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(values.firstName)) {
-            errors.push(t("FORM.firstName") + "  " + t("errors.alphabetic"))
-        }
-        if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(values.lastName)) {
-            errors.push(t("FORM.lastName") + "  " + t("errors.alphabetic"))        }
-    }
-
-    const checkEmail = (values, errors) => {
-        if(!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(values.email)) {
-            errors.push(t("errors.invalidEmail"))
-        }
-    }
-
     const handleSignUp = async (e) => {
 
         e.preventDefault();
@@ -162,7 +102,6 @@ function SignUp() {
                         error.message ||
                         error.toString();*/
                     setMessage(t('error.emailInUse'))
-                    return
                 }
             );
 
@@ -177,94 +116,40 @@ function SignUp() {
         switch (event.target.id) {
             case "firstName":
                 setFirstName(event.target.value)
-                if(!isPresent(event.target.value)) {
-                    errors.push(t("FORM.firstName") + "  " + t("errors.required"))
-                    error = true
-                }
-                if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(event.target.value)) {
-                    errors.push(t("FORM.firstName") + "  " + t("errors.alphabetic"))
-                    error = true
-                }
+                error = error || validation.requiredAlpha(event.target.value, errors, "firstName", t)
                 setFirstNameErrors(errors)
                 break;
             case "lastName":
                 setLastName(event.target.value)
-                if(!isPresent(event.target.value)) {
-                    errors.push(t("FORM.lastName") + "  " + t("errors.required"))
-                    error = true
-                }
-                if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(event.target.value)) {
-                    errors.push(t("FORM.lastName") + "  " + t("errors.alphabetic"))
-                    error = true
-                }
+                error = error || validation.requiredAlpha(event.target.value, errors, "lastName", t)
                 setLastNameErrors(errors)
                 break;
             case "document":
                 setDocument(event.target.value)
-                if(!isPresent(event.target.value)) {
-                    errors.push(t("FORM.document") + "  " + t("errors.required"))
-                    error = true
-                }
-                if(event.target.value.length !== 8) {
-                    errors.push(t("errors.invalidDocumentLength"))
-                    error = true
-                }
-                if(event.target.value.length > 20) {
-                    errors.push(t("errors.prepaidNumberTooLong"))
-                    error = true
-                }
-                if(!/^\d+$/.test(event.target.value)) {
-                    errors.push(t("FORM.document") + "  " + t("errors.numeric"))
-                    error = true
-                }
+                error = error || validation.requiredNumeric(event.target.value, errors, "document", t)
+                    || !validation.checkLengthExact(event.target.value, errors, "document", 8, t)
                 setDocumentErrors(errors)
                 break;
             case "email":
                 setEmail(event.target.value)
-                if(!isPresent(event.target.value)) {
-                    errors.push(t("FORM.email") + "  " + t("errors.required"))
-                    error = true
-                }
-                if(!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(event.target.value)) {
-                    errors.push(t("errors.invalidEmail"))
-                    error = true
-                }
+                error = error || validation.requiredEmail(event.target.value, errors, "email", t)
                 setEmailErrors(errors)
                 break;
             case "password":
                 setPassword(event.target.value)
-                if(event.target.value !== '' && event.target.value.length < 8) {
-                    errors.push(t("errors.passwordTooShort"))
-                    error = true
-                }
-                if(event.target.value !== '' && repeatPassword !== event.target.value) {
-                    setRepeatPasswordErrors([t("errors.passwordMismatch")])
-                    error = true
-                }
+                error = error || validation.requiredLength(event.target.value, errors, "password", 8, 20, t)
+                    || !validation.passwordMatch(event.target.value, errors, repeatPassword, t)
                 setPasswordErrors(errors)
                 break;
             case "prepaidNumber":
                 setPrepaidNumber(event.target.value)
-                if(!/^\d+$/.test(event.target.value)) {
-                    errors.push(t("FORM.prepaidNumber") + "  " + t("errors.numeric"))
-                    error = true
-                }
-                if(event.target.value.length > 20) {
-                    errors.push(t("errors.prepaidNumberTooLong"))
-                    error = true
-                }
-                if(!isPresent(event.target.value)) {
-                    errors.push(t("FORM.prepaidNumber") + "  " + t("errors.required"))
-                    error = true
-                }
+                error = error || validation.requiredNumeric(event.target.value, errors, "prepaidNumber", t) ||
+                    !validation.checkLength(event.target.value, errors, "prepaidNumber", 8, 20, t)
                 setPrepaidNumberErrors(errors)
                 break;
             case "repeatPassword":
                 setRepeatPassword(event.target.value)
-                if(event.target.value !== '' && password !== '' && password !== event.target.value) {
-                    errors.push(t("errors.passwordMismatch"))
-                    error = true
-                }
+                error = error || !validation.passwordMatch(password, errors, event.target.value, t)
                 setRepeatPasswordErrors(errors)
                 break;
         }
@@ -296,8 +181,7 @@ function SignUp() {
                                     </ul>
                                 </div>
                             </div>
-                        )}
-                    </Col>
+                        )}                    </Col>
                     <Col className="mx-4">
                         <Form.Group className="mb-3 div-signup" controlId="lastName">
                             <Form.Label className="label-signup m-3">{t("FORM.lastName")}</Form.Label>
