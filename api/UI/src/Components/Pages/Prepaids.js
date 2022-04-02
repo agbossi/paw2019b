@@ -23,11 +23,6 @@ function Prepaids(props) {
             setPrepaids(response.data)
             setMaxPage(Utils.getMaxPage(response.headers.link));
         }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
-        }
     }
 
     useEffect(async () => {
@@ -58,10 +53,6 @@ function Prepaids(props) {
         if (response && response.ok) {
             await fetchPrepaids(page)
             setMessage("")
-        } else if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
         } else if (response.status === 409) {
             if (response.data === "prepaid-exists") {
                 setMessage("errors.prepaidExists")

@@ -93,8 +93,7 @@ function DoctorClinicSchedule(props) {
             if (response.data === "schedule-exists")
                 setMessage("errors.scheduleExists")
         }
-        if (response.status === 401)
-            handleUnauth()
+
     }
 
     const handleDelete = async (day, hour) => {

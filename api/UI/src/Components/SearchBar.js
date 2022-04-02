@@ -154,7 +154,7 @@ function SearchBar(props) {
                     <div className="list-group-item list-group-item-action">
                         <FormGroup className="mb-3" controlId="firstName">
                                     <Form.Label>{t("FORM.firstName")}</Form.Label>
-                                    <Form.Control placeholder="Enter first name"
+                                    <Form.Control placeholder={t("FORM.enterFirstName")}
                                                   value={firstName}
                                                   onChange={onChange}/>
                         </FormGroup>
@@ -176,7 +176,7 @@ function SearchBar(props) {
                     <div className="list-group-item list-group-item-action">
                         <Form.Group className="mb-3" controlId="lastName">
                                     <Form.Label>{t("FORM.lastName")}</Form.Label>
-                                    <Form.Control placeholder="Enter last name"
+                                    <Form.Control placeholder={t("FORM.enterLastName")}
                                                   value={lastName}
                                                   onChange={onChange}/>
                         </Form.Group>

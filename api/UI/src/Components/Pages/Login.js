@@ -28,7 +28,12 @@ const WrappedLogin = props => {
     const navigate = useNavigate()
     const location = useLocation()
     const {t} = useTranslation()
-
+    console.log('navigate info')
+    console.log(navigate)
+    console.log(navigate.state)
+    console.log('location info')
+    console.log(location)
+    console.log(location.search !== null && location.search !== undefined)
     return <Login navigate={navigate} t={t} location={location} {...props} />
 }
 
@@ -40,14 +45,16 @@ class Login extends Component {
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
         //this.loginRedirect = this.loginRedirect.bind(this);
-
+        let message = '';
         console.log('path en constructor: ' + localStorage.getItem("path"))
-
+        if(props.location.search !== null && props.location.search !== undefined) {
+            message = this.props.t('errors.auth')
+        }
         this.state = {
             email: "",
             password: "",
             loading: false,
-            message: "",
+            message: message,
             redirect: localStorage.getItem("path")
         };
 
@@ -64,18 +71,6 @@ class Login extends Component {
             password: e.target.value
         });
     }
-
-    /*loginRedirect(redirectPath) {
-        console.log('redirect path ' + redirectPath)
-        console.log('state redirect ' + this.state.redirect)
-        if (localStorage.getItem("path") !== null) {
-            this.props.navigate('/paw-2019b-4/' + localStorage.getItem("path"));
-        } else if(redirectPath !== null && redirectPath !== undefined) {
-            this.props.navigate(redirectPath);
-        } else {
-            this.props.navigate('/paw-2019b-4/login')
-        }
-    } */
 
     handleLogin(e) {
         e.preventDefault();
@@ -94,20 +89,12 @@ class Login extends Component {
                         switch (localStorage.getItem('role')) {
                             case "ROLE_ADMIN":
                                 redirectPath = "/paw-2019b-4/admin"
-                                //this.props.navigate("/paw-2019b-4/admin");
-                                //window.location.reload()
                                 break;
                             case "ROLE_DOCTOR":
                                 redirectPath = "/paw-2019b-4/doctor"
-                                //this.props.navigate("/paw-2019b-4/doctor");
-                                //window.location.reload()
                                 break;
                             case "ROLE_USER":
                                 redirectPath = "/paw-2019b-4"
-                                //localStorage.removeItem("path")
-                                //window.location.reload()
-                                //this.props.navigate("/paw-2019b-4");
-                                //window.location.reload()
                                 break;
                         }
                         if (localStorage.getItem("path") !== null) {
@@ -134,7 +121,6 @@ class Login extends Component {
                     }
                 },
                 error => {
-                    console.log('en error')
                     const resMessage =
                         (error.response &&
                             error.response.data &&

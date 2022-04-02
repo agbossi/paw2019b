@@ -6,20 +6,11 @@ const getDoctorsAdmin = async (pag) => api.get(
 const searchDocs = async (pag, location, specialty, firstName, lastName, consultPrice, prepaid) => api.get(
     cons.DOCTORS_PATH + "?" + cons.PAGE_QUERY + pag
     + getSearchQuery(location, specialty, firstName, lastName, consultPrice, prepaid))
-const addDoctor = async (data) => api.post(
-    cons.DOCTORS_PATH,
-    data,
-    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
-);
+const addDoctor = async (data) => api.post(cons.DOCTORS_PATH, data);
 const deleteDoctor = async (license) => api.delete(
-    cons.DOCTORS_PATH + '/' + license,
-    {},
-    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}})
+    cons.DOCTORS_PATH + '/' + license,{},)
 const editDoctor = async (license, data) => api.put(
-    cons.DOCTORS_PATH + "/" + license,
-    data,
-    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
-    )
+    cons.DOCTORS_PATH + "/" + license, data)
 
 const getClinics = async (license, pag) =>
     api.get (cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "?" + cons.PAGE_QUERY + pag)
@@ -28,19 +19,12 @@ const getAllClinics = async (license) =>
 const getDocByEmail = async (email) => api.get (cons.DOCTORS_PATH + "?" + cons.MODE + "one" + '&' + cons.EMAIL_QUERY + email)
 const getDocByLicense = async (license) => api.get(cons.DOCTORS_PATH + "/" + license)
 const addDoctorToClinic = async (data, license) => api.post(
-    cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH,
-    data,
-    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}})
+    cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH, data)
 const deleteDoctorsClinic = async (license, clinic) => api.delete(
-    cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinic,
-    {},
-    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
-)
+    cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinic, {})
 const editPrice = async (license, clinicId, price) => api.put(
     cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinicId + "?" + cons.PRICE_QUERY + price,
-    {},
-    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
-)
+    {})
 const getSchedule = async (license) => api.get(
     cons.DOCTORS_PATH + "/" + license + "/schedules")
 const addSchedule = async (license, clinicId, day, hour) => api.post(
@@ -48,19 +32,14 @@ const addSchedule = async (license, clinicId, day, hour) => api.post(
     {
         day: day,
         hour: hour
-    },
-    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
-)
+    })
 
 const getAvailableAppointments = async (license) => api.get(
     cons.DOCTORS_PATH + '/' + license + cons.APPOINTMENT_PATH);
 
 const deleteSchedule = async (license, clinicId, day, hour) => api.delete(
     cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinicId + "/schedules"
-    + "?" + cons.DAY_QUERY + day + "&" + cons.HOUR_QUERY + hour,
-    {},
-    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
-)
+    + "?" + cons.DAY_QUERY + day + "&" + cons.HOUR_QUERY + hour, {})
 
 const getSearchQuery = (location, specialty, firstName, lastName, consultPrice, prepaid) => {
     const queryParams = [];

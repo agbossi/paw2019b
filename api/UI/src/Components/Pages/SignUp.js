@@ -117,8 +117,14 @@ function SignUp() {
     }
 
     const handleSignUp = async (e) => {
+
         e.preventDefault();
         setInvalidForm(true)
+        if(!isPresent(firstName) || !isPresent(email) || !isPresent(lastName) ||
+            !isPresent(document) || !isPresent(password) || (isPresent(selectedPrepaid) && !isPresent(prepaidNumber))) {
+            setMessage(t('errors.incompleteForm'))
+            return
+        }
         let data = {
             firstName: firstName,
             lastName: lastName,
@@ -130,17 +136,37 @@ function SignUp() {
             prepaidNumber: prepaidNumber
         }
 
-        const resp = await ApiCalls.signUp(data)
+        await ApiCalls.signUp(data)
+            .then(
+                (resp) => {
+                    if (resp.status === 201) {
+                        navigate("/paw-2019b-4/login");
+                        window.location.reload()
+                    }
+                    console.log('data')
+                    console.log(resp.data)
+                    if (resp.status === 409) {
+                        if (resp.data === "user-exists") {
+                            console.log('409 en signup')
+                            setMessage(t("errors.emailInUse"))
+                        }
+                    }
+                },
+                error => {
+                    /*console.log('en signup error?')
+                    console.log(error)
+                    const resMessage =
+                        (error.response &&
+                            error.response.data &&
+                            error.response.data.message) ||
+                        error.message ||
+                        error.toString();*/
+                    setMessage(t('error.emailInUse'))
+                    return
+                }
+            );
 
-        if (resp.status === 201) {
-            navigate("/paw-2019b-4/login");
-            window.location.reload()
-        }
-        if (resp.status === 409) {
-            if (resp.data === "user-exists") {
-                setMessage(t("errors.emailInUse"))
-            }
-        }
+
         setInvalidForm(false)
     }
 

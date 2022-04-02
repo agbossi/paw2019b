@@ -15,11 +15,7 @@ const getImage = async (license) => api.get(
     )
 
 const deleteImage = async (license) => api.delete(
-    cons.DOCTORS_PATH + "/" + license + cons.IMAGE_PATH,
-    {},
-    {headers: {
-            'X-AUTH-TOKEN': localStorage.getItem('token')}}
-    )
+    cons.DOCTORS_PATH + "/" + license + cons.IMAGE_PATH, {},)
 
 export default {
     uploadImage,

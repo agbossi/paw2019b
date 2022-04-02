@@ -30,12 +30,6 @@ function Favorites() {
             setMaxPage(Number(Utils.getMaxPage(response.headers.link)));
             setIsLoading(false)
         }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            localStorage.removeItem('email')
-            navigate('/paw-2019b-4/login')
-        }
     }
 
     const removeFromFavorites = async (license) => {

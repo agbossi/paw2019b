@@ -1,5 +1,5 @@
 import './App.css';
-import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
+import {BrowserRouter as Router, Routes, Route, Navigate, useNavigate} from "react-router-dom";
 import Home from './Components/Pages/Home'
 import Navbar from "./Components/NavBar";
 import AdminHome from "./Components/Pages/AdminHome";
@@ -19,6 +19,7 @@ import UserDoctorProfile from "./Components/Pages/UserDoctorProfile";
 import Favorites from "./Components/Pages/Favorites";
 import Profile from "./Components/Pages/Profile";
 import Appointments from "./Components/Pages/Appointments";
+import utils from "./utils/functions";
 
 function App() {
 
@@ -30,17 +31,30 @@ function App() {
 
     function AdminRoute({ children }) {
         const auth = isAdmin();
-        return auth ? children : <Navigate to="/paw-2019b-4/login" />;
+        if(!auth) {
+            utils.handleUnAuth()
+            return <Navigate to="/paw-2019b-4/login?unAuth=true"/>;
+        }
+        return children
     }
 
     function DoctorRoute ({children}) {
         const auth = isDoc();
-        return auth ? children : <Navigate to="/paw-2019b-4/login" />;
+        if(!auth) {
+            utils.handleUnAuth()
+            console.log('siquiera paso por aca?')
+            return <Navigate to="/paw-2019b-4/login?unAuth=true" state={{k: 'sarasa'}}/>;
+        }
+        return children
     }
 
     function UserRoute ({children}) {
         const auth = isUser();
-        return auth ? children : <Navigate to="/paw-2019b-4/login" />;
+        if(!auth) {
+            utils.handleUnAuth()
+            return <Navigate to="/paw-2019b-4/login?unAuth=true"/>;
+        }
+        return children
     }
 
   return (
@@ -57,7 +71,7 @@ function App() {
                     <Route exact path="/paw-2019b-4/doctor/appointments" element={<DoctorRoute><Appointments user="doctor" /></DoctorRoute>} />
                     <Route exact path="/paw-2019b-4/doctor/:license/clinics/:id/schedule"
                            element={<DoctorRoute><DoctorClinicSchedule /></DoctorRoute>} />
-                    <Route exact path='/paw-2019b-4/admin/' exact element={<AdminRoute><AdminHome /></AdminRoute>}/>
+                    <Route exact path='/paw-2019b-4/admin/' element={<AdminRoute><AdminHome /></AdminRoute>}/>
                     <Route exact path='/paw-2019b-4/admin/locations' element={<AdminRoute><Locations /></AdminRoute>}/>
                     <Route exact path='/paw-2019b-4/admin/specialties' element={<AdminRoute><Specialties /></AdminRoute>}/>
                     <Route exact path='/paw-2019b-4/admin/clinics' element={<AdminRoute><Clinics /></AdminRoute>} />

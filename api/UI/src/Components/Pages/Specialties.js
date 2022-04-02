@@ -22,11 +22,6 @@ function Specialties(props){
             setSpecialties(response.data);
             setMaxPage(Utils.getMaxPage(response.headers.link));
         }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
-        }
     }
 
     useEffect(async () => {
@@ -62,10 +57,6 @@ function Specialties(props){
         if (response && response.ok) {
             await fetchSpecialties(page)
             setMessage("")
-        } else if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
         } else if (response.status === 409) {
             if (response.data === "specialty-exists") {
                 setMessage("errors.specialtyExists")

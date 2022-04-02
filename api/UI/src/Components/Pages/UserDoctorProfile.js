@@ -137,11 +137,7 @@ function UserDoctorProfile(props) {
             if (response && response.ok) {
                 navigate("/paw-2019b-4/appointments")
             }
-            if (response.status === 401) {
-                localStorage.removeItem('token')
-                localStorage.removeItem('role')
-                navigate('/paw-2019b-4/login')
-            }
+
             if (response.status === 400) {
                 if (response.data === "past-date")
                     setMessage("errors.datePast")
@@ -201,12 +197,6 @@ function UserDoctorProfile(props) {
                 setMessage("errors.noDocFound")
             if (response.data === "patient-not-found")
                 setMessage("errors.noPatientEmail")
-        }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            localStorage.setItem('path', "/" + license + "/profile")
-            navigate('/paw-2019b-4/login')
         }
     }
 

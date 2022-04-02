@@ -94,6 +94,7 @@ export const TRANSLATION_EN = {
         id: "Id"
     },
     errors: {
+        auth: "other credentials required for that page",
         licenseInUse: "Licence already registered",
         emailInUse: "Email already registered",
         specialtyNotFound: "Specialty chosen does not exist",
@@ -141,7 +142,8 @@ export const TRANSLATION_EN = {
         noPatientEmail: "No patient found with logged email",
         favExists: "The doctor is already a favorite",
         noAppointmentFound: "No appointment found",
-        alreadySubscribed: "Already subscribed to this clinic"
+        alreadySubscribed: "Already subscribed to this clinic",
+        incompleteForm: "Please complete all mandatory fields"
     },
     actions: {
         add: "Add",

@@ -90,9 +90,6 @@ function DoctorHome(props) {
         if (response.status === 404) {
             setMessage('errors.doctorNotFoundEdit')
         }
-        if (response.status === 401) {
-            handleUnauth()
-        }
     }
 
     const handleUpload = async (formData) => {
@@ -129,9 +126,7 @@ function DoctorHome(props) {
             setImage(null)
             setMessage("")
         }
-        if (response.status === 401) {
-            handleUnauth()
-        }
+
         if (response.status === 404) {
             if (response.data === "doctor-not-found") {
                 setMessage("errors.docLoggedNotFound")

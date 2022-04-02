@@ -103,6 +103,7 @@ export const TRANSLATION_ES = {
         update: "Actualizar"
     },
     errors: {
+        auth: "Se requieren otras credenciales para acceder a esa pagina",
         licenseInUse: "Licencia ya registrada",
         emailInUse: "Email ya registrado",
         specialtyNotFound: "La especialidad elegida no existe",
@@ -150,7 +151,8 @@ export const TRANSLATION_ES = {
         noPatientEmail: "No se encontró paciente con el email en sesión",
         favExists: "El doctor ya es un favorito",
         noAppointmentFound: "No se encontró el turno",
-        alreadySubscribed: "Yá está suscripto a esta clínica"
+        alreadySubscribed: "Yá está suscripto a esta clínica",
+        incompleteForm: "Por favor complete todos los campos obligatorios"
     },
     CAL : {
         hour: "Hora",

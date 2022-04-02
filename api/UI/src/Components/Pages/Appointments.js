@@ -22,7 +22,7 @@ function Appointments(props) {
         if (email === null) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
+            //navigate('/paw-2019b-4/login')
         }
         setIsLoading(true)
         const response = await AppointmentCalls.getAppointment(email, pag)
@@ -31,12 +31,6 @@ function Appointments(props) {
             setMaxPage(Utils.getMaxPage(response.headers.link));
             setMessage("")
             setIsLoading(false)
-        }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            localStorage.removeItem('email')
-            navigate('/paw-2019b-4/login')
         }
         if (response.status === 404) {
             if (response.data === "user-not-found")
@@ -49,7 +43,7 @@ function Appointments(props) {
         if (email === null) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
+            //navigate('/paw-2019b-4/login')
         }
         const response = await AppointmentCalls.deleteAppointment(
             email,
@@ -63,12 +57,6 @@ function Appointments(props) {
             await fetchAppointments(page)
             setMessage("")
         }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            localStorage.removeItem('email')
-            navigate('/paw-2019b-4/login')
-        }
         if (response.status === 404) {
             if (response.data === "doctor-clinic-not-found")
                 setMessage("errors.docClinicNotFound")
@@ -78,7 +66,8 @@ function Appointments(props) {
     }
 
     useEffect(async () => {
-        localStorage.setItem('path', '/' + props.user + '/appointments')
+        let path = props.user === 'doctor/' ? props.user : ''
+        localStorage.setItem('path', '/' + path + 'appointments')
         await fetchAppointments(page);
     }, [])
 

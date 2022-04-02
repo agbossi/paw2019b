@@ -24,11 +24,7 @@ function Doctors() {
             setDoctors(response.data)
             setMaxPage(Number(Utils.getMaxPage(response.headers.link)))
         }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
-        }
+
     }
 
     const fetchSpecialties = async () => {
@@ -54,10 +50,6 @@ function Doctors() {
         if (response && response.ok) {
             await fetchDoctors(page)
             setMessage("")
-        } else if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
         } else if (response.status === 409) {
             if (response.data === 'license-in-use')
                 setMessage("errors.licenseInUse")

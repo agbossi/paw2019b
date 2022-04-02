@@ -36,11 +36,6 @@ function Profile() {
         if (response && response.ok) {
             setPrepaids(response.data.map(prepaid => prepaid.name))
         }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
-        }
     }
 
     const fetchProfile = async () => {
@@ -72,12 +67,6 @@ function Profile() {
         const response = await AppointmentCalls.getAppointment(email, 0)
         if (response && response.ok) {
             setAppointments(response.data.slice(0, 3))
-        }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            localStorage.removeItem('email')
-            navigate('/paw-2019b-4/login')
         }
     }
     const handleProfileUpdateOk = async () => {

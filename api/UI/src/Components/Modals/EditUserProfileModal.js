@@ -123,11 +123,7 @@ function EditUserProfileModal(props) {
         if (response && response.ok) {
             props.handleOk()
         }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
-        }
+
         setInvalidForm(false)
         handleShow()
     }

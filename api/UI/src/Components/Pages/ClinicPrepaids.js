@@ -33,11 +33,6 @@ function ClinicPrepaids() {
                 setMessage("errors.clinicNotFound")
             }
         }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
-        }
 
     }
 
@@ -64,11 +59,6 @@ function ClinicPrepaids() {
         const response = await PrepaidCalls.getAllPrepaids();
         if (response && response.ok) {
             setAllPrepaids(response.data)
-        }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
         }
     }
 
@@ -102,11 +92,6 @@ function ClinicPrepaids() {
             await fetchAllClinicPrepaids()
             await fetchClinicPrepaids(page)
             setMessage("")
-        }
-        if(response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
         }
         if (response.status === 404) {
             if (response.data === "prepaid-not-found") {

@@ -29,11 +29,6 @@ function Clinics(props) {
             setClinics(response.data)
             setMaxPage(Number(Utils.getMaxPage(response.headers.link)));
         }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
-        }
     }
 
     const fetchLocation = async () => {
@@ -62,10 +57,6 @@ function Clinics(props) {
         if (response.status === 404) {
             if (response.data === "clinic-not-found")
                 setMessage("errors.clinicNotFoundDelete")
-        } else if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
         }
     }
 
@@ -110,11 +101,7 @@ function Clinics(props) {
             setShow(false)
             setMessage("")
         }
-        if (response.status === 401) {
-            localStorage.removeItem('token')
-            localStorage.removeItem('role')
-            navigate('/paw-2019b-4/login')
-        }
+
         if (response.status === 404) {
             if (response.data === "clinic-not-found") {
                 setMessage("errors.clinicNotFoundEdit")

@@ -1,23 +1,16 @@
 import api from "./index";
 import * as cons from './Constants.js'
 
-const makeAppointment = async (data) => api.post(
-    cons.APPOINTMENT_PATH,
-    data,
-    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
-    )
+const makeAppointment = async (data) => api.post(cons.APPOINTMENT_PATH, data)
 
 const getAppointment = async (email, page) => api.get(
     cons.APPOINTMENT_PATH + '/' + email + "?" + cons.PAGE_QUERY + page,
-    {},
-    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
+    {}
 )
 
 const deleteAppointment = async (email, license, clinic, year, month, day, time) => api.delete(
     cons.APPOINTMENT_PATH + '/' + email + '?' + deleteQueryParams(license, clinic, year, month, day, time),
-    {},
-    {headers: {'X-AUTH-TOKEN': localStorage.getItem('token')}}
-)
+    {})
 
 const deleteQueryParams = (license, clinic, year, month, day, time) => {
     return cons.LICENSE_QUERY + license + '&' + cons.CLINIC_QUERY + clinic + '&' + cons.YEAR_QUERY + year + '&' +
