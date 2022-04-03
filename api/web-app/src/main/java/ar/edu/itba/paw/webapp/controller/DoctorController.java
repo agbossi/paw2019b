@@ -213,7 +213,7 @@ public class DoctorController {
      */
     @GET
     @Path("/{license}/image")
-    @Produces(value = { MediaType.MULTIPART_FORM_DATA })
+    @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getProfileImage(@PathParam("license") final String license,
                                     @Context Request request) throws EntityNotFoundException {
         Doctor d = doctorService.getDoctorByLicense(license);

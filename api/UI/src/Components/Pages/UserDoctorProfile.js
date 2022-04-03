@@ -98,12 +98,17 @@ function UserDoctorProfile(props) {
 
     useEffect(async () => {
         await fetchDoctor();
+        localStorage.setItem('path', "/" + license + "/profile")
         await fetchImage();
         await fetchSchedule();
         await fetchClinics();
         await fetchAvailableAppointments();
-        await fetchIsFavorite();
-        localStorage.setItem('path', "/" + license + "/profile")
+        if(localStorage.getItem('email') !== null) {
+            console.log('entro a favorites?')
+            console.log(localStorage.getItem('email'))
+            await fetchIsFavorite();
+
+        }
     },[])
 
     const getName = () => {

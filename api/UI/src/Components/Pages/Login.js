@@ -33,7 +33,7 @@ const WrappedLogin = props => {
     console.log(navigate.state)
     console.log('location info')
     console.log(location)
-    console.log(location.search !== null && location.search !== undefined)
+    console.log(location.search !== null && location.search !== undefined && location.search !== '')
     return <Login navigate={navigate} t={t} location={location} {...props} />
 }
 
@@ -47,7 +47,7 @@ class Login extends Component {
         //this.loginRedirect = this.loginRedirect.bind(this);
         let message = '';
         console.log('path en constructor: ' + localStorage.getItem("path"))
-        if(props.location.search !== null && props.location.search !== undefined) {
+        if(props.location.search !== null && props.location.search !== undefined && props.location.search !== '') {
             message = this.props.t('errors.auth')
         }
         this.state = {
