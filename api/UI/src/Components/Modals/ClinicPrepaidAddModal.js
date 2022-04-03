@@ -20,7 +20,7 @@ import "../../i18n/i18n"
 
     const handleAdd = async () => {
         setNewPrepaid("")
-        await props.handleAdd(newPrepaid)
+        await props.handleAdd({name: newPrepaid})
         handleShow()
 
     }

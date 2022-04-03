@@ -5,7 +5,7 @@ import * as cons from './Constants.js'
 const getSpecialties = async (pag) => api.get(cons.SPECIALTIES_PATH + "?" + cons.PAGE_QUERY + pag);
 const getAllSpecialties = async () => api.get(cons.SPECIALTIES_PATH + "?" + cons.MODE + "all");
 const addSpecialty = async (data) => api.post(cons.SPECIALTIES_PATH, data);
-const deleteSpecialty = async (name) => api.delete(cons.SPECIALTIES_PATH + "/" + name, {})
+const deleteSpecialty = async (name) => api.delete(cons.SPECIALTIES_PATH + "?" + cons.SPECIALTY_QUERY + name, {})
 
 export default {
     getSpecialties,

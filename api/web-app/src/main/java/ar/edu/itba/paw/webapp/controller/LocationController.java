@@ -77,9 +77,8 @@ public class LocationController {
      * @throws EntityDependencyException
      */
     @DELETE
-    @Path("/{name}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response deleteLocation(@PathParam("name") final String name)
+    public Response deleteLocation(@QueryParam("location") final String name)
             throws EntityNotFoundException, EntityDependencyException {
         locationService.deleteLocation(name);
         return Response.noContent().build();

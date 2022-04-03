@@ -67,9 +67,8 @@ public class PrepaidController {
      * @throws EntityNotFoundException
      */
     @DELETE
-    @Path("/{name}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response deleteLocation(@PathParam("name") final String name) throws EntityNotFoundException {
+    public Response deletePrepaid(@QueryParam("prepaid") final String name) throws EntityNotFoundException {
         prepaidService.deletePrepaid(name);
         return Response.noContent().build();
     }

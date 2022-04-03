@@ -5,7 +5,7 @@ import * as cons from './Constants.js'
 const getLocations = async (pag) => api.get(cons.LOCATIONS_PATH + "?" + cons.PAGE_QUERY + pag);
 const getAllLocations = async () => api.get(cons.LOCATIONS_PATH + "?" + cons.MODE + "all")
 const addLocation = async (data) => api.post(cons.LOCATIONS_PATH, data);
-const deleteLocation = async (name) => api.delete(cons.LOCATIONS_PATH + "/" + name, {})
+const deleteLocation = async (name) => api.delete(cons.LOCATIONS_PATH + "?" + cons.LOCATION_QUERY + name, {})
 
 export default {
     getLocations,

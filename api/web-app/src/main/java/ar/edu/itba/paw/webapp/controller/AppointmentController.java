@@ -1,17 +1,12 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.AppointmentService;
-import ar.edu.itba.paw.interfaces.service.ClinicService;
-import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.interfaces.service.UserService;
-import ar.edu.itba.paw.model.Clinic;
-import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.webapp.caching.AppointmentCaching;
 import ar.edu.itba.paw.webapp.dto.AppointmentDto;
 import ar.edu.itba.paw.webapp.form.AppointmentForm;
-import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import ar.edu.itba.paw.webapp.helpers.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -98,45 +93,6 @@ public class AppointmentController {
 
 
     }
-
-    /* @GET
-    @Path("{userId}/{clinicId}")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    @PreAuthorize("hasPermission(#email, 'user')")
-    public Response getUserAppointmentsForClinic(@PathParam("userId") final String email,
-                                                 @PathParam("clinicId") final Integer clinicId,
-                                                 @Context Request request) {
-        User user = userService.findUserByEmail(email);
-        Clinic clinic = clinicService.getClinicById(clinicId);
-        if(user != null && clinic != null) {
-            List<AppointmentDto> appointments = appointmentService.getUserAppointmentsForClinic(user, clinic)
-                    .stream().map(appointment -> AppointmentDto.fromAppointment(appointment, uriInfo))
-                    .collect(Collectors.toList());
-            return CacheHelper.handleResponse(appointments, appointmentCaching,
-                    new GenericEntity<List<AppointmentDto>>(appointments) {},
-                    "appointments", request).build();
-        }
-        return Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build();
-    }
-
-    @DELETE
-    @Path("{userId}/{clinicId}")
-    @PreAuthorize("hasPermission(#email, 'user')")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response cancelAppointmentInClinic(@PathParam("userId") final String email,
-                                      @PathParam("clinicId") final Integer clinic,
-                                      @QueryParam("license") final String license,
-                                      @QueryParam("year") final Integer year,
-                                      @QueryParam("month") final Integer month,
-                                      @QueryParam("day") final Integer day,
-                                      @QueryParam("time") final Integer time) throws EntityNotFoundException,
-            RequestEntityNotFoundException {
-
-        appointmentService.cancelUserAppointment(email, license, clinic, year, month, day, time);
-        return Response.noContent().build();
-
-
-    } */
 
 
     /**

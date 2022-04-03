@@ -35,7 +35,7 @@ public class TokenHandler {
 
     public String createTokenForUser(String email) {
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + TimeUnit.MINUTES.toMillis(2L));
+        Date expiration = new Date(now.getTime() + TimeUnit.HOURS.toMillis(2L));
         return Jwts.builder()
                 .setId(UUID.randomUUID().toString())
                 .setSubject(email)

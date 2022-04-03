@@ -12,6 +12,7 @@ import ar.edu.itba.paw.webapp.caching.PrepaidCaching;
 import ar.edu.itba.paw.webapp.dto.ClinicDto;
 import ar.edu.itba.paw.webapp.dto.PrepaidDto;
 import ar.edu.itba.paw.webapp.form.ClinicForm;
+import ar.edu.itba.paw.webapp.form.PrepaidForm;
 import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import ar.edu.itba.paw.webapp.helpers.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -172,7 +173,7 @@ public class ClinicController {
             List<PrepaidDto> prepaids = prepaidToClinicService.getPrepaidsForClinic(clinicId, page)
                     .stream().map(PrepaidDto::fromPrepaid)
                     .collect(Collectors.toList());
-            int maxPage = prepaidToClinicService.maxAvailablePagePerClinic(clinicId);
+            int maxPage = prepaidToClinicService.maxAvailablePagePerClinic(clinicId) - 1;
             return PaginationHelper.handlePagination(page, maxPage, "prepaids",
                     uriInfo, prepaids, prepaidCaching,
                     new GenericEntity<List<PrepaidDto>>(prepaids) {}, request);
@@ -182,19 +183,18 @@ public class ClinicController {
     /**
      * Lets ADMIN add a prepaid to a specific clinic
      * @param clinicId
-     * @param prepaidId
      * @return
      * @throws EntityNotFoundException
      */
     @POST
-    @Path("{clinicId}/prepaids/{prepaidId}")
+    @Path("{clinicId}/prepaids")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response addPrepaidToClinic(@PathParam("clinicId") final Integer clinicId,
-                                       @PathParam("prepaidId") final String prepaidId)
+                                       final PrepaidForm form)
             throws EntityNotFoundException {
 
-        prepaidToClinicService.addPrepaidToClinic(prepaidId, clinicId);
+        prepaidToClinicService.addPrepaidToClinic(form.getName(), clinicId);
         return Response.created(uriInfo.getAbsolutePath()).build();
 
     }
@@ -207,10 +207,10 @@ public class ClinicController {
      * @throws EntityNotFoundException
      */
     @DELETE
-    @Path("{clinicId}/prepaids/{prepaidId}")
+    @Path("{clinicId}/prepaids")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response removePrepaidFromClinic(@PathParam("clinicId") final Integer clinicId,
-                                            @PathParam("prepaidId") final String prepaid)
+                                            @QueryParam("prepaid") final String prepaid)
             throws EntityNotFoundException {
         prepaidToClinicService.deletePrepaidFromClinic(prepaid, clinicId);
         return Response.noContent().build();

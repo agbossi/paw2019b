@@ -71,9 +71,8 @@ public class SpecialtyController {
      * @throws EntityDependencyException
      */
     @DELETE
-    @Path("/{specialty}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response deleteSpecialty(@PathParam("specialty") final String specialty)
+    public Response deleteSpecialty(@QueryParam("specialty") final String specialty)
             throws EntityNotFoundException, EntityDependencyException {
         specialtyService.deleteSpecialty(specialty);
         return Response.noContent().build();
