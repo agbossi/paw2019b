@@ -40,10 +40,9 @@ public class AppointmentController {
      * @throws EntityNotFoundException
      */
     @GET
-    @Path("{user}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    @PreAuthorize("hasPermission(#email, 'user')")
-    public Response getUserAppointments(@PathParam("user") final String email,
+    @PreAuthorize("hasPermission(#email, 'email')")
+    public Response getUserAppointments(@QueryParam("email") final String email,
                                         @QueryParam("page") @DefaultValue("0") Integer page,
                                         @Context Request request) throws EntityNotFoundException {
         page = (page < 0) ? 0 : page;
@@ -76,10 +75,9 @@ public class AppointmentController {
      * @throws RequestEntityNotFoundException
      */
     @DELETE
-    @Path("{user}")
     @Produces(value = { MediaType.APPLICATION_JSON })
-    @PreAuthorize("hasPermission(#email, 'user')")
-    public Response cancelAppointment(@PathParam("user") final String email,
+    @PreAuthorize("hasPermission(#email, 'email')")
+    public Response cancelAppointment(@QueryParam("email") final String email,
                                       @QueryParam("clinic") final Integer clinic,
                                       @QueryParam("license") final String license,
                                       @QueryParam("year") final Integer year,

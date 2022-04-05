@@ -4,12 +4,12 @@ import * as cons from './Constants.js'
 const makeAppointment = async (data) => api.post(cons.APPOINTMENT_PATH, data)
 
 const getAppointment = async (email, page) => api.get(
-    cons.APPOINTMENT_PATH + '/' + email + "?" + cons.PAGE_QUERY + page,
+    cons.APPOINTMENT_PATH + '?' + cons.EMAIL_QUERY + email + "&" + cons.PAGE_QUERY + page,
     {}
 )
 
 const deleteAppointment = async (email, license, clinic, year, month, day, time) => api.delete(
-    cons.APPOINTMENT_PATH + '/' + email + '?' + deleteQueryParams(license, clinic, year, month, day, time),
+    cons.APPOINTMENT_PATH + '?' + cons.EMAIL_QUERY + email + '&' + deleteQueryParams(license, clinic, year, month, day, time),
     {})
 
 const deleteQueryParams = (license, clinic, year, month, day, time) => {
