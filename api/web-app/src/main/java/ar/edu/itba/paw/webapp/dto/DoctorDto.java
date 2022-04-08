@@ -7,8 +7,11 @@ import java.net.URI;
 
 public class DoctorDto {
 
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
     private String specialty;
-    private UserDto userData;
     private String license;
     private String phoneNumber;
     private URI profileImage;
@@ -18,18 +21,28 @@ public class DoctorDto {
         doctorDto.license = doctor.getLicense();
         doctorDto.specialty = doctor.getSpecialty().getSpecialtyName();
         doctorDto.phoneNumber = doctor.getPhoneNumber();
-        doctorDto.userData = UserDto.fromUser(doctor.getUser());
+        doctorDto.firstName = doctor.getUser().getFirstName();
+        doctorDto.lastName = doctor.getUser().getLastName();
+        doctorDto.email = doctor.getUser().getEmail();
         doctorDto.profileImage = uriInfo.getBaseUriBuilder().path("doctors").path(doctor.getLicense()).path("ProfileImage").build();
         return doctorDto;
     }
 
-    public UserDto getUserData() {
-        return userData;
-    }
+    public String getFirstName() { return firstName; }
 
-    public void setUserData(UserDto userData) {
-        this.userData = userData;
-    }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+
+    public String getLastName() { return lastName; }
+
+    public void setLastName(String lastName) { this.lastName = lastName; }
+
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) { this.password = password; }
 
     public URI getProfileImage() {
         return profileImage;
@@ -45,14 +58,6 @@ public class DoctorDto {
 
     public void setSpecialty(String specialty) {
         this.specialty = specialty;
-    }
-
-    public UserDto getUser() {
-        return userData;
-    }
-
-    public void setUser(UserDto user) {
-        this.userData = user;
     }
 
     public String getLicense() {

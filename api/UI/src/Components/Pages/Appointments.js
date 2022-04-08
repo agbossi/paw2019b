@@ -121,7 +121,7 @@ function Appointments(props) {
                                     <Card.Title><b>{dateToString(ap, t)}</b></Card.Title>
                                     <Card.Text>
                                         {props.user === "patient"? <div>
-                                            {t("USER.doc")}{ap.doctorClinic.doctor.user.firstName + ' ' + ap.doctorClinic.doctor.user.lastName}
+                                            {t("USER.doc")}{ap.doctorClinic.doctor.firstName + ' ' + ap.doctorClinic.doctor.lastName}
                                         </div>: <div>
                                             {t("USER.patient")}{ap.patient.firstName + ' ' + ap.patient.lastName} ({ap.patient.email})
                                         </div> }

@@ -6,7 +6,10 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
 public class PatientDto {
-    private UserDto userData;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
     private String prepaid;
     private String prepaidNumber;
     private String id;
@@ -15,7 +18,9 @@ public class PatientDto {
 
     public static PatientDto fromPatient(Patient patient, UriInfo uriInfo) {
         PatientDto patientDto = new PatientDto();
-        patientDto.userData = UserDto.fromUser(patient.getUser());
+        patientDto.firstName = patient.getUser().getFirstName();
+        patientDto.lastName = patient.getUser().getLastName();
+        patientDto.email = patient.getUser().getEmail();
         patientDto.id = patient.getId();
         patientDto.prepaid = patient.getPrepaid();
         patientDto.prepaidNumber = patient.getPrepaidNumber();
@@ -26,13 +31,21 @@ public class PatientDto {
         return patientDto;
     }
 
-    public UserDto getUserData() {
-        return userData;
-    }
+    public String getFirstName() { return firstName; }
 
-    public void setUserData(UserDto userData) {
-        this.userData = userData;
-    }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+
+    public String getLastName() { return lastName; }
+
+    public void setLastName(String lastName) { this.lastName = lastName; }
+
+    public String getEmail() { return email; }
+
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPassword() { return password; }
+
+    public void setPassword(String password) { this.password = password; }
 
     public String getPrepaid() {
         return prepaid;

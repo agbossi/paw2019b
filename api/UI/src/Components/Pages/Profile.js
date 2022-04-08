@@ -41,10 +41,10 @@ function Profile() {
     const fetchProfile = async () => {
         const response = await PatientCalls.getProfile(localStorage.getItem('email'));
         if (response && response.ok) {
-            setFirstName(response.data.userData.firstName)
-            localStorage.setItem('firstName', response.data.userData.firstName)
-            setLastName(response.data.userData.lastName)
-            localStorage.setItem('lastName', response.data.userData.lastName)
+            setFirstName(response.data.firstName)
+            localStorage.setItem('firstName', response.data.firstName)
+            setLastName(response.data.lastName)
+            localStorage.setItem('lastName', response.data.lastName)
             setSelectedPrepaid(response.data.prepaid)
             localStorage.setItem('prepaid', response.data.prepaid)
             setPrepaidNumber(response.data.prepaidNumber)
@@ -114,7 +114,7 @@ function Profile() {
                             {appointments.map(app => {
                                 return(
                                     <li className="my-3">
-                                        <b>{dateToString(app, t)}</b> {t("with")} <b>{app.doctorClinic.doctor.user.firstName + ' ' + app.doctorClinic.doctor.user.lastName}</b> ({app.doctorClinic.clinic.name})
+                                        <b>{dateToString(app, t)}</b> {t("with")} <b>{app.doctorClinic.doctor.firstName + ' ' + app.doctorClinic.doctor.lastName}</b> ({app.doctorClinic.clinic.name})
                                     </li>
                                 )
                             })}

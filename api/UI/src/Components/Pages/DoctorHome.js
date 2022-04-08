@@ -29,8 +29,8 @@ function DoctorHome(props) {
                 let doctor = response.data[0]
                 setDoctor(doctor)
                 localStorage.setItem('license', doctor.license)
-                localStorage.setItem('firstName', doctor.userData.firstName)
-                localStorage.setItem('lastName', doctor.userData.lastName)
+                localStorage.setItem('firstName', doctor.firstName)
+                localStorage.setItem('lastName', doctor.lastName)
                 localStorage.setItem('specialty', doctor.specialty)
                 localStorage.setItem('phone', doctor.phoneNumber)
             }
@@ -68,15 +68,15 @@ function DoctorHome(props) {
     }
 
     const getDoctorsFirstName = () => {
-        if(doctor.userData === undefined)
+        if(doctor.firstName === undefined || doctor.firstName === null)
             return "Doctor!";
         else
-            return doctor.userData.firstName + " "
+            return doctor.firstName + " "
     }
 
     const getDoctorsLastName = () => {
-        if(doctor.userData !== undefined)
-            return doctor.userData.lastName
+        if(doctor.lastName !== undefined && doctor.lastName !== null)
+            return doctor.lastName
         return ''
     }
 

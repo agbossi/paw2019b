@@ -134,7 +134,7 @@ function Home(props) {
                                           style={{color: "#000", width: '20rem', height: '8rem'}}
                                           key={doctor.license}>
                                         <Card.Body className="card-body-doc">
-                                            <Card.Title>{doctor.user.firstName + ' ' + doctor.user.lastName}</Card.Title>
+                                            <Card.Title>{doctor.firstName + ' ' + doctor.lastName}</Card.Title>
                                             <Card.Text>
                                                 {doctor.specialty}
                                             </Card.Text>

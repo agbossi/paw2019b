@@ -106,7 +106,7 @@ function Favorites() {
                                     <Card className="mb-3 fav-doc-card shadow"
                                           key={doctor.license}>
                                         <Card.Body className="card-body-doc">
-                                            <Card.Title>{doctor.user.firstName + ' ' + doctor.user.lastName}</Card.Title>
+                                            <Card.Title>{doctor.firstName + ' ' + doctor.lastName}</Card.Title>
                                             <Card.Text>
                                                 {doctor.specialty}
                                             </Card.Text>

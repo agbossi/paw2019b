@@ -4,7 +4,6 @@ import ar.edu.itba.paw.interfaces.web.Caching;
 import ar.edu.itba.paw.webapp.dto.ClinicDto;
 import ar.edu.itba.paw.webapp.dto.DoctorClinicDto;
 import ar.edu.itba.paw.webapp.dto.DoctorDto;
-import ar.edu.itba.paw.webapp.dto.UserDto;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -18,11 +17,10 @@ public class DoctorClinicCaching implements Caching<DoctorClinicDto> {
         }
 
         DoctorDto doctor = dc.getDoctor();
-        UserDto userData = doctor.getUser();
         ClinicDto clinic = dc.getClinic();
 
         return Objects.hash(doctor.getLicense(),doctor.getPhoneNumber(), doctor.getSpecialty(),
-                userData.getEmail(), userData.getFirstName(), userData.getLastName(),
+                doctor.getEmail(), doctor.getFirstName(), doctor.getLastName(),
                 clinic.getName(), clinic.getLocation(), clinic.getAddress());
     }
 }

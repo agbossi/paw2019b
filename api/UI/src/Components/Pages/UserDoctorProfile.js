@@ -112,10 +112,10 @@ function UserDoctorProfile(props) {
     },[])
 
     const getName = () => {
-        if (doctor.user === undefined) {
+        if (doctor.firstName === undefined) {
             return ""
         }
-        return doctor.user.firstName + " " + doctor.user.lastName
+        return doctor.firstName + " " + doctor.lastName
     }
 
     const handleMakeApp = async () => {
@@ -206,10 +206,10 @@ function UserDoctorProfile(props) {
     }
 
     const getEmail = () => {
-        if (doctor.user === undefined) {
+        if (doctor.email === undefined || doctor.email === null) {
             return ""
         }
-        return doctor.user.email
+        return doctor.email
     }
 
     const getRow = (row) => {

@@ -131,7 +131,7 @@ function Doctors() {
                             <Card className="mb-3 doc-card shadow"
                                   key={doctor.license}>
                                 <Card.Body>
-                                    <Card.Title><b>{doctor.user.firstName + ' ' + doctor.user.lastName}</b></Card.Title>
+                                    <Card.Title><b>{doctor.firstName + ' ' + doctor.lastName}</b></Card.Title>
                                     <Card.Text>
                                         <b>{t('DOC.license')}</b>: {doctor.license}
                                     </Card.Text>
