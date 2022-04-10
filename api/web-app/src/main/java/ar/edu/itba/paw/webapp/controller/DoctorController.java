@@ -167,7 +167,8 @@ public class DoctorController {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Consumes(MediaType.APPLICATION_JSON)
     @PreAuthorize("hasPermission(#license, 'doctor')")
-    public Response updateDoctor(@PathParam("license") final String license, @Valid EditDoctorProfileForm form)
+    public Response updateDoctor(@PathParam("license") final String license,
+                                 @Valid EditDoctorProfileForm form)
             throws EntityNotFoundException {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor == null) throw new EntityNotFoundException("doctor");
@@ -190,7 +191,7 @@ public class DoctorController {
     @POST
     @Produces(value = { MediaType.APPLICATION_JSON, })
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createDoctor(final DoctorForm form)
+    public Response createDoctor(@Valid final DoctorForm form)
             throws DuplicateEntityException, EntityNotFoundException,
             ar.edu.itba.paw.model.exceptions.BadRequestException {
         if (!form.getPassword().equals(form.getRepeatPassword()))
@@ -336,7 +337,7 @@ public class DoctorController {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#license, 'doctor')")
     public Response createDoctorClinic(@PathParam("license") final String license,
-                                       final DoctorClinicForm form) throws EntityNotFoundException,
+                                       @Valid final DoctorClinicForm form) throws EntityNotFoundException,
             DuplicateEntityException {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor == null) throw new EntityNotFoundException("doctor");

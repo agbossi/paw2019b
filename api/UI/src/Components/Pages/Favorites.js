@@ -5,6 +5,8 @@ import Utils from "../../utils/paginationHelper";
 import {Button, Card, Col, Container, Row} from "react-bootstrap";
 import {Link, useNavigate} from "react-router-dom";
 import './Favorites.css'
+import DoctorCalls from "../../api/DoctorCalls";
+
 
 function Favorites() {
     const [doctors, setDoctors] = useState([])
@@ -15,6 +17,21 @@ function Favorites() {
     const [isLoading, setIsLoading] = useState(false)
     const {t} = useTranslation()
 
+    const fetchDoctors = async (licenses) => {
+        let doctors = []
+        licenses.map(license => {
+            fetchDoctor(license).then(resp => {
+                doctors.push(resp.data)
+            })
+        })
+        console.log('se pusheo?')
+        console.log(doctors)
+        return doctors
+    }
+
+    const fetchDoctor = async (license) => {
+        return await DoctorCalls.getDocByLicense(license)
+    }
 
     const fetchFavorites = async (pag) => {
         let id = localStorage.getItem('email')
@@ -26,7 +43,10 @@ function Favorites() {
         setIsLoading(true)
         const response = await PatientCalls.getFavoriteDoctors(id, pag)
         if (response && response.ok) {
-            setDoctors(response.data)
+            const doctors = await fetchDoctors(response.data.map(f => f.license))
+            setDoctors(doctors)
+            console.log('en la var de estado')
+            console.log(doctors)
             setMaxPage(Number(Utils.getMaxPage(response.headers.link)));
             setIsLoading(false)
         }

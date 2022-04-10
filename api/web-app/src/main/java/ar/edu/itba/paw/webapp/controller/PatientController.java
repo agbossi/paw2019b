@@ -9,9 +9,9 @@ import ar.edu.itba.paw.model.Patient;
 import ar.edu.itba.paw.model.exceptions.DuplicateEntityException;
 import ar.edu.itba.paw.model.exceptions.EntityNotFoundException;
 import ar.edu.itba.paw.model.exceptions.FavouriteExistsException;
-import ar.edu.itba.paw.webapp.caching.DoctorCaching;
+import ar.edu.itba.paw.webapp.caching.FavoriteCaching;
 import ar.edu.itba.paw.webapp.caching.PatientCaching;
-import ar.edu.itba.paw.webapp.dto.DoctorDto;
+import ar.edu.itba.paw.webapp.dto.FavoriteDto;
 import ar.edu.itba.paw.webapp.dto.PatientDto;
 import ar.edu.itba.paw.webapp.form.FavoriteForm;
 import ar.edu.itba.paw.webapp.form.PersonalInformationForm;
@@ -24,6 +24,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
@@ -55,7 +56,7 @@ public class PatientController {
     private PatientCaching patientCaching;
 
     @Autowired
-    private DoctorCaching doctorCaching;
+    private FavoriteCaching favoriteCaching;
 
     @GET
     @Path("{id}")
@@ -130,13 +131,15 @@ public class PatientController {
             }
             return Response.status(Response.Status.NOT_FOUND).entity("not-favorite").build();
         } else {
-            List<DoctorDto> favorites = favoriteService.getPaginatedObjects(page, patient)
-                    .stream().map(f -> DoctorDto.fromDoctor(f.getDoctor(), uriInfo)).collect(Collectors.toList());
+
+            List<FavoriteDto> favorites = favoriteService.getPaginatedObjects(page, patient)
+                    .stream().map(f -> FavoriteDto.fromDoctor(f.getDoctor(), uriInfo))
+                    .collect(Collectors.toList());
+
             int maxPage = favoriteService.maxAvailablePage(patient) - 1;
             return PaginationHelper.handlePagination(page, maxPage, "favorites",
-                    uriInfo, favorites, doctorCaching,
-                    new GenericEntity<List<DoctorDto>>(favorites) {
-                    }, request);
+                    uriInfo, favorites, favoriteCaching,
+                    new GenericEntity<List<FavoriteDto>>(favorites) {}, request);
         }
     }
 
@@ -156,8 +159,8 @@ public class PatientController {
     @Consumes(MediaType.APPLICATION_JSON)
     @PreAuthorize("hasPermission(#patientEmail, 'user')")
     public Response addFavorite(@PathParam("id") final String patientEmail,
-                                @QueryParam("license") String doctorLicense) throws EntityNotFoundException, FavouriteExistsException {
-        patientService.addFavorite(patientEmail, doctorLicense);
+                                @Valid final FavoriteForm form) throws EntityNotFoundException, FavouriteExistsException {
+        patientService.addFavorite(patientEmail, form.getLicense());
         return Response.created(uriInfo.getAbsolutePath()).build();
     }
 }

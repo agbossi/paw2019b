@@ -22,13 +22,41 @@ function DoctorClinics(props) {
     const fetchDoctorsClinics = async (pag) => {
         const response = await DoctorCalls.getClinics(license, pag)
         if (response && response.ok) {
-            setClinics(response.data)
-            setMaxPage(Number(Utils.getMaxPage(response.headers.link)));
-            setMessage("")
+            const fetchPromises = response.data.map(dc => {
+                return new Promise((resolve, reject) => {
+                    fetchClinic(dc.clinicId).then(resp => resolve(resp.data))
+                });
+            })
+            Promise.all(fetchPromises).then(clinics => {
+                let doctorClinics = response.data
+                setClinics(generateDoctorClinics(clinics, doctorClinics))
+                setMaxPage(Number(Utils.getMaxPage(response.headers.link)));
+                setMessage("")
+            })
+
+
         }
         if(response.status === 404) {
             setMessage("errors.docLoggedNotFound")
         }
+    }
+
+    const fetchClinics = async (ids) => {
+        const fetchPromises = ids.map(id => {
+            return new Promise((resolve, reject) => {
+                fetchClinic(id).then(clinic => resolve(clinic))
+            });
+        })
+        Promise.all(fetchPromises).then(clinics => {
+            console.log('que es esto?')
+            console.log(clinics)
+            return clinics
+        })
+
+    }
+
+    const fetchClinic = async (id) => {
+        return await ClinicCalls.getClinic(id)
     }
 
     const fetchAllDoctorClinics = async () => {
@@ -40,6 +68,28 @@ function DoctorClinics(props) {
         if(response.status === 404) {
             setMessage("errors.docLoggedNotFound")
         }
+    }
+
+    const generateDoctorClinics = (clinics, doctorClinics) => {
+        let dc = []
+        doctorClinics.sort((dc1, dc2) => {
+            return dc1.clinicId - dc2.clinicId
+        })
+        clinics.sort((c1, c2) => {
+            return c1.id - c2.id
+        })
+        for (var i = 0; i < doctorClinics.length; i++) {
+            dc.push({
+                id: doctorClinics[i].clinicId,
+                name: clinics[i].name,
+                location: clinics[i].location,
+                address: clinics[i].address,
+                consultPrice: doctorClinics[i].consultPrice
+            })
+        }
+        console.log('generated doctor clinics')
+        console.log(dc)
+        return dc
     }
 
     const fetchAllClinics = async () => {
@@ -118,7 +168,7 @@ function DoctorClinics(props) {
             <DoctorClinicAddModal
                 handleAdd={handleAdd}
                 allClinics={allClinics}
-                clinics={allDoctorClinics.map(clinic => clinic.id)}
+                clinics={allDoctorClinics.map(clinic => clinic.clinicId)}
             />
             {message && (
                 <div className="form-group">
@@ -133,25 +183,25 @@ function DoctorClinics(props) {
                         return (
                             <Card className="mb-3 shadow" style={{color: "#000", width: '20rem', height: '16.5rem'}} key={dc.id}>
                                 <Card.Body>
-                                    <Card.Title>{dc.clinic.name}</Card.Title>
+                                    <Card.Title>{dc.name}</Card.Title>
                                     <Card.Text>
-                                        {dc.clinic.address + ' (' + dc.clinic.location + ')'}
+                                        {dc.address + ' (' + dc.location + ')'}
                                     </Card.Text>
                                     <Card.Text>
                                         {t('DOC.price')}: {String(dc.consultPrice)}
-                                        <EditPriceModal handleEdit={(newPrice) => handleEditPrice(dc.clinic.id, newPrice)}
+                                        <EditPriceModal handleEdit={(newPrice) => handleEditPrice(dc.id, newPrice)}
                                                         price={dc.consultPrice}
                                         />
                                     </Card.Text>
                                     <Link className="btn btn-outline-dark btn-lg see-prepaid-button shadow-sm"
                                           role="button"
-                                          to={`/paw-2019b-4/doctor/${license}/clinics/${dc.clinic.id}/schedule`}>
+                                          to={`/paw-2019b-4/doctor/${license}/clinics/${dc.id}/schedule`}>
                                         {t('scheduleButton')}
                                     </Link>
                                 </Card.Body>
                                 <div className="buttons-div">
                                     <Button className="edit-remove-button remove-button-color shadow-sm"
-                                            onClick={() => handleDelete(dc.clinic.id)}
+                                            onClick={() => handleDelete(dc.id)}
                                     >
                                         {t("deleteButton")}
                                     </Button>

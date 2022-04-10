@@ -3,38 +3,53 @@ package ar.edu.itba.paw.webapp.dto;
 import ar.edu.itba.paw.model.DoctorClinic;
 
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 
 
 public class DoctorClinicDto {
 
-    private DoctorDto doctor;
-    private ClinicDto clinic;
+    private URI doctor;
     private int consultPrice;
-
+    private int clinicId;
+    private String license;
+    private URI clinic;
+    private URI schedules;
 
     public static DoctorClinicDto fromDoctorClinic(DoctorClinic doctorClinic, UriInfo uriInfo) {
         DoctorClinicDto doctorClinicDto = new DoctorClinicDto();
-        doctorClinicDto.doctor = DoctorDto.fromDoctor(doctorClinic.getDoctor(), uriInfo);
-        doctorClinicDto.clinic = ClinicDto.fromClinic(doctorClinic.getClinic(), uriInfo);
+        doctorClinicDto.doctor = uriInfo.getBaseUriBuilder().path("doctors")
+                .path(doctorClinic.getDoctor().getLicense()).build();
+        doctorClinicDto.clinic = uriInfo.getBaseUriBuilder().path("clinics")
+                .path(Integer.toString(doctorClinic.getClinic().getId())).build();
         doctorClinicDto.consultPrice = doctorClinic.getConsultPrice();
+        doctorClinicDto.clinicId = doctorClinic.getClinic().getId();
+        doctorClinicDto.schedules = uriInfo.getBaseUriBuilder().path("doctors")
+                .path(doctorClinic.getDoctor().getLicense()).path("clinics")
+                .path(Integer.toString(doctorClinic.getClinic().getId()))
+                .path("schedules").build();
+        doctorClinicDto.license = doctorClinic.getDoctor().getLicense();
         return doctorClinicDto;
     }
 
-    public DoctorDto getDoctor() {
-        return doctor;
-    }
+    public String getLicense() { return license; }
 
-    public void setDoctor(DoctorDto doctorDto) {
-        this.doctor = doctorDto;
-    }
+    public void setLicense(String license) { this.license = license; }
 
-    public ClinicDto getClinic() {
-        return clinic;
-    }
+    public URI getDoctor() { return doctor; }
 
-    public void setClinic(ClinicDto clinic) {
-        this.clinic = clinic;
-    }
+    public void setDoctor(URI doctor) { this.doctor = doctor; }
+
+    public int getClinicId() { return clinicId; }
+
+    public void setClinicId(int clinicId) { this.clinicId = clinicId; }
+
+    public URI getClinic() { return clinic; }
+
+    public void setClinic(URI clinic) { this.clinic = clinic; }
+
+    public URI getSchedules() { return schedules; }
+
+    public void setSchedules(URI schedules) { this.schedules = schedules; }
 
     public int getConsultPrice() {
         return consultPrice;

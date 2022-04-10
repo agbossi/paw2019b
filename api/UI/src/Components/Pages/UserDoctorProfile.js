@@ -13,6 +13,8 @@ import './UserDoctorProfile.css'
 import docpic from "../../Assets/docpic.jpg";
 import yesFav from "../../Assets/yesfav.png";
 import noFav from "../../Assets/nofav.png";
+import ClinicCalls from "../../api/ClinicCalls";
+import Utils from "../../utils/paginationHelper";
 
 function UserDoctorProfile(props) {
     const {license} = useParams()
@@ -43,13 +45,36 @@ function UserDoctorProfile(props) {
         }
     }
 
-    const fetchClinics = async () => {
+    const fetchAllClinics = async () => {
         const response = await DoctorCalls.getAllClinics(license);
         if (response && response.ok) {
-            setClinics(response.data)
-            setMessage("")
+            const fetchPromises = response.data.map(dc => {
+                return new Promise((resolve, reject) => {
+                    fetchClinic(dc.clinicId).then(resp => resolve(resp.data))
+                });
+            })
+            Promise.all(fetchPromises).then(clinics => {
+                setClinics(clinics)
+                setMessage("")
+            })
         }
 
+    }
+
+    const fetchClinics = async (ids) => {
+        let clinics = []
+        ids.map(id => {
+            fetchClinic(id).then(resp => {
+                clinics.push(resp.data)
+            })
+        })
+        console.log('se pusheo?')
+        console.log(clinics)
+        return clinics
+    }
+
+    const fetchClinic = async (id) => {
+        return await ClinicCalls.getClinic(id)
     }
 
     const fetchImage = async () => {
@@ -101,7 +126,7 @@ function UserDoctorProfile(props) {
         localStorage.setItem('path', "/" + license + "/profile")
         await fetchImage();
         await fetchSchedule();
-        await fetchClinics();
+        await fetchAllClinics();
         await fetchAvailableAppointments();
         if(localStorage.getItem('email') !== null) {
             console.log('entro a favorites?')
@@ -165,7 +190,7 @@ function UserDoctorProfile(props) {
         if (localStorage.getItem('email') === null) {
             navigate("/paw-2019b-4/login")
         }
-        const response = await PatientCalls.addFavoriteDoctor(localStorage.getItem('email'), license)
+        const response = await PatientCalls.addFavoriteDoctor(localStorage.getItem('email'), {license: license})
         if (response && response.ok) {
             setIsFavorite(true)
             setMessage("")
@@ -228,7 +253,7 @@ function UserDoctorProfile(props) {
     }
 
     const handleSelectClinic = (clinicName) => {
-        const selected = clinics.filter(dc => dc.clinic.name + " (" + dc.clinic.location + ")" === clinicName)
+        const selected = clinics.filter(dc => dc.name + " (" + dc.location + ")" === clinicName)
         setSelectedClinic(selected[0])
     }
 
@@ -332,8 +357,8 @@ function UserDoctorProfile(props) {
                         </h4>
                         <Form.Group className="m-3">
                             <Form.Label><b>{t("CLINIC.clinic")}</b>: {selectedClinic === null? "":
-                                selectedClinic.clinic.name + " - " + selectedClinic.clinic.location}</Form.Label>
-                            <DropDownList iterable={clinics.map(dc => dc.clinic.name + " (" + dc.clinic.location + ")")}
+                                selectedClinic.name + " - " + selectedClinic.location}</Form.Label>
+                            <DropDownList iterable={clinics.map(dc => dc.name + " (" + dc.location + ")")}
                                           selectedElement=''
                                           handleSelect={handleSelectClinic}
                                           elementType={t('FORM.selectClinic')}

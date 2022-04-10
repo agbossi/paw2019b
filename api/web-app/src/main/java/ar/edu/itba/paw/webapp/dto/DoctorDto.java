@@ -15,6 +15,8 @@ public class DoctorDto {
     private String license;
     private String phoneNumber;
     private URI profileImage;
+    private URI clinics;
+    private URI availability;
 
     public static DoctorDto fromDoctor(Doctor doctor, UriInfo uriInfo) {
         DoctorDto doctorDto = new DoctorDto();
@@ -24,9 +26,24 @@ public class DoctorDto {
         doctorDto.firstName = doctor.getUser().getFirstName();
         doctorDto.lastName = doctor.getUser().getLastName();
         doctorDto.email = doctor.getUser().getEmail();
-        doctorDto.profileImage = uriInfo.getBaseUriBuilder().path("doctors").path(doctor.getLicense()).path("ProfileImage").build();
+        doctorDto.profileImage = uriInfo.getBaseUriBuilder().path("doctors")
+                .path(doctor.getLicense()).path("ProfileImage").build();
+        doctorDto.clinics = uriInfo.getBaseUriBuilder().path("doctors")
+                .path(doctor.getLicense()).path("clinics").build();
+        doctorDto.availability = uriInfo.getBaseUriBuilder().path("doctors")
+                .path(doctor.getLicense()).path("appointments").build();
         return doctorDto;
     }
+
+    public URI getAvailability() { return availability; }
+
+    public void setAvailability(URI availability) {
+        this.availability = availability;
+    }
+
+    public URI getClinics() { return clinics; }
+
+    public void setClinics(URI clinics) { this.clinics = clinics; }
 
     public String getFirstName() { return firstName; }
 

@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public class FavoriteDaoImpl implements FavoriteDao {
 
-    private final static int MAX_FAVORITES_PER_PAGE = 12;
+    private final static int MAX_FAVORITES_PER_PAGE = 4;
 
     @PersistenceContext
     private EntityManager entityManager;

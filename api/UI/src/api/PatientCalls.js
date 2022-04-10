@@ -8,8 +8,8 @@ const deleteFavoriteDoctor = async (id, license) => api.delete(
     PATIENT_PATH + "/" + id + FAVORITE_PATH + "?" + LICENSE_QUERY + license, {})
 const isFavorite = async (id, license) => api.get(PATIENT_PATH + "/" + id + FAVORITE_PATH + "?" + cons.MODE + "isFav" + "&" + cons.LICENSE_QUERY + license,
     {})
-const addFavoriteDoctor = async (id, license) => api.post(
-    PATIENT_PATH + "/" + id + FAVORITE_PATH + "?" + LICENSE_QUERY + license, {})
+const addFavoriteDoctor = async (id, data) => api.post(
+    PATIENT_PATH + "/" + id + FAVORITE_PATH, data)
 
 const getProfile = async (id) => api.get(PATIENT_PATH + "/" + id,{})
 
