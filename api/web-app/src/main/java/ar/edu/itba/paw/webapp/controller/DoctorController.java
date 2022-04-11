@@ -401,26 +401,6 @@ public class DoctorController {
     }
 
     /**
-     * Returns doctors schedule for a specific clinic
-     * @param license
-     * @param clinic
-     * @return List if Schedules
-     */
-    @GET
-    @Path("/{license}/clinics/{clinic}/schedules")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    public Response getDoctorClinicSchedules(@PathParam("license") final String license,
-                                             @PathParam("clinic") final Integer clinic,
-                                             @Context Request request) throws EntityNotFoundException {
-        DoctorClinic dc = doctorClinicService.getDoctorInClinic(license, clinic);
-        if(dc == null) throw new EntityNotFoundException("doctor-clinic");
-        List<ScheduleDto> schedules = scheduleService.getDoctorClinicSchedule(dc)
-                .stream().map(s -> ScheduleDto.fromSchedule(s, uriInfo)).collect(Collectors.toList());
-        return CacheHelper.handleResponse(schedules, scheduleCaching,
-                new GenericEntity<List<ScheduleDto>>(schedules) {},"schedules", request).build();
-    }
-
-    /**
      * Returns doctor schedule for all clinics, used by doctor to see other clinic's schedule
      * while adding a working hour to specific clinic
      * @param license
@@ -430,29 +410,37 @@ public class DoctorController {
     @Path("/{license}/schedules")
     @Produces(value = { MediaType.APPLICATION_JSON })
     public Response getDoctorSchedules(@PathParam("license") final String license,
+                                       @QueryParam("clinic") @DefaultValue("-1") final int clinic,
                                        @Context Request request) throws EntityNotFoundException {
         Doctor doctor = doctorService.getDoctorByLicense(license);
         if(doctor == null) throw new EntityNotFoundException("doctor");
 
-        List<ScheduleDto> schedules = scheduleService.getDoctorSchedule(doctor).stream()
+        List<ScheduleDto> schedules = scheduleService.getDoctorSchedule(doctor, clinic).stream()
                 .map(s -> ScheduleDto.fromSchedule(s, uriInfo)).collect(Collectors.toList());
         return CacheHelper.handleResponse(schedules, scheduleCaching,
                 new GenericEntity<List<ScheduleDto>>(schedules) {},"schedules", request).build();
     }
-    /**
-     * Lets DOCTOR delete a scheduled working hour for a specific clinic
-     * @param license
-     * @param clinic
-     * @param day
-     * @param hour
-     * @return
-     */
+
+    @POST
+    @Path("/{license}/schedules")
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @PreAuthorize("hasPermission(#license, 'doctor')")
+    public Response createSchedule(@PathParam("license") final String license,
+                                   ScheduleForm form) throws EntityNotFoundException, ConflictException {
+        DoctorClinic dc = doctorClinicService.getDoctorInClinic(license, form.getClinic());
+        if(dc == null) throw new EntityNotFoundException("doctor-clinic");
+
+        scheduleService.createSchedule(form.getHour(), form.getDay(), dc.getDoctor().getEmail(),
+                dc.getClinic().getId());
+        return Response.created(uriInfo.getAbsolutePath()).build();
+    }
+
     @DELETE
-    @Path("/{license}/clinics/{clinic}/schedules")
+    @Path("/{license}/schedules")
     @Produces(value = { MediaType.APPLICATION_JSON })
     @PreAuthorize("hasPermission(#license, 'doctor')")
     public Response deleteDoctorClinicSchedule(@PathParam("license") final String license,
-                                               @PathParam("clinic") final Integer clinic,
+                                               @QueryParam("clinic") final Integer clinic,
                                                @QueryParam("day") final Integer day,
                                                @QueryParam("hour") final Integer hour)
             throws EntityNotFoundException, OutOfRangeException {
@@ -461,30 +449,6 @@ public class DoctorController {
 
         scheduleService.deleteSchedule(hour, day, license, clinic);
         return Response.noContent().build();
-    }
-
-    /**
-     * Lets DOCTOR schedule a working hour for a specific clinic
-     * @param license
-     * @param clinic
-     * @param form
-     * @return
-     */
-    @POST
-    @Path("/{license}/clinics/{clinic}/schedules")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    @Consumes(MediaType.APPLICATION_JSON)
-    @PreAuthorize("hasPermission(#license, 'doctor')")
-    public Response createSchedule(@PathParam("license") final String license,
-                                   @PathParam("clinic") final Integer clinic,
-                                   ScheduleForm form) throws EntityNotFoundException, ConflictException {
-        DoctorClinic dc = doctorClinicService.getDoctorInClinic(license,clinic);
-        if(dc == null) throw new EntityNotFoundException("doctor-clinic");
-
-        scheduleService.createSchedule(form.getHour(), form.getDay(), dc.getDoctor().getEmail(),
-                dc.getClinic().getId());
-        return Response.created(uriInfo.getAbsolutePath()).build();
-
     }
 
     /**

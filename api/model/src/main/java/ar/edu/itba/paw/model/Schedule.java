@@ -32,6 +32,10 @@ public class Schedule {
 
     public Schedule(){}
 
+    public int getClinic() { return clinic; }
+
+    public void setClinic(int clinic) { this.clinic = clinic; }
+
     public int getDay() {
         return getScheduleKey().getDay();
     }

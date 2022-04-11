@@ -21,4 +21,6 @@ public interface ScheduleService {
     void deleteSchedule(int hour, int day, String license, int clinicId) throws OutOfRangeException, EntityNotFoundException;
 
     boolean doctorHasSchedule(Doctor doctor, int day, int hour);
+
+    List<Schedule> getDoctorSchedule(Doctor doctor, int clinic) throws EntityNotFoundException;
 }

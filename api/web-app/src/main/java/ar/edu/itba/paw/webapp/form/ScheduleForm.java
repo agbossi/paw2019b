@@ -11,10 +11,19 @@ public class ScheduleForm {
     @Max(value = 7, message = "schedule.max.day.constraint")
     private int day;
 
-    //TODO valores
     @Min(value = 9, message = "schedule.min.hour.constraint")
     @Max(value = 18, message = "schedule.max.hour.constraint")
     private int hour;
+
+    private int clinic;
+
+    public int getClinic() {
+        return clinic;
+    }
+
+    public void setClinic(int clinic) {
+        this.clinic = clinic;
+    }
 
     public int getDay() {
         return day;

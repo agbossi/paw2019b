@@ -61,18 +61,6 @@ function UserDoctorProfile(props) {
 
     }
 
-    const fetchClinics = async (ids) => {
-        let clinics = []
-        ids.map(id => {
-            fetchClinic(id).then(resp => {
-                clinics.push(resp.data)
-            })
-        })
-        console.log('se pusheo?')
-        console.log(clinics)
-        return clinics
-    }
-
     const fetchClinic = async (id) => {
         return await ClinicCalls.getClinic(id)
     }

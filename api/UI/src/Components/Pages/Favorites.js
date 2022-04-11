@@ -43,12 +43,16 @@ function Favorites() {
         setIsLoading(true)
         const response = await PatientCalls.getFavoriteDoctors(id, pag)
         if (response && response.ok) {
-            const doctors = await fetchDoctors(response.data.map(f => f.license))
-            setDoctors(doctors)
-            console.log('en la var de estado')
-            console.log(doctors)
-            setMaxPage(Number(Utils.getMaxPage(response.headers.link)));
-            setIsLoading(false)
+            const fetchPromises = response.data.map(f => {
+                return new Promise((resolve, reject) => {
+                    fetchDoctor(f.license).then(resp => resolve(resp.data))
+                });
+            })
+            Promise.all(fetchPromises).then(doctors => {
+                setDoctors(doctors)
+                setMaxPage(Number(Utils.getMaxPage(response.headers.link)));
+                setIsLoading(false)
+            })
         }
     }
 

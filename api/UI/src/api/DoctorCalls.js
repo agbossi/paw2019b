@@ -31,15 +31,16 @@ const addSchedule = async (license, clinicId, day, hour) => api.post(
     cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinicId + "/schedules",
     {
         day: day,
-        hour: hour
+        hour: hour,
+        clinic: clinicId
     })
 
 const getAvailableAppointments = async (license) => api.get(
     cons.DOCTORS_PATH + '/' + license + cons.APPOINTMENT_PATH);
 
 const deleteSchedule = async (license, clinicId, day, hour) => api.delete(
-    cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/" + clinicId + "/schedules"
-    + "?" + cons.DAY_QUERY + day + "&" + cons.HOUR_QUERY + hour, {})
+    cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/schedules"
+    + "?" + cons.CLINIC_QUERY + clinicId + "&" + cons.DAY_QUERY + day + "&" + cons.HOUR_QUERY + hour, {})
 
 const getSearchQuery = (location, specialty, firstName, lastName, consultPrice, prepaid) => {
     const queryParams = [];

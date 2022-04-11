@@ -17,6 +17,7 @@ public class DoctorDto {
     private URI profileImage;
     private URI clinics;
     private URI availability;
+    private URI schedules;
 
     public static DoctorDto fromDoctor(Doctor doctor, UriInfo uriInfo) {
         DoctorDto doctorDto = new DoctorDto();
@@ -32,8 +33,14 @@ public class DoctorDto {
                 .path(doctor.getLicense()).path("clinics").build();
         doctorDto.availability = uriInfo.getBaseUriBuilder().path("doctors")
                 .path(doctor.getLicense()).path("appointments").build();
+        doctorDto.schedules = uriInfo.getBaseUriBuilder().path("doctors")
+                .path(doctor.getLicense()).path("schedules").build();
         return doctorDto;
     }
+
+    public URI getSchedules() { return schedules; }
+
+    public void setSchedules(URI schedules) { this.schedules = schedules; }
 
     public URI getAvailability() { return availability; }
 

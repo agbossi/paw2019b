@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.dto;
 import ar.edu.itba.paw.model.Schedule;
 
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 
 public class ScheduleDto {
 
@@ -10,13 +11,17 @@ public class ScheduleDto {
 
     private int hour;
 
-    private ClinicDto clinic;
+    private int clinicId;
+
+    private URI clinic;
 
     public static ScheduleDto fromSchedule(Schedule schedule, UriInfo uriInfo) {
         ScheduleDto scheduleDto = new ScheduleDto();
         scheduleDto.day = schedule.getDay();
         scheduleDto.hour = schedule.getHour();
-        scheduleDto.clinic = ClinicDto.fromClinic(schedule.getDoctorClinic().getClinic(), uriInfo);
+        scheduleDto.clinicId = schedule.getClinic();
+        scheduleDto.clinic = uriInfo.getBaseUriBuilder().path("clinics")
+                .path(Integer.toString(scheduleDto.clinicId)).build();
         return scheduleDto;
     }
 
@@ -36,11 +41,11 @@ public class ScheduleDto {
         this.hour = hour;
     }
 
-    public ClinicDto getClinic() {
-        return clinic;
-    }
+    public int getClinicId() { return clinicId; }
 
-    public void setClinic(ClinicDto clinic) {
-        this.clinic = clinic;
-    }
+    public void setClinicId(int clinicId) { this.clinicId = clinicId; }
+
+    public URI getClinic() { return clinic; }
+
+    public void setClinic(URI clinic) { this.clinic = clinic; }
 }

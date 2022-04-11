@@ -48,6 +48,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    public List<Schedule> getDoctorSchedule(Doctor doctor, int clinic) throws EntityNotFoundException {
+        if(clinic == -1) {
+            return getDoctorSchedule(doctor);
+        }
+        DoctorClinic dc = doctorClinicService.getDoctorInClinic(doctor.getLicense(), clinic);
+        if(dc == null) throw new EntityNotFoundException("doctor-clinic");
+        return getDoctorClinicSchedule(dc);
+    }
+
+    @Override
     public List<Schedule> getDoctorClinicSchedule(DoctorClinic doctorClinic) {
         return scheduleDao.getDoctorClinicSchedule(doctorClinic);
     }
