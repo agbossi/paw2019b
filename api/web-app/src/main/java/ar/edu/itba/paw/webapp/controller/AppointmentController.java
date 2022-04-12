@@ -1,15 +1,21 @@
 package ar.edu.itba.paw.webapp.controller;
 
 import ar.edu.itba.paw.interfaces.service.AppointmentService;
+import ar.edu.itba.paw.interfaces.service.DoctorService;
 import ar.edu.itba.paw.interfaces.service.UserService;
+import ar.edu.itba.paw.model.Doctor;
 import ar.edu.itba.paw.model.User;
 import ar.edu.itba.paw.model.exceptions.*;
 import ar.edu.itba.paw.webapp.caching.AppointmentCaching;
 import ar.edu.itba.paw.webapp.dto.AppointmentDto;
 import ar.edu.itba.paw.webapp.form.AppointmentForm;
+import ar.edu.itba.paw.webapp.helpers.CacheHelper;
 import ar.edu.itba.paw.webapp.helpers.PaginationHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
@@ -30,6 +36,9 @@ public class AppointmentController {
     @Autowired
     private AppointmentCaching appointmentCaching;
 
+    @Autowired
+    private DoctorService doctorService;
+
     @Context
     private UriInfo uriInfo;
 
@@ -41,24 +50,37 @@ public class AppointmentController {
      */
     @GET
     @Produces(value = { MediaType.APPLICATION_JSON })
-    @PreAuthorize("hasPermission(#email, 'email')")
+    //@PreAuthorize("hasPermission(#email, 'email')")
     public Response getUserAppointments(@QueryParam("email") final String email,
                                         @QueryParam("page") @DefaultValue("0") Integer page,
+                                        @QueryParam("mode") @DefaultValue("taken") String mode,
                                         @Context Request request) throws EntityNotFoundException {
         page = (page < 0) ? 0 : page;
 
         User user = userService.findUserByEmail(email);
         if(user == null) throw new EntityNotFoundException("user");
+        if(mode.equals("available")) {
+            Doctor doc = doctorService.getDoctorByEmail(email);
+            if (doc == null) throw new EntityNotFoundException("doctor");
+            List<AppointmentDto> appointments = appointmentService.getDoctorsAvailableAppointments(doc)
+                    .stream().map(appointment -> AppointmentDto.fromAppointment(appointment, uriInfo))
+                    .collect(Collectors.toList());
+            return CacheHelper.handleResponse(appointments, appointmentCaching,
+                    new GenericEntity<List<AppointmentDto>>(appointments) {}, "appointments",
+                    request).build();
+        } else {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            if(!auth.getName().equals(email)) throw new AccessDeniedException("");
+            List<AppointmentDto> appointments = appointmentService.getPaginatedAppointments(user, page)
+                    .stream().map(appointment -> AppointmentDto.fromAppointment(appointment, uriInfo))
+                    .collect(Collectors.toList());
 
-        List<AppointmentDto> appointments = appointmentService.getPaginatedAppointments(user, page)
-                .stream().map(appointment -> AppointmentDto.fromAppointment(appointment, uriInfo))
-                .collect(Collectors.toList());
+            int maxPage = appointmentService.getMaxAvailablePage(user) - 1;
 
-        int maxPage = appointmentService.getMaxAvailablePage(user) - 1;
-
-        return PaginationHelper.handlePagination(page, maxPage, "appointments",
-                uriInfo, appointments, appointmentCaching,
-                new GenericEntity<List<AppointmentDto>>(appointments) {}, request);
+            return PaginationHelper.handlePagination(page, maxPage, "appointments",
+                    uriInfo, appointments, appointmentCaching,
+                    new GenericEntity<List<AppointmentDto>>(appointments) {}, request);
+        }
     }
 
     /**

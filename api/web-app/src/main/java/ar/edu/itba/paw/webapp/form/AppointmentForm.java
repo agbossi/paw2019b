@@ -19,7 +19,6 @@ public class AppointmentForm {
     @Exists(field = "user", message = "value.not.exists")
     private String patient;
 
-    //TODO valores
     @Min(value = 9, message = "schedule.min.hour.constraint")
     @Max(value = 18, message = "schedule.max.hour.constraint")
     private int time;

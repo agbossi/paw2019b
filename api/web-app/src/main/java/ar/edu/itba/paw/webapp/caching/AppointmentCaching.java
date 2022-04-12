@@ -15,8 +15,7 @@ public class AppointmentCaching implements Caching<AppointmentDto> {
         if(element == null) {
             return 0;
         }
-        DoctorClinicDto doctorClinic = element.getDoctorClinic();
         LocalDateTime date = element.getDate();
-        return Objects.hash(date, doctorClinic.getLicense());
+        return Objects.hash(date, element.getLicense(), element.getClinicId());
     }
 }

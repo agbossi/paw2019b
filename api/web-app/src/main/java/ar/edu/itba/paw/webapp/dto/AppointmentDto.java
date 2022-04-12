@@ -3,6 +3,7 @@ package ar.edu.itba.paw.webapp.dto;
 import ar.edu.itba.paw.model.Appointment;
 
 import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.time.LocalDateTime;
 
 public class AppointmentDto {
@@ -14,7 +15,9 @@ public class AppointmentDto {
     private int day;
     private int hour;
     private int dayWeek;
-    private DoctorClinicDto doctorClinic;
+    private int clinicId;
+    private String license;
+    private URI doctorClinic;
 
     public static AppointmentDto fromAppointment(Appointment appointment, UriInfo uriInfo) {
         AppointmentDto appointmentDto = new AppointmentDto();
@@ -25,9 +28,23 @@ public class AppointmentDto {
         appointmentDto.day = appointment.getAppointmentKey().getDate().getDayOfMonth();
         appointmentDto.hour = appointment.getAppointmentKey().getDate().getHour();
         appointmentDto.dayWeek = appointment.getAppointmentKey().getDate().getDayOfWeek().getValue();
-        appointmentDto.doctorClinic = DoctorClinicDto.fromDoctorClinic(appointment.getDoctorClinic(), uriInfo);
+        appointmentDto.license = appointment.getDoctorClinic().getDoctor().getLicense();
+        appointmentDto.clinicId = appointment.getDoctorClinic().getClinic().getId();
+        appointmentDto.doctorClinic = uriInfo.getBaseUriBuilder().path("doctors")
+                .path(appointmentDto.license).path("clinics")
+                .path(Integer.toString(appointmentDto.clinicId)).build();
         return appointmentDto;
     }
+
+    public int getClinicId() { return clinicId; }
+
+    public void setClinicId(int clinicId) { this.clinicId = clinicId; }
+
+    public String getLicense() { return license; }
+
+    public void setLicense(String license) { this.license = license; }
+
+    public void setDoctorClinic(URI doctorClinic) { this.doctorClinic = doctorClinic; }
 
     public UserDto getPatient() {
         return patient;
@@ -43,14 +60,6 @@ public class AppointmentDto {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
-    }
-
-    public DoctorClinicDto getDoctorClinic() {
-        return doctorClinic;
-    }
-
-    public void setDoctorClinic(DoctorClinicDto doctorClinic) {
-        this.doctorClinic = doctorClinic;
     }
 
     public int getMonth() {

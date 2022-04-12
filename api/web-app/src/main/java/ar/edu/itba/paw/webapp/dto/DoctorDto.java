@@ -16,7 +16,7 @@ public class DoctorDto {
     private String phoneNumber;
     private URI profileImage;
     private URI clinics;
-    private URI availability;
+    private URI appointments;
     private URI schedules;
 
     public static DoctorDto fromDoctor(Doctor doctor, UriInfo uriInfo) {
@@ -31,8 +31,7 @@ public class DoctorDto {
                 .path(doctor.getLicense()).path("ProfileImage").build();
         doctorDto.clinics = uriInfo.getBaseUriBuilder().path("doctors")
                 .path(doctor.getLicense()).path("clinics").build();
-        doctorDto.availability = uriInfo.getBaseUriBuilder().path("doctors")
-                .path(doctor.getLicense()).path("appointments").build();
+        doctorDto.appointments = uriInfo.getBaseUriBuilder().path("appointments").build();
         doctorDto.schedules = uriInfo.getBaseUriBuilder().path("doctors")
                 .path(doctor.getLicense()).path("schedules").build();
         return doctorDto;
@@ -42,10 +41,10 @@ public class DoctorDto {
 
     public void setSchedules(URI schedules) { this.schedules = schedules; }
 
-    public URI getAvailability() { return availability; }
+    public URI getAppointments() { return appointments; }
 
-    public void setAvailability(URI availability) {
-        this.availability = availability;
+    public void setAppointments(URI appointments) {
+        this.appointments = appointments;
     }
 
     public URI getClinics() { return clinics; }

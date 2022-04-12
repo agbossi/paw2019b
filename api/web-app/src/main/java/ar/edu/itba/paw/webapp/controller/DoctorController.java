@@ -450,28 +450,4 @@ public class DoctorController {
         scheduleService.deleteSchedule(hour, day, license, clinic);
         return Response.noContent().build();
     }
-
-    /**
-     * Returns a list of all available Appointments from today to 9 weeks in the future, to check doctor's
-     * availability
-     * @param license
-     * @return List of Appointments
-     * @throws EntityNotFoundException
-     */
-    @GET
-    @Path("/{license}/appointments")
-    @Produces(value = { MediaType.APPLICATION_JSON })
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response getAvailableAppointments(@PathParam("license") final String license,
-                                             @Context Request request) throws EntityNotFoundException {
-        Doctor doc = doctorService.getDoctorByLicense(license);
-        if (doc == null) throw new EntityNotFoundException("doctor");
-
-        List<AppointmentDto> appointments = appointmentService.getDoctorsAvailableAppointments(doc)
-                .stream().map(appointment -> AppointmentDto.fromAppointment(appointment, uriInfo))
-                .collect(Collectors.toList());
-        return CacheHelper.handleResponse(appointments, appointmentCaching,
-                new GenericEntity<List<AppointmentDto>>(appointments) {}, "appointments",
-                request).build();
-    }
 }

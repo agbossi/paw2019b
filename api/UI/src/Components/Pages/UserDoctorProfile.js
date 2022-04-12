@@ -38,7 +38,7 @@ function UserDoctorProfile(props) {
     }
 
     const fetchAvailableAppointments = async () => {
-        const response = await DoctorCalls.getAvailableAppointments(license);
+        const response = await DoctorCalls.getAvailableAppointments(doctor.email);
         if (response && response.ok) {
             setAvailable(response.data)
             setMessage("")
@@ -263,7 +263,7 @@ function UserDoctorProfile(props) {
         if (selectedClinic === null) {
             return []
         }
-        return available.filter(appointment => appointment.doctorClinic.clinic.id === selectedClinic.clinic.id)
+        return available.filter(appointment => appointment.clinicId === selectedClinic.id)
     }
 
     return (

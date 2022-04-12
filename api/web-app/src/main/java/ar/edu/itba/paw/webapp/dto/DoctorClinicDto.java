@@ -13,7 +13,6 @@ public class DoctorClinicDto {
     private int clinicId;
     private String license;
     private URI clinic;
-    private URI schedules;
 
     public static DoctorClinicDto fromDoctorClinic(DoctorClinic doctorClinic, UriInfo uriInfo) {
         DoctorClinicDto doctorClinicDto = new DoctorClinicDto();
@@ -23,10 +22,6 @@ public class DoctorClinicDto {
                 .path(Integer.toString(doctorClinic.getClinic().getId())).build();
         doctorClinicDto.consultPrice = doctorClinic.getConsultPrice();
         doctorClinicDto.clinicId = doctorClinic.getClinic().getId();
-        doctorClinicDto.schedules = uriInfo.getBaseUriBuilder().path("doctors")
-                .path(doctorClinic.getDoctor().getLicense()).path("clinics")
-                .path(Integer.toString(doctorClinic.getClinic().getId()))
-                .path("schedules").build();
         doctorClinicDto.license = doctorClinic.getDoctor().getLicense();
         return doctorClinicDto;
     }
@@ -46,10 +41,6 @@ public class DoctorClinicDto {
     public URI getClinic() { return clinic; }
 
     public void setClinic(URI clinic) { this.clinic = clinic; }
-
-    public URI getSchedules() { return schedules; }
-
-    public void setSchedules(URI schedules) { this.schedules = schedules; }
 
     public int getConsultPrice() {
         return consultPrice;

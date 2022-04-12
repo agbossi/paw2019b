@@ -35,8 +35,8 @@ const addSchedule = async (license, clinicId, day, hour) => api.post(
         clinic: clinicId
     })
 
-const getAvailableAppointments = async (license) => api.get(
-    cons.DOCTORS_PATH + '/' + license + cons.APPOINTMENT_PATH);
+const getAvailableAppointments = async (email) => api.get(cons.APPOINTMENT_PATH + "?"
+    + cons.EMAIL_QUERY + email + "&" + cons.MODE + "available");
 
 const deleteSchedule = async (license, clinicId, day, hour) => api.delete(
     cons.DOCTORS_PATH + "/" + license + cons.CLINICS_PATH + "/schedules"

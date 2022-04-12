@@ -6,6 +6,8 @@ import {Button, Card, Container, Row} from "react-bootstrap";
 import Utils from "../../utils/paginationHelper";
 import './Favorites.css'
 import {dateToString, getMonth, getWeekDate} from "../../utils/dateHelper";
+import DoctorCalls from "../../api/DoctorCalls";
+import ClinicCalls from "../../api/ClinicCalls";
 
 function Appointments(props) {
     const [appointments, setAppointments] = useState([])
@@ -27,10 +29,11 @@ function Appointments(props) {
         setIsLoading(true)
         const response = await AppointmentCalls.getAppointment(email, pag)
         if (response && response.ok) {
-            setAppointments(response.data)
-            setMaxPage(Utils.getMaxPage(response.headers.link));
-            setMessage("")
-            setIsLoading(false)
+            await generateAppointments(response.data).then(() => {
+                setMaxPage(Utils.getMaxPage(response.headers.link));
+                setMessage("")
+                setIsLoading(false)
+            })
         }
         if (response.status === 404) {
             if (response.data === "user-not-found")
@@ -38,17 +41,52 @@ function Appointments(props) {
         }
     }
 
+    const fetchDoctor = async (license) => {
+        return await DoctorCalls.getDocByLicense(license)
+    }
+
+    const fetchClinic = async (id) => {
+        return await ClinicCalls.getClinic(id)
+    }
+
+    const generateAppointments = async (appointments) => {
+        let doctors = []
+        let clinics = []
+        const apps = []
+        const doctorFetchPromises = appointments.map(ap => {
+            return new Promise((resolve, reject) => {
+                fetchDoctor(ap.license).then(resp => resolve(resp.data))
+            })
+        })
+        const clinicFetchPromises = appointments.map(ap => {
+            return new Promise((resolve, reject) => {
+                fetchClinic(ap.clinicId).then(resp => resolve(resp.data))
+            })
+        })
+        Promise.all(doctorFetchPromises).then(d => doctors = d)
+        Promise.all(clinicFetchPromises).then(c => clinics = c).then(() => {
+            for (let i = 0; i < appointments.length; i++) {
+                apps.push({
+                    appointment: appointments[i],
+                    clinic: clinics[i],
+                    doctor: doctors[i]
+                })
+            }
+            setAppointments(apps)
+        })
+    }
+
     const deleteAppointment = async (app) => {
         const email = localStorage.getItem('email')
         if (email === null) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            //navigate('/paw-2019b-4/login')
+            navigate('/paw-2019b-4/login')
         }
         const response = await AppointmentCalls.deleteAppointment(
             email,
-            app.doctorClinic.doctor.license,
-            app.doctorClinic.clinic.id,
+            app.license,
+            app.clinicId,
             app.year,
             app.month,
             app.day,
@@ -121,19 +159,19 @@ function Appointments(props) {
                                     <Card.Title><b>{dateToString(ap, t)}</b></Card.Title>
                                     <Card.Text>
                                         {props.user === "patient"? <div>
-                                            {t("USER.doc")}{ap.doctorClinic.doctor.firstName + ' ' + ap.doctorClinic.doctor.lastName}
+                                            {t("USER.doc")}{ap.doctor.firstName + ' ' + ap.doctor.lastName}
                                         </div>: <div>
-                                            {t("USER.patient")}{ap.patient.firstName + ' ' + ap.patient.lastName} ({ap.patient.email})
+                                            {t("USER.patient")}{ap.appointment.patient.firstName + ' ' + ap.appointment.patient.lastName} ({ap.appointment.patient.email})
                                         </div> }
 
                                         <div>
-                                            {t("USER.clinic")} {ap.doctorClinic.clinic.name} - {ap.doctorClinic.clinic.location} ({ap.doctorClinic.clinic.address})
+                                            {t("USER.clinic")} {ap.clinic.name} - {ap.clinic.location} ({ap.clinic.address})
                                         </div>
 
                                     </Card.Text>
                                 </Card.Body>
                                 <Button className="remove-button remove-button-color shadow-sm"
-                                        onClick={() => {deleteAppointment(ap)}}>
+                                        onClick={() => {deleteAppointment(ap.appointment)}}>
                                     {t('cancelButton')}
                                 </Button>
                             </Card>

@@ -10,6 +10,8 @@ import EditUserProfileModal from "../Modals/EditUserProfileModal";
 import AppointmentCalls from "../../api/AppointmentCalls";
 import {dateToString} from "../../utils/dateHelper";
 import './Profile.css'
+import ClinicCalls from "../../api/ClinicCalls";
+import DoctorCalls from "../../api/DoctorCalls";
 
 function Profile() {
     const [selectedPrepaid, setSelectedPrepaid] = useState('')
@@ -25,9 +27,9 @@ function Profile() {
     const navigate = useNavigate();
 
     useEffect(async () => {
+        await fetchAppointments()
         await fetchProfile()
         await fetchPrepaids()
-        await fetchAppointments()
         localStorage.setItem('path', '/profile')
     }, [])
 
@@ -36,6 +38,42 @@ function Profile() {
         if (response && response.ok) {
             setPrepaids(response.data.map(prepaid => prepaid.name))
         }
+    }
+
+    const fetchDoctor = async (license) => {
+        return await DoctorCalls.getDocByLicense(license)
+    }
+
+    const fetchClinic = async (id) => {
+        return await ClinicCalls.getClinic(id)
+    }
+
+    const generateAppointments = async (appointments) => {
+        let doctors = []
+        let clinics = []
+        const apps = []
+        const doctorFetchPromises = appointments.map(ap => {
+            return new Promise((resolve, reject) => {
+                fetchDoctor(ap.license).then(resp => resolve(resp.data))
+            })
+        })
+        const clinicFetchPromises = appointments.map(ap => {
+            return new Promise((resolve, reject) => {
+                fetchClinic(ap.clinicId).then(resp => resolve(resp.data))
+            })
+        })
+        Promise.all(doctorFetchPromises).then(d => doctors = d)
+        Promise.all(clinicFetchPromises).then(c => clinics = c).then(() => {
+            for (let i = 0; i < appointments.length; i++) {
+                apps.push({
+                    appointment: appointments[i],
+                    name: clinics[i].name,
+                    firstName: doctors[i].firstName,
+                    lastName: doctors[i].lastName
+                })
+            }
+            setAppointments(apps)
+        })
     }
 
     const fetchProfile = async () => {
@@ -66,7 +104,8 @@ function Profile() {
         }
         const response = await AppointmentCalls.getAppointment(email, 0)
         if (response && response.ok) {
-            setAppointments(response.data.slice(0, 3))
+            await generateAppointments(response.data.slice(0, 3))
+            //setAppointments(response.data.slice(0, 3))
         }
     }
     const handleProfileUpdateOk = async () => {
@@ -114,7 +153,7 @@ function Profile() {
                             {appointments.map(app => {
                                 return(
                                     <li className="my-3">
-                                        <b>{dateToString(app, t)}</b> {t("with")} <b>{app.doctorClinic.doctor.firstName + ' ' + app.doctorClinic.doctor.lastName}</b> ({app.doctorClinic.clinic.name})
+                                        <b>{dateToString(app.appointment, t)}</b> {t("with")} <b>{app.firstName + ' ' + app.lastName}</b> ({app.name})
                                     </li>
                                 )
                             })}
