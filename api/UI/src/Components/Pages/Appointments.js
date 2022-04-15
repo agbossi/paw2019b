@@ -156,7 +156,7 @@ function Appointments(props) {
                         return (
                             <Card className="mb-3 app-card shadow">
                                 <Card.Body>
-                                    <Card.Title><b>{dateToString(ap, t)}</b></Card.Title>
+                                    <Card.Title><b>{dateToString(ap.appointment, t)}</b></Card.Title>
                                     <Card.Text>
                                         {props.user === "patient"? <div>
                                             {t("USER.doc")}{ap.doctor.firstName + ' ' + ap.doctor.lastName}

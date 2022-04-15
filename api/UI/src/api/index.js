@@ -29,6 +29,7 @@ api.interceptors.response.use(
     error => {
         if (error.response) {
             // Request made and server responded
+            console.log('status: ' + error.response.status)
             if (error.response.status === 401) {
                 ApiCalls.logout()
                 window.location.replace("http://pawserver.it.itba.edu.ar/paw-2019b-4/login")

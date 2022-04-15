@@ -35,10 +35,11 @@ function UserDoctorProfile(props) {
         if (response && response.ok) {
             setDoctor(response.data)
         }
+        return response.data
     }
 
-    const fetchAvailableAppointments = async () => {
-        const response = await DoctorCalls.getAvailableAppointments(doctor.email);
+    const fetchAvailableAppointments = async (email) => {
+        const response = await DoctorCalls.getAvailableAppointments(email);
         if (response && response.ok) {
             setAvailable(response.data)
             setMessage("")
@@ -46,6 +47,7 @@ function UserDoctorProfile(props) {
     }
 
     const fetchAllClinics = async () => {
+        let clinicsRet = []
         const response = await DoctorCalls.getAllClinics(license);
         if (response && response.ok) {
             const fetchPromises = response.data.map(dc => {
@@ -56,9 +58,10 @@ function UserDoctorProfile(props) {
             Promise.all(fetchPromises).then(clinics => {
                 setClinics(clinics)
                 setMessage("")
+                clinicsRet = clinics
             })
         }
-
+        return clinicsRet
     }
 
     const fetchClinic = async (id) => {
@@ -80,12 +83,32 @@ function UserDoctorProfile(props) {
         }
     }
 
-    const fetchSchedule = async () => {
-        const response = await DoctorCalls.getSchedule(license)
-        if (response && response.ok) {
-            setSchedule(response.data)
-            setMessage("")
-        }
+    const fetchClinicSchedules = async () => {
+        let clinicSchedules = []
+        await DoctorCalls.getSchedule(license).then(resp => {
+            if (resp && resp.ok) {
+                let uniqueIds = [...new Set(resp.data.map(schedule => schedule.clinicId))];
+                const fetchPromises = uniqueIds.map(clinicId => {
+                    return new Promise((resolve, reject) => {
+                        fetchClinic(clinicId).then(resp => {
+                            resolve(resp.data)
+                        })
+                    });
+                })
+                Promise.all(fetchPromises).then(clinics => {
+                    for(let i = 0;i < resp.data.length; i++) {
+                        clinicSchedules.push({
+                            schedule: resp.data[i],
+                            clinic: clinics.filter(clinic => clinic.id === resp.data[i].clinicId)[0]
+                        })
+                    }
+                    setSchedule(clinicSchedules)
+                    setClinics(clinics)
+                })
+                setMessage("")
+            }
+
+        })
     }
 
     const fetchIsFavorite = async () => {
@@ -110,15 +133,14 @@ function UserDoctorProfile(props) {
 
 
     useEffect(async () => {
-        await fetchDoctor();
+        const doctor = await fetchDoctor();
         localStorage.setItem('path', "/" + license + "/profile")
         await fetchImage();
-        await fetchSchedule();
-        await fetchAllClinics();
-        await fetchAvailableAppointments();
+        //await fetchAllClinics();
+        await fetchClinicSchedules();
+
+        await fetchAvailableAppointments(doctor.email);
         if(localStorage.getItem('email') !== null) {
-            console.log('entro a favorites?')
-            console.log(localStorage.getItem('email'))
             await fetchIsFavorite();
 
         }
@@ -226,16 +248,18 @@ function UserDoctorProfile(props) {
     }
 
     const getRow = (row) => {
-        const rowSchedule = schedule.filter(schedule => schedule.hour === row)
         const days = []
-        for (let i = 1; i < 8; i++) {
-            const scheduleDay = rowSchedule.filter(schedule => (schedule.day) === i)
-            if (scheduleDay.length > 0) {
-                days[i - 1] = scheduleDay[0].clinic
-            } else {
-                days[i - 1] = null
-            }
+        if(schedule.length !== 0) {
+            const rowSchedule = schedule.filter(schedule => schedule.schedule.hour === row)
+            for (let i = 1; i < 8; i++) {
+                const scheduleDay = rowSchedule.filter(schedule => (schedule.schedule.day) === i)
+                if (scheduleDay.length > 0) {
+                    days[i - 1] = scheduleDay[0].clinic
+                } else {
+                    days[i - 1] = null
+                }
 
+            }
         }
         return days
     }
