@@ -28,6 +28,8 @@ public interface AppointmentDao {
 
     boolean hasAppointment(User patient, LocalDateTime date);
 
+    void cleanPastAppointments();
+
     List<Appointment> getAllDocAppointmentsOnSchedule(DoctorClinic doctor, int day, int hour);
 
     List<Appointment> getDoctorAppointmentsWithinWeek(Doctor doctor, LocalDate beginning, LocalDate end);

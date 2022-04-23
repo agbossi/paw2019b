@@ -46,8 +46,10 @@ function DoctorAddModal(props) {
     }
 
     const handleAdd = (doctor) => {
-        if(!isPresent(firstName) || !isPresent(email) || !isPresent(lastName) ||
-            !isPresent(phoneNumber) || !isPresent(password) || !isPresent(selectedSpecialty)) {
+        console.log('doctor en add')
+        console.log(doctor)
+        if(!isPresent(doctor.firstName) || !isPresent(doctor.email) || !isPresent(doctor.lastName) || !isPresent(doctor.license) ||
+            !isPresent(doctor.phoneNumber) || !isPresent(doctor.password) || !isPresent(doctor.specialty)) {
             setMessage(t('errors.incompleteForm'))
         } else {
             setMessage('')
@@ -84,13 +86,14 @@ function DoctorAddModal(props) {
                 break;
             case "password":
                 setPassword(event.target.value)
-                error = error || validation.requiredLength(event.target.value, errors, "password", 8, 20, t)
-                    || !validation.passwordMatch(event.target.value, errors, repeatPassword, t)
+                let len = validation.requiredLength(event.target.value, errors, "password", 8, 20, t)
+                let match = !validation.passwordMatch(event.target.value, errors, repeatPassword, t)
+                error = error || len || match
                 setPasswordErrors(errors)
                 break;
             case "phoneNumber":
                 setPhoneNumber(event.target.value)
-                error = error || validation.requiredLength(event.target.value, errors, "phoneNumber", 8, 10, t)
+                error = error || validation.requiredLength(event.target.value, errors, "phoneNumber", 8, 11, t)
                 setphoneNumberErrors(errors)
                 break;
             case "repeatPassword":
@@ -295,7 +298,7 @@ function DoctorAddModal(props) {
                     <Button variant="secondary" onClick={() => handleShow()}>
                         {t("closeButton")}
                     </Button>
-                    <Button disabled={invalidForm && selectedSpecialty !== ''}
+                    <Button disabled={invalidForm || selectedSpecialty === ''}
                             className="doc-button-color"
                             onClick={() => handleAdd({
                         firstName: firstName,

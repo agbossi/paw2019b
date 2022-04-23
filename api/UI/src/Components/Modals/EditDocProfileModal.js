@@ -2,6 +2,7 @@ import {useTranslation} from "react-i18next";
 import React, {useState} from "react";
 import {Button, Form, Modal} from "react-bootstrap";
 import DropDownList from "../DropDownList";
+import validation from "../../utils/validationHelper";
 
 function EditDocProfileModal(props) {
     const [firstName, setFirstName] = useState(localStorage.getItem('firstName'))
@@ -14,24 +15,47 @@ function EditDocProfileModal(props) {
     const [message, setMessage] = useState('')
     const {t} = useTranslation()
 
+    const [invalidForm, setInvalidForm] = useState(true)
+
+    const [firstNameErrors, setFirstNameErrors] = useState([])
+    const [lastNameErrors, setLastNameErrors] = useState([])
+    const [phoneNumberErrors, setPhoneNumberErrors] = useState([])
+    const [passwordErrors, setPasswordErrors] = useState([])
+    const [repeatPasswordErrors, setRepeatPasswordErrors] = useState([])
+
     const onChange = (event) => {
+        let error = false
+        let errors = []
         switch(event.target.id) {
             case "firstName":
                 setFirstName(event.target.value);
+                error = error || validation.requiredAlpha(event.target.value, errors, "firstName", t)
+                setFirstNameErrors(errors)
                 break;
             case "lastName":
                 setLastName(event.target.value);
+                error = error || validation.requiredAlpha(event.target.value, errors, "lastName", t)
+                setLastNameErrors(errors)
                 break;
             case "newPassword":
                 setNewPassword(event.target.value);
+                error = error || validation.requiredLength(event.target.value, errors, "password", 8, 20, t)
+                    || !validation.passwordMatch(event.target.value, errors, repeatPassword, t)
+                setPasswordErrors(errors)
                 break;
             case "repeatPassword":
                 setRepeatPassword(event.target.value);
+                error = error || !validation.passwordMatch(newPassword, errors, event.target.value, t)
+                setRepeatPasswordErrors(errors)
                 break;
             case "phoneNumber":
                 setPhoneNumber(event.target.value);
+                error = error || validation.requiredNumeric(event.target.value, errors, "phoneNumber", t) ||
+                    !validation.checkLength(event.target.value, errors, "phoneNumber", 8, 11, t)
+                setPhoneNumberErrors(errors)
                 break;
         }
+        setInvalidForm(error)
     }
 
     const handleSelect = (specialty) => {
@@ -44,8 +68,8 @@ function EditDocProfileModal(props) {
     }
 
     const handleClick = () => {
+        setInvalidForm(true)
         if (selectedSpecialty === '')
-            console.log(localStorage.getItem('specialty'))
             setSelectedSpecialty(localStorage.getItem('specialty'))
         const doctor = {
             firstName: firstName,
@@ -60,8 +84,10 @@ function EditDocProfileModal(props) {
         else {
             setMessage('')
             props.handleEdit(doctor)
+            setInvalidForm(false)
             handleShow()
         }
+        setInvalidForm(false)
     }
 
     return (
@@ -81,14 +107,42 @@ function EditDocProfileModal(props) {
                             <Form.Label>{t("FORM.firstName")}</Form.Label>
                             <Form.Control value={firstName}
                                           placeholder={t("FORM.enterFirstName")}
-                                          onChange={onChange}/>
+                                          onChange={onChange}
+                            />
+                            {firstNameErrors.length !== 0 && (
+                                <div className="form-group">
+                                    <div className="alert alert-danger" role="alert">
+                                        <ul>
+                                            {firstNameErrors.map((error) => {
+                                                return (
+                                                    <li>{error}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="lastName">
                             <Form.Label>{t("FORM.lastName")}</Form.Label>
                             <Form.Control value={lastName}
                                           placeholder={t("FORM.enterLastName")}
-                                          onChange={onChange}/>
+                                          onChange={onChange}
+                            />
+                            {lastNameErrors.length !== 0 && (
+                                <div className="form-group">
+                                    <div className="alert alert-danger" role="alert">
+                                        <ul>
+                                            {lastNameErrors.map((error) => {
+                                                return (
+                                                    <li>{error}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="specialty">
@@ -105,21 +159,63 @@ function EditDocProfileModal(props) {
                             <Form.Control value={phoneNumber}
                                           type="text"
                                           placeholder={t("FORM.enterPhone")}
-                                          onChange={onChange}/>
+                                          onChange={onChange}
+                            />
+                            {phoneNumberErrors.length !== 0 && (
+                                <div className="form-group">
+                                    <div className="alert alert-danger" role="alert">
+                                        <ul>
+                                            {phoneNumberErrors.map((error) => {
+                                                return (
+                                                    <li>{error}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="newPassword">
                             <Form.Label>{t("FORM.password")}</Form.Label>
                             <Form.Control type="password"
                                           placeholder={t("FORM.password")}
-                                          onChange={onChange}/>
+                                          onChange={onChange}
+                            />
+                            {passwordErrors.length !== 0 && (
+                                <div className="form-group">
+                                    <div className="alert alert-danger" role="alert">
+                                        <ul>
+                                            {passwordErrors.map((error) => {
+                                                return (
+                                                    <li>{error}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="repeatPassword">
                             <Form.Label>{t("FORM.repeatPassword")}</Form.Label>
                             <Form.Control type="password"
                                           placeholder={t("FORM.repeatPassword")}
-                                          onChange={onChange}/>
+                                          onChange={onChange}
+                            />
+                            {repeatPasswordErrors.length !== 0 && (
+                                <div className="form-group">
+                                    <div className="alert alert-danger" role="alert">
+                                        <ul>
+                                            {repeatPasswordErrors.map((error) => {
+                                                return (
+                                                    <li>{error}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
                         </Form.Group>
                     </Form>
                     {message && (
@@ -134,7 +230,7 @@ function EditDocProfileModal(props) {
                     <Button variant="secondary" onClick={() => handleShow()}>
                         {t("closeButton")}
                     </Button>
-                    <Button className="doc-button-color" onClick={() => handleClick()} >
+                    <Button className="doc-button-color" disabled={invalidForm} onClick={() => handleClick()} >
                         {t('actions.edit')}
                     </Button>
                 </Modal.Footer>

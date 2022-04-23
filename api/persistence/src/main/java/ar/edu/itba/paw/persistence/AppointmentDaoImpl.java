@@ -146,6 +146,15 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
+    @Transactional
+    public void cleanPastAppointments() {
+        final Query query = entityManager.createQuery(
+                "delete from Appointment as ap where ap.appointmentKey.date < :date");
+        query.setParameter("date",LocalDateTime.now());
+        query.executeUpdate();
+    }
+
+    @Override
     public boolean hasAppointment(User patient, LocalDateTime date) {
         TypedQuery<Appointment> query = entityManager.createQuery("from Appointment as ap" +
                 " where ap.patient = :email " +

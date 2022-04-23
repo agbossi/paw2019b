@@ -61,7 +61,6 @@ const optionalNumeric = (value, errors, field, t) => {
 const optionalAlpha = (value, errors, field, t) => {
     console.log('value in optional alpa: ' + value)
     if (value !== '') {
-        console.log('message: ' + t("FORM." + field) + "  " + t("errors.alphabetic"))
         return !checkAlpha(value, errors, t("FORM." + field) + "  " + t("errors.alphabetic"))
     }
     return false
@@ -81,7 +80,7 @@ const checkLength = (value, errors, field, min, max, t) => {
 
 const requiredLength = (value, errors, field, min, max, t) => {
     return !isPresent(value, errors, t("FORM." + field) + "  " + t("errors.required"))
-        || !checkLength(value, errors, field, min, max)
+        || !checkLength(value, errors, field, min, max, t)
 }
 
 const checkLengthExact = (value, errors, field, exact, t) => {
@@ -95,15 +94,18 @@ const checkLengthExact = (value, errors, field, exact, t) => {
 
 const requiredEmail = (value, errors, field, t) => {
     return !isPresent(value, errors, t("FORM." + field) + "  " + t("errors.required"))
-        || !checkEmail(value, errors, t("FORM." + field) + "  " + t("errors.invalidEmail"))
+        || !validateEmail(value, errors, t("errors.invalidEmail"))
 }
 
 const passwordMatch = (value, errors, repeatPassword, t) => {
     let match = true
-    if(value !== '' && repeatPassword !== value) {
+    if(repeatPassword !== value) {
         errors.push([t("errors.passwordMismatch")])
         match = false
     }
+    console.log('pass ' + value)
+    console.log('repeat pass ' + repeatPassword)
+    console.log('match ' + match)
     return match
 }
 
@@ -115,6 +117,17 @@ const checkEmail = (values, errors, message) => {
     }
     return isEmail
 }
+
+const validateEmail = (email, errors, message) => {
+    let isEmail = String(email)
+        .toLowerCase()
+        .match(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
+    if(!isEmail)
+        errors.push(message)
+    return isEmail
+};
 
 export default {
     isPresent,

@@ -11,7 +11,7 @@ function DoctorClinicAddModal(props) {
     const [price, setPrice] = useState(0)
 
     const [priceErrors, setPriceErrors] = useState([])
-    const [invalidForm, setInvalidForm] = useState(false)
+    const [invalidForm, setInvalidForm] = useState(true)
 
     const {t} = useTranslation()
 
@@ -92,7 +92,7 @@ function DoctorClinicAddModal(props) {
                     <Button variant="secondary" onClick={handleShow}>
                         {t("closeButton")}
                     </Button>
-                    <Button disabled={invalidForm && selectedClinic !== ''} className="doc-button-color" onClick={handleAdd}>
+                    <Button disabled={invalidForm || selectedClinic === ''} className="doc-button-color" onClick={handleAdd}>
                         {t("actions.add")}
                     </Button>
                 </Modal.Footer>

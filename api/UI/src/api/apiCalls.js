@@ -1,5 +1,41 @@
 import api from "./index";
 import * as cons from './Constants.js'
+import DoctorCalls from "./DoctorCalls";
+import PatientCalls from "./PatientCalls";
+
+const handleInformation = async () => {
+    console.log('en info')
+    if(localStorage.getItem('token') === null
+        || localStorage.getItem('token') === undefined || localStorage.getItem('firstName') !== null)
+        return
+    const email = localStorage.getItem('email')
+    switch (localStorage.getItem('role')) {
+        case "ROLE_DOCTOR":
+            DoctorCalls.getDocByEmail(email).then(resp => {
+                console.log(resp)
+                if (resp && resp.ok) {
+                    let doctor = resp.data[0]
+                    console.log('entro')
+                    localStorage.setItem('license', doctor.license)
+                    localStorage.setItem('firstName', doctor.firstName)
+                    localStorage.setItem('lastName', doctor.lastName)
+                    localStorage.setItem('specialty', doctor.specialty)
+                    localStorage.setItem('phone', doctor.phoneNumber)
+                }
+            })
+            break;
+        case "ROLE_USER":
+            PatientCalls.getProfile(email).then(resp => {
+                if (resp && resp.ok) {
+                    localStorage.setItem('firstName', resp.data.firstName)
+                    localStorage.setItem('lastName', resp.data.lastName)
+                    localStorage.setItem('prepaid', resp.data.prepaid)
+                    localStorage.setItem('prepaidNumber', resp.data.prepaidNumber)
+                }
+            })
+            break;
+    }
+}
 
 const login = async (email, password) => {
     localStorage.setItem('email', email)
@@ -9,9 +45,9 @@ const login = async (email, password) => {
     return api.post(cons.LOGIN_PATH, params)
         .then(resp => {
             if(resp.status === 200) {
-                console.log(resp.headers)
                 localStorage.setItem('token', resp.headers.xAuthToken)
                 localStorage.setItem('role', resp.headers.xRole)
+                localStorage.setItem('email', email)
             }
 
             return resp
@@ -30,10 +66,13 @@ const logout = async () => {
     localStorage.removeItem('firstName')
     localStorage.removeItem('lastName')
     localStorage.removeItem('path')
+    localStorage.removeItem('specialty')
+    localStorage.removeItem('phone')
 }
 
 export default {
     login,
     signUp,
     logout,
+    handleInformation
 }

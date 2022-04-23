@@ -24,8 +24,6 @@ function Favorites() {
                 doctors.push(resp.data)
             })
         })
-        console.log('se pusheo?')
-        console.log(doctors)
         return doctors
     }
 

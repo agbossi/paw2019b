@@ -15,6 +15,7 @@ import yesFav from "../../Assets/yesfav.png";
 import noFav from "../../Assets/nofav.png";
 import ClinicCalls from "../../api/ClinicCalls";
 import Utils from "../../utils/paginationHelper";
+import ApiCalls from "../../api/apiCalls";
 
 function UserDoctorProfile(props) {
     const {license} = useParams()
@@ -138,8 +139,8 @@ function UserDoctorProfile(props) {
         await fetchImage();
         //await fetchAllClinics();
         await fetchClinicSchedules();
-
         await fetchAvailableAppointments(doctor.email);
+        await ApiCalls.handleInformation()
         if(localStorage.getItem('email') !== null) {
             await fetchIsFavorite();
 
@@ -166,7 +167,7 @@ function UserDoctorProfile(props) {
         else {
             const data = {
                 license: license,
-                clinic: selectedClinic.clinic.id,
+                clinic: selectedClinic.id,
                 patient: localStorage.getItem('email'),
                 time: selectedDateTime.hour,
                 day: selectedDateTime.day,

@@ -83,8 +83,6 @@ function SignUp() {
                         navigate("/paw-2019b-4/login");
                         window.location.reload()
                     }
-                    console.log('data')
-                    console.log(resp.data)
                     if (resp.status === 409) {
                         if (resp.data === "user-exists") {
                             console.log('409 en signup')
@@ -93,14 +91,6 @@ function SignUp() {
                     }
                 },
                 error => {
-                    /*console.log('en signup error?')
-                    console.log(error)
-                    const resMessage =
-                        (error.response &&
-                            error.response.data &&
-                            error.response.data.message) ||
-                        error.message ||
-                        error.toString();*/
                     setMessage(t('error.emailInUse'))
                 }
             );
@@ -336,7 +326,7 @@ function SignUp() {
                     </Col>
                 </Row>
                 <br/>
-                <Button type="submit" disabled={invalidForm && selectedPrepaid !== ''} variant="secondary" >
+                <Button type="submit" disabled={invalidForm || selectedPrepaid === ''} variant="secondary" >
                     {t("FORM.signUp")}
                 </Button>
             </Form>

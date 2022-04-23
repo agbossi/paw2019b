@@ -12,6 +12,8 @@ import '../../i18n/i18n'
 
 import {useLocation, useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import DoctorCalls from "../../api/DoctorCalls";
+import PatientCalls from "../../api/PatientCalls";
 
 
 const required = (value) => {
@@ -28,12 +30,6 @@ const WrappedLogin = props => {
     const navigate = useNavigate()
     const location = useLocation()
     const {t} = useTranslation()
-    console.log('navigate info')
-    console.log(navigate)
-    console.log(navigate.state)
-    console.log('location info')
-    console.log(location)
-    console.log(location.search !== null && location.search !== undefined && location.search !== '')
     return <Login navigate={navigate} t={t} location={location} {...props} />
 }
 
@@ -72,6 +68,7 @@ class Login extends Component {
         });
     }
 
+
     handleLogin(e) {
         e.preventDefault();
 
@@ -79,6 +76,7 @@ class Login extends Component {
             message: "",
             loading: true
         });
+
 
         this.form.validateAll();
         let redirectPath;
@@ -98,16 +96,13 @@ class Login extends Component {
                                 break;
                         }
                         if (localStorage.getItem("path") !== null) {
-                            console.log('entro en memoria')
-                            console.log('/paw-2019b-4' + localStorage.getItem("path"))
                             this.props.navigate('/paw-2019b-4' + localStorage.getItem("path"));
                         } else if(redirectPath !== null && redirectPath !== undefined) {
-                            console.log('entro en redirect principal')
                             this.props.navigate(redirectPath);
                         } else {
-                            console.log('pasaron cosas')
                             this.props.navigate('/paw-2019b-4/login')
                         }
+                        console.log('license: ' +  localStorage.getItem('license'))
                         localStorage.removeItem("path")
                         window.location.reload()
 
@@ -121,7 +116,6 @@ class Login extends Component {
                     }
                 },
                 error => {
-                    console.log('este es el que jode?')
                     const resMessage =
                         (error.response &&
                             error.response.data &&

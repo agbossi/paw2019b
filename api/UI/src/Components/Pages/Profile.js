@@ -12,26 +12,36 @@ import {dateToString} from "../../utils/dateHelper";
 import './Profile.css'
 import ClinicCalls from "../../api/ClinicCalls";
 import DoctorCalls from "../../api/DoctorCalls";
+import ApiCalls from "../../api/apiCalls";
 
 function Profile() {
     const [selectedPrepaid, setSelectedPrepaid] = useState('')
-    const [firstName, setFirstName] = useState('')
-    const [lastName, setLastName] = useState('')
+    const [firstName, setFirstName] = useState(localStorage.getItem('firstName'))
+    const [lastName, setLastName] = useState(localStorage.getItem('lastName'))
     const [id, setId] = useState('')
-    const [prepaidNumber, setPrepaidNumber] = useState('')
+    const [prepaidNumber, setPrepaidNumber] = useState(localStorage.getItem('prepaid'))
     const [prepaids, setPrepaids] = useState([])
     const [appointments, setAppointments] = useState([])
-
+    const [modalReady, setModalReady] = useState(false)
 
     const { t } = useTranslation();
     const navigate = useNavigate();
 
     useEffect(async () => {
+        await ApiCalls.handleInformation()
         await fetchAppointments()
         await fetchProfile()
         await fetchPrepaids()
         localStorage.setItem('path', '/profile')
+        awaitModal()
     }, [])
+
+    const awaitModal = () => {
+        while(localStorage.getItem('lastName') === null) {
+
+        }
+        setModalReady(true)
+    }
 
     const fetchPrepaids = async () => {
         const response = await PrepaidCalls.getAllPrepaids();
@@ -80,13 +90,13 @@ function Profile() {
         const response = await PatientCalls.getProfile(localStorage.getItem('email'));
         if (response && response.ok) {
             setFirstName(response.data.firstName)
-            localStorage.setItem('firstName', response.data.firstName)
+            //localStorage.setItem('firstName', response.data.firstName)
             setLastName(response.data.lastName)
-            localStorage.setItem('lastName', response.data.lastName)
+            //localStorage.setItem('lastName', response.data.lastName)
             setSelectedPrepaid(response.data.prepaid)
-            localStorage.setItem('prepaid', response.data.prepaid)
+            //localStorage.setItem('prepaid', response.data.prepaid)
             setPrepaidNumber(response.data.prepaidNumber)
-            localStorage.setItem('prepaidNumber', response.data.prepaidNumber)
+           // localStorage.setItem('prepaidNumber', response.data.prepaidNumber)
             setId(response.data.id)
         } else if (response.status === 401) {
             localStorage.removeItem('token')
@@ -110,6 +120,7 @@ function Profile() {
     }
     const handleProfileUpdateOk = async () => {
             await fetchProfile()
+            await ApiCalls.handleInformation();
             await fetchPrepaids()
     }
 
@@ -163,10 +174,10 @@ function Profile() {
                 </Row>
                 <Row>
                     <Col className="col-button">
-                        <EditUserProfileModal prepaids={prepaids}
+                        {modalReady && <EditUserProfileModal prepaids={prepaids}
                                               handleOk={handleProfileUpdateOk}
                                               prepaidNumber={prepaidNumber}
-                        />
+                        />}
                     </Col>
                     <Col className="col-button">
                         <Link

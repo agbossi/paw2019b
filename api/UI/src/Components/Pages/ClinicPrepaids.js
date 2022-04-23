@@ -8,6 +8,7 @@ import Utils from "../../utils/paginationHelper";
 import PrepaidCalls from "../../api/PrepaidCalls";
 import {useTranslation} from "react-i18next";
 import "../../i18n/i18n"
+import ApiCalls from "../../api/apiCalls";
 
 function ClinicPrepaids() {
 
@@ -79,6 +80,7 @@ function ClinicPrepaids() {
     }
 
     useEffect(async () => {
+        await ApiCalls.handleInformation()
         await fetchClinicPrepaids(page)
         await fetchAllClinicPrepaids()
         await fetchPrepaids()

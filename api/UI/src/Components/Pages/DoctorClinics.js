@@ -7,6 +7,7 @@ import Utils from "../../utils/paginationHelper";
 import {Link, useNavigate} from "react-router-dom";
 import DoctorClinicAddModal from "../Modals/DoctorClinicAddModal";
 import EditPriceModal from "../Modals/EditPriceModal";
+import ApiCalls from "../../api/apiCalls";
 
 function DoctorClinics(props) {
     const [clinics, setClinics] = useState([]);
@@ -48,8 +49,6 @@ function DoctorClinics(props) {
             });
         })
         Promise.all(fetchPromises).then(clinics => {
-            console.log('que es esto?')
-            console.log(clinics)
             return clinics
         })
 
@@ -87,8 +86,6 @@ function DoctorClinics(props) {
                 consultPrice: doctorClinics[i].consultPrice
             })
         }
-        console.log('generated doctor clinics')
-        console.log(dc)
         return dc
     }
 
@@ -156,6 +153,7 @@ function DoctorClinics(props) {
         }
     }
     useEffect(async () => {
+        await ApiCalls.handleInformation()
         await fetchDoctorsClinics(page);
         await fetchAllClinics();
         localStorage.setItem('path', '/doctor/clinics')

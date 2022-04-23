@@ -98,7 +98,7 @@ public class AppointmentController {
      */
     @DELETE
     @Produces(value = { MediaType.APPLICATION_JSON })
-    @PreAuthorize("hasPermission(#email, 'email')")
+    //@PreAuthorize("hasPermission(#email, 'email')")
     public Response cancelAppointment(@QueryParam("email") final String email,
                                       @QueryParam("clinic") final Integer clinic,
                                       @QueryParam("license") final String license,
@@ -107,7 +107,8 @@ public class AppointmentController {
                                       @QueryParam("day") final Integer day,
                                       @QueryParam("time") final Integer time) throws EntityNotFoundException,
             RequestEntityNotFoundException {
-
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(!auth.getName().equals(email)) throw new AccessDeniedException("");
         appointmentService.cancelUserAppointment(email, license, clinic, year, month, day, time);
         return Response.noContent().build();
 

@@ -13,6 +13,7 @@ import ImageCalls from "../../api/ImageCalls";
 import {BASE_URL} from "../../Constants";
 import docpic from "../../Assets/docpic.jpg";
 
+
 function DoctorHome(props) {
     const [doctor, setDoctor] = useState({})
     const [message, setMessage] = useState("")
@@ -20,6 +21,8 @@ function DoctorHome(props) {
     const {t} = useTranslation()
     const navigate = useNavigate()
     const [image, setImage] = useState(null)
+    const [modalReady, setModalReady] = useState(false)
+
 
     const fetchDoctor = async () => {
         const email = localStorage.getItem('email')
@@ -150,7 +153,15 @@ function DoctorHome(props) {
         await fetchDoctor();
         await fetchSpecialties();
         await fetchImage();
+        awaitModal()
     }, [])
+
+    const awaitModal = () => {
+        while(localStorage.getItem('lastName') === null) {
+
+        }
+        setModalReady(true)
+    }
 
     return (
         <>
@@ -190,9 +201,9 @@ function DoctorHome(props) {
                         <div className="info-label">
                             <b>{t('ADMIN.specialty')}:</b> {doctor.specialty}
                         </div>
-                        <EditDocProfileModal specialties={specialties.map(specialty=> specialty.name)}
+                        {modalReady && <EditDocProfileModal specialties={specialties.map(specialty=> specialty.name)}
                                              handleEdit={handleEdit}
-                        />
+                        />}
                     </Col>
                     <Col>
                         <img className="img-size"

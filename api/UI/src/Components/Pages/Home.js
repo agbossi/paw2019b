@@ -36,7 +36,6 @@ function Home(props) {
         const pag = searchParams.get('page') === undefined ||  searchParams.get('page') === null ?
             0: Number(searchParams.get('page'))
 
-        console.log("page " + page)
         const search = {
             location: searchParams.get('location') === "null"? null: searchParams.get('location'),
             specialty: searchParams.get('specialty') === "null"? null: searchParams.get('specialty'),

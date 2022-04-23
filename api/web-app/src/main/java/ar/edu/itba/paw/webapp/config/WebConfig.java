@@ -19,6 +19,7 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -43,6 +44,7 @@ import java.util.concurrent.Executor;
 
 @EnableTransactionManagement
 @EnableAsync
+@EnableScheduling
 @ComponentScan({ "ar.edu.itba.paw.webapp.controller",
                  "ar.edu.itba.paw.webapp.helpers",
                  "ar.edu.itba.paw.service",

@@ -8,6 +8,7 @@ import './Favorites.css'
 import {dateToString, getMonth, getWeekDate} from "../../utils/dateHelper";
 import DoctorCalls from "../../api/DoctorCalls";
 import ClinicCalls from "../../api/ClinicCalls";
+import ApiCalls from "../../api/apiCalls";
 
 function Appointments(props) {
     const [appointments, setAppointments] = useState([])
@@ -17,14 +18,13 @@ function Appointments(props) {
     const [isLoading, setIsLoading] = useState(false)
     const {t} = useTranslation()
     const navigate = useNavigate()
-    console.log('print en appointments')
 
     const fetchAppointments = async (pag) => {
         const email = localStorage.getItem('email')
         if (email === null) {
             localStorage.removeItem('token')
             localStorage.removeItem('role')
-            //navigate('/paw-2019b-4/login')
+            navigate('/paw-2019b-4/login')
         }
         setIsLoading(true)
         const response = await AppointmentCalls.getAppointment(email, pag)
@@ -83,6 +83,7 @@ function Appointments(props) {
             localStorage.removeItem('role')
             navigate('/paw-2019b-4/login')
         }
+
         const response = await AppointmentCalls.deleteAppointment(
             email,
             app.license,
@@ -104,6 +105,7 @@ function Appointments(props) {
     }
 
     useEffect(async () => {
+        await ApiCalls.handleInformation()
         let path = props.user === 'doctor/' ? props.user : ''
         localStorage.setItem('path', '/' + path + 'appointments')
         await fetchAppointments(page);
@@ -137,6 +139,27 @@ function Appointments(props) {
         }
     }
 
+    const getDoctorName = (appointment) => {
+        if(appointment.doctor !== null && appointment.doctor !== undefined) {
+            return appointment.doctor.firstName + ' ' + appointment.doctor.lastName
+        }
+        return ''
+    }
+
+    const getPatientName = (ap) => {
+        if(ap.appointment.patient !== null && ap.appointment.patient !== undefined) {
+            return ap.appointment.patient.firstName + ' ' + ap.appointment.patient.lastName + ' (' + ap.appointment.patient.email + ')'
+        }
+        return ''
+    }
+
+    const getClinicName = (ap) => {
+        if(ap.clinic !== null && ap.clinic !== undefined) {
+            return ap.clinic.name + ' - ' + ap.clinic.location + ' ' + '(' + ap.clinic.address + ')'
+        }
+        return ''
+    }
+
     return(
         <>
             <Row style={{display:"flex"}}>
@@ -159,13 +182,13 @@ function Appointments(props) {
                                     <Card.Title><b>{dateToString(ap.appointment, t)}</b></Card.Title>
                                     <Card.Text>
                                         {props.user === "patient"? <div>
-                                            {t("USER.doc")}{ap.doctor.firstName + ' ' + ap.doctor.lastName}
-                                        </div>: <div>
-                                            {t("USER.patient")}{ap.appointment.patient.firstName + ' ' + ap.appointment.patient.lastName} ({ap.appointment.patient.email})
+                                            {t("USER.doc")}{getDoctorName(ap)}
+                                        </div> : <div>
+                                            {t("USER.patient")}{getPatientName(ap)}
                                         </div> }
 
                                         <div>
-                                            {t("USER.clinic")} {ap.clinic.name} - {ap.clinic.location} ({ap.clinic.address})
+                                            {t("USER.clinic")} {getClinicName(ap)}
                                         </div>
 
                                     </Card.Text>

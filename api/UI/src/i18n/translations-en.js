@@ -61,6 +61,7 @@ export const TRANSLATION_EN = {
         specialty: "Specialty: ",
         selectSpecialty: "Select specialty",
         enterLicense: "Enter license",
+        license: "License",
         phoneNumber: "Phone Number",
         enterPhone: "Enter phone number",
         email: "Email",

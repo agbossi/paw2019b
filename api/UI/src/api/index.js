@@ -29,8 +29,11 @@ api.interceptors.response.use(
     error => {
         if (error.response) {
             // Request made and server responded
-            console.log('status: ' + error.response.status)
-            if (error.response.status === 401) {
+            let path = window.location.pathname
+            console.log('path: ' + path)
+            console.log('status ' + error.response.status)
+            if (error.response.status === 401 && !path.includes('login')) {
+                console.log('no es este redirect, no?')
                 ApiCalls.logout()
                 window.location.replace("http://pawserver.it.itba.edu.ar/paw-2019b-4/login")
             }

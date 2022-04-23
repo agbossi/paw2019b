@@ -6,11 +6,13 @@ import DoctorCalls from "../../api/DoctorCalls";
 import ClinicCalls from "../../api/ClinicCalls";
 import {useNavigate, useParams} from "react-router-dom";
 import ModifyScheduleModal from "../Modals/ModifyScheduleModal";
+import ApiCalls from "../../api/apiCalls";
 
 function DoctorClinicSchedule(props) {
     const [schedule, setSchedule] = useState([]);
     const [message, setMessage] = useState("");
     const [clinic, setClinic] = useState(null);
+    const [clinics, setClinics] = useState([]);
     const [doctor, setDoctor] = useState(null);
     const {t} = useTranslation();
     const navigate = useNavigate()
@@ -27,12 +29,8 @@ function DoctorClinicSchedule(props) {
         }
     }
 
-    const fetchClinic = async () => {
-        const response = await ClinicCalls.getClinic(id);
-        if (response && response.ok) {
-            setClinic(response.data);
-            setMessage("");
-        }
+    const fetchClinic = async (id) => {
+        return await ClinicCalls.getClinic(id)
     }
 
     const fetchSchedule = async () => {
@@ -44,23 +42,53 @@ function DoctorClinicSchedule(props) {
     }
 
     const getClinicName = () => {
-        if (clinic === null)
+        if (clinic === null || clinic === undefined)
             return "";
         return clinic.name
     }
 
-    const getRow = (row) => {
-        const rowSchedule = schedule.filter(schedule => schedule.hour === row)
-        const days = []
-        for (let i = 1; i < 8; i++) {
-            const scheduleDay = rowSchedule.filter(schedule => (schedule.day) === i)
-            if (scheduleDay.length > 0) {
-             days[i - 1] = scheduleDay[0].clinic
-            } else {
-                days[i - 1] = null
+    const fetchClinicSchedules = async () => {
+        let clinicSchedules = []
+        await DoctorCalls.getSchedule(license).then(resp => {
+            if (resp && resp.ok) {
+                let uniqueIds = [...new Set(resp.data.map(schedule => schedule.clinicId))];
+                const fetchPromises = uniqueIds.map(clinicId => {
+                    return new Promise((resolve, reject) => {
+                        fetchClinic(clinicId).then(resp2 => {
+                            resolve(resp2.data)
+                        })
+                    });
+                })
+                Promise.all(fetchPromises).then(clinics => {
+                    for(let i = 0;i < resp.data.length; i++) {
+                        clinicSchedules.push({
+                            schedule: resp.data[i],
+                            clinic: clinics.filter(clinic => clinic.id === resp.data[i].clinicId)[0]
+                        })
+                    }
+                    setSchedule(clinicSchedules)
+                    setClinics(clinics)
+                })
+                setMessage("")
             }
 
+        })
+    }
+
+    const getRow = (row) => {
+        const days = []
+        if(schedule.length !== 0) {
+            const rowSchedule = schedule.filter(schedule => schedule.schedule.hour === row)
+            for (let i = 1; i < 8; i++) {
+                const scheduleDay = rowSchedule.filter(schedule => (schedule.schedule.day) === i)
+                if (scheduleDay.length > 0) {
+                    days[i - 1] = scheduleDay[0].clinic
+                } else {
+                    days[i - 1] = null
+                }
+            }
         }
+
         return days
     }
 
@@ -73,16 +101,19 @@ function DoctorClinicSchedule(props) {
     }
 
     useEffect(async () => {
+        await ApiCalls.handleInformation()
+        await fetchClinic(id).then(response => setClinic(response.data));
         await fetchDoctor();
-        await fetchClinic();
-        await fetchSchedule()
+        await fetchClinicSchedules();
+        //await fetchSchedule()
         localStorage.setItem('path', '/doctor/' + license + '/clinics/' + id + '/schedule')
     },[])
 
     const handleAdd = async (day, hour) => {
         const response = await DoctorCalls.addSchedule(license, id, day, hour)
         if (response && response.ok) {
-            await fetchSchedule();
+            //await fetchSchedule();
+            await fetchClinicSchedules();
             setMessage("")
         }
         if (response.status === 404) {
@@ -99,7 +130,8 @@ function DoctorClinicSchedule(props) {
     const handleDelete = async (day, hour) => {
         const response = await DoctorCalls.deleteSchedule(license, id, day, hour)
         if (response && response.ok) {
-            await fetchSchedule();
+            //await fetchSchedule();
+            await fetchClinicSchedules();
             setMessage("")
         }
         if (response.status === 404) {

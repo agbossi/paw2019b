@@ -76,14 +76,17 @@ function EditUserProfileModal(props) {
 
     const handleProfileUpdate = async () => {
         setInvalidForm(true)
-        const response = await PatientCalls.updateProfile({
+        let data = {
             firstName: firstName,
             lastName: lastName,
             newPassword: newPassword,
             repeatPassword: repeatPassword,
             prepaid: selectedPrepaid,
             prepaidNumber: prepaidNumber
-        }, localStorage.getItem('email'))
+        }
+        console.log(data)
+        const response = await PatientCalls.updateProfile(data,
+            localStorage.getItem('email'))
         if (response && response.ok) {
             props.handleOk()
         }
@@ -131,18 +134,18 @@ function EditUserProfileModal(props) {
                                           placeholder={t("FORM.enterLastName")}
                                           onChange={onChange}/>
                             {lastNameErrors.length !== 0 && (
-                                                        <div className="form-group">
-                                                            <div className="alert alert-danger" role="alert">
-                                                                <ul>
-                                                                    {lastNameErrors.map((error) => {
-                                                                        return (
-                                                                            <li>{error}</li>
-                                                                        )
-                                                                    })}
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    )}
+                                <div className="form-group">
+                                    <div className="alert alert-danger" role="alert">
+                                        <ul>
+                                            {lastNameErrors.map((error) => {
+                                                return (
+                                                    <li>{error}</li>
+                                                )
+                                            })}
+                                        </ul>
+                                    </div>
+                                </div>
+                            )}
                         </Form.Group>
 
                         <Form.Group className="mb-3" controlId="prepaid">

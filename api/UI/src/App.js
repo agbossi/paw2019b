@@ -42,8 +42,7 @@ function App() {
         const auth = isDoc();
         if(!auth) {
             utils.handleUnAuth()
-            console.log('siquiera paso por aca?')
-            return <Navigate to="/paw-2019b-4/login?unAuth=true" state={{k: 'sarasa'}}/>;
+            return <Navigate to="/paw-2019b-4/login?unAuth=true" />;
         }
         return children
     }
@@ -57,15 +56,42 @@ function App() {
         return children
     }
 
+    function AnonymousRoute ({children}) {
+        const isAnon = !isAuth();
+        let to;
+        if(!isAnon) {
+            if(isUser())
+                to = "/paw-2019b-4"
+            else if(isDoc())
+                to = "/paw-2019b-4/doctor"
+            else
+                to = "/paw-2019b-4/admin"
+            return <Navigate to={to}/>;
+        }
+        return children
+    }
+
+    function UserOrAnonymousRoute ({children}) {
+        const auth = isUser();
+        const isAnon = !isAuth();
+        console.log('anon: ' + isAnon)
+        console.log('is user ' + auth)
+        if(!auth && !isAnon) {
+            utils.handleUnAuth()
+            return <Navigate to="/paw-2019b-4/login?unAuth=true"/>;
+        }
+        return children
+    }
+
   return (
     <div className="App">
         <div className="App-header">
             <Router>
                 <Navbar isAuth={isAuth}/>
                 <Routes>
-                    <Route exact path='/paw-2019b-4' element={<Home/>}/>
+                    <Route exact path='/paw-2019b-4' element={<UserOrAnonymousRoute><Home/></UserOrAnonymousRoute>}/>
                     <Route exact path='/paw-2019b-4/appointments' element={<UserRoute><Appointments user="patient" /></UserRoute>}/>
-                    <Route exact path='/paw-2019b-4/:license/profile' element={<UserDoctorProfile />}/>
+                    <Route exact path='/paw-2019b-4/:license/profile' element={<UserOrAnonymousRoute><UserDoctorProfile /></UserOrAnonymousRoute>}/>
                     <Route exact path="/paw-2019b-4/doctor" element={<DoctorRoute><DoctorHome /></DoctorRoute>} />
                     <Route exact path="/paw-2019b-4/doctor/clinics" element={<DoctorRoute><DoctorClinics/></DoctorRoute>} />
                     <Route exact path="/paw-2019b-4/doctor/appointments" element={<DoctorRoute><Appointments user="doctor" /></DoctorRoute>} />
@@ -78,7 +104,7 @@ function App() {
                     <Route exact path='/paw-2019b-4/admin/prepaids' element={<AdminRoute><Prepaids /></AdminRoute>}/>
                     <Route exact path='/paw-2019b-4/admin/clinics/:id/prepaids' element={<AdminRoute><ClinicPrepaids/></AdminRoute>}/>
                     <Route exact path='/paw-2019b-4/admin/doctors' element={<AdminRoute><Doctors/></AdminRoute>}/>
-                    <Route exact path='/paw-2019b-4/login' element={<WrappedLogin />}/>
+                    <Route exact path='/paw-2019b-4/login' element={<AnonymousRoute><WrappedLogin /></AnonymousRoute>}/>
                     <Route exact path='/paw-2019b-4/signUp' element={<SignUp />}/>
                     <Route exact path='/paw-2019b-4/favorites' element={<UserRoute><Favorites /></UserRoute>}/>
                     <Route exact path='/paw-2019b-4/profile' element={<UserRoute><Profile/></UserRoute>}/>
