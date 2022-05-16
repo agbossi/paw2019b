@@ -22,3 +22,7 @@ i18n
 const changeLanguage = async (lang) => {
     await i18n.changeLanguage(lang);
 }
+
+export default {
+    changeLanguage
+}

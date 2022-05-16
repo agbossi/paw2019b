@@ -69,6 +69,7 @@ export const TRANSLATION_ES = {
         newPassword: "Nueva contraseña",
         enterPassword: "Ingrese Contraseña",
         repeatPassword: "Reingrese Contraseña",
+        enterRepeatPassword: "Confirme contraseña",
         prepaidNumber: "Numero de prepaga",
         enterPrepaidNumber: "Ingrese numero de prepaga",
         name: "Nombre",

@@ -7,6 +7,7 @@ import ar.edu.itba.paw.model.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -97,8 +98,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    @Scheduled(fixedRate = 86400000)
+    @Scheduled(fixedRate = 43200000)
     public void cleanPastAppointments() {
+        System.out.println("en cron");
         appointmentDao.cleanPastAppointments();
     }
 

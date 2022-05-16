@@ -69,6 +69,7 @@ export const TRANSLATION_EN = {
         password: "Password",
         enterPassword: "Enter Password",
         repeatPassword: "Repeat Password",
+        enterRepeatPassword: "confirm Password",
         newPassword: "New password",
         prepaid: "Prepaid",
         prepaidNumber: "Prepaid number",

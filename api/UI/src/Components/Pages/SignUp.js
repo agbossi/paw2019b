@@ -162,16 +162,17 @@ function SignUp() {
                         {firstNameErrors.length !== 0 && (
                             <div className="form-group">
                                 <div className="alert alert-danger" role="alert">
-                                    <ul>
-                                        {firstNameErrors.map((error) => {
+                                    <ul id='firstNameErrors'>
+                                        {firstNameErrors.map((error, index) => {
                                             return (
-                                                <li>{error}</li>
+                                                <li key={index}>{error}</li>
                                             )
                                         })}
                                     </ul>
                                 </div>
                             </div>
-                        )}                    </Col>
+                        )}
+                    </Col>
                     <Col className="mx-4">
                         <Form.Group className="mb-3 div-signup" controlId="lastName">
                             <Form.Label className="label-signup m-3">{t("FORM.lastName")}</Form.Label>
@@ -183,10 +184,10 @@ function SignUp() {
                         {lastNameErrors.length !== 0 && (
                             <div className="form-group">
                                 <div className="alert alert-danger" role="alert">
-                                    <ul>
-                                        {lastNameErrors.map((error) => {
+                                    <ul id='lastNameErrors'>
+                                        {lastNameErrors.map((error, index) => {
                                             return (
-                                                <li>{error}</li>
+                                                <li key={index}>{error}</li>
                                             )
                                         })}
                                     </ul>
@@ -205,7 +206,7 @@ function SignUp() {
                                           elementType={t("FORM.selectPrepaid")}
                                           id='prepaids'
                             />
-                            <Form.Label className="label-signup m-3">{selectedPrepaid}</Form.Label>
+                            <Form.Label id='selectedPrepaid' className="label-signup m-3">{selectedPrepaid}</Form.Label>
                         </Form.Group>
                     </Col>
                     <Col className="mx-4">
@@ -218,10 +219,10 @@ function SignUp() {
                             {prepaidNumberErrors.length !== 0 && (
                                 <div className="form-group">
                                     <div className="alert alert-danger" role="alert">
-                                        <ul>
-                                            {prepaidNumberErrors.map((error) => {
+                                        <ul id='prepaidNumberErrors'>
+                                            {prepaidNumberErrors.map((error, index) => {
                                                 return (
-                                                    <li>{error}</li>
+                                                    <li key={index}>{error}</li>
                                                 )
                                             })}
                                         </ul>
@@ -243,10 +244,10 @@ function SignUp() {
                         {documentErrors.length !== 0 && (
                             <div className="form-group">
                                 <div className="alert alert-danger" role="alert">
-                                    <ul>
-                                        {documentErrors.map((error) => {
+                                    <ul id='documentErrors'>
+                                        {documentErrors.map((error, index) => {
                                             return (
-                                                <li>{error}</li>
+                                                <li key={index}>{error}</li>
                                             )
                                         })}
                                     </ul>
@@ -265,10 +266,10 @@ function SignUp() {
                             {emailErrors.length !== 0 && (
                                 <div className="form-group">
                                     <div className="alert alert-danger" role="alert">
-                                        <ul>
-                                            {emailErrors.map((error) => {
+                                        <ul id='emailErrors'>
+                                            {emailErrors.map((error, index) => {
                                                 return (
-                                                    <li>{error}</li>
+                                                    <li key={index}>{error}</li>
                                                 )
                                             })}
                                         </ul>
@@ -283,16 +284,16 @@ function SignUp() {
                         <Form.Group className="mb-3 div-signup" controlId="password">
                             <Form.Label className="label-signup m-3">{t("FORM.password")}</Form.Label>
                             <Form.Control type="password"
-                                          placeholder={t("FORM.password")}
+                                          placeholder={t("FORM.enterPassword")}
                                           value={password} onChange={onChange}
                             />
                             {passwordErrors.length !== 0 && (
                                 <div className="form-group">
                                     <div className="alert alert-danger" role="alert">
-                                        <ul>
-                                            {passwordErrors.map((error) => {
+                                        <ul id='passwordErrors'>
+                                            {passwordErrors.map((error, index) => {
                                                 return (
-                                                    <li>{error}</li>
+                                                    <li key={index}>{error}</li>
                                                 )
                                             })}
                                         </ul>
@@ -305,17 +306,17 @@ function SignUp() {
                         <Form.Group className="mb-3 div-signup" controlId="repeatPassword">
                             <Form.Label className="label-signup m-3">{t("FORM.repeatPassword")}</Form.Label>
                             <Form.Control type="password"
-                                          placeholder={t("FORM.repeatPassword")}
+                                          placeholder={t("FORM.enterRepeatPassword")}
                                           value={repeatPassword}
                                           onChange={onChange}
                             />
                             {repeatPasswordErrors.length !== 0 && (
                                 <div className="form-group">
                                     <div className="alert alert-danger" role="alert">
-                                        <ul>
-                                            {repeatPasswordErrors.map((error) => {
+                                        <ul id='repeatPasswordErrors'>
+                                            {repeatPasswordErrors.map((error, index) => {
                                                 return (
-                                                    <li>{error}</li>
+                                                    <li key={index}>{error}</li>
                                                 )
                                             })}
                                         </ul>
@@ -326,7 +327,7 @@ function SignUp() {
                     </Col>
                 </Row>
                 <br/>
-                <Button type="submit" disabled={invalidForm || selectedPrepaid === ''} variant="secondary" >
+                <Button type="submit" id='submitButton' disabled={invalidForm || selectedPrepaid === ''} variant="secondary" >
                     {t("FORM.signUp")}
                 </Button>
             </Form>

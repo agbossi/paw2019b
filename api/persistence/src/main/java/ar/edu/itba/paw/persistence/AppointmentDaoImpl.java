@@ -2,8 +2,12 @@ package ar.edu.itba.paw.persistence;
 
 import ar.edu.itba.paw.interfaces.dao.AppointmentDao;
 import ar.edu.itba.paw.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,6 +24,9 @@ public class AppointmentDaoImpl implements AppointmentDao {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Autowired
+    private PlatformTransactionManager transactionManager;
 
     @Override
     public Appointment createAppointment(DoctorClinic doctorClinic, User patient, LocalDateTime date){
@@ -146,12 +153,21 @@ public class AppointmentDaoImpl implements AppointmentDao {
     }
 
     @Override
-    @Transactional
+    //@Transactional
     public void cleanPastAppointments() {
-        final Query query = entityManager.createQuery(
-                "delete from Appointment as ap where ap.appointmentKey.date < :date");
-        query.setParameter("date",LocalDateTime.now());
-        query.executeUpdate();
+        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.execute(transactionStatus -> {
+            Query query = entityManager.createQuery(
+                    "delete from Appointment as ap where ap.appointmentKey.date < :date");
+            query.setParameter("date",LocalDateTime.now());
+            query.executeUpdate();
+            transactionStatus.flush();
+            return null;
+        });
+
+        //query.setParameter("date",LocalDateTime.now());
+        //entityManager.joinTransaction();
+        //query.executeUpdate();
     }
 
     @Override

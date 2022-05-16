@@ -8,7 +8,7 @@ function DropDownList(props) {
 
     return (
         <Dropdown>
-            <Dropdown.Toggle  id={props.id} variant="secondary">
+            <Dropdown.Toggle id={props.id} variant="secondary">
                 {props.elementType}
             </Dropdown.Toggle>
             <Dropdown.Menu variant="dark" className="dropdown-list">

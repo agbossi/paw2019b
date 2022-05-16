@@ -35,7 +35,7 @@ api.interceptors.response.use(
             if (error.response.status === 401 && !path.includes('login')) {
                 console.log('no es este redirect, no?')
                 ApiCalls.logout()
-                window.location.replace("http://pawserver.it.itba.edu.ar/paw-2019b-4/login")
+                window.location.replace("http://pawserver.it.itba.edu.ar/paw-2019b-4/login?unAuth=true")
             }
         }
         return Promise.reject(error);

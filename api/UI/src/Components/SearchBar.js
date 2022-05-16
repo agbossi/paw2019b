@@ -218,6 +218,7 @@ function SearchBar(props) {
                         <Button className="doc-button-color" onClick={() => clearFilters()}>
                             {t("FORM.clear")}
                         </Button>
+                        <br/>
                         <Button disabled={invalidSearch} className="doc-button-color" onClick={() => props.handleSearch({
                                 firstName: firstName,
                                 lastName: lastName,
