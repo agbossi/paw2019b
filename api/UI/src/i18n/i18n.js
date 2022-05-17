@@ -23,6 +23,11 @@ const changeLanguage = async (lang) => {
     await i18n.changeLanguage(lang);
 }
 
+const translate = async (key) => {
+    await i18n.t(key)
+}
+
 export default {
-    changeLanguage
+    changeLanguage,
+    translate
 }

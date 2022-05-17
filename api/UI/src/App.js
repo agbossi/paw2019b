@@ -74,8 +74,6 @@ function App() {
     function UserOrAnonymousRoute ({children}) {
         const auth = isUser();
         const isAnon = !isAuth();
-        console.log('anon: ' + isAnon)
-        console.log('is user ' + auth)
         if(!auth && !isAnon) {
             utils.handleUnAuth()
             return <Navigate to="/paw-2019b-4/login?unAuth=true"/>;

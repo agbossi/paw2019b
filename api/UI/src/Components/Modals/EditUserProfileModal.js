@@ -84,7 +84,6 @@ function EditUserProfileModal(props) {
             prepaid: selectedPrepaid,
             prepaidNumber: prepaidNumber
         }
-        console.log(data)
         const response = await PatientCalls.updateProfile(data,
             localStorage.getItem('email'))
         if (response && response.ok) {

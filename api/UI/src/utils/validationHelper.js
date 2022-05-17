@@ -20,7 +20,7 @@ const checkDigits = (value, errors, message) => {
 
 const checkAlphaNumeric = (value, errors, message) => {
     let isAlphaNum = true
-    if(!/^[a-zA-ZÀ-ÿ0-9\s]{1,40}$/.test(value)) {
+    if(!/^[0-9a-zA-ZÀ-ÿ\s]{1,40}$/.test(value) || value === null || value === undefined) {
         errors.push(message)
         isAlphaNum = false
     }
@@ -29,7 +29,7 @@ const checkAlphaNumeric = (value, errors, message) => {
 
 const checkAlpha = (value, errors, message) => {
     let isAlpha = true
-    if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(value)) {
+    if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(value) || value === null || value === undefined) {
         errors.push(message)
         isAlpha = false
     }
@@ -59,7 +59,6 @@ const optionalNumeric = (value, errors, field, t) => {
 }
 
 const optionalAlpha = (value, errors, field, t) => {
-    console.log('value in optional alpa: ' + value)
     if (value !== '') {
         return !checkAlpha(value, errors, t("FORM." + field) + "  " + t("errors.alphabetic"))
     }
@@ -103,19 +102,7 @@ const passwordMatch = (value, errors, repeatPassword, t) => {
         errors.push([t("errors.passwordMismatch")])
         match = false
     }
-    console.log('pass ' + value)
-    console.log('repeat pass ' + repeatPassword)
-    console.log('match ' + match)
     return match
-}
-
-const checkEmail = (values, errors, message) => {
-    let isEmail = true
-    if(!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(values.email)) {
-        isEmail = false
-        errors.push(message)
-    }
-    return isEmail
 }
 
 const validateEmail = (email, errors, message) => {
@@ -141,5 +128,7 @@ export default {
     passwordMatch,
     optionalNumeric,
     optionalAlpha,
-    requiredAlphaNumeric
+    requiredAlphaNumeric,
+    checkDigits,
+    checkAlphaNumeric
 }

@@ -6,6 +6,26 @@ import SignUp from "../Components/Pages/SignUp";
 import i18n from "i18next";
 import {fireEvent} from "@testing-library/dom";
 
+import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import {TRANSLATION_ES} from "../i18n/translations-es";
+import {TRANSLATION_EN} from "../i18n/translations-en";
+
+i18n
+    .use(LanguageDetector)
+    .use(initReactI18next)
+    .init({
+        resources: {
+            en: {
+                translation: TRANSLATION_EN
+            },
+            es: {
+                translation: TRANSLATION_ES
+            }
+        }
+    });
+
+
 const mockedUsedNavigate = jest.fn();
 
 jest.mock('react-router-dom', () => ({
@@ -67,6 +87,7 @@ describe('signup tests', () => {
             expect(control.getAttribute("placeholder")).toBe(i18n.t('FORM.enter' + field.charAt(0).toUpperCase() + field.slice(1)))
         })
         const btn = document.querySelector('#submitButton')
+        expect(btn).toHaveTextContent(i18n.t('FORM.signUp'))
         expect(btn).toBeDisabled()
     })
 
@@ -87,7 +108,6 @@ describe('signup tests', () => {
         const component = render(<SignUp />)
         let firstNameControl = component.getByPlaceholderText(i18n.t('FORM.enterFirstName'))
         fireEvent.change(firstNameControl, {target: {value: invalidFormInput['firstName']}})
-        console.log(firstNameControl.textContent)
 
         let list = document.querySelector("#firstNameErrors")
         let msg = list.children.item(0).textContent

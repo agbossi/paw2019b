@@ -50,7 +50,9 @@ export const TRANSLATION_ES = {
     },
     FORM: {
         clear: "Limpiar filtros",
-        price: "Precio de consulta",
+        search: "Buscar",
+        consultPrice: "Precio de consulta",
+        price: "Ingrese precio de consulta",
         firstName: "Nombre",
         enterFirstName: "Ingrese nombre",
         lastName: "Apellido",

@@ -46,8 +46,6 @@ function DoctorAddModal(props) {
     }
 
     const handleAdd = (doctor) => {
-        console.log('doctor en add')
-        console.log(doctor)
         if(!isPresent(doctor.firstName) || !isPresent(doctor.email) || !isPresent(doctor.lastName) || !isPresent(doctor.license) ||
             !isPresent(doctor.phoneNumber) || !isPresent(doctor.password) || !isPresent(doctor.specialty)) {
             setMessage(t('errors.incompleteForm'))

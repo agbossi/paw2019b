@@ -4,7 +4,6 @@ import DoctorCalls from "./DoctorCalls";
 import PatientCalls from "./PatientCalls";
 
 const handleInformation = async () => {
-    console.log('en info')
     if(localStorage.getItem('token') === null
         || localStorage.getItem('token') === undefined || localStorage.getItem('firstName') !== null)
         return
@@ -12,10 +11,8 @@ const handleInformation = async () => {
     switch (localStorage.getItem('role')) {
         case "ROLE_DOCTOR":
             DoctorCalls.getDocByEmail(email).then(resp => {
-                console.log(resp)
                 if (resp && resp.ok) {
                     let doctor = resp.data[0]
-                    console.log('entro')
                     localStorage.setItem('license', doctor.license)
                     localStorage.setItem('firstName', doctor.firstName)
                     localStorage.setItem('lastName', doctor.lastName)

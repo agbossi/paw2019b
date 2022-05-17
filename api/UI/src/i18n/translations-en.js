@@ -51,7 +51,9 @@ export const TRANSLATION_EN = {
     },
     FORM: {
         clear: "Clear filters",
+        search: "Search",
         price: "Consult price",
+        enterConsultPrice: "Enter consult price",
         firstName: "First Name",
         enterFirstName: "Enter first name",
         lastName: "Last Name",

@@ -34,7 +34,8 @@ function SignUp() {
     const navigate = useNavigate();
 
     const handleSelect = (prepaid) => {
-        setSelectedPrepaid(prepaid)
+        if(prepaid !== '-')
+            setSelectedPrepaid(prepaid)
     }
 
     useEffect(async () => {
@@ -85,7 +86,6 @@ function SignUp() {
                     }
                     if (resp.status === 409) {
                         if (resp.data === "user-exists") {
-                            console.log('409 en signup')
                             setMessage(t("errors.emailInUse"))
                         }
                     }

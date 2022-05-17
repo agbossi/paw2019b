@@ -42,7 +42,6 @@ class Login extends Component {
         this.onChangePassword = this.onChangePassword.bind(this);
         //this.loginRedirect = this.loginRedirect.bind(this);
         let message = '';
-        console.log('path en constructor: ' + localStorage.getItem("path"))
         if(props.location.search !== null && props.location.search !== undefined && props.location.search !== '') {
             message = this.props.t('errors.auth')
         }
@@ -102,7 +101,6 @@ class Login extends Component {
                         } else {
                             this.props.navigate('/paw-2019b-4/login')
                         }
-                        console.log('license: ' +  localStorage.getItem('license'))
                         localStorage.removeItem("path")
                         window.location.reload()
 

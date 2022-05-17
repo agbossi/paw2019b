@@ -106,6 +106,11 @@ function SearchBar(props) {
         setConsultPrice('')
         setFirstName('')
         setLastName('')
+
+        setInvalidSearch(false)
+        setPriceErrors([])
+        setFirstNameErrors([])
+        setLastNameErrors([])
     }
 
     return (
@@ -155,10 +160,10 @@ function SearchBar(props) {
                         {firstNameErrors.length !== 0 && (
                             <div className="form-group">
                                 <div className="alert alert-danger" role="alert">
-                                    <ul>
-                                        {firstNameErrors.map((error) => {
+                                    <ul id='firstNameErrors'>
+                                        {firstNameErrors.map((error, index) => {
                                             return (
-                                                <li>{error}</li>
+                                                <li key={index}>{error}</li>
                                             )
                                         })}
                                     </ul>
@@ -177,10 +182,10 @@ function SearchBar(props) {
                         {lastNameErrors.length !== 0 && (
                             <div className="form-group">
                                 <div className="alert alert-danger" role="alert">
-                                    <ul>
-                                        {lastNameErrors.map((error) => {
+                                    <ul id='lastNameErrors'>
+                                        {lastNameErrors.map((error, index) => {
                                             return (
-                                                <li>{error}</li>
+                                                <li key={index}>{error}</li>
                                             )
                                         })}
                                     </ul>
@@ -196,6 +201,7 @@ function SearchBar(props) {
                                 <InputGroup.Text>$</InputGroup.Text>
                                 <FormControl aria-label="Amount (to the nearest dollar)"
                                              value={consultPrice}
+                                             placeholder={t("FORM.enterConsultPrice")}
                                              onChange={onChange}/>
                                 <InputGroup.Text>.00</InputGroup.Text>
                             </InputGroup>
@@ -203,10 +209,10 @@ function SearchBar(props) {
                         {priceErrors.length !== 0 && (
                             <div className="form-group">
                                 <div className="alert alert-danger" role="alert">
-                                    <ul>
-                                        {priceErrors.map((error) => {
+                                    <ul id='priceErrors'>
+                                        {priceErrors.map((error, index) => {
                                             return (
-                                                <li>{error}</li>
+                                                <li key={index}>{error}</li>
                                             )
                                         })}
                                     </ul>
@@ -215,11 +221,13 @@ function SearchBar(props) {
                         )}
                     </div>
                     <div className="list-group-item list-group-item-action">
-                        <Button className="doc-button-color" onClick={() => clearFilters()}>
+                        <Button className="doc-button-color" id='clearButton' onClick={() => clearFilters()}>
                             {t("FORM.clear")}
                         </Button>
                         <br/>
-                        <Button disabled={invalidSearch} className="doc-button-color" onClick={() => props.handleSearch({
+                        <Button disabled={invalidSearch}
+                                id='submitButton'
+                                className="doc-button-color" onClick={() => props.handleSearch({
                                 firstName: firstName,
                                 lastName: lastName,
                                 location: selectedLocation === '-'? null : selectedLocation,
@@ -228,7 +236,7 @@ function SearchBar(props) {
                                 consultPrice: consultPrice
                             }, 0
                         )}>
-                            Search
+                            {t("FORM.search")}
                         </Button>
                     </div>
                 </Form>

@@ -100,7 +100,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     @Scheduled(fixedRate = 43200000)
     public void cleanPastAppointments() {
-        System.out.println("en cron");
         appointmentDao.cleanPastAppointments();
     }
 
