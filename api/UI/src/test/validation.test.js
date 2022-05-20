@@ -213,7 +213,7 @@ describe('validation functions', () => {
     test('email validation passes valid emails', () => {
         let errors = []
         let test = 'test error'
-        let inputs = []
+        let inputs = ['admin@doctorsearch.com', 'abossi@itba.edu.ar']
         let result;
         inputs.forEach(input => {
             result = validation.requiredEmail(input, errors, test, i18n.t)
@@ -225,12 +225,13 @@ describe('validation functions', () => {
     test('email validation detects invalid emails', () => {
         let errors = []
         let test = 'test error'
-        let inputs = []
+        let inputs = ['a', 1, null, undefined, 'asdf@asdf', 'a.com', '']
         let result;
         inputs.forEach(input => {
             result = validation.requiredEmail(input, errors, test, i18n.t)
             expect(result).toBeTruthy()
             expect(errors.length).toBe(1)
+            errors = []
         })
     })
 })
